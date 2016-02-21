@@ -16,7 +16,7 @@ namespace SistemaBienestarEstudiantil.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult About() // about function
         {
             return View();
         }
