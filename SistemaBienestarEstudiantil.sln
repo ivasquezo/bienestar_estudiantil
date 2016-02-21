@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaBienestarEstudiantil", "SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.csproj", "{E4C45E42-AD72-4FE9-966D-74A3993AAFFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaBienestarEstudiantil.Tests", "SistemaBienestarEstudiantil.Tests\SistemaBienestarEstudiantil.Tests.csproj", "{38376A22-BAB8-4D1C-A91F-1DE32C810ACE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4C45E42-AD72-4FE9-966D-74A3993AAFFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4C45E42-AD72-4FE9-966D-74A3993AAFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4C45E42-AD72-4FE9-966D-74A3993AAFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4C45E42-AD72-4FE9-966D-74A3993AAFFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38376A22-BAB8-4D1C-A91F-1DE32C810ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38376A22-BAB8-4D1C-A91F-1DE32C810ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38376A22-BAB8-4D1C-A91F-1DE32C810ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38376A22-BAB8-4D1C-A91F-1DE32C810ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

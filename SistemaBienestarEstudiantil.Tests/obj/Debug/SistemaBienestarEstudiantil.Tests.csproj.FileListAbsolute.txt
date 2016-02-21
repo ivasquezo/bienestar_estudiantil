@@ -1,0 +1,8 @@
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\bin\Debug\SistemaBienestarEstudiantil.Tests.dll.config
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\bin\Debug\SistemaBienestarEstudiantil.Tests.dll
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\bin\Debug\SistemaBienestarEstudiantil.Tests.pdb
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\bin\Debug\SistemaBienestarEstudiantil.dll
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\bin\Debug\SistemaBienestarEstudiantil.pdb
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\obj\Debug\SistemaBienestarEstudiantil.Tests.csprojResolveAssemblyReference.cache
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\obj\Debug\SistemaBienestarEstudiantil.Tests.dll
+c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil.Tests\obj\Debug\SistemaBienestarEstudiantil.Tests.pdb
