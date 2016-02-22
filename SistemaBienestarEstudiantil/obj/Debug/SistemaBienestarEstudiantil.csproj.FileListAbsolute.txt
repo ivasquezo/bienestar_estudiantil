@@ -1,5 +1,0 @@
-c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil\bin\SistemaBienestarEstudiantil.dll
-c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil\bin\SistemaBienestarEstudiantil.pdb
-c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil\obj\Debug\SistemaBienestarEstudiantil.csprojResolveAssemblyReference.cache
-c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil\obj\Debug\SistemaBienestarEstudiantil.dll
-c:\users\ines\documents\visual studio 2010\Projects\SistemaBienestarEstudiantil\SistemaBienestarEstudiantil\obj\Debug\SistemaBienestarEstudiantil.pdb
