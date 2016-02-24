@@ -4,6 +4,9 @@
     Acerca de nosotros
 </asp:Content>
 <asp:Content ID="aboutContent" ContentPlaceHolderID="MainContent" runat="server">
+    <%--<div ng-controller="UsuarioController">
+        {{Message}}
+    </div>--%>
     <p>
         <input type="submit" value="Iniciar sesión" style="float:right" />
     </p>

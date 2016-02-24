@@ -1,5 +1,10 @@
 ﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
+<%
+    Random rand = new Random((int)DateTime.Now.Ticks);
+    int RandomNumber = rand.Next(100000, 999999);
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -12,7 +17,10 @@
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
+<body ng-app="HomeApp">
+   <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
+   <script type="text/javascript" src="../../Scripts/HomeApp.js?nocache=<%=RandomNumber%>"></script>
+
     <div class="page">
         <div id="header">
             <div id="title">
@@ -26,10 +34,11 @@
             <div id="menucontainer">
                 <ul id="menu">
                     <li><%: Html.ActionLink("Principal", "Index", "Home")%></li>
-                    <li><% if (@ViewData["Permiso"] == "true"){ %><%: Html.ActionLink("Usuarios", "Usuarios", "Home")%><% } %></li>
-                    <li><% if (@ViewData["Permiso"] == "true"){ %><%: Html.ActionLink("Roles", "Roles", "Home")%><% } %></li>
-                    <li><% if (@ViewData["Permiso"] == "true"){ %><%: Html.ActionLink("Datos", "Datos", "Home")%><% } %></li>
-                    <li><% if (@ViewData["Permiso"] == "true"){ %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
+                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Usuarios", "Usuarios", "Home")%><% } %></li>
+                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Roles", "Roles", "Home")%><% } %></li>
+                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Datos", "Datos", "Home")%><% } %></li>
+                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
+                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Cerrar sesión", "LogOut", "Home")%><% } %></li>
                 </ul>
             </div>
         </div>

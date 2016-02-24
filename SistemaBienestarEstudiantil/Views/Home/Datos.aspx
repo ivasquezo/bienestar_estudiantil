@@ -4,9 +4,12 @@
 </asp:Content>
 
 <asp:Content ID="aboutContent" ContentPlaceHolderID="MainContent" runat="server">
+    <div ng-controller="DatosController">
+    {{Message}}
+    </div>
     <h2>Datos</h2>
     <p>
-        Incluya aquí el contenido.
+        Usuario logueado: <%=@Session["userName"]%>
     </p>
 </asp:Content>
 

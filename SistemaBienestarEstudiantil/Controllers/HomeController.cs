@@ -38,6 +38,7 @@ namespace SistemaBienestarEstudiantil.Controllers
             {
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
+                    Session["userName"] = model.UserName;
                     FormsService.SignIn(model.UserName);
                     if (!String.IsNullOrEmpty(returnUrl))
                     {
@@ -45,7 +46,7 @@ namespace SistemaBienestarEstudiantil.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Tareas", "Home");
                     }
                 }
                 else
@@ -96,6 +97,14 @@ namespace SistemaBienestarEstudiantil.Controllers
             ViewData["Permiso"] = Permiso;
 
             return View();
+        }
+
+        public ActionResult LogOut()
+        {
+            FormsService.SignOut();
+            Session.RemoveAll();
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

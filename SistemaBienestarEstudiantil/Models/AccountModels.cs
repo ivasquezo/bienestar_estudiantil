@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Data.SqlClient;
 
 namespace SistemaBienestarEstudiantil.Models
 {
@@ -112,7 +113,20 @@ namespace SistemaBienestarEstudiantil.Models
             if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
 
-            return _provider.ValidateUser(userName, password);
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["conexionBienestar"].ConnectionString;
+            SqlConnection conexion = new SqlConnection(connectionString);
+            conexion.Open();
+            String sql = "select nombreusuario from usuario where usuario = '" + userName + "' and contrasenaactual = '" + password + "'";
+            SqlCommand comando = new SqlCommand(sql, conexion);
+            SqlDataReader registro = comando.ExecuteReader();
+            Boolean valueReturn = false;
+            
+            if (registro.Read())
+                valueReturn = true;
+
+            conexion.Close();
+
+            return valueReturn;
         }
 
         public MembershipCreateStatus CreateUser(string userName, string password, string email)
@@ -246,10 +260,11 @@ namespace SistemaBienestarEstudiantil.Models
 
         public override bool IsValid(object value)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(value);
-            object originalValue = properties.Find(OriginalProperty, true /* ignoreCase */).GetValue(value);
-            object confirmValue = properties.Find(ConfirmProperty, true /* ignoreCase */).GetValue(value);
-            return Object.Equals(originalValue, confirmValue);
+            return true;
+            //PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(value);
+            //object originalValue = properties.Find(OriginalProperty, true /* ignoreCase */).GetValue(value);
+            //object confirmValue = properties.Find(ConfirmProperty, true /* ignoreCase */).GetValue(value);
+            //return Object.Equals(originalValue, confirmValue);
         }
     }
 
