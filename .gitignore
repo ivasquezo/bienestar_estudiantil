@@ -2,3 +2,5 @@ SistemaBienestarEstudiantil.Tests/bin
 SistemaBienestarEstudiantil.Tests/obj
 SistemaBienestarEstudiantil/bin
 SistemaBienestarEstudiantil/obj
+SistemaBienestarEstudiantil/*.suo
+SistemaBienestarEstudiantil/SistemaBienestarEstudiantil/*.user
