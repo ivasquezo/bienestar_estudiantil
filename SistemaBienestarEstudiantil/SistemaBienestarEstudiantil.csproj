@@ -76,6 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\angular-route.js" />
+    <Content Include="Scripts\angular-route.min.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\HomeApp.js" />
     <Content Include="Views\Home\Datos.aspx" />
     <Content Include="Views\Home\Roles.aspx" />
     <Content Include="Views\Home\Tareas.aspx" />
