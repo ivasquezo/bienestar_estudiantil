@@ -149,7 +149,6 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
             {
                 UserName = "someUser",
                 Password = "goodPassword",
-                RememberMe = false
             };
 
             // Actuar
@@ -172,7 +171,6 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
             {
                 UserName = "someUser",
                 Password = "goodPassword",
-                RememberMe = false
             };
 
             // Actuar
@@ -194,7 +192,6 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
             {
                 UserName = "someUser",
                 Password = "goodPassword",
-                RememberMe = false
             };
             controller.ModelState.AddModelError("", "Mensaje de error ficticio.");
 
@@ -216,7 +213,6 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
             {
                 UserName = "someUser",
                 Password = "badPassword",
-                RememberMe = false
             };
 
             // Actuar
@@ -334,11 +330,10 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
             public bool SignIn_WasCalled;
             public bool SignOut_WasCalled;
 
-            public void SignIn(string userName, bool createPersistentCookie)
+            public void SignIn(string userName)
             {
                 // comprobar que los argumentos son los esperados
                 Assert.AreEqual("someUser", userName);
-                Assert.IsFalse(createPersistentCookie);
 
                 SignIn_WasCalled = true;
             }

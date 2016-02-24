@@ -13,6 +13,19 @@ namespace SistemaBienestarEstudiantil.Models
 
     #region Modelos
     [PropertiesMustMatch("NewPassword", "ConfirmPassword", ErrorMessage = "La nueva contraseña y la contraseña de confirmación no coinciden.")]
+
+    public class LogOnModel
+    {
+        [Required]
+        [DisplayName("Nombre de usuario")]
+        public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [DisplayName("Contraseña")]
+        public string Password { get; set; }
+    }
+
     public class ChangePasswordModel
     {
         [Required]
@@ -30,21 +43,6 @@ namespace SistemaBienestarEstudiantil.Models
         [DataType(DataType.Password)]
         [DisplayName("Confirmar la nueva contraseña")]
         public string ConfirmPassword { get; set; }
-    }
-
-    public class LogOnModel
-    {
-        [Required]
-        [DisplayName("Nombre de usuario")]
-        public string UserName { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [DisplayName("Contraseña")]
-        public string Password { get; set; }
-
-        [DisplayName("Recordar mi cuenta")]
-        public bool RememberMe { get; set; }
     }
 
     [PropertiesMustMatch("Password", "ConfirmPassword", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
@@ -154,17 +152,17 @@ namespace SistemaBienestarEstudiantil.Models
 
     public interface IFormsAuthenticationService
     {
-        void SignIn(string userName, bool createPersistentCookie);
+        void SignIn(string userName);
         void SignOut();
     }
 
     public class FormsAuthenticationService : IFormsAuthenticationService
     {
-        public void SignIn(string userName, bool createPersistentCookie)
+        public void SignIn(string userName)
         {
             if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
 
-            FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
+            FormsAuthentication.SetAuthCookie(userName, false);
         }
 
         public void SignOut()

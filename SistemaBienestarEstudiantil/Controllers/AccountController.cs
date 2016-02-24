@@ -43,7 +43,7 @@ namespace SistemaBienestarEstudiantil.Controllers
             {
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
-                    FormsService.SignIn(model.UserName, model.RememberMe);
+                    FormsService.SignIn(model.UserName);
                     if (!String.IsNullOrEmpty(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -94,7 +94,7 @@ namespace SistemaBienestarEstudiantil.Controllers
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+                    FormsService.SignIn(model.UserName);
                     return RedirectToAction("Index", "Home");
                 }
                 else
