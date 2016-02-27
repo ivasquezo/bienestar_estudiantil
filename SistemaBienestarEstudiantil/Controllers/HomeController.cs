@@ -11,7 +11,6 @@ namespace SistemaBienestarEstudiantil.Controllers
     [HandleError]
     public class HomeController : Controller
     {
-        public static String Permiso { get; set; }
         public IFormsAuthenticationService FormsService { get; set; }
         public IMembershipService MembershipService { get; set; }
 
@@ -25,9 +24,6 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult Index()
         {
-            Permiso = "true";
-            ViewData["Permiso"] = Permiso;
-
             return View();
         }
 
@@ -39,6 +35,9 @@ namespace SistemaBienestarEstudiantil.Controllers
                 if (MembershipService.ValidateUser(model.UserName, model.Password))
                 {
                     Session["userName"] = model.UserName;
+                    Session["usuarioValidado"] = false;
+                    Session["firstPasswordAccess"] = false;
+
                     FormsService.SignIn(model.UserName);
                     if (!String.IsNullOrEmpty(returnUrl))
                     {
@@ -46,7 +45,19 @@ namespace SistemaBienestarEstudiantil.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Tareas", "Home");
+                        if (MembershipService.ValidateFirstPassword(model.Password))
+                        {
+                            Session["usuarioValidado"] = false;
+                            Session["firstPasswordAccess"] = true;
+                            return RedirectToAction("ChangePassword", "Home");
+                        }
+                        else
+                        {
+                            Session["usuarioValidado"] = true;
+                            Session["firstPasswordAccess"] = false;
+                            return RedirectToAction("Tareas", "Home");
+                        }
+                        
                     }
                 }
                 else
@@ -59,43 +70,73 @@ namespace SistemaBienestarEstudiantil.Controllers
             return View(model);
         }
 
+        [Authorize]
+        public ActionResult ChangePassword()
+        {
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
+                {
+                    return RedirectToAction("ChangePasswordSuccess");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "La contraseña actual es incorrecta o la nueva contraseña no es válida.");
+                }
+            }
+
+            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            return View(model);
+        }
+
         public ActionResult About()
         {
+            Response.Write("<p>tontera</p>");
+            Response.Flush();
             return View();
+        }
+
+        public void prueba()
+        {
+            Response.Write("<p>tontera</p>");
+            Response.Flush();
         }
 
         public ActionResult Usuarios()
         {
-            ViewData["Permiso"] = Permiso;
-
             return View();
         }
 
         public ActionResult Roles()
         {
-            ViewData["Permiso"] = Permiso;
-
             return View();
         }
 
         public ActionResult Datos()
         {
-            ViewData["Permiso"] = Permiso;
-
             return View();
         }
 
         public ActionResult Tareas()
         {
-            ViewData["Permiso"] = Permiso;
-
+            if (!Class.Utils.validateAccess())
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult LogOn()
         {
-            ViewData["Permiso"] = Permiso;
-
             return View();
         }
 
@@ -106,5 +147,8 @@ namespace SistemaBienestarEstudiantil.Controllers
             Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
+
+        
+
     }
 }

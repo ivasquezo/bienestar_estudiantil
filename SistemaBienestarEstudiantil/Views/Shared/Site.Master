@@ -1,6 +1,10 @@
 ﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
+
 <%
+    Boolean accessValid = Utils.validateAccess();
+    Boolean accessFirstPasswordValid = Utils.validateFirstPasswordAccess();
     Random rand = new Random((int)DateTime.Now.Ticks);
     int RandomNumber = rand.Next(100000, 999999);
 %>
@@ -9,17 +13,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>
         <asp:ContentPlaceHolder ID="TitleContent" runat="server" />
     </title>
-    
     <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body ng-app="HomeApp">
-   <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
-   <script type="text/javascript" src="../../Scripts/HomeApp.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/HomeApp.js?nocache=<%=RandomNumber%>"></script>
 
     <div class="page">
         <div id="header">
@@ -33,20 +35,19 @@
 
             <div id="menucontainer">
                 <ul id="menu">
-                    <li><%: Html.ActionLink("Principal", "Index", "Home")%></li>
-                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Usuarios", "Usuarios", "Home")%><% } %></li>
-                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Roles", "Roles", "Home")%><% } %></li>
-                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Datos", "Datos", "Home")%><% } %></li>
-                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
-                    <li><% if (Session["userName"] != null){ %><%: Html.ActionLink("Cerrar sesión", "LogOut", "Home")%><% } %></li>
+                    <li><% if (accessFirstPasswordValid){ %><%: Html.ActionLink("Iniciar sesión", "ChangePassword", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Usuarios", "Usuarios", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Roles", "Roles", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Datos", "Datos", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Cerrar sesión", "LogOut", "Home")%><% } %></li>
                 </ul>
             </div>
         </div>
 
         <div id="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-            <div id="footer">
-            </div>
+            <div id="footer"></div>
         </div>
     </div>
 </body>

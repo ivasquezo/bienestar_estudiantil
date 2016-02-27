@@ -82,6 +82,7 @@ namespace SistemaBienestarEstudiantil.Models
         int MinPasswordLength { get; }
 
         bool ValidateUser(string userName, string password);
+        bool ValidateFirstPassword(string password);
         MembershipCreateStatus CreateUser(string userName, string password, string email);
         bool ChangePassword(string userName, string oldPassword, string newPassword);
     }
@@ -121,6 +122,26 @@ namespace SistemaBienestarEstudiantil.Models
             SqlDataReader registro = comando.ExecuteReader();
             Boolean valueReturn = false;
             
+            if (registro.Read())
+                valueReturn = true;
+
+            conexion.Close();
+
+            return valueReturn;
+        }
+
+        public bool ValidateFirstPassword(string password)
+        {
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
+
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["conexionBienestar"].ConnectionString;
+            SqlConnection conexion = new SqlConnection(connectionString);
+            conexion.Open();
+            String sql = "select nombreusuario from usuario where contrasenaactual = '" + password + "' and contrasenaanterior = '" + password + "'";
+            SqlCommand comando = new SqlCommand(sql, conexion);
+            SqlDataReader registro = comando.ExecuteReader();
+            Boolean valueReturn = false;
+
             if (registro.Read())
                 valueReturn = true;
 

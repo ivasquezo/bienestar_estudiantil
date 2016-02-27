@@ -33,8 +33,6 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult LogOn()
         {
-            ViewData["Permiso"] = HomeController.Permiso;
-
             return View();
         }
 
