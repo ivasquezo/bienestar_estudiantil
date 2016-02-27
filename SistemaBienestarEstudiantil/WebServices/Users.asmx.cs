@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Data.SqlClient;
+using System.Web.Script.Serialization;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -35,6 +36,15 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             conexion.Close();
             Context.Response.Write(valueReturn.ToString().ToLower());
+        }
+
+        [WebMethod]
+        public void allUser()
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.ToList()));
+            Context.Response.Flush();
+            Context.Response.End();
         }
     }
 }
