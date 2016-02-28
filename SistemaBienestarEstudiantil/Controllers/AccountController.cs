@@ -36,32 +36,32 @@ namespace SistemaBienestarEstudiantil.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
-                {
-                    FormsService.SignIn(model.UserName);
-                    if (!String.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "El nombre de usuario o la contraseña especificados son incorrectos.");
-                }
-            }
+        //[HttpPost]
+        //public ActionResult LogOn(LogOnModel model, string returnUrl)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (MembershipService.ValidateUser(model.UserName, model.Password))
+        //        {
+        //            FormsService.SignIn(model.UserName);
+        //            if (!String.IsNullOrEmpty(returnUrl))
+        //            {
+        //                return Redirect(returnUrl);
+        //            }
+        //            else
+        //            {
+        //                return RedirectToAction("Index", "Home");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError("", "El nombre de usuario o la contraseña especificados son incorrectos.");
+        //        }
+        //    }
 
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
-            return View(model);
-        }
+        //    // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
+        //    return View(model);
+        //}
 
         // **************************************
         // URL: /Account/LogOff

@@ -13,8 +13,6 @@ namespace SistemaBienestarEstudiantil.Models
 {
 
     #region Modelos
-    [PropertiesMustMatch("NewPassword", "ConfirmPassword", ErrorMessage = "La nueva contraseña y la contraseña de confirmación no coinciden.")]
-
     public class LogOnModel
     {
         [Required]
@@ -81,8 +79,8 @@ namespace SistemaBienestarEstudiantil.Models
     {
         int MinPasswordLength { get; }
 
-        bool ValidateUser(string userName, string password);
-        bool ValidateFirstPassword(string password);
+        USUARIO ValidateUser(string userName, string password);
+
         MembershipCreateStatus CreateUser(string userName, string password, string email);
         bool ChangePassword(string userName, string oldPassword, string newPassword);
     }
@@ -91,8 +89,7 @@ namespace SistemaBienestarEstudiantil.Models
     {
         private readonly MembershipProvider _provider;
 
-        public AccountMembershipService()
-            : this(null)
+        public AccountMembershipService() : this(null)
         {
         }
 
@@ -109,56 +106,24 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
 
-        public bool ValidateUser(string userName, string password)
+        public USUARIO ValidateUser(string userName, string password)
         {
             if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
 
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["conexionBienestar"].ConnectionString;
-            SqlConnection conexion = new SqlConnection(connectionString);
-            conexion.Open();
-            String sql = "select nombreusuario from usuario where usuario = '" + userName + "' and contrasenaactual = '" + password + "'";
-            SqlCommand comando = new SqlCommand(sql, conexion);
-            SqlDataReader registro = comando.ExecuteReader();
-            Boolean valueReturn = false;
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            USUARIO usuario = null;
             
-            if (registro.Read())
-                valueReturn = true;
+            try
+            {
+                usuario = db.USUARIOs.Single(u => u.USUARIO1 == userName && u.CONTRASENAACTUAL == password);
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.Write(e);
+            }
 
-            conexion.Close();
-
-            return valueReturn;
-        }
-
-        public bool ValidateFirstPassword(string password)
-        {
-            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
-
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["conexionBienestar"].ConnectionString;
-            SqlConnection conexion = new SqlConnection(connectionString);
-            conexion.Open();
-            String sql = "select nombreusuario from usuario where contrasenaactual = '" + password + "' and contrasenaanterior = '" + password + "'";
-            SqlCommand comando = new SqlCommand(sql, conexion);
-            SqlDataReader registro = comando.ExecuteReader();
-            Boolean valueReturn = false;
-
-            if (registro.Read())
-                valueReturn = true;
-
-            conexion.Close();
-
-            return valueReturn;
-        }
-
-        public MembershipCreateStatus CreateUser(string userName, string password, string email)
-        {
-            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
-            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
-            if (String.IsNullOrEmpty(email)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "email");
-
-            MembershipCreateStatus status;
-            _provider.CreateUser(userName, password, email, null, null, true, null, out status);
-            return status;
+            return usuario;
         }
 
         public bool ChangePassword(string userName, string oldPassword, string newPassword)
@@ -167,8 +132,6 @@ namespace SistemaBienestarEstudiantil.Models
             if (String.IsNullOrEmpty(oldPassword)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "oldPassword");
             if (String.IsNullOrEmpty(newPassword)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "newPassword");
 
-            // El elemento ChangePassword() subyacente iniciará una excepción en lugar de
-            // devolver false en determinados escenarios de error.
             try
             {
                 MembershipUser currentUser = _provider.GetUser(userName, true /* userIsOnline */);
@@ -182,6 +145,17 @@ namespace SistemaBienestarEstudiantil.Models
             {
                 return false;
             }
+        }
+
+        public MembershipCreateStatus CreateUser(string userName, string password, string email)
+        {
+            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
+            if (String.IsNullOrEmpty(email)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "email");
+
+            MembershipCreateStatus status;
+            _provider.CreateUser(userName, password, email, null, null, true, null, out status);
+            return status;
         }
     }
 

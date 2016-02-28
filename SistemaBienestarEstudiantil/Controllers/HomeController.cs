@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using SistemaBienestarEstudiantil.Models;
 using System.Web.Routing;
+using SistemaBienestarEstudiantil.Class;
 
 namespace SistemaBienestarEstudiantil.Controllers
 {
@@ -13,6 +14,7 @@ namespace SistemaBienestarEstudiantil.Controllers
     {
         public IFormsAuthenticationService FormsService { get; set; }
         public IMembershipService MembershipService { get; set; }
+        public static USUARIO usuario { get; set; }
 
         protected override void Initialize(RequestContext requestContext)
         {
@@ -32,9 +34,11 @@ namespace SistemaBienestarEstudiantil.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
+                usuario = MembershipService.ValidateUser(model.UserName, model.Password);
+
+                if (usuario != null)
                 {
-                    Session["userName"] = model.UserName;
+                    Session["userName"] = usuario.NOMBREUSUARIO;
                     Session["usuarioValidado"] = false;
                     Session["firstPasswordAccess"] = false;
 
@@ -45,7 +49,7 @@ namespace SistemaBienestarEstudiantil.Controllers
                     }
                     else
                     {
-                        if (MembershipService.ValidateFirstPassword(model.Password))
+                        if (Utils.ValidateFirstPassword(usuario.CONTRASENAACTUAL, usuario.CONTRASENAANTERIOR))
                         {
                             Session["usuarioValidado"] = false;
                             Session["firstPasswordAccess"] = true;
@@ -61,9 +65,7 @@ namespace SistemaBienestarEstudiantil.Controllers
                     }
                 }
                 else
-                {
                     ModelState.AddModelError("", "El nombre de usuario o la contraseña especificados son incorrectos.");
-                }
             }
 
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
@@ -83,14 +85,17 @@ namespace SistemaBienestarEstudiantil.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
+                if (Utils.ValidateConfirmPassword(usuario.CONTRASENAACTUAL, model.OldPassword, model.NewPassword, model.ConfirmPassword))
                 {
-                    return RedirectToAction("ChangePasswordSuccess");
+                    //if (MembershipService.ChangePassword(usuario.USUARIO1, model.OldPassword, model.NewPassword))
+                    //{
+                        Session["usuarioValidado"] = true;
+                        Session["firstPasswordAccess"] = false;
+                        return RedirectToAction("Tareas", "Home");
+                    //}
                 }
                 else
-                {
-                    ModelState.AddModelError("", "La contraseña actual es incorrecta o la nueva contraseña no es válida.");
-                }
+                    ModelState.AddModelError("", "La contraseña actual es incorrecta o la nueva contraseña no es válida..");
             }
 
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
