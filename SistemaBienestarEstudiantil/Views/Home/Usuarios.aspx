@@ -4,21 +4,15 @@
     Acerca de nosotros
 </asp:Content>
 <asp:Content ID="aboutContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div ng-controller="UsuarioController">
-        <table>
-            <tr>
-                <td>Código</td>
-                <td>Nombre</td>
-                <td>Estado</td>
-            </tr>
-            <tr ng-repeat="user in users">
-                <td>{{user.CODIGOUSUARIO}}</td>
-                <td>{{user.NOMBREUSUARIO}}</td>
-                <td>{{user.ESTADOUSUARIO}}</td>
-            </tr>
-        </table>
-        MICHEL PRUEBA<BR/>   
+    <div ng-controller="UsuarioController as Main">
+        <div ui-grid="gridOptions"></div>
     </div>
+    <script type="text/ng-template" id="actionsUsers.html">
+          <div class="ui-grid-cell-contents">
+            <button class="btn" type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)">Borrar</button>
+            <button class="btn" type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)">Editar</button>
+          </div>
+    </script>
     <p>
         <input type="submit" value="Iniciar sesión" style="float:right" />
     </p>
