@@ -81,7 +81,7 @@ namespace SistemaBienestarEstudiantil.Models
 
         USUARIO ValidateUser(string userName, string password);
 
-        void ChangePassword(int codigoUsuario, string newPassword);
+        void ChangePassword(decimal codigoUsuario, string newPassword);
 
         MembershipCreateStatus CreateUser(string userName, string password, string email);
         
@@ -130,7 +130,7 @@ namespace SistemaBienestarEstudiantil.Models
             return usuario;
         }
 
-        public void ChangePassword(int codigoUsuario, string newPassword)
+        public void ChangePassword(decimal codigoUsuario, string newPassword)
         {
             if (codigoUsuario == null) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "codigoUsuario");
             if (String.IsNullOrEmpty(newPassword)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "newPassword");
