@@ -17,6 +17,7 @@
                 <td>{{user.ESTADOUSUARIO}}</td>
             </tr>
         </table>
+        MICHEL PRUEBA<BR/>   
     </div>
     <p>
         <input type="submit" value="Iniciar sesión" style="float:right" />

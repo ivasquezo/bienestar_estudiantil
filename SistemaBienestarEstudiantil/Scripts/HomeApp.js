@@ -17,7 +17,7 @@
     app.controller('UsuarioController', ['$scope', '$http', function ($scope, $http) {
         $scope.Message = "Tareas Mensaje controller funcionando";
         $scope.cargarUsuarios = function () {
-            $http.post('../../WebServices/Users.asmx/allUser', {
+            $http.post('../../WebServices/Users.asmx/getAllActivedUser', {
             }).success(function (data, status, headers, config) {
                 $scope.users = data;
             }).error(function (data, status, headers, config) {

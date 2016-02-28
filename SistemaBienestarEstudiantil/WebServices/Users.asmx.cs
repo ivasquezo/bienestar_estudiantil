@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using System.Data.SqlClient;
 using System.Web.Script.Serialization;
+using SistemaBienestarEstudiantil.Models;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -39,12 +40,71 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void allUser()
+        public void getAllUser()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
             Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.ToList()));
             Context.Response.Flush();
             Context.Response.End();
         }
+
+        [WebMethod]
+        public void getAllActivedUser()
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.Where(u => u.ESTADOUSUARIO == true).ToList()));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
+        public void getUserByCode(int code)
+        {
+            bienestarEntities db = new bienestarEntities();
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == code);
+            Context.Response.Write(new JavaScriptSerializer().Serialize(usuario));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
+        public void removeUserById(int id)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == id);
+            db.USUARIOs.DeleteObject(usuario);
+            db.SaveChanges();
+
+            Context.Response.Write("ok");
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
+        public void inactiveUserById(int id)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == id);
+            usuario.ESTADOUSUARIO = false;
+            db.SaveChanges();
+
+            writeResponse("ok");
+        }
+
+        [WebMethod]
+        public string prueba1()
+        {
+            return "prueba michel";
+        }
+
+        private void writeResponse(String response)
+        {
+            Context.Response.Write(response);
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
     }
 }
