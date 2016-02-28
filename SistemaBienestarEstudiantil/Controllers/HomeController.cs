@@ -87,12 +87,10 @@ namespace SistemaBienestarEstudiantil.Controllers
             {
                 if (Utils.ValidateConfirmPassword(usuario.CONTRASENAACTUAL, model.OldPassword, model.NewPassword, model.ConfirmPassword))
                 {
-                    //if (MembershipService.ChangePassword(usuario.USUARIO1, model.OldPassword, model.NewPassword))
-                    //{
-                        Session["usuarioValidado"] = true;
-                        Session["firstPasswordAccess"] = false;
-                        return RedirectToAction("Tareas", "Home");
-                    //}
+                    MembershipService.ChangePassword(usuario.CODIGOUSUARIO, model.NewPassword);
+                    Session["usuarioValidado"] = true;
+                    Session["firstPasswordAccess"] = false;
+                    return RedirectToAction("Tareas", "Home");
                 }
                 else
                     ModelState.AddModelError("", "La contraseña actual es incorrecta o la nueva contraseña no es válida..");

@@ -81,15 +81,19 @@ namespace SistemaBienestarEstudiantil.Models
 
         USUARIO ValidateUser(string userName, string password);
 
+        void ChangePassword(int codigoUsuario, string newPassword);
+
         MembershipCreateStatus CreateUser(string userName, string password, string email);
-        bool ChangePassword(string userName, string oldPassword, string newPassword);
+        
     }
 
     public class AccountMembershipService : IMembershipService
     {
         private readonly MembershipProvider _provider;
+        private Models.bienestarEntities db;
 
-        public AccountMembershipService() : this(null)
+        public AccountMembershipService()
+            : this(null)
         {
         }
 
@@ -111,9 +115,9 @@ namespace SistemaBienestarEstudiantil.Models
             if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
 
-            Models.bienestarEntities db = new Models.bienestarEntities();
+            db = new Models.bienestarEntities();
             USUARIO usuario = null;
-            
+
             try
             {
                 usuario = db.USUARIOs.Single(u => u.USUARIO1 == userName && u.CONTRASENAACTUAL == password);
@@ -126,24 +130,22 @@ namespace SistemaBienestarEstudiantil.Models
             return usuario;
         }
 
-        public bool ChangePassword(string userName, string oldPassword, string newPassword)
+        public void ChangePassword(int codigoUsuario, string newPassword)
         {
-            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
-            if (String.IsNullOrEmpty(oldPassword)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "oldPassword");
+            if (codigoUsuario == null) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "codigoUsuario");
             if (String.IsNullOrEmpty(newPassword)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "newPassword");
 
             try
             {
-                MembershipUser currentUser = _provider.GetUser(userName, true /* userIsOnline */);
-                return currentUser.ChangePassword(oldPassword, newPassword);
+                db = new bienestarEntities();
+
+                USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == codigoUsuario);
+                usuario.CONTRASENAACTUAL = newPassword;
+                db.SaveChanges();
             }
-            catch (ArgumentException)
+            catch (InvalidOperationException e)
             {
-                return false;
-            }
-            catch (MembershipPasswordException)
-            {
-                return false;
+                Console.Write(e);
             }
         }
 
