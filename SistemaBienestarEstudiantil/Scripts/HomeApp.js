@@ -1,5 +1,5 @@
 ﻿(function () {
-    var app = angular.module('HomeApp', ['ui.grid']);
+    var app = angular.module('HomeApp', ['ui.grid', 'ngDialog']);
 
     app.controller('HomeController', function ($scope) {
         $scope.Message = "Mensaje controller funcionando";
@@ -14,13 +14,16 @@
         $scope.Message = "Tareas Mensaje controller funcionando";
     });
 
-    app.controller('UsuarioController', ['$scope', '$http', function ($scope, $http) {
+    app.controller('UsuarioController', ['$scope', '$http', 'ngDialog', function ($scope, $http, ngDialog) {
+
+        this.ngDialogCustom = ngDialog;
 
         $scope.Message = "Tareas Mensaje controller funcionando";
 
         $scope.cargarUsuarios = function () {
             $http.post('../../WebServices/Users.asmx/getAllActivedUser', {
             }).success(function (data, status, headers, config) {
+                console.log(data);
                 $scope.gridOptions.data = data;
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...");
@@ -54,9 +57,9 @@
             });
 
         };
-        
+
         this.editUser = function (code) {
-            console.log("Editar: " + code);
+            ngDialog.open({template: 'editUser.html', className: 'ngdialog-theme-flat ngdialog-theme-custom'});
         };
 
         this.removeElementArray = function(arrayUser, userCode) {
@@ -66,5 +69,6 @@
                 }
             }
         };
+
     }]);
 })();
