@@ -101,31 +101,30 @@ namespace SistemaBienestarEstudiantil.Controllers
             return View(model);
         }
 
-        public ActionResult About()
-        {
-            Response.Write("<p>tontera</p>");
-            Response.Flush();
-            return View();
-        }
-
-        public void prueba()
-        {
-            Response.Write("<p>tontera</p>");
-            Response.Flush();
-        }
-
         public ActionResult Usuarios()
         {
+            if (!Class.Utils.validateAccess())
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult Roles()
         {
+            if (!Class.Utils.validateAccess())
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult Datos()
         {
+            if (!Class.Utils.validateAccess())
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 

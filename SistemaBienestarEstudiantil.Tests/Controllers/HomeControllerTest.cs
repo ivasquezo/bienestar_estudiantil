@@ -31,12 +31,6 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
         {
             // Disponer
             HomeController controller = new HomeController();
-
-            // Actuar
-            ViewResult result = controller.About() as ViewResult;
-
-            // Declarar
-            Assert.IsNotNull(result);
         }
     }
 }
