@@ -20,20 +20,25 @@ namespace SistemaBienestarEstudiantil.WebServices
     public class Users : System.Web.Services.WebService
     {
 
+        private void writeResponse(String response)
+        {
+            Context.Response.Write(response);
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
         [WebMethod]
         public void getAllUser()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.ToList()));
-            Context.Response.Flush();
-            Context.Response.End();
+            writeResponse(new JavaScriptSerializer().Serialize(db.USUARIOs.ToList()));
         }
 
         [WebMethod]
         public void getAllActivedUser()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.Where(u => u.ESTADOUSUARIO == true).ToList()));
+            Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.Where(u => u.ESTADO == true).ToList()));
             Context.Response.Flush();
             Context.Response.End();
         }
@@ -42,7 +47,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getUserByCode(int code)
         {
             bienestarEntities db = new bienestarEntities();
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == code);
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == code);
             Context.Response.Write(new JavaScriptSerializer().Serialize(usuario));
             Context.Response.Flush();
             Context.Response.End();
@@ -53,7 +58,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == id);
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == id);
             db.USUARIOs.DeleteObject(usuario);
             db.SaveChanges();
 
@@ -67,8 +72,8 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == id);
-            usuario.ESTADOUSUARIO = false;
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == id);
+            usuario.ESTADO = false;
             db.SaveChanges();
 
             writeResponse("ok");
@@ -80,20 +85,52 @@ namespace SistemaBienestarEstudiantil.WebServices
             String userName,
             String userCompleteName,
             String userIdentificationNumber,
+            String userMail,
+            Boolean userState,
             Boolean resetPassword)
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == userCode);
-            
-            usuario.USUARIO1 = userName;
-            usuario.NOMBREUSUARIO = userCompleteName;
-            usuario.CEDULAUSUARIO = userIdentificationNumber;
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == userCode);
 
-            if (resetPassword) {
+            usuario.NOMBREUSUARIO = userName;
+            usuario.NOMBRECOMPLETO = userCompleteName;
+            usuario.CEDULA = userIdentificationNumber;
+            usuario.CORREO = userMail;
+            usuario.ESTADO = userState;
+
+            if (resetPassword)
+            {
                 usuario.CONTRASENAACTUAL = userIdentificationNumber;
                 usuario.CONTRASENAANTERIOR = userIdentificationNumber;
             }
+
+            db.SaveChanges();
+
+            writeResponse("ok");
+        }
+
+        [WebMethod]
+        public void addNewUser(
+            String userName,
+            String userCompleteName,
+            String userIdentificationNumber,
+            String userMail,
+            Boolean userState)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            USUARIO newUser = new USUARIO();
+
+            newUser.NOMBREUSUARIO = userName;
+            newUser.NOMBRECOMPLETO = userCompleteName;
+            newUser.CEDULA = userIdentificationNumber;
+            newUser.CORREO = userMail;
+            newUser.ESTADO = userState;
+            newUser.CONTRASENAACTUAL = userIdentificationNumber;
+            newUser.CONTRASENAANTERIOR = userIdentificationNumber;
+
+            db.USUARIOs.AddObject(newUser);
 
             db.SaveChanges();
 
@@ -106,13 +143,5 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             return "prueba michel";
         }
-
-        private void writeResponse(String response)
-        {
-            Context.Response.Write(response);
-            Context.Response.Flush();
-            Context.Response.End();
-        }
-
     }
 }

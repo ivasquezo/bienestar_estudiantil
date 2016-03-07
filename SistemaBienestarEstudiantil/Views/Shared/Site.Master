@@ -1,14 +1,10 @@
 ﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
 <%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
-
 <%
     Boolean accessValid = Utils.validateAccess();
     Boolean accessFirstPasswordValid = Utils.validateFirstPasswordAccess();
-    Random rand = new Random((int)DateTime.Now.Ticks);
-    int RandomNumber = rand.Next(100000, 999999);
 %>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -24,9 +20,8 @@
     <link href="../../Scripts/ng-dialog/ngDialog-theme-flat.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body ng-app="HomeApp">
+<body ng-app="BienestarApp">
     <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/HomeApp.js?nocache=<%=RandomNumber%>"></script>
     <script type="text/javascript" src="../../Scripts/ui-grid/ui-grid-stable.min.js"></script>
     <script type="text/javascript" src="../../Scripts/ng-dialog/ngDialog.min.js"></script>
 
@@ -56,11 +51,6 @@
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
             <div id="footer"></div>
         </div>
-         <script type="text/javascript">
-            function prueba(data) {
-                console.log(data);
-            }
-         </script>
     </div>
 </body>
 </html>

@@ -24,9 +24,9 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ASISTENCIA_GRUPO", "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRUPO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "MODULO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.MODULO), "ROL_MODULO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_MODULO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "ROL_MODULO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_MODULO), true)]
-[assembly: EdmRelationshipAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "GRUPO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "NIVEL_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "NIVEL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.NIVEL))]
+[assembly: EdmRelationshipAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "USUARIO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 
 #endregion
@@ -368,15 +368,15 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto ACTIVIDAD.
         /// </summary>
-        /// <param name="cODIGOACTIVIDAD">Valor inicial de la propiedad CODIGOACTIVIDAD.</param>
-        /// <param name="nOMBREACTIVIDAD">Valor inicial de la propiedad NOMBREACTIVIDAD.</param>
-        /// <param name="eSTADOACTIVIDAD">Valor inicial de la propiedad ESTADOACTIVIDAD.</param>
-        public static ACTIVIDAD CreateACTIVIDAD(global::System.Decimal cODIGOACTIVIDAD, global::System.String nOMBREACTIVIDAD, global::System.Boolean eSTADOACTIVIDAD)
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
+        public static ACTIVIDAD CreateACTIVIDAD(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.Boolean eSTADO)
         {
             ACTIVIDAD aCTIVIDAD = new ACTIVIDAD();
-            aCTIVIDAD.CODIGOACTIVIDAD = cODIGOACTIVIDAD;
-            aCTIVIDAD.NOMBREACTIVIDAD = nOMBREACTIVIDAD;
-            aCTIVIDAD.ESTADOACTIVIDAD = eSTADOACTIVIDAD;
+            aCTIVIDAD.CODIGO = cODIGO;
+            aCTIVIDAD.NOMBRE = nOMBRE;
+            aCTIVIDAD.ESTADO = eSTADO;
             return aCTIVIDAD;
         }
 
@@ -389,123 +389,123 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOACTIVIDAD
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOACTIVIDAD;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOACTIVIDAD != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOACTIVIDADChanging(value);
-                    ReportPropertyChanging("CODIGOACTIVIDAD");
-                    _CODIGOACTIVIDAD = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOACTIVIDAD");
-                    OnCODIGOACTIVIDADChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOACTIVIDAD;
-        partial void OnCODIGOACTIVIDADChanging(global::System.Decimal value);
-        partial void OnCODIGOACTIVIDADChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String NOMBREACTIVIDAD
+        public global::System.String NOMBRE
         {
             get
             {
-                return _NOMBREACTIVIDAD;
+                return _NOMBRE;
             }
             set
             {
-                OnNOMBREACTIVIDADChanging(value);
-                ReportPropertyChanging("NOMBREACTIVIDAD");
-                _NOMBREACTIVIDAD = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NOMBREACTIVIDAD");
-                OnNOMBREACTIVIDADChanged();
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
             }
         }
-        private global::System.String _NOMBREACTIVIDAD;
-        partial void OnNOMBREACTIVIDADChanging(global::System.String value);
-        partial void OnNOMBREACTIVIDADChanged();
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> FECHAACTIVIDAD
+        public Nullable<global::System.DateTime> FECHA
         {
             get
             {
-                return _FECHAACTIVIDAD;
+                return _FECHA;
             }
             set
             {
-                OnFECHAACTIVIDADChanging(value);
-                ReportPropertyChanging("FECHAACTIVIDAD");
-                _FECHAACTIVIDAD = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("FECHAACTIVIDAD");
-                OnFECHAACTIVIDADChanged();
+                OnFECHAChanging(value);
+                ReportPropertyChanging("FECHA");
+                _FECHA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FECHA");
+                OnFECHAChanged();
             }
         }
-        private Nullable<global::System.DateTime> _FECHAACTIVIDAD;
-        partial void OnFECHAACTIVIDADChanging(Nullable<global::System.DateTime> value);
-        partial void OnFECHAACTIVIDADChanged();
+        private Nullable<global::System.DateTime> _FECHA;
+        partial void OnFECHAChanging(Nullable<global::System.DateTime> value);
+        partial void OnFECHAChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean ESTADOACTIVIDAD
+        public global::System.Boolean ESTADO
         {
             get
             {
-                return _ESTADOACTIVIDAD;
+                return _ESTADO;
             }
             set
             {
-                OnESTADOACTIVIDADChanging(value);
-                ReportPropertyChanging("ESTADOACTIVIDAD");
-                _ESTADOACTIVIDAD = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADOACTIVIDAD");
-                OnESTADOACTIVIDADChanged();
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
             }
         }
-        private global::System.Boolean _ESTADOACTIVIDAD;
-        partial void OnESTADOACTIVIDADChanging(global::System.Boolean value);
-        partial void OnESTADOACTIVIDADChanged();
+        private global::System.Boolean _ESTADO;
+        partial void OnESTADOChanging(global::System.Boolean value);
+        partial void OnESTADOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String OBSERVACIONACTIVIDAD
+        public global::System.String OBSERVACION
         {
             get
             {
-                return _OBSERVACIONACTIVIDAD;
+                return _OBSERVACION;
             }
             set
             {
-                OnOBSERVACIONACTIVIDADChanging(value);
-                ReportPropertyChanging("OBSERVACIONACTIVIDAD");
-                _OBSERVACIONACTIVIDAD = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("OBSERVACIONACTIVIDAD");
-                OnOBSERVACIONACTIVIDADChanged();
+                OnOBSERVACIONChanging(value);
+                ReportPropertyChanging("OBSERVACION");
+                _OBSERVACION = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OBSERVACION");
+                OnOBSERVACIONChanged();
             }
         }
-        private global::System.String _OBSERVACIONACTIVIDAD;
-        partial void OnOBSERVACIONACTIVIDADChanging(global::System.String value);
-        partial void OnOBSERVACIONACTIVIDADChanged();
+        private global::System.String _OBSERVACION;
+        partial void OnOBSERVACIONChanging(global::System.String value);
+        partial void OnOBSERVACIONChanged();
 
         #endregion
 
@@ -540,28 +540,6 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "USUARIO")]
-        public EntityCollection<USUARIO> USUARIOs
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<USUARIO>("bienestarModel.ACTIVIDAD_USUARIO", "USUARIO");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO>("bienestarModel.ACTIVIDAD_USUARIO", "USUARIO", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "GRUPO_ACTIVIDAD", "GRUPO")]
         public EntityCollection<GRUPO> GRUPOes
         {
@@ -574,6 +552,28 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<GRUPO>("bienestarModel.GRUPO_ACTIVIDAD", "GRUPO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "USUARIO")]
+        public EntityCollection<USUARIO> USUARIOs
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<USUARIO>("bienestarModel.ACTIVIDAD_USUARIO", "USUARIO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO>("bienestarModel.ACTIVIDAD_USUARIO", "USUARIO", value);
                 }
             }
         }
@@ -595,17 +595,17 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto ADJUNTO.
         /// </summary>
-        /// <param name="cODIGOADJUNTO">Valor inicial de la propiedad CODIGOADJUNTO.</param>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="cODIGOACTIVIDAD">Valor inicial de la propiedad CODIGOACTIVIDAD.</param>
         /// <param name="aDJUNTO1">Valor inicial de la propiedad ADJUNTO1.</param>
-        /// <param name="eSTADOADJUNTO">Valor inicial de la propiedad ESTADOADJUNTO.</param>
-        public static ADJUNTO CreateADJUNTO(global::System.Decimal cODIGOADJUNTO, global::System.Decimal cODIGOACTIVIDAD, global::System.Byte[] aDJUNTO1, global::System.Boolean eSTADOADJUNTO)
+        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
+        public static ADJUNTO CreateADJUNTO(global::System.Decimal cODIGO, global::System.Decimal cODIGOACTIVIDAD, global::System.Byte[] aDJUNTO1, global::System.Boolean eSTADO)
         {
             ADJUNTO aDJUNTO = new ADJUNTO();
-            aDJUNTO.CODIGOADJUNTO = cODIGOADJUNTO;
+            aDJUNTO.CODIGO = cODIGO;
             aDJUNTO.CODIGOACTIVIDAD = cODIGOACTIVIDAD;
             aDJUNTO.ADJUNTO1 = aDJUNTO1;
-            aDJUNTO.ESTADOADJUNTO = eSTADOADJUNTO;
+            aDJUNTO.ESTADO = eSTADO;
             return aDJUNTO;
         }
 
@@ -618,27 +618,27 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOADJUNTO
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOADJUNTO;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOADJUNTO != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOADJUNTOChanging(value);
-                    ReportPropertyChanging("CODIGOADJUNTO");
-                    _CODIGOADJUNTO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOADJUNTO");
-                    OnCODIGOADJUNTOChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOADJUNTO;
-        partial void OnCODIGOADJUNTOChanging(global::System.Decimal value);
-        partial void OnCODIGOADJUNTOChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -696,48 +696,48 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String NOMBREADJUNTO
+        public global::System.String NOMBRE
         {
             get
             {
-                return _NOMBREADJUNTO;
+                return _NOMBRE;
             }
             set
             {
-                OnNOMBREADJUNTOChanging(value);
-                ReportPropertyChanging("NOMBREADJUNTO");
-                _NOMBREADJUNTO = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("NOMBREADJUNTO");
-                OnNOMBREADJUNTOChanged();
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
             }
         }
-        private global::System.String _NOMBREADJUNTO;
-        partial void OnNOMBREADJUNTOChanging(global::System.String value);
-        partial void OnNOMBREADJUNTOChanged();
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean ESTADOADJUNTO
+        public global::System.Boolean ESTADO
         {
             get
             {
-                return _ESTADOADJUNTO;
+                return _ESTADO;
             }
             set
             {
-                OnESTADOADJUNTOChanging(value);
-                ReportPropertyChanging("ESTADOADJUNTO");
-                _ESTADOADJUNTO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADOADJUNTO");
-                OnESTADOADJUNTOChanged();
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
             }
         }
-        private global::System.Boolean _ESTADOADJUNTO;
-        partial void OnESTADOADJUNTOChanging(global::System.Boolean value);
-        partial void OnESTADOADJUNTOChanged();
+        private global::System.Boolean _ESTADO;
+        partial void OnESTADOChanging(global::System.Boolean value);
+        partial void OnESTADOChanged();
 
         #endregion
 
@@ -799,13 +799,13 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto ALUMNO.
         /// </summary>
-        /// <param name="cODIGOALUMNO">Valor inicial de la propiedad CODIGOALUMNO.</param>
-        /// <param name="nOMBREALUMNO">Valor inicial de la propiedad NOMBREALUMNO.</param>
-        public static ALUMNO CreateALUMNO(global::System.Decimal cODIGOALUMNO, global::System.String nOMBREALUMNO)
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        public static ALUMNO CreateALUMNO(global::System.Decimal cODIGO, global::System.String nOMBRE)
         {
             ALUMNO aLUMNO = new ALUMNO();
-            aLUMNO.CODIGOALUMNO = cODIGOALUMNO;
-            aLUMNO.NOMBREALUMNO = nOMBREALUMNO;
+            aLUMNO.CODIGO = cODIGO;
+            aLUMNO.NOMBRE = nOMBRE;
             return aLUMNO;
         }
 
@@ -818,51 +818,51 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOALUMNO
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOALUMNO;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOALUMNO != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOALUMNOChanging(value);
-                    ReportPropertyChanging("CODIGOALUMNO");
-                    _CODIGOALUMNO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOALUMNO");
-                    OnCODIGOALUMNOChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOALUMNO;
-        partial void OnCODIGOALUMNOChanging(global::System.Decimal value);
-        partial void OnCODIGOALUMNOChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String NOMBREALUMNO
+        public global::System.String NOMBRE
         {
             get
             {
-                return _NOMBREALUMNO;
+                return _NOMBRE;
             }
             set
             {
-                OnNOMBREALUMNOChanging(value);
-                ReportPropertyChanging("NOMBREALUMNO");
-                _NOMBREALUMNO = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NOMBREALUMNO");
-                OnNOMBREALUMNOChanged();
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
             }
         }
-        private global::System.String _NOMBREALUMNO;
-        partial void OnNOMBREALUMNOChanging(global::System.String value);
-        partial void OnNOMBREALUMNOChanged();
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
 
         #endregion
 
@@ -930,14 +930,14 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto ASISTENCIA.
         /// </summary>
-        /// <param name="cODIGOASISTENCIA">Valor inicial de la propiedad CODIGOASISTENCIA.</param>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="cODIGOGRUPO">Valor inicial de la propiedad CODIGOGRUPO.</param>
         /// <param name="cODIGOALUMNO">Valor inicial de la propiedad CODIGOALUMNO.</param>
         /// <param name="aSISTENCIA1">Valor inicial de la propiedad ASISTENCIA1.</param>
-        public static ASISTENCIA CreateASISTENCIA(global::System.Decimal cODIGOASISTENCIA, global::System.Decimal cODIGOGRUPO, global::System.Decimal cODIGOALUMNO, global::System.Boolean aSISTENCIA1)
+        public static ASISTENCIA CreateASISTENCIA(global::System.Decimal cODIGO, global::System.Decimal cODIGOGRUPO, global::System.Decimal cODIGOALUMNO, global::System.Boolean aSISTENCIA1)
         {
             ASISTENCIA aSISTENCIA = new ASISTENCIA();
-            aSISTENCIA.CODIGOASISTENCIA = cODIGOASISTENCIA;
+            aSISTENCIA.CODIGO = cODIGO;
             aSISTENCIA.CODIGOGRUPO = cODIGOGRUPO;
             aSISTENCIA.CODIGOALUMNO = cODIGOALUMNO;
             aSISTENCIA.ASISTENCIA1 = aSISTENCIA1;
@@ -953,27 +953,27 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOASISTENCIA
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOASISTENCIA;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOASISTENCIA != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOASISTENCIAChanging(value);
-                    ReportPropertyChanging("CODIGOASISTENCIA");
-                    _CODIGOASISTENCIA = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOASISTENCIA");
-                    OnCODIGOASISTENCIAChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOASISTENCIA;
-        partial void OnCODIGOASISTENCIAChanging(global::System.Decimal value);
-        partial void OnCODIGOASISTENCIAChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -1151,15 +1151,15 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto GRUPO.
         /// </summary>
-        /// <param name="cODIGOGRUPO">Valor inicial de la propiedad CODIGOGRUPO.</param>
-        /// <param name="nIVELGRUPO">Valor inicial de la propiedad NIVELGRUPO.</param>
-        /// <param name="eSTADOGRUPO">Valor inicial de la propiedad ESTADOGRUPO.</param>
-        public static GRUPO CreateGRUPO(global::System.Decimal cODIGOGRUPO, global::System.String nIVELGRUPO, global::System.Boolean eSTADOGRUPO)
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nIVEL">Valor inicial de la propiedad NIVEL.</param>
+        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
+        public static GRUPO CreateGRUPO(global::System.Decimal cODIGO, global::System.String nIVEL, global::System.Boolean eSTADO)
         {
             GRUPO gRUPO = new GRUPO();
-            gRUPO.CODIGOGRUPO = cODIGOGRUPO;
-            gRUPO.NIVELGRUPO = nIVELGRUPO;
-            gRUPO.ESTADOGRUPO = eSTADOGRUPO;
+            gRUPO.CODIGO = cODIGO;
+            gRUPO.NIVEL = nIVEL;
+            gRUPO.ESTADO = eSTADO;
             return gRUPO;
         }
 
@@ -1172,123 +1172,123 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOGRUPO
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOGRUPO;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOGRUPO != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOGRUPOChanging(value);
-                    ReportPropertyChanging("CODIGOGRUPO");
-                    _CODIGOGRUPO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOGRUPO");
-                    OnCODIGOGRUPOChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOGRUPO;
-        partial void OnCODIGOGRUPOChanging(global::System.Decimal value);
-        partial void OnCODIGOGRUPOChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String NIVELGRUPO
+        public global::System.String NIVEL
         {
             get
             {
-                return _NIVELGRUPO;
+                return _NIVEL;
             }
             set
             {
-                OnNIVELGRUPOChanging(value);
-                ReportPropertyChanging("NIVELGRUPO");
-                _NIVELGRUPO = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NIVELGRUPO");
-                OnNIVELGRUPOChanged();
+                OnNIVELChanging(value);
+                ReportPropertyChanging("NIVEL");
+                _NIVEL = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NIVEL");
+                OnNIVELChanged();
             }
         }
-        private global::System.String _NIVELGRUPO;
-        partial void OnNIVELGRUPOChanging(global::System.String value);
-        partial void OnNIVELGRUPOChanged();
+        private global::System.String _NIVEL;
+        partial void OnNIVELChanging(global::System.String value);
+        partial void OnNIVELChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String PARALELOGRUPO
+        public global::System.String PARALELO
         {
             get
             {
-                return _PARALELOGRUPO;
+                return _PARALELO;
             }
             set
             {
-                OnPARALELOGRUPOChanging(value);
-                ReportPropertyChanging("PARALELOGRUPO");
-                _PARALELOGRUPO = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("PARALELOGRUPO");
-                OnPARALELOGRUPOChanged();
+                OnPARALELOChanging(value);
+                ReportPropertyChanging("PARALELO");
+                _PARALELO = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PARALELO");
+                OnPARALELOChanged();
             }
         }
-        private global::System.String _PARALELOGRUPO;
-        partial void OnPARALELOGRUPOChanging(global::System.String value);
-        partial void OnPARALELOGRUPOChanged();
+        private global::System.String _PARALELO;
+        partial void OnPARALELOChanging(global::System.String value);
+        partial void OnPARALELOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String MODALIDADGRUPO
+        public global::System.String MODALIDAD
         {
             get
             {
-                return _MODALIDADGRUPO;
+                return _MODALIDAD;
             }
             set
             {
-                OnMODALIDADGRUPOChanging(value);
-                ReportPropertyChanging("MODALIDADGRUPO");
-                _MODALIDADGRUPO = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("MODALIDADGRUPO");
-                OnMODALIDADGRUPOChanged();
+                OnMODALIDADChanging(value);
+                ReportPropertyChanging("MODALIDAD");
+                _MODALIDAD = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("MODALIDAD");
+                OnMODALIDADChanged();
             }
         }
-        private global::System.String _MODALIDADGRUPO;
-        partial void OnMODALIDADGRUPOChanging(global::System.String value);
-        partial void OnMODALIDADGRUPOChanged();
+        private global::System.String _MODALIDAD;
+        partial void OnMODALIDADChanging(global::System.String value);
+        partial void OnMODALIDADChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean ESTADOGRUPO
+        public global::System.Boolean ESTADO
         {
             get
             {
-                return _ESTADOGRUPO;
+                return _ESTADO;
             }
             set
             {
-                OnESTADOGRUPOChanging(value);
-                ReportPropertyChanging("ESTADOGRUPO");
-                _ESTADOGRUPO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADOGRUPO");
-                OnESTADOGRUPOChanged();
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
             }
         }
-        private global::System.Boolean _ESTADOGRUPO;
-        partial void OnESTADOGRUPOChanging(global::System.Boolean value);
-        partial void OnESTADOGRUPOChanged();
+        private global::System.Boolean _ESTADO;
+        partial void OnESTADOChanging(global::System.Boolean value);
+        partial void OnESTADOChanged();
 
         #endregion
 
@@ -1356,17 +1356,17 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto MODULO.
         /// </summary>
-        /// <param name="cODIGOMODULO">Valor inicial de la propiedad CODIGOMODULO.</param>
-        /// <param name="nOMBREMODULO">Valor inicial de la propiedad NOMBREMODULO.</param>
-        /// <param name="eNLACEMODULO">Valor inicial de la propiedad ENLACEMODULO.</param>
-        /// <param name="eSTADOROL">Valor inicial de la propiedad ESTADOROL.</param>
-        public static MODULO CreateMODULO(global::System.Decimal cODIGOMODULO, global::System.String nOMBREMODULO, global::System.String eNLACEMODULO, global::System.Boolean eSTADOROL)
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        /// <param name="eNLACE">Valor inicial de la propiedad ENLACE.</param>
+        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
+        public static MODULO CreateMODULO(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.String eNLACE, global::System.Boolean eSTADO)
         {
             MODULO mODULO = new MODULO();
-            mODULO.CODIGOMODULO = cODIGOMODULO;
-            mODULO.NOMBREMODULO = nOMBREMODULO;
-            mODULO.ENLACEMODULO = eNLACEMODULO;
-            mODULO.ESTADOROL = eSTADOROL;
+            mODULO.CODIGO = cODIGO;
+            mODULO.NOMBRE = nOMBRE;
+            mODULO.ENLACE = eNLACE;
+            mODULO.ESTADO = eSTADO;
             return mODULO;
         }
 
@@ -1379,99 +1379,99 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOMODULO
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOMODULO;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOMODULO != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOMODULOChanging(value);
-                    ReportPropertyChanging("CODIGOMODULO");
-                    _CODIGOMODULO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOMODULO");
-                    OnCODIGOMODULOChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOMODULO;
-        partial void OnCODIGOMODULOChanging(global::System.Decimal value);
-        partial void OnCODIGOMODULOChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String NOMBREMODULO
+        public global::System.String NOMBRE
         {
             get
             {
-                return _NOMBREMODULO;
+                return _NOMBRE;
             }
             set
             {
-                OnNOMBREMODULOChanging(value);
-                ReportPropertyChanging("NOMBREMODULO");
-                _NOMBREMODULO = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NOMBREMODULO");
-                OnNOMBREMODULOChanged();
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
             }
         }
-        private global::System.String _NOMBREMODULO;
-        partial void OnNOMBREMODULOChanging(global::System.String value);
-        partial void OnNOMBREMODULOChanged();
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ENLACEMODULO
+        public global::System.String ENLACE
         {
             get
             {
-                return _ENLACEMODULO;
+                return _ENLACE;
             }
             set
             {
-                OnENLACEMODULOChanging(value);
-                ReportPropertyChanging("ENLACEMODULO");
-                _ENLACEMODULO = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ENLACEMODULO");
-                OnENLACEMODULOChanged();
+                OnENLACEChanging(value);
+                ReportPropertyChanging("ENLACE");
+                _ENLACE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ENLACE");
+                OnENLACEChanged();
             }
         }
-        private global::System.String _ENLACEMODULO;
-        partial void OnENLACEMODULOChanging(global::System.String value);
-        partial void OnENLACEMODULOChanged();
+        private global::System.String _ENLACE;
+        partial void OnENLACEChanging(global::System.String value);
+        partial void OnENLACEChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean ESTADOROL
+        public global::System.Boolean ESTADO
         {
             get
             {
-                return _ESTADOROL;
+                return _ESTADO;
             }
             set
             {
-                OnESTADOROLChanging(value);
-                ReportPropertyChanging("ESTADOROL");
-                _ESTADOROL = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADOROL");
-                OnESTADOROLChanged();
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
             }
         }
-        private global::System.Boolean _ESTADOROL;
-        partial void OnESTADOROLChanging(global::System.Boolean value);
-        partial void OnESTADOROLChanged();
+        private global::System.Boolean _ESTADO;
+        partial void OnESTADOChanging(global::System.Boolean value);
+        partial void OnESTADOChanged();
 
         #endregion
 
@@ -1517,13 +1517,13 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto NIVEL.
         /// </summary>
-        /// <param name="cODIGONIVEL">Valor inicial de la propiedad CODIGONIVEL.</param>
-        /// <param name="nOMBRENIVEL">Valor inicial de la propiedad NOMBRENIVEL.</param>
-        public static NIVEL CreateNIVEL(global::System.Decimal cODIGONIVEL, global::System.String nOMBRENIVEL)
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        public static NIVEL CreateNIVEL(global::System.Decimal cODIGO, global::System.String nOMBRE)
         {
             NIVEL nIVEL = new NIVEL();
-            nIVEL.CODIGONIVEL = cODIGONIVEL;
-            nIVEL.NOMBRENIVEL = nOMBRENIVEL;
+            nIVEL.CODIGO = cODIGO;
+            nIVEL.NOMBRE = nOMBRE;
             return nIVEL;
         }
 
@@ -1536,51 +1536,51 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGONIVEL
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGONIVEL;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGONIVEL != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGONIVELChanging(value);
-                    ReportPropertyChanging("CODIGONIVEL");
-                    _CODIGONIVEL = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGONIVEL");
-                    OnCODIGONIVELChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGONIVEL;
-        partial void OnCODIGONIVELChanging(global::System.Decimal value);
-        partial void OnCODIGONIVELChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String NOMBRENIVEL
+        public global::System.String NOMBRE
         {
             get
             {
-                return _NOMBRENIVEL;
+                return _NOMBRE;
             }
             set
             {
-                OnNOMBRENIVELChanging(value);
-                ReportPropertyChanging("NOMBRENIVEL");
-                _NOMBRENIVEL = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NOMBRENIVEL");
-                OnNOMBRENIVELChanged();
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
             }
         }
-        private global::System.String _NOMBRENIVEL;
-        partial void OnNOMBRENIVELChanging(global::System.String value);
-        partial void OnNOMBRENIVELChanged();
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
 
         #endregion
 
@@ -1626,15 +1626,15 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto ROL.
         /// </summary>
-        /// <param name="cODIGOROL">Valor inicial de la propiedad CODIGOROL.</param>
-        /// <param name="nOMBREROL">Valor inicial de la propiedad NOMBREROL.</param>
-        /// <param name="eSTADOROL">Valor inicial de la propiedad ESTADOROL.</param>
-        public static ROL CreateROL(global::System.Decimal cODIGOROL, global::System.String nOMBREROL, global::System.Boolean eSTADOROL)
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
+        public static ROL CreateROL(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.Boolean eSTADO)
         {
             ROL rOL = new ROL();
-            rOL.CODIGOROL = cODIGOROL;
-            rOL.NOMBREROL = nOMBREROL;
-            rOL.ESTADOROL = eSTADOROL;
+            rOL.CODIGO = cODIGO;
+            rOL.NOMBRE = nOMBRE;
+            rOL.ESTADO = eSTADO;
             return rOL;
         }
 
@@ -1647,75 +1647,75 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOROL
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOROL;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOROL != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOROLChanging(value);
-                    ReportPropertyChanging("CODIGOROL");
-                    _CODIGOROL = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOROL");
-                    OnCODIGOROLChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOROL;
-        partial void OnCODIGOROLChanging(global::System.Decimal value);
-        partial void OnCODIGOROLChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String NOMBREROL
+        public global::System.String NOMBRE
         {
             get
             {
-                return _NOMBREROL;
+                return _NOMBRE;
             }
             set
             {
-                OnNOMBREROLChanging(value);
-                ReportPropertyChanging("NOMBREROL");
-                _NOMBREROL = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NOMBREROL");
-                OnNOMBREROLChanged();
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
             }
         }
-        private global::System.String _NOMBREROL;
-        partial void OnNOMBREROLChanging(global::System.String value);
-        partial void OnNOMBREROLChanged();
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean ESTADOROL
+        public global::System.Boolean ESTADO
         {
             get
             {
-                return _ESTADOROL;
+                return _ESTADO;
             }
             set
             {
-                OnESTADOROLChanging(value);
-                ReportPropertyChanging("ESTADOROL");
-                _ESTADOROL = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADOROL");
-                OnESTADOROLChanged();
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
             }
         }
-        private global::System.Boolean _ESTADOROL;
-        partial void OnESTADOROLChanging(global::System.Boolean value);
-        partial void OnESTADOROLChanged();
+        private global::System.Boolean _ESTADO;
+        partial void OnESTADOChanging(global::System.Boolean value);
+        partial void OnESTADOChanged();
 
         #endregion
 
@@ -2154,17 +2154,23 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto USUARIO.
         /// </summary>
-        /// <param name="cODIGOUSUARIO">Valor inicial de la propiedad CODIGOUSUARIO.</param>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBREUSUARIO">Valor inicial de la propiedad NOMBREUSUARIO.</param>
+        /// <param name="cEDULA">Valor inicial de la propiedad CEDULA.</param>
+        /// <param name="cORREO">Valor inicial de la propiedad CORREO.</param>
         /// <param name="cONTRASENAANTERIOR">Valor inicial de la propiedad CONTRASENAANTERIOR.</param>
-        /// <param name="eSTADOUSUARIO">Valor inicial de la propiedad ESTADOUSUARIO.</param>
-        /// <param name="uSUARIO1">Valor inicial de la propiedad USUARIO1.</param>
-        public static USUARIO CreateUSUARIO(global::System.Decimal cODIGOUSUARIO, global::System.String cONTRASENAANTERIOR, global::System.Boolean eSTADOUSUARIO, global::System.String uSUARIO1)
+        /// <param name="cONTRASENAACTUAL">Valor inicial de la propiedad CONTRASENAACTUAL.</param>
+        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
+        public static USUARIO CreateUSUARIO(global::System.Decimal cODIGO, global::System.String nOMBREUSUARIO, global::System.String cEDULA, global::System.String cORREO, global::System.String cONTRASENAANTERIOR, global::System.String cONTRASENAACTUAL, global::System.Boolean eSTADO)
         {
             USUARIO uSUARIO = new USUARIO();
-            uSUARIO.CODIGOUSUARIO = cODIGOUSUARIO;
+            uSUARIO.CODIGO = cODIGO;
+            uSUARIO.NOMBREUSUARIO = nOMBREUSUARIO;
+            uSUARIO.CEDULA = cEDULA;
+            uSUARIO.CORREO = cORREO;
             uSUARIO.CONTRASENAANTERIOR = cONTRASENAANTERIOR;
-            uSUARIO.ESTADOUSUARIO = eSTADOUSUARIO;
-            uSUARIO.USUARIO1 = uSUARIO1;
+            uSUARIO.CONTRASENAACTUAL = cONTRASENAACTUAL;
+            uSUARIO.ESTADO = eSTADO;
             return uSUARIO;
         }
 
@@ -2177,32 +2183,32 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOUSUARIO
+        public global::System.Decimal CODIGO
         {
             get
             {
-                return _CODIGOUSUARIO;
+                return _CODIGO;
             }
             set
             {
-                if (_CODIGOUSUARIO != value)
+                if (_CODIGO != value)
                 {
-                    OnCODIGOUSUARIOChanging(value);
-                    ReportPropertyChanging("CODIGOUSUARIO");
-                    _CODIGOUSUARIO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOUSUARIO");
-                    OnCODIGOUSUARIOChanged();
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOUSUARIO;
-        partial void OnCODIGOUSUARIOChanging(global::System.Decimal value);
-        partial void OnCODIGOUSUARIOChanged();
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String NOMBREUSUARIO
         {
@@ -2214,7 +2220,7 @@ namespace SistemaBienestarEstudiantil.Models
             {
                 OnNOMBREUSUARIOChanging(value);
                 ReportPropertyChanging("NOMBREUSUARIO");
-                _NOMBREUSUARIO = StructuralObject.SetValidValue(value, true);
+                _NOMBREUSUARIO = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("NOMBREUSUARIO");
                 OnNOMBREUSUARIOChanged();
             }
@@ -2228,24 +2234,72 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String CEDULAUSUARIO
+        public global::System.String NOMBRECOMPLETO
         {
             get
             {
-                return _CEDULAUSUARIO;
+                return _NOMBRECOMPLETO;
             }
             set
             {
-                OnCEDULAUSUARIOChanging(value);
-                ReportPropertyChanging("CEDULAUSUARIO");
-                _CEDULAUSUARIO = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("CEDULAUSUARIO");
-                OnCEDULAUSUARIOChanged();
+                OnNOMBRECOMPLETOChanging(value);
+                ReportPropertyChanging("NOMBRECOMPLETO");
+                _NOMBRECOMPLETO = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("NOMBRECOMPLETO");
+                OnNOMBRECOMPLETOChanged();
             }
         }
-        private global::System.String _CEDULAUSUARIO;
-        partial void OnCEDULAUSUARIOChanging(global::System.String value);
-        partial void OnCEDULAUSUARIOChanged();
+        private global::System.String _NOMBRECOMPLETO;
+        partial void OnNOMBRECOMPLETOChanging(global::System.String value);
+        partial void OnNOMBRECOMPLETOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CEDULA
+        {
+            get
+            {
+                return _CEDULA;
+            }
+            set
+            {
+                OnCEDULAChanging(value);
+                ReportPropertyChanging("CEDULA");
+                _CEDULA = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CEDULA");
+                OnCEDULAChanged();
+            }
+        }
+        private global::System.String _CEDULA;
+        partial void OnCEDULAChanging(global::System.String value);
+        partial void OnCEDULAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String CORREO
+        {
+            get
+            {
+                return _CORREO;
+            }
+            set
+            {
+                OnCORREOChanging(value);
+                ReportPropertyChanging("CORREO");
+                _CORREO = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("CORREO");
+                OnCORREOChanged();
+            }
+        }
+        private global::System.String _CORREO;
+        partial void OnCORREOChanging(global::System.String value);
+        partial void OnCORREOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -2274,7 +2328,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String CONTRASENAACTUAL
         {
@@ -2286,7 +2340,7 @@ namespace SistemaBienestarEstudiantil.Models
             {
                 OnCONTRASENAACTUALChanging(value);
                 ReportPropertyChanging("CONTRASENAACTUAL");
-                _CONTRASENAACTUAL = StructuralObject.SetValidValue(value, true);
+                _CONTRASENAACTUAL = StructuralObject.SetValidValue(value, false);
                 ReportPropertyChanged("CONTRASENAACTUAL");
                 OnCONTRASENAACTUALChanged();
             }
@@ -2300,72 +2354,48 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String TIPOUSUARIO
+        public global::System.String TIPO
         {
             get
             {
-                return _TIPOUSUARIO;
+                return _TIPO;
             }
             set
             {
-                OnTIPOUSUARIOChanging(value);
-                ReportPropertyChanging("TIPOUSUARIO");
-                _TIPOUSUARIO = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("TIPOUSUARIO");
-                OnTIPOUSUARIOChanged();
+                OnTIPOChanging(value);
+                ReportPropertyChanging("TIPO");
+                _TIPO = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TIPO");
+                OnTIPOChanged();
             }
         }
-        private global::System.String _TIPOUSUARIO;
-        partial void OnTIPOUSUARIOChanging(global::System.String value);
-        partial void OnTIPOUSUARIOChanged();
+        private global::System.String _TIPO;
+        partial void OnTIPOChanging(global::System.String value);
+        partial void OnTIPOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean ESTADOUSUARIO
+        public global::System.Boolean ESTADO
         {
             get
             {
-                return _ESTADOUSUARIO;
+                return _ESTADO;
             }
             set
             {
-                OnESTADOUSUARIOChanging(value);
-                ReportPropertyChanging("ESTADOUSUARIO");
-                _ESTADOUSUARIO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADOUSUARIO");
-                OnESTADOUSUARIOChanged();
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
             }
         }
-        private global::System.Boolean _ESTADOUSUARIO;
-        partial void OnESTADOUSUARIOChanging(global::System.Boolean value);
-        partial void OnESTADOUSUARIOChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String USUARIO1
-        {
-            get
-            {
-                return _USUARIO1;
-            }
-            set
-            {
-                OnUSUARIO1Changing(value);
-                ReportPropertyChanging("USUARIO1");
-                _USUARIO1 = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("USUARIO1");
-                OnUSUARIO1Changed();
-            }
-        }
-        private global::System.String _USUARIO1;
-        partial void OnUSUARIO1Changing(global::System.String value);
-        partial void OnUSUARIO1Changed();
+        private global::System.Boolean _ESTADO;
+        partial void OnESTADOChanging(global::System.Boolean value);
+        partial void OnESTADOChanged();
 
         #endregion
 

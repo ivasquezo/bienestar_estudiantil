@@ -120,9 +120,9 @@ namespace SistemaBienestarEstudiantil.Models
 
             try
             {
-                usuario = db.USUARIOs.Single(u => u.USUARIO1 == userName && u.CONTRASENAACTUAL == password);
+                usuario = db.USUARIOs.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == password);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException e) // catch too Win32Exception (error en coneccion) System.Data.EntityException
             {
                 Console.Write(e);
             }
@@ -139,7 +139,7 @@ namespace SistemaBienestarEstudiantil.Models
             {
                 db = new bienestarEntities();
 
-                USUARIO usuario = db.USUARIOs.Single(u => u.CODIGOUSUARIO == codigoUsuario);
+                USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == codigoUsuario);
                 usuario.CONTRASENAACTUAL = newPassword;
                 db.SaveChanges();
             }

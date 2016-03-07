@@ -87,7 +87,7 @@ namespace SistemaBienestarEstudiantil.Controllers
             {
                 if (Utils.ValidateConfirmPassword(usuario.CONTRASENAACTUAL, model.OldPassword, model.NewPassword, model.ConfirmPassword))
                 {
-                    MembershipService.ChangePassword(usuario.CODIGOUSUARIO, model.NewPassword);
+                    MembershipService.ChangePassword(usuario.CODIGO, model.NewPassword);
                     Session["usuarioValidado"] = true;
                     Session["firstPasswordAccess"] = false;
                     return RedirectToAction("Tareas", "Home");

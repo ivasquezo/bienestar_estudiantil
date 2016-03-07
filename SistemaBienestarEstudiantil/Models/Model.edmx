@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="bienestarModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="bienestarModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="bienestarModelStoreContainer">
           <EntitySet Name="ACTIVIDAD" EntityType="bienestarModel.Store.ACTIVIDAD" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ACTIVIDAD_USUARIO" EntityType="bienestarModel.Store.ACTIVIDAD_USUARIO" store:Type="Tables" Schema="dbo" />
@@ -76,13 +76,13 @@
         </EntityContainer>
         <EntityType Name="ACTIVIDAD">
           <Key>
-            <PropertyRef Name="CODIGOACTIVIDAD" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
-          <Property Name="NOMBREACTIVIDAD" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="FECHAACTIVIDAD" Type="date" />
-          <Property Name="ESTADOACTIVIDAD" Type="bit" Nullable="false" />
-          <Property Name="OBSERVACIONACTIVIDAD" Type="nvarchar(max)" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="FECHA" Type="date" />
+          <Property Name="ESTADO" Type="bit" Nullable="false" />
+          <Property Name="OBSERVACION" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="ACTIVIDAD_USUARIO">
           <Key>
@@ -94,42 +94,42 @@
         </EntityType>
         <EntityType Name="ADJUNTO">
           <Key>
-            <PropertyRef Name="CODIGOADJUNTO" />
+            <PropertyRef Name="CODIGO" />
             <PropertyRef Name="CODIGOACTIVIDAD" />
           </Key>
-          <Property Name="CODIGOADJUNTO" Type="numeric" Nullable="false" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
           <Property Name="ADJUNTO" Type="varbinary(max)" Nullable="false" />
-          <Property Name="NOMBREADJUNTO" Type="varchar" MaxLength="50" />
-          <Property Name="ESTADOADJUNTO" Type="bit" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
+          <Property Name="ESTADO" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ALUMNO">
           <Key>
-            <PropertyRef Name="CODIGOALUMNO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
-          <Property Name="NOMBREALUMNO" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <EntityType Name="ASISTENCIA">
           <Key>
-            <PropertyRef Name="CODIGOASISTENCIA" />
+            <PropertyRef Name="CODIGO" />
             <PropertyRef Name="CODIGOGRUPO" />
             <PropertyRef Name="CODIGOALUMNO" />
           </Key>
-          <Property Name="CODIGOASISTENCIA" Type="numeric" Nullable="false" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CODIGOGRUPO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
           <Property Name="ASISTENCIA" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
-            <PropertyRef Name="CODIGOGRUPO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOGRUPO" Type="numeric" Nullable="false" />
-          <Property Name="NIVELGRUPO" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="PARALELOGRUPO" Type="varchar" MaxLength="1" />
-          <Property Name="MODALIDADGRUPO" Type="varchar" MaxLength="20" />
-          <Property Name="ESTADOGRUPO" Type="bit" Nullable="false" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NIVEL" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="PARALELO" Type="varchar" MaxLength="1" />
+          <Property Name="MODALIDAD" Type="varchar" MaxLength="20" />
+          <Property Name="ESTADO" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="GRUPO_ACTIVIDAD">
           <Key>
@@ -141,19 +141,19 @@
         </EntityType>
         <EntityType Name="MODULO">
           <Key>
-            <PropertyRef Name="CODIGOMODULO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOMODULO" Type="numeric" Nullable="false" />
-          <Property Name="NOMBREMODULO" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="ENLACEMODULO" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="ESTADOROL" Type="bit" Nullable="false" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="ENLACE" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ESTADO" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="NIVEL">
           <Key>
-            <PropertyRef Name="CODIGONIVEL" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGONIVEL" Type="numeric" Nullable="false" />
-          <Property Name="NOMBRENIVEL" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="20" />
         </EntityType>
         <EntityType Name="NIVEL_ALUMNO">
           <Key>
@@ -165,11 +165,11 @@
         </EntityType>
         <EntityType Name="ROL">
           <Key>
-            <PropertyRef Name="CODIGOROL" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOROL" Type="numeric" Nullable="false" />
-          <Property Name="NOMBREROL" Type="varchar" Nullable="false" MaxLength="30" />
-          <Property Name="ESTADOROL" Type="bit" Nullable="false" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="ESTADO" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ROL_MODULO">
           <Key>
@@ -193,16 +193,17 @@
         </EntityType>
         <EntityType Name="USUARIO">
           <Key>
-            <PropertyRef Name="CODIGOUSUARIO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOUSUARIO" Type="numeric" Nullable="false" />
-          <Property Name="NOMBREUSUARIO" Type="varchar" MaxLength="50" />
-          <Property Name="CEDULAUSUARIO" Type="varchar" MaxLength="10" />
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBREUSUARIO" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="NOMBRECOMPLETO" Type="varchar" MaxLength="50" />
+          <Property Name="CEDULA" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="CORREO" Type="varchar" Nullable="false" MaxLength="40" />
           <Property Name="CONTRASENAANTERIOR" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="CONTRASENAACTUAL" Type="varchar" MaxLength="10" />
-          <Property Name="TIPOUSUARIO" Type="varchar" MaxLength="10" />
-          <Property Name="ESTADOUSUARIO" Type="bit" Nullable="false" />
-          <Property Name="USUARIO" Type="varchar" Nullable="false" MaxLength="20" />
+          <Property Name="CONTRASENAACTUAL" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="TIPO" Type="varchar" MaxLength="10" />
+          <Property Name="ESTADO" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="USUARIO_ROL">
           <Key>
@@ -217,7 +218,7 @@
           <End Role="ACTIVIDAD_USUARIO" Type="bienestarModel.Store.ACTIVIDAD_USUARIO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ACTIVIDAD_USUARIO">
               <PropertyRef Name="CODIGOACTIVIDAD" />
@@ -229,7 +230,7 @@
           <End Role="ACTIVIDAD_USUARIO" Type="bienestarModel.Store.ACTIVIDAD_USUARIO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="USUARIO">
-              <PropertyRef Name="CODIGOUSUARIO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ACTIVIDAD_USUARIO">
               <PropertyRef Name="CODIGOUSUARIO" />
@@ -241,7 +242,7 @@
           <End Role="ADJUNTO" Type="bienestarModel.Store.ADJUNTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ADJUNTO">
               <PropertyRef Name="CODIGOACTIVIDAD" />
@@ -253,7 +254,7 @@
           <End Role="ASISTENCIA" Type="bienestarModel.Store.ASISTENCIA" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ALUMNO">
-              <PropertyRef Name="CODIGOALUMNO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ASISTENCIA">
               <PropertyRef Name="CODIGOALUMNO" />
@@ -265,7 +266,7 @@
           <End Role="ASISTENCIA" Type="bienestarModel.Store.ASISTENCIA" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="GRUPO">
-              <PropertyRef Name="CODIGOGRUPO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ASISTENCIA">
               <PropertyRef Name="CODIGOGRUPO" />
@@ -277,7 +278,7 @@
           <End Role="GRUPO_ACTIVIDAD" Type="bienestarModel.Store.GRUPO_ACTIVIDAD" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="GRUPO_ACTIVIDAD">
               <PropertyRef Name="CODIGOACTIVIDAD" />
@@ -289,7 +290,7 @@
           <End Role="GRUPO_ACTIVIDAD" Type="bienestarModel.Store.GRUPO_ACTIVIDAD" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="GRUPO">
-              <PropertyRef Name="CODIGOGRUPO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="GRUPO_ACTIVIDAD">
               <PropertyRef Name="CODIGOGRUPO" />
@@ -301,7 +302,7 @@
           <End Role="NIVEL_ALUMNO" Type="bienestarModel.Store.NIVEL_ALUMNO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ALUMNO">
-              <PropertyRef Name="CODIGOALUMNO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="NIVEL_ALUMNO">
               <PropertyRef Name="CODIGOALUMNO" />
@@ -313,7 +314,7 @@
           <End Role="NIVEL_ALUMNO" Type="bienestarModel.Store.NIVEL_ALUMNO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NIVEL">
-              <PropertyRef Name="CODIGONIVEL" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="NIVEL_ALUMNO">
               <PropertyRef Name="CODIGONIVEL" />
@@ -325,7 +326,7 @@
           <End Role="ROL_MODULO" Type="bienestarModel.Store.ROL_MODULO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MODULO">
-              <PropertyRef Name="CODIGOMODULO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ROL_MODULO">
               <PropertyRef Name="CODIGOMODULO" />
@@ -337,7 +338,7 @@
           <End Role="ROL_MODULO" Type="bienestarModel.Store.ROL_MODULO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ROL">
-              <PropertyRef Name="CODIGOROL" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ROL_MODULO">
               <PropertyRef Name="CODIGOROL" />
@@ -349,7 +350,7 @@
           <End Role="USUARIO_ROL" Type="bienestarModel.Store.USUARIO_ROL" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ROL">
-              <PropertyRef Name="CODIGOROL" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="USUARIO_ROL">
               <PropertyRef Name="CODIGOROL" />
@@ -361,15 +362,14 @@
           <End Role="USUARIO_ROL" Type="bienestarModel.Store.USUARIO_ROL" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="USUARIO">
-              <PropertyRef Name="CODIGOUSUARIO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="USUARIO_ROL">
               <PropertyRef Name="CODIGOUSUARIO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="bienestarModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -384,7 +384,6 @@
           <EntitySet Name="ROLs" EntityType="bienestarModel.ROL" />
           <EntitySet Name="ROL_MODULO" EntityType="bienestarModel.ROL_MODULO" />
           <EntitySet Name="sysdiagrams" EntityType="bienestarModel.sysdiagram" />
-          <EntitySet Name="USUARIOs" EntityType="bienestarModel.USUARIO" />
           <AssociationSet Name="FK_ADJUNTO_ACTIVIDAD" Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
             <End Role="ADJUNTO" EntitySet="ADJUNTOes" />
@@ -405,10 +404,6 @@
             <End Role="ROL" EntitySet="ROLs" />
             <End Role="ROL_MODULO" EntitySet="ROL_MODULO" />
           </AssociationSet>
-          <AssociationSet Name="ACTIVIDAD_USUARIO" Association="bienestarModel.ACTIVIDAD_USUARIO">
-            <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
-            <End Role="USUARIO" EntitySet="USUARIOs" />
-          </AssociationSet>
           <AssociationSet Name="GRUPO_ACTIVIDAD" Association="bienestarModel.GRUPO_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
             <End Role="GRUPO" EntitySet="GRUPOes" />
@@ -417,95 +412,100 @@
             <End Role="ALUMNO" EntitySet="ALUMNOes" />
             <End Role="NIVEL" EntitySet="NIVELs" />
           </AssociationSet>
+          <EntitySet Name="USUARIOs" EntityType="bienestarModel.USUARIO" />
+          <AssociationSet Name="ACTIVIDAD_USUARIO" Association="bienestarModel.ACTIVIDAD_USUARIO">
+            <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
+            <End Role="USUARIO" EntitySet="USUARIOs" />
+          </AssociationSet>
           <AssociationSet Name="USUARIO_ROL" Association="bienestarModel.USUARIO_ROL">
             <End Role="ROL" EntitySet="ROLs" />
             <End Role="USUARIO" EntitySet="USUARIOs" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="ACTIVIDAD">
           <Key>
-            <PropertyRef Name="CODIGOACTIVIDAD" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOACTIVIDAD" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NOMBREACTIVIDAD" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="FECHAACTIVIDAD" Type="DateTime" />
-          <Property Name="ESTADOACTIVIDAD" Type="Boolean" Nullable="false" />
-          <Property Name="OBSERVACIONACTIVIDAD" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FECHA" />
+          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
+          <Property Type="String" Name="OBSERVACION" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ADJUNTOes" Relationship="bienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ADJUNTO" />
-          <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="ACTIVIDAD" ToRole="USUARIO" />
           <NavigationProperty Name="GRUPOes" Relationship="bienestarModel.GRUPO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="GRUPO" />
+          <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="ACTIVIDAD" ToRole="USUARIO" />
         </EntityType>
         <EntityType Name="ADJUNTO">
           <Key>
-            <PropertyRef Name="CODIGOADJUNTO" />
+            <PropertyRef Name="CODIGO" />
             <PropertyRef Name="CODIGOACTIVIDAD" />
           </Key>
-          <Property Name="CODIGOADJUNTO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="CODIGOACTIVIDAD" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="ADJUNTO1" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Name="NOMBREADJUNTO" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="ESTADOADJUNTO" Type="Boolean" Nullable="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOACTIVIDAD" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Binary" Name="ADJUNTO1" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="NOMBRE" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
           <NavigationProperty Name="ACTIVIDAD" Relationship="bienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ADJUNTO" ToRole="ACTIVIDAD" />
         </EntityType>
         <EntityType Name="ALUMNO">
           <Key>
-            <PropertyRef Name="CODIGOALUMNO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOALUMNO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NOMBREALUMNO" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ASISTENCIAs" Relationship="bienestarModel.FK_ASISTENCIA_ALUMNO" FromRole="ALUMNO" ToRole="ASISTENCIA" />
           <NavigationProperty Name="NIVELs" Relationship="bienestarModel.NIVEL_ALUMNO" FromRole="ALUMNO" ToRole="NIVEL" />
         </EntityType>
         <EntityType Name="ASISTENCIA">
           <Key>
-            <PropertyRef Name="CODIGOASISTENCIA" />
+            <PropertyRef Name="CODIGO" />
             <PropertyRef Name="CODIGOGRUPO" />
             <PropertyRef Name="CODIGOALUMNO" />
           </Key>
-          <Property Name="CODIGOASISTENCIA" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="CODIGOGRUPO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="CODIGOALUMNO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="ASISTENCIA1" Type="Boolean" Nullable="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOGRUPO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOALUMNO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="ASISTENCIA1" Nullable="false" />
           <NavigationProperty Name="ALUMNO" Relationship="bienestarModel.FK_ASISTENCIA_ALUMNO" FromRole="ASISTENCIA" ToRole="ALUMNO" />
           <NavigationProperty Name="GRUPO" Relationship="bienestarModel.FK_ASISTENCIA_GRUPO" FromRole="ASISTENCIA" ToRole="GRUPO" />
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
-            <PropertyRef Name="CODIGOGRUPO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOGRUPO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NIVELGRUPO" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="PARALELOGRUPO" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
-          <Property Name="MODALIDADGRUPO" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="ESTADOGRUPO" Type="Boolean" Nullable="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NIVEL" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="PARALELO" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="MODALIDAD" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
           <NavigationProperty Name="ASISTENCIAs" Relationship="bienestarModel.FK_ASISTENCIA_GRUPO" FromRole="GRUPO" ToRole="ASISTENCIA" />
           <NavigationProperty Name="ACTIVIDADs" Relationship="bienestarModel.GRUPO_ACTIVIDAD" FromRole="GRUPO" ToRole="ACTIVIDAD" />
         </EntityType>
         <EntityType Name="MODULO">
           <Key>
-            <PropertyRef Name="CODIGOMODULO" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOMODULO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NOMBREMODULO" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-          <Property Name="ENLACEMODULO" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="ESTADOROL" Type="Boolean" Nullable="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="ENLACE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
           <NavigationProperty Name="ROL_MODULO" Relationship="bienestarModel.FK_ROL_MODULO_MODULO1" FromRole="MODULO" ToRole="ROL_MODULO" />
         </EntityType>
         <EntityType Name="NIVEL">
           <Key>
-            <PropertyRef Name="CODIGONIVEL" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGONIVEL" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NOMBRENIVEL" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ALUMNOes" Relationship="bienestarModel.NIVEL_ALUMNO" FromRole="NIVEL" ToRole="ALUMNO" />
         </EntityType>
         <EntityType Name="ROL">
           <Key>
-            <PropertyRef Name="CODIGOROL" />
+            <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Name="CODIGOROL" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NOMBREROL" Type="String" Nullable="false" MaxLength="30" Unicode="false" FixedLength="false" />
-          <Property Name="ESTADOROL" Type="Boolean" Nullable="false" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
           <NavigationProperty Name="ROL_MODULO" Relationship="bienestarModel.FK_ROL_MODULO_ROL" FromRole="ROL" ToRole="ROL_MODULO" />
           <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.USUARIO_ROL" FromRole="ROL" ToRole="USUARIO" />
         </EntityType>
@@ -514,10 +514,10 @@
             <PropertyRef Name="CODIGOROL" />
             <PropertyRef Name="CODIGOMODULO" />
           </Key>
-          <Property Name="CODIGOROL" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="CODIGOMODULO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="VISUALIZAR" Type="Boolean" />
-          <Property Name="EDITAR" Type="Boolean" />
+          <Property Type="Decimal" Name="CODIGOROL" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOMODULO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="VISUALIZAR" />
+          <Property Type="Boolean" Name="EDITAR" />
           <NavigationProperty Name="MODULO" Relationship="bienestarModel.FK_ROL_MODULO_MODULO1" FromRole="ROL_MODULO" ToRole="MODULO" />
           <NavigationProperty Name="ROL" Relationship="bienestarModel.FK_ROL_MODULO_ROL" FromRole="ROL_MODULO" ToRole="ROL" />
         </EntityType>
@@ -525,33 +525,18 @@
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="USUARIO">
-          <Key>
-            <PropertyRef Name="CODIGOUSUARIO" />
-          </Key>
-          <Property Name="CODIGOUSUARIO" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="NOMBREUSUARIO" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="CEDULAUSUARIO" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="CONTRASENAANTERIOR" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="CONTRASENAACTUAL" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="TIPOUSUARIO" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="ESTADOUSUARIO" Type="Boolean" Nullable="false" />
-          <Property Name="USUARIO1" Type="String" Nullable="false" MaxLength="20" Unicode="false" FixedLength="false" />
-          <NavigationProperty Name="ACTIVIDADs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="USUARIO" ToRole="ACTIVIDAD" />
-          <NavigationProperty Name="ROLs" Relationship="bienestarModel.USUARIO_ROL" FromRole="USUARIO" ToRole="ROL" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="principal_id" Nullable="false" />
+          <Property Type="Int32" Name="diagram_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="version" />
+          <Property Type="Binary" Name="definition" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_ADJUNTO_ACTIVIDAD">
-          <End Role="ACTIVIDAD" Type="bienestarModel.ACTIVIDAD" Multiplicity="1" />
-          <End Role="ADJUNTO" Type="bienestarModel.ADJUNTO" Multiplicity="*" />
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
+          <End Type="bienestarModel.ADJUNTO" Role="ADJUNTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ADJUNTO">
               <PropertyRef Name="CODIGOACTIVIDAD" />
@@ -559,11 +544,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ASISTENCIA_ALUMNO">
-          <End Role="ALUMNO" Type="bienestarModel.ALUMNO" Multiplicity="1" />
-          <End Role="ASISTENCIA" Type="bienestarModel.ASISTENCIA" Multiplicity="*" />
+          <End Type="bienestarModel.ALUMNO" Role="ALUMNO" Multiplicity="1" />
+          <End Type="bienestarModel.ASISTENCIA" Role="ASISTENCIA" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ALUMNO">
-              <PropertyRef Name="CODIGOALUMNO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ASISTENCIA">
               <PropertyRef Name="CODIGOALUMNO" />
@@ -571,11 +556,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ASISTENCIA_GRUPO">
-          <End Role="GRUPO" Type="bienestarModel.GRUPO" Multiplicity="1" />
-          <End Role="ASISTENCIA" Type="bienestarModel.ASISTENCIA" Multiplicity="*" />
+          <End Type="bienestarModel.GRUPO" Role="GRUPO" Multiplicity="1" />
+          <End Type="bienestarModel.ASISTENCIA" Role="ASISTENCIA" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="GRUPO">
-              <PropertyRef Name="CODIGOGRUPO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ASISTENCIA">
               <PropertyRef Name="CODIGOGRUPO" />
@@ -583,11 +568,11 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ROL_MODULO_MODULO1">
-          <End Role="MODULO" Type="bienestarModel.MODULO" Multiplicity="1" />
-          <End Role="ROL_MODULO" Type="bienestarModel.ROL_MODULO" Multiplicity="*" />
+          <End Type="bienestarModel.MODULO" Role="MODULO" Multiplicity="1" />
+          <End Type="bienestarModel.ROL_MODULO" Role="ROL_MODULO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MODULO">
-              <PropertyRef Name="CODIGOMODULO" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ROL_MODULO">
               <PropertyRef Name="CODIGOMODULO" />
@@ -595,34 +580,50 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ROL_MODULO_ROL">
-          <End Role="ROL" Type="bienestarModel.ROL" Multiplicity="1" />
-          <End Role="ROL_MODULO" Type="bienestarModel.ROL_MODULO" Multiplicity="*" />
+          <End Type="bienestarModel.ROL" Role="ROL" Multiplicity="1" />
+          <End Type="bienestarModel.ROL_MODULO" Role="ROL_MODULO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ROL">
-              <PropertyRef Name="CODIGOROL" />
+              <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ROL_MODULO">
               <PropertyRef Name="CODIGOROL" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ACTIVIDAD_USUARIO">
-          <End Role="ACTIVIDAD" Type="bienestarModel.ACTIVIDAD" Multiplicity="*" />
-          <End Role="USUARIO" Type="bienestarModel.USUARIO" Multiplicity="*" />
-        </Association>
         <Association Name="GRUPO_ACTIVIDAD">
-          <End Role="ACTIVIDAD" Type="bienestarModel.ACTIVIDAD" Multiplicity="*" />
-          <End Role="GRUPO" Type="bienestarModel.GRUPO" Multiplicity="*" />
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
+          <End Type="bienestarModel.GRUPO" Role="GRUPO" Multiplicity="*" />
         </Association>
         <Association Name="NIVEL_ALUMNO">
-          <End Role="ALUMNO" Type="bienestarModel.ALUMNO" Multiplicity="*" />
-          <End Role="NIVEL" Type="bienestarModel.NIVEL" Multiplicity="*" />
+          <End Type="bienestarModel.ALUMNO" Role="ALUMNO" Multiplicity="*" />
+          <End Type="bienestarModel.NIVEL" Role="NIVEL" Multiplicity="*" />
+        </Association>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBREUSUARIO" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NOMBRECOMPLETO" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CEDULA" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CORREO" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CONTRASENAANTERIOR" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CONTRASENAACTUAL" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="TIPO" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
+          <NavigationProperty Name="ACTIVIDADs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="USUARIO" ToRole="ACTIVIDAD" />
+          <NavigationProperty Name="ROLs" Relationship="bienestarModel.USUARIO_ROL" FromRole="USUARIO" ToRole="ROL" />
+        </EntityType>
+        <Association Name="ACTIVIDAD_USUARIO">
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
+          <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
         </Association>
         <Association Name="USUARIO_ROL">
-          <End Role="ROL" Type="bienestarModel.ROL" Multiplicity="*" />
-          <End Role="USUARIO" Type="bienestarModel.USUARIO" Multiplicity="*" />
+          <End Type="bienestarModel.ROL" Role="ROL" Multiplicity="*" />
+          <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -631,149 +632,150 @@
           <EntitySetMapping Name="ACTIVIDADs">
             <EntityTypeMapping TypeName="bienestarModel.ACTIVIDAD">
               <MappingFragment StoreEntitySet="ACTIVIDAD">
-                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
-                <ScalarProperty Name="NOMBREACTIVIDAD" ColumnName="NOMBREACTIVIDAD" />
-                <ScalarProperty Name="FECHAACTIVIDAD" ColumnName="FECHAACTIVIDAD" />
-                <ScalarProperty Name="ESTADOACTIVIDAD" ColumnName="ESTADOACTIVIDAD" />
-                <ScalarProperty Name="OBSERVACIONACTIVIDAD" ColumnName="OBSERVACIONACTIVIDAD" />
+                <ScalarProperty Name="OBSERVACION" ColumnName="OBSERVACION" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ADJUNTOes">
             <EntityTypeMapping TypeName="bienestarModel.ADJUNTO">
               <MappingFragment StoreEntitySet="ADJUNTO">
-                <ScalarProperty Name="CODIGOADJUNTO" ColumnName="CODIGOADJUNTO" />
-                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="ADJUNTO1" ColumnName="ADJUNTO" />
-                <ScalarProperty Name="NOMBREADJUNTO" ColumnName="NOMBREADJUNTO" />
-                <ScalarProperty Name="ESTADOADJUNTO" ColumnName="ESTADOADJUNTO" />
+                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ALUMNOes">
             <EntityTypeMapping TypeName="bienestarModel.ALUMNO">
               <MappingFragment StoreEntitySet="ALUMNO">
-                <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
-                <ScalarProperty Name="NOMBREALUMNO" ColumnName="NOMBREALUMNO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ASISTENCIAs">
             <EntityTypeMapping TypeName="bienestarModel.ASISTENCIA">
               <MappingFragment StoreEntitySet="ASISTENCIA">
-                <ScalarProperty Name="CODIGOASISTENCIA" ColumnName="CODIGOASISTENCIA" />
-                <ScalarProperty Name="CODIGOGRUPO" ColumnName="CODIGOGRUPO" />
-                <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
                 <ScalarProperty Name="ASISTENCIA1" ColumnName="ASISTENCIA" />
+                <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
+                <ScalarProperty Name="CODIGOGRUPO" ColumnName="CODIGOGRUPO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GRUPOes">
             <EntityTypeMapping TypeName="bienestarModel.GRUPO">
               <MappingFragment StoreEntitySet="GRUPO">
-                <ScalarProperty Name="CODIGOGRUPO" ColumnName="CODIGOGRUPO" />
-                <ScalarProperty Name="NIVELGRUPO" ColumnName="NIVELGRUPO" />
-                <ScalarProperty Name="PARALELOGRUPO" ColumnName="PARALELOGRUPO" />
-                <ScalarProperty Name="MODALIDADGRUPO" ColumnName="MODALIDADGRUPO" />
-                <ScalarProperty Name="ESTADOGRUPO" ColumnName="ESTADOGRUPO" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="MODALIDAD" ColumnName="MODALIDAD" />
+                <ScalarProperty Name="PARALELO" ColumnName="PARALELO" />
+                <ScalarProperty Name="NIVEL" ColumnName="NIVEL" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MODULOes">
             <EntityTypeMapping TypeName="bienestarModel.MODULO">
               <MappingFragment StoreEntitySet="MODULO">
-                <ScalarProperty Name="CODIGOMODULO" ColumnName="CODIGOMODULO" />
-                <ScalarProperty Name="NOMBREMODULO" ColumnName="NOMBREMODULO" />
-                <ScalarProperty Name="ENLACEMODULO" ColumnName="ENLACEMODULO" />
-                <ScalarProperty Name="ESTADOROL" ColumnName="ESTADOROL" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="ENLACE" ColumnName="ENLACE" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NIVELs">
             <EntityTypeMapping TypeName="bienestarModel.NIVEL">
               <MappingFragment StoreEntitySet="NIVEL">
-                <ScalarProperty Name="CODIGONIVEL" ColumnName="CODIGONIVEL" />
-                <ScalarProperty Name="NOMBRENIVEL" ColumnName="NOMBRENIVEL" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ROLs">
             <EntityTypeMapping TypeName="bienestarModel.ROL">
               <MappingFragment StoreEntitySet="ROL">
-                <ScalarProperty Name="CODIGOROL" ColumnName="CODIGOROL" />
-                <ScalarProperty Name="NOMBREROL" ColumnName="NOMBREROL" />
-                <ScalarProperty Name="ESTADOROL" ColumnName="ESTADOROL" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ROL_MODULO">
             <EntityTypeMapping TypeName="bienestarModel.ROL_MODULO">
               <MappingFragment StoreEntitySet="ROL_MODULO">
-                <ScalarProperty Name="CODIGOROL" ColumnName="CODIGOROL" />
-                <ScalarProperty Name="CODIGOMODULO" ColumnName="CODIGOMODULO" />
-                <ScalarProperty Name="VISUALIZAR" ColumnName="VISUALIZAR" />
                 <ScalarProperty Name="EDITAR" ColumnName="EDITAR" />
+                <ScalarProperty Name="VISUALIZAR" ColumnName="VISUALIZAR" />
+                <ScalarProperty Name="CODIGOMODULO" ColumnName="CODIGOMODULO" />
+                <ScalarProperty Name="CODIGOROL" ColumnName="CODIGOROL" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="bienestarModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="GRUPO_ACTIVIDAD" TypeName="bienestarModel.GRUPO_ACTIVIDAD" StoreEntitySet="GRUPO_ACTIVIDAD">
+            <EndProperty Name="GRUPO">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOGRUPO" />
+            </EndProperty>
+            <EndProperty Name="ACTIVIDAD">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOACTIVIDAD" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="NIVEL_ALUMNO" TypeName="bienestarModel.NIVEL_ALUMNO" StoreEntitySet="NIVEL_ALUMNO">
+            <EndProperty Name="NIVEL">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGONIVEL" />
+            </EndProperty>
+            <EndProperty Name="ALUMNO">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOALUMNO" />
+            </EndProperty>
+          </AssociationSetMapping>
           <EntitySetMapping Name="USUARIOs">
             <EntityTypeMapping TypeName="bienestarModel.USUARIO">
               <MappingFragment StoreEntitySet="USUARIO">
-                <ScalarProperty Name="CODIGOUSUARIO" ColumnName="CODIGOUSUARIO" />
-                <ScalarProperty Name="NOMBREUSUARIO" ColumnName="NOMBREUSUARIO" />
-                <ScalarProperty Name="CEDULAUSUARIO" ColumnName="CEDULAUSUARIO" />
-                <ScalarProperty Name="CONTRASENAANTERIOR" ColumnName="CONTRASENAANTERIOR" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
                 <ScalarProperty Name="CONTRASENAACTUAL" ColumnName="CONTRASENAACTUAL" />
-                <ScalarProperty Name="TIPOUSUARIO" ColumnName="TIPOUSUARIO" />
-                <ScalarProperty Name="ESTADOUSUARIO" ColumnName="ESTADOUSUARIO" />
-                <ScalarProperty Name="USUARIO1" ColumnName="USUARIO" />
+                <ScalarProperty Name="CONTRASENAANTERIOR" ColumnName="CONTRASENAANTERIOR" />
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
+                <ScalarProperty Name="NOMBRECOMPLETO" ColumnName="NOMBRECOMPLETO" />
+                <ScalarProperty Name="NOMBREUSUARIO" ColumnName="NOMBREUSUARIO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <AssociationSetMapping Name="ACTIVIDAD_USUARIO" TypeName="bienestarModel.ACTIVIDAD_USUARIO" StoreEntitySet="ACTIVIDAD_USUARIO">
-            <EndProperty Name="ACTIVIDAD">
-              <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
-            </EndProperty>
             <EndProperty Name="USUARIO">
-              <ScalarProperty Name="CODIGOUSUARIO" ColumnName="CODIGOUSUARIO" />
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOUSUARIO" />
             </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="GRUPO_ACTIVIDAD" TypeName="bienestarModel.GRUPO_ACTIVIDAD" StoreEntitySet="GRUPO_ACTIVIDAD">
             <EndProperty Name="ACTIVIDAD">
-              <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
-            </EndProperty>
-            <EndProperty Name="GRUPO">
-              <ScalarProperty Name="CODIGOGRUPO" ColumnName="CODIGOGRUPO" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="NIVEL_ALUMNO" TypeName="bienestarModel.NIVEL_ALUMNO" StoreEntitySet="NIVEL_ALUMNO">
-            <EndProperty Name="ALUMNO">
-              <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
-            </EndProperty>
-            <EndProperty Name="NIVEL">
-              <ScalarProperty Name="CODIGONIVEL" ColumnName="CODIGONIVEL" />
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOACTIVIDAD" />
             </EndProperty>
           </AssociationSetMapping>
           <AssociationSetMapping Name="USUARIO_ROL" TypeName="bienestarModel.USUARIO_ROL" StoreEntitySet="USUARIO_ROL">
-            <EndProperty Name="ROL">
-              <ScalarProperty Name="CODIGOROL" ColumnName="CODIGOROL" />
-            </EndProperty>
             <EndProperty Name="USUARIO">
-              <ScalarProperty Name="CODIGOUSUARIO" ColumnName="CODIGOUSUARIO" />
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOUSUARIO" />
+            </EndProperty>
+            <EndProperty Name="ROL">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOROL" />
             </EndProperty>
           </AssociationSetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -787,29 +789,28 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="Model">
-        <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD" Width="1.5" PointX="0.75" PointY="6.5" Height="2.5571907552083344" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.ADJUNTO" Width="1.5" PointX="3" PointY="5.25" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.ALUMNO" Width="1.5" PointX="3" PointY="11.375" Height="1.7879850260416639" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.ASISTENCIA" Width="1.5" PointX="5.25" PointY="8.25" Height="2.1725878906249978" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.GRUPO" Width="1.5" PointX="3" PointY="8.125" Height="2.3648893229166674" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.MODULO" Width="1.5" PointX="3.75" PointY="14.25" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.NIVEL" Width="1.5" PointX="5.25" PointY="11.5" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.ROL" Width="1.5" PointX="3.75" PointY="1.875" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.ROL_MODULO" Width="1.5" PointX="6" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.sysdiagram" Width="1.5" PointX="7.75" PointY="8.875" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="bienestarModel.USUARIO" Width="1.5" PointX="6" PointY="4.375" Height="2.9417936197916674" IsExpanded="true" />
-        <AssociationConnector Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="6.9612939453125" />
-          <ConnectorPoint PointX="3" PointY="6.9612939453125" />
+      <Diagram Name="Model" ZoomLevel="94">
+        <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD" Width="1.5" PointX="0.75" PointY="6.5" Height="2.5571907552083317" />
+        <EntityTypeShape EntityType="bienestarModel.ADJUNTO" Width="1.5" PointX="3" PointY="5.25" Height="2.1725878906250031" />
+        <EntityTypeShape EntityType="bienestarModel.ALUMNO" Width="1.5" PointX="3" PointY="11.375" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.ASISTENCIA" Width="1.5" PointX="5.25" PointY="8.25" Height="2.172587890624996" />
+        <EntityTypeShape EntityType="bienestarModel.GRUPO" Width="1.5" PointX="3" PointY="8.125" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="bienestarModel.MODULO" Width="1.5" PointX="3.75" PointY="14.25" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.NIVEL" Width="1.5" PointX="5.25" PointY="11.5" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="bienestarModel.ROL" Width="1.5" PointX="3.75" PointY="1.875" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.ROL_MODULO" Width="1.5" PointX="6" PointY="0.75" Height="2.172587890624996" />
+        <EntityTypeShape EntityType="bienestarModel.sysdiagram" Width="1.5" PointX="7.75" PointY="8.875" Height="1.9802864583333388" />
+        <AssociationConnector Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD" >
+          <ConnectorPoint PointX="2.25" PointY="6.9612939453125016" />
+          <ConnectorPoint PointX="3" PointY="6.9612939453125016" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_ALUMNO" ManuallyRouted="false">
+        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_ALUMNO" >
           <ConnectorPoint PointX="4.5" PointY="11.376152846153847" />
           <ConnectorPoint PointX="4.6910744349011209" PointY="11.185078411252725" />
           <ConnectorPoint PointX="4.8089255650988791" PointY="11.067227281054969" />
@@ -817,50 +818,51 @@
           <ConnectorPoint PointX="4.875" PointY="9.336293945312498" />
           <ConnectorPoint PointX="5.25" PointY="9.336293945312498" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_GRUPO" ManuallyRouted="false">
+        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_GRUPO" >
           <ConnectorPoint PointX="4.5" PointY="8.730646972656249" />
           <ConnectorPoint PointX="4.666666666666667" PointY="8.730646972656249" />
           <ConnectorPoint PointX="4.833333333333333" PointY="8.730646972656249" />
           <ConnectorPoint PointX="5.25" PointY="8.730646972656249" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_MODULO1" ManuallyRouted="false">
+        <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_MODULO1" >
           <ConnectorPoint PointX="4.5" PointY="14.25" />
-          <ConnectorPoint PointX="4.5" PointY="13.412985026041664" />
-          <ConnectorPoint PointX="4.75" PointY="13.412985026041664" />
-          <ConnectorPoint PointX="4.75" PointY="4.1052864583333317" />
-          <ConnectorPoint PointX="4.916666666666667" PointY="4.1052864583333308" />
-          <ConnectorPoint PointX="5.083333333333333" PointY="4.1052864583333317" />
-          <ConnectorPoint PointX="5.5" PointY="4.1052864583333317" />
-          <ConnectorPoint PointX="5.5" PointY="1.8362939453124998" />
-          <ConnectorPoint PointX="6" PointY="1.8362939453124998" />
+          <ConnectorPoint PointX="4.5" PointY="13.412985026041667" />
+          <ConnectorPoint PointX="4.75" PointY="13.412985026041667" />
+          <ConnectorPoint PointX="4.75" PointY="4.1052864583333335" />
+          <ConnectorPoint PointX="4.916666666666667" PointY="4.1052864583333326" />
+          <ConnectorPoint PointX="5.083333333333333" PointY="4.1052864583333335" />
+          <ConnectorPoint PointX="5.5" PointY="4.1052864583333335" />
+          <ConnectorPoint PointX="5.5" PointY="1.5431449726562483" />
+          <ConnectorPoint PointX="6" PointY="1.5431449726562483" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_ROL" ManuallyRouted="false">
-          <ConnectorPoint PointX="5.25" PointY="2.3987939453125" />
-          <ConnectorPoint PointX="5.416666666666667" PointY="2.3987939453124993" />
-          <ConnectorPoint PointX="5.583333333333333" PointY="2.3987939453125" />
-          <ConnectorPoint PointX="6" PointY="2.3987939453125" />
+        <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_ROL" >
+          <ConnectorPoint PointX="5.25" PointY="2.398793945312498" />
+          <ConnectorPoint PointX="5.416666666666667" PointY="2.3987939453124976" />
+          <ConnectorPoint PointX="5.583333333333333" PointY="2.398793945312498" />
+          <ConnectorPoint PointX="6" PointY="2.398793945312498" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.ACTIVIDAD_USUARIO" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="7.7737939453125" />
-          <ConnectorPoint PointX="4.666666666666667" PointY="7.7737939453124989" />
-          <ConnectorPoint PointX="4.833333333333333" PointY="7.7737939453125" />
-          <ConnectorPoint PointX="7.15625" PointY="7.7737939453125" />
-          <ConnectorPoint PointX="7.15625" PointY="7.3167936197916674" />
+        <AssociationConnector Association="bienestarModel.GRUPO_ACTIVIDAD" >
+          <ConnectorPoint PointX="2.25" PointY="8.5910953776041659" />
+          <ConnectorPoint PointX="3" PointY="8.5910953776041659" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.GRUPO_ACTIVIDAD" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="8.5910953776041676" />
-          <ConnectorPoint PointX="3" PointY="8.5910953776041676" />
+        <AssociationConnector Association="bienestarModel.NIVEL_ALUMNO" >
+          <ConnectorPoint PointX="4.5" PointY="12.297841796875002" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="12.297841796875002" />
+          <ConnectorPoint PointX="4.833333333333333" PointY="12.297841796875002" />
+          <ConnectorPoint PointX="5.25" PointY="12.297841796875002" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.NIVEL_ALUMNO" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="12.297841796875" />
-          <ConnectorPoint PointX="4.666666666666667" PointY="12.297841796875" />
-          <ConnectorPoint PointX="4.833333333333333" PointY="12.297841796875" />
-          <ConnectorPoint PointX="5.25" PointY="12.297841796875" />
+        <EntityTypeShape EntityType="bienestarModel.USUARIO" Width="1.5" PointX="6" PointY="3.875" Height="3.1340950520833317" />
+        <AssociationConnector Association="bienestarModel.ACTIVIDAD_USUARIO" >
+          <ConnectorPoint PointX="2.25" PointY="7.7737939453125016" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="7.7737939453125007" />
+          <ConnectorPoint PointX="4.833333333333333" PointY="7.7737939453125016" />
+          <ConnectorPoint PointX="7.15625" PointY="7.7737939453125016" />
+          <ConnectorPoint PointX="7.15625" PointY="7.0090950520833317" />
         </AssociationConnector>
-        <AssociationConnector Association="bienestarModel.USUARIO_ROL" ManuallyRouted="false">
-          <ConnectorPoint PointX="5" PointY="3.8552864583333317" />
-          <ConnectorPoint PointX="5" PointY="4.78125" />
-          <ConnectorPoint PointX="6" PointY="4.78125" />
+        <AssociationConnector Association="bienestarModel.USUARIO_ROL" >
+          <ConnectorPoint PointX="5" PointY="3.8552864583333331" />
+          <ConnectorPoint PointX="5" PointY="4.6463932291666667" />
+          <ConnectorPoint PointX="6" PointY="4.6463932291666667" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>
