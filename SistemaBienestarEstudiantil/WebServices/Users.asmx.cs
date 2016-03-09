@@ -48,9 +48,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
             USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == code);
-            Context.Response.Write(new JavaScriptSerializer().Serialize(usuario));
-            Context.Response.Flush();
-            Context.Response.End();
+            writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
         [WebMethod]
@@ -131,10 +129,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             newUser.CONTRASENAANTERIOR = userIdentificationNumber;
 
             db.USUARIOs.AddObject(newUser);
-
             db.SaveChanges();
 
-            writeResponse("ok");
+            writeResponse(new JavaScriptSerializer().Serialize(newUser));
         }
 
 

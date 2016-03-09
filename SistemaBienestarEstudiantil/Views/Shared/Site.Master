@@ -18,12 +18,24 @@
     <link href="../../Scripts/ng-dialog/ngDialog.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/ng-dialog/ngDialog-theme-default.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/ng-dialog/ngDialog-theme-flat.css" rel="stylesheet" type="text/css" />
+
+    <link href="../../Scripts/Utils/primeui/css/growl/growl.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/Utils/primeui/css/core/core.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/Utils/primeui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/Utils/primeui/themes/aristo/theme.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript" src="../../Scripts/Utils/jquery/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="../../Scripts/Utils/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/Utils/primeui/js/growl/growl.js"></script>
+    <script type="text/javascript" src="../../Scripts/Utils/primeui/js/core/core.js"></script>
+
 </head>
 
 <body ng-app="BienestarApp">
     <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
     <script type="text/javascript" src="../../Scripts/ui-grid/ui-grid-stable.min.js"></script>
     <script type="text/javascript" src="../../Scripts/ng-dialog/ngDialog.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/app.js"></script>
 
     <div class="page">
         <div id="header">

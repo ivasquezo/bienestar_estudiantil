@@ -1,7 +1,11 @@
 ﻿(function () {
+
     var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages']);
 
     app.controller('UsuariosController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
+
+        $('#messages').puigrowl();
+        $('#messages').puigrowl('option', {life: 5000});
 
         $scope.userCopy = {
             CEDULA: ''
@@ -43,8 +47,7 @@
               {name:'Usuario', field: 'NOMBREUSUARIO'},
               {name:'Cédula', field: 'CEDULA'},
               {name:'Correo', field: 'CORREO'},
-              {name:'Activo', field: 'ESTADO'},
-              {name:'Estado', field: 'ESTADO', cellTemplate: "<div>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
+              {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
               {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html' }
             ]
         };
@@ -58,7 +61,7 @@
                 id: code
             }).success(function (data, status, headers, config) {
                 console.log("removeUser", data);
-                alert("Usuario borrado correctamente!");
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Borrar', detail: 'Usuario eliminado...'}]);
                 parentObject.removeElementArray($scope.gridOptions.data, code);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...");
@@ -140,8 +143,6 @@
 
         $scope.saveEditedUser = function () {
 
-            console.log("saveEditedUser");
-            
             $http.post('../../WebServices/Users.asmx/saveUserData', {
                 
                 userCode: $scope.userCopy.CODIGO,
@@ -154,7 +155,7 @@
 
             }).success(function (data, status, headers, config) {
                 console.log("saveEditedUser: ", data);
-                alert("Usuario guardado correctamente!");
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Datos del usuario guardados...'}]);
             }).error(function (data, status, headers, config) {
                 console.log("error al editar el usuario...", data);
             });
@@ -162,7 +163,7 @@
             this.closeThisDialog();
         };
 
-        $scope.addNewUser1 = function () {
+        $scope.addNewUserDB = function () {
 
             $http.post('../../WebServices/Users.asmx/addNewUser', {
                 
@@ -174,7 +175,8 @@
 
             }).success(function (data, status, headers, config) {
                 console.log("addNewUser: ", data);
-                $scope.addElementArray($scope.gridOptions.data, $scope.userCopy);
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Usuario añadido...'}]);
+                $scope.addElementArray($scope.gridOptions.data, data);
             }).error(function (data, status, headers, config) {
                 console.log("error al añadir un nuevo usuario...", data);
             });

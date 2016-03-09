@@ -7,9 +7,12 @@
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
-    <script type="text/javascript" src="../../Scripts/Controllers/usuarios.js?nocache=<%=RandomNumber%>"></script>
+    
     <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="../../Scripts/Controllers/usuarios.js?nocache=<%=RandomNumber%>"></script>
+    
     <h2>Usuarios</h2>
+    <div id="messages"></div>
     <div ng-controller="UsuariosController as Main">
         <button type="button" ng-click="addNewUserDialog()">Nuevo Usuario</button><br/><br/>
         <div ui-grid="gridOptions"></div>
@@ -20,9 +23,8 @@
               </div>
         </script>
         <script type="text/ng-template" id="editUser.html">
-            <fieldset>
+            <fieldset><legend>Editar usuario</legend>
             <form name="userForm" ng-submit="saveEditedUser()">
-                <legend>Editar usuario</legend>
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
                   <div class="col-md-4">
@@ -71,9 +73,8 @@
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
                   <div class="col-md-4">
-                    <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control">
-                      <option value="true">Activo</option>
-                      <option value="false">Inactivo</option>
+                    <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                      ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
                     </select>
                   </div>
                 </div>
@@ -81,9 +82,8 @@
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="activeUserBox">Reiniciar</label>
                   <div class="col-md-4">
-                    <select ng-model="password.reset" id="activeUserBox" name="activeUserBox" class="form-control">
-                      <option value="false">No</option>
-                      <option value="true">Si</option>
+                    <select ng-model="password.reset" id="activeUserBox" name="activeUserBox" class="form-control"
+                      ng-options="o.v as o.n for o in [{ n: 'No', v: false }, { n: 'Si', v: true }]">
                     </select>
                   </div>
                 </div>
@@ -91,7 +91,6 @@
                   <label class="col-md-4 control-label" for="buttonsave1"></label>
                   <div class="col-md-8">
                     <button type="submit" id="buttonsave1" name="buttonsave1" class="btn btn-success">Guardar</button>
-                    <button ng-click="closeThisDialog()" id="buttoncancel1" name="buttoncancel1" class="btn btn-danger">Cancelar</button>
                   </div>
                 </div>
             </form>
@@ -100,8 +99,8 @@
         <script type="text/ng-template" id="newUser.html">
             
             <fieldset>
-                <form name="newUserForm" ng-submit="addNewUser1()">
                 <legend>Nuevo usuario</legend>
+                <form name="newUserForm" ng-submit="addNewUserDB()">
 
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
@@ -143,13 +142,11 @@
                     </span>
                   </div>
                 </div>
-
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
                   <div class="col-md-4">
-                    <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control">
-                      <option value="true">Activo</option>
-                      <option value="false">Inactivo</option>
+                    <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                      ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
                     </select>
                   </div>
                 </div>
@@ -158,7 +155,6 @@
                   <label class="col-md-4 control-label" for="buttonsave1"></label>
                   <div class="col-md-8">
                     <button type="submit" class="btn btn-success">Guardar</button>
-                    <button ng-click="closeThisDialog()" class="btn btn-danger">Cancelar</button>
                   </div>
                 </div>
             </form>
