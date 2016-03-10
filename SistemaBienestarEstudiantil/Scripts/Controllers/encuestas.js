@@ -7,37 +7,66 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
+        $scope.generateId = function(){
+            return Math.floor(Math.random() * 999999) + 100000;
+        };
+
         $scope.poll = {
             title: null,
             description: null,
-            questions: []
+            questions: [],
+            addQuestion: function() {
+
+                var question = {
+                    id: $scope.generateId(),
+                    title: null,
+                    type:2,
+                    responses: [],
+                    addResponse: function(){
+                        
+                        var response = {
+                            id: $scope.generateId(),
+                            text: null
+                        };
+
+                        this.responses.push(response);
+                    },
+                    removeResponse: function(id){
+
+                        var index = null;
+                        for (var i = 0; i < this.responses.length; i++) {
+                            if (this.responses[i].id == id) {
+                                index = i;
+                                break;
+                            }
+                        };
+                        if (index != null) this.responses.splice(index,1);
+                    }
+                };
+
+                question.addResponse();
+                this.questions.push(question);
+            },
+            removeQuestion: function(id){
+                
+                var index = null;
+                for (var i = 0; i < this.questions.length; i++) {
+                    if (this.questions[i].id == id) {
+                        index = i;
+                        break;
+                    }
+                };
+                if (index != null) this.questions.splice(index,1);
+            }
         };
 
-        $scope.addQuestion = function() {
-
-            var question = {
-                text: null,
-                type:1,
-                responses: [''],
-                addResponse: function(){
-                    
-                    var response = {
-                        response: null
-                    };
-
-                    this.responses.push(response);
-                }
-            };
-
-            $scope.poll.questions.push(question);
-
-        };
+        // init poll
+        $scope.poll.addQuestion();
 
         $scope.$watch('poll.title', function() {
             var text = document.getElementById('encuestaTitulo');
             text.style.height = 'auto';
             text.style.height = text.scrollHeight + 'px';
-            console.log(text.scrollHeight);
         });
 
     }]);

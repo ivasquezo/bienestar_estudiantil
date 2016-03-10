@@ -1,4 +1,11 @@
-﻿
+﻿.encuestas {
+    margin: 10px;
+}
+
+.encuestas table,
+.encuestas td {
+    border: 0;
+}
 
 .encuestas .col-md-4 {
     width: 33.33333333333333%;
@@ -138,6 +145,43 @@
     overflow:hidden;
     outline: none;
     resize:none;
+}
+.encuestas .response {
+    vertical-align: middle;
+    height: 35px;
+}
+.encuestas .button-remove {
+    height: 27px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.encuestas input[type="text"].ng-valid {
+    border: none;
+}
+.encuestas input[type="text"],
+.encuestas input[type="button"],
+.encuestas button,
+.encuestas select {
+    border-radius: 4px;
+    height: 27px;
+}
+.encuestas input[type="text"] {
+    width: 90%;
+    height: 27px;
+    font-size: 15px;
+    padding: 2px;
+    vertical-align: middle;
+}
+.encuestas input[type="radio"],
+.encuestas input[type="checkbox"] {
+    margin: 3px;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+.encuestas .input-img {
+    vertical-align: middle;
+    width: 25px;
 }
 .encuestas .poll-display {
     width: 45%;
