@@ -21,12 +21,15 @@
                     id: $scope.generateId(),
                     title: null,
                     type:2,
+                    required: true,
                     responses: [],
+                    answereds:[],
                     addResponse: function(){
                         
                         var response = {
                             id: $scope.generateId(),
-                            text: null
+                            text: null,
+                            checked: false
                         };
 
                         this.responses.push(response);
@@ -41,6 +44,24 @@
                             }
                         };
                         if (index != null) this.responses.splice(index,1);
+                    },
+                    addAnswered: function(response){
+
+                        if (response.checked) {
+                            this.answereds.push(response.id);
+                        }else{
+                            this.removeAnswered(response.id);
+                        };
+                    },
+                    removeAnswered: function(id){
+                        var index = null;
+                        for (var i = 0; i < this.answereds.length; i++) {
+                            if (this.answereds[i] == id) {
+                                index = i;
+                                break;
+                            }
+                        };
+                        if (index != null) this.answereds.splice(index,1);
                     }
                 };
 

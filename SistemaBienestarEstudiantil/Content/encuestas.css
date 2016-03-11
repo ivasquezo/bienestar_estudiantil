@@ -133,18 +133,22 @@
 }
 .encuestas .title {
     font-size: 34px;
-    padding: 0;
+    width: 100%;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid red;
     resize: none;
 }
 .encuestas .question {
     max-width: 100%;
     width: 100%;
-    border: 0px;
     /*background-color: rgba(92, 135, 178, 0.08);*/
     border-bottom: 2px solid red;
     overflow:hidden;
     outline: none;
     resize:none;
+    font-size: 18px;
+    font-weight: bold;
 }
 .encuestas .response {
     vertical-align: middle;
@@ -155,7 +159,8 @@
     font-weight: bold;
     vertical-align: middle;
 }
-.encuestas input[type="text"].ng-valid {
+textarea.ng-valid,
+input[type="text"].ng-valid {
     border: none;
 }
 .encuestas input[type="text"],
@@ -183,9 +188,29 @@
     vertical-align: middle;
     width: 25px;
 }
-.encuestas .poll-display {
+.encuestas .poll-display,
+.encuestas .poll-preview {
     width: 45%;
-    margin: 3px; 
+    margin: 10px; 
     display: inline-block;
     vertical-align: top;
+}
+.encuestas .poll-preview .content {
+    margin: 10px; 
+}
+.encuestas .poll-preview .content .response{
+    margin: 10px;
+    font-size: 15px;
+    font-weight: normal;
+}
+.encuestas .poll-preview .content .question textarea.ng-valid{
+    border:1px solid #E0E0E2;
+    max-width: 100%;
+}
+.encuestas .poll-preview .content .question textarea {
+    height: 100px;
+}
+.encuestas textarea {
+    margin-bottom: 5px;
+    padding: 5px;
 }
