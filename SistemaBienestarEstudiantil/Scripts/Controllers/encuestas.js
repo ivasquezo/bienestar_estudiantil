@@ -90,6 +90,10 @@
             text.style.height = text.scrollHeight + 'px';
         });
 
+        $scope.pollConsole = function(){
+            console.log("JSON:",JSON.stringify(this.poll));
+            console.log("ANGULAR:", angular.toJson(this.poll));
+        }
     }]);
 
 })();
