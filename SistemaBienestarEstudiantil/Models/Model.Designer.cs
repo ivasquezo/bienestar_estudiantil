@@ -15,6 +15,7 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.Web.Script.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
@@ -28,6 +29,8 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("bienestarModel", "NIVEL_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "NIVEL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.NIVEL))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "USUARIO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA), "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA))]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), "ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA))]
 
 #endregion
 
@@ -254,6 +257,54 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<USUARIO> _USUARIOs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ENCUESTA> ENCUESTAs
+        {
+            get
+            {
+                if ((_ENCUESTAs == null))
+                {
+                    _ENCUESTAs = base.CreateObjectSet<ENCUESTA>("ENCUESTAs");
+                }
+                return _ENCUESTAs;
+            }
+        }
+        private ObjectSet<ENCUESTA> _ENCUESTAs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTA
+        {
+            get
+            {
+                if ((_ENCUESTA_PREGUNTA == null))
+                {
+                    _ENCUESTA_PREGUNTA = base.CreateObjectSet<ENCUESTA_PREGUNTA>("ENCUESTA_PREGUNTA");
+                }
+                return _ENCUESTA_PREGUNTA;
+            }
+        }
+        private ObjectSet<ENCUESTA_PREGUNTA> _ENCUESTA_PREGUNTA;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTA
+        {
+            get
+            {
+                if ((_ENCUESTA_RESPUESTA == null))
+                {
+                    _ENCUESTA_RESPUESTA = base.CreateObjectSet<ENCUESTA_RESPUESTA>("ENCUESTA_RESPUESTA");
+                }
+                return _ENCUESTA_RESPUESTA;
+            }
+        }
+        private ObjectSet<ENCUESTA_RESPUESTA> _ENCUESTA_RESPUESTA;
 
         #endregion
 
@@ -345,6 +396,30 @@ namespace SistemaBienestarEstudiantil.Models
         public void AddToUSUARIOs(USUARIO uSUARIO)
         {
             base.AddObject("USUARIOs", uSUARIO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTAs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToENCUESTAs(ENCUESTA eNCUESTA)
+        {
+            base.AddObject("ENCUESTAs", eNCUESTA);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTA_PREGUNTA. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToENCUESTA_PREGUNTA(ENCUESTA_PREGUNTA eNCUESTA_PREGUNTA)
+        {
+            base.AddObject("ENCUESTA_PREGUNTA", eNCUESTA_PREGUNTA);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTA_RESPUESTA. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToENCUESTA_RESPUESTA(ENCUESTA_RESPUESTA eNCUESTA_RESPUESTA)
+        {
+            base.AddObject("ENCUESTA_RESPUESTA", eNCUESTA_RESPUESTA);
         }
 
         #endregion
@@ -1130,6 +1205,467 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<GRUPO>("bienestarModel.FK_ASISTENCIA_GRUPO", "GRUPO", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ENCUESTA")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ENCUESTA : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ENCUESTA.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="tITULO">Valor inicial de la propiedad TITULO.</param>
+        public static ENCUESTA CreateENCUESTA(global::System.Int32 cODIGO, global::System.String tITULO)
+        {
+            ENCUESTA eNCUESTA = new ENCUESTA();
+            eNCUESTA.CODIGO = cODIGO;
+            eNCUESTA.TITULO = tITULO;
+            return eNCUESTA;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Int32 _CODIGO;
+        partial void OnCODIGOChanging(global::System.Int32 value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TITULO
+        {
+            get
+            {
+                return _TITULO;
+            }
+            set
+            {
+                OnTITULOChanging(value);
+                ReportPropertyChanging("TITULO");
+                _TITULO = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TITULO");
+                OnTITULOChanged();
+            }
+        }
+        private global::System.String _TITULO;
+        partial void OnTITULOChanging(global::System.String value);
+        partial void OnTITULOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DESCRIPCION
+        {
+            get
+            {
+                return _DESCRIPCION;
+            }
+            set
+            {
+                OnDESCRIPCIONChanging(value);
+                ReportPropertyChanging("DESCRIPCION");
+                _DESCRIPCION = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DESCRIPCION");
+                OnDESCRIPCIONChanged();
+            }
+        }
+        private global::System.String _DESCRIPCION;
+        partial void OnDESCRIPCIONChanging(global::System.String value);
+        partial void OnDESCRIPCIONChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA_PREGUNTA")]
+        public EntityCollection<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA_PREGUNTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA_PREGUNTA", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ENCUESTA_PREGUNTA")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ENCUESTA_PREGUNTA : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ENCUESTA_PREGUNTA.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="tITULO">Valor inicial de la propiedad TITULO.</param>
+        /// <param name="tIPO">Valor inicial de la propiedad TIPO.</param>
+        /// <param name="rEQUERIDO">Valor inicial de la propiedad REQUERIDO.</param>
+        public static ENCUESTA_PREGUNTA CreateENCUESTA_PREGUNTA(global::System.Int32 cODIGO, global::System.String tITULO, global::System.Int32 tIPO, global::System.Boolean rEQUERIDO)
+        {
+            ENCUESTA_PREGUNTA eNCUESTA_PREGUNTA = new ENCUESTA_PREGUNTA();
+            eNCUESTA_PREGUNTA.CODIGO = cODIGO;
+            eNCUESTA_PREGUNTA.TITULO = tITULO;
+            eNCUESTA_PREGUNTA.TIPO = tIPO;
+            eNCUESTA_PREGUNTA.REQUERIDO = rEQUERIDO;
+            return eNCUESTA_PREGUNTA;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Int32 _CODIGO;
+        partial void OnCODIGOChanging(global::System.Int32 value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TITULO
+        {
+            get
+            {
+                return _TITULO;
+            }
+            set
+            {
+                OnTITULOChanging(value);
+                ReportPropertyChanging("TITULO");
+                _TITULO = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TITULO");
+                OnTITULOChanged();
+            }
+        }
+        private global::System.String _TITULO;
+        partial void OnTITULOChanging(global::System.String value);
+        partial void OnTITULOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TIPO
+        {
+            get
+            {
+                return _TIPO;
+            }
+            set
+            {
+                OnTIPOChanging(value);
+                ReportPropertyChanging("TIPO");
+                _TIPO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TIPO");
+                OnTIPOChanged();
+            }
+        }
+        private global::System.Int32 _TIPO;
+        partial void OnTIPOChanging(global::System.Int32 value);
+        partial void OnTIPOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean REQUERIDO
+        {
+            get
+            {
+                return _REQUERIDO;
+            }
+            set
+            {
+                OnREQUERIDOChanging(value);
+                ReportPropertyChanging("REQUERIDO");
+                _REQUERIDO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("REQUERIDO");
+                OnREQUERIDOChanged();
+            }
+        }
+        private global::System.Boolean _REQUERIDO;
+        partial void OnREQUERIDOChanging(global::System.Boolean value);
+        partial void OnREQUERIDOChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA")]
+        public ENCUESTA ENCUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ENCUESTA> ENCUESTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_RESPUESTA")]
+        public EntityCollection<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_RESPUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_RESPUESTA", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ENCUESTA_RESPUESTA")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ENCUESTA_RESPUESTA : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ENCUESTA_RESPUESTA.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="tEXTO">Valor inicial de la propiedad TEXTO.</param>
+        public static ENCUESTA_RESPUESTA CreateENCUESTA_RESPUESTA(global::System.Int32 cODIGO, global::System.String tEXTO)
+        {
+            ENCUESTA_RESPUESTA eNCUESTA_RESPUESTA = new ENCUESTA_RESPUESTA();
+            eNCUESTA_RESPUESTA.CODIGO = cODIGO;
+            eNCUESTA_RESPUESTA.TEXTO = tEXTO;
+            return eNCUESTA_RESPUESTA;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Int32 _CODIGO;
+        partial void OnCODIGOChanging(global::System.Int32 value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String TEXTO
+        {
+            get
+            {
+                return _TEXTO;
+            }
+            set
+            {
+                OnTEXTOChanging(value);
+                ReportPropertyChanging("TEXTO");
+                _TEXTO = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TEXTO");
+                OnTEXTOChanged();
+            }
+        }
+        private global::System.String _TEXTO;
+        partial void OnTEXTOChanging(global::System.String value);
+        partial void OnTEXTOChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA")]
+        public ENCUESTA_PREGUNTA ENCUESTA_PREGUNTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", value);
                 }
             }
         }

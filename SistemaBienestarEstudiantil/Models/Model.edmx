@@ -11,6 +11,9 @@
           <EntitySet Name="ADJUNTO" EntityType="bienestarModel.Store.ADJUNTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ALUMNO" EntityType="bienestarModel.Store.ALUMNO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ASISTENCIA" EntityType="bienestarModel.Store.ASISTENCIA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ENCUESTA" EntityType="bienestarModel.Store.ENCUESTA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ENCUESTA_PREGUNTA" EntityType="bienestarModel.Store.ENCUESTA_PREGUNTA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ENCUESTA_RESPUESTA" EntityType="bienestarModel.Store.ENCUESTA_RESPUESTA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GRUPO" EntityType="bienestarModel.Store.GRUPO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GRUPO_ACTIVIDAD" EntityType="bienestarModel.Store.GRUPO_ACTIVIDAD" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="MODULO" EntityType="bienestarModel.Store.MODULO" store:Type="Tables" Schema="dbo" />
@@ -40,6 +43,14 @@
           <AssociationSet Name="FK_ASISTENCIA_GRUPO" Association="bienestarModel.Store.FK_ASISTENCIA_GRUPO">
             <End Role="GRUPO" EntitySet="GRUPO" />
             <End Role="ASISTENCIA" EntitySet="ASISTENCIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_PREGUNTA_ENCUESTA" Association="bienestarModel.Store.FK_ENCUESTA_PREGUNTA_ENCUESTA">
+            <End Role="ENCUESTA" EntitySet="ENCUESTA" />
+            <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
+            <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
+            <End Role="ENCUESTA_RESPUESTA" EntitySet="ENCUESTA_RESPUESTA" />
           </AssociationSet>
           <AssociationSet Name="FK_GRUPO_ACTIVIDAD_ACTIVIDAD" Association="bienestarModel.Store.FK_GRUPO_ACTIVIDAD_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
@@ -120,6 +131,32 @@
           <Property Name="CODIGOGRUPO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
           <Property Name="ASISTENCIA" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ENCUESTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TITULO" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DESCRIPCION" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_PREGUNTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CODIGOENCUESTA" Type="int" Nullable="false" />
+          <Property Name="TITULO" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="TIPO" Type="int" Nullable="false" />
+          <Property Name="REQUERIDO" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_RESPUESTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TEXTO" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CODIGOPREGUNTA" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
@@ -273,6 +310,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ENCUESTA_PREGUNTA_ENCUESTA">
+          <End Role="ENCUESTA" Type="bienestarModel.Store.ENCUESTA" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ENCUESTA_PREGUNTA" Type="bienestarModel.Store.ENCUESTA_PREGUNTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_PREGUNTA">
+              <PropertyRef Name="CODIGOENCUESTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
+          <End Role="ENCUESTA_PREGUNTA" Type="bienestarModel.Store.ENCUESTA_PREGUNTA" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ENCUESTA_RESPUESTA" Type="bienestarModel.Store.ENCUESTA_RESPUESTA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA_PREGUNTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA">
+              <PropertyRef Name="CODIGOPREGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GRUPO_ACTIVIDAD_ACTIVIDAD">
           <End Role="ACTIVIDAD" Type="bienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
           <End Role="GRUPO_ACTIVIDAD" Type="bienestarModel.Store.GRUPO_ACTIVIDAD" Multiplicity="*" />
@@ -420,6 +485,17 @@
           <AssociationSet Name="USUARIO_ROL" Association="bienestarModel.USUARIO_ROL">
             <End Role="ROL" EntitySet="ROLs" />
             <End Role="USUARIO" EntitySet="USUARIOs" />
+          </AssociationSet>
+          <EntitySet Name="ENCUESTAs" EntityType="bienestarModel.ENCUESTA" />
+          <EntitySet Name="ENCUESTA_PREGUNTA" EntityType="bienestarModel.ENCUESTA_PREGUNTA" />
+          <EntitySet Name="ENCUESTA_RESPUESTA" EntityType="bienestarModel.ENCUESTA_RESPUESTA" />
+          <AssociationSet Name="FK_ENCUESTA_PREGUNTA_ENCUESTA" Association="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA">
+            <End Role="ENCUESTA" EntitySet="ENCUESTAs" />
+            <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
+            <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
+            <End Role="ENCUESTA_RESPUESTA" EntitySet="ENCUESTA_RESPUESTA" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="ACTIVIDAD">
@@ -623,6 +699,42 @@
           <End Type="bienestarModel.ROL" Role="ROL" Multiplicity="*" />
           <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
         </Association>
+        <EntityType Name="ENCUESTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Int32" Name="CODIGO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="TITULO" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DESCRIPCION" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ENCUESTA_PREGUNTA" Relationship="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" FromRole="ENCUESTA" ToRole="ENCUESTA_PREGUNTA" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_PREGUNTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Int32" Name="CODIGO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="TITULO" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="TIPO" Nullable="false" />
+          <Property Type="Boolean" Name="REQUERIDO" Nullable="false" />
+          <NavigationProperty Name="ENCUESTA" Relationship="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" FromRole="ENCUESTA_PREGUNTA" ToRole="ENCUESTA" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_PREGUNTA" ToRole="ENCUESTA_RESPUESTA" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_RESPUESTA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Int32" Name="CODIGO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="TEXTO" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ENCUESTA_PREGUNTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_RESPUESTA" ToRole="ENCUESTA_PREGUNTA" />
+        </EntityType>
+        <Association Name="FK_ENCUESTA_PREGUNTA_ENCUESTA">
+          <End Type="bienestarModel.ENCUESTA" Role="ENCUESTA" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_PREGUNTA" Role="ENCUESTA_PREGUNTA" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
+          <End Type="bienestarModel.ENCUESTA_PREGUNTA" Role="ENCUESTA_PREGUNTA" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA" Role="ENCUESTA_RESPUESTA" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -775,6 +887,49 @@
               <ScalarProperty Name="CODIGO" ColumnName="CODIGOROL" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="ENCUESTAs">
+            <EntityTypeMapping TypeName="bienestarModel.ENCUESTA">
+              <MappingFragment StoreEntitySet="ENCUESTA">
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="TITULO" ColumnName="TITULO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ENCUESTA_PREGUNTA">
+            <EntityTypeMapping TypeName="bienestarModel.ENCUESTA_PREGUNTA">
+              <MappingFragment StoreEntitySet="ENCUESTA_PREGUNTA">
+                <ScalarProperty Name="REQUERIDO" ColumnName="REQUERIDO" />
+                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
+                <ScalarProperty Name="TITULO" ColumnName="TITULO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ENCUESTA_RESPUESTA">
+            <EntityTypeMapping TypeName="bienestarModel.ENCUESTA_RESPUESTA">
+              <MappingFragment StoreEntitySet="ENCUESTA_RESPUESTA">
+                <ScalarProperty Name="TEXTO" ColumnName="TEXTO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_ENCUESTA_PREGUNTA_ENCUESTA" TypeName="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" StoreEntitySet="ENCUESTA_PREGUNTA">
+            <EndProperty Name="ENCUESTA_PREGUNTA">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+            </EndProperty>
+            <EndProperty Name="ENCUESTA">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOENCUESTA" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" TypeName="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" StoreEntitySet="ENCUESTA_RESPUESTA">
+            <EndProperty Name="ENCUESTA_RESPUESTA">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+            </EndProperty>
+            <EndProperty Name="ENCUESTA_PREGUNTA">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOPREGUNTA" />
+            </EndProperty>
+          </AssociationSetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -790,7 +945,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
@@ -864,7 +1019,18 @@
           <ConnectorPoint PointX="5" PointY="4.6463932291666667" />
           <ConnectorPoint PointX="6" PointY="4.6463932291666667" />
         </AssociationConnector>
-      </Diagram>
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA" Width="1.5" PointX="8.375" PointY="1.125" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_PREGUNTA" Width="1.5" PointX="10.625" PointY="0.875" Height="2.172587890624996" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_RESPUESTA" Width="1.5" PointX="12.875" PointY="1.25" Height="1.5956835937500031" />
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" >
+          <ConnectorPoint PointX="9.875" PointY="2.0189925130208337" />
+          <ConnectorPoint PointX="10.625" PointY="2.0189925130208337" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" >
+          <ConnectorPoint PointX="12.125" PointY="2.0478417968750016" />
+          <ConnectorPoint PointX="12.875" PointY="2.0478417968750016" />
+        </AssociationConnector>
+        </Diagram>
     </Diagrams>
   </Designer>
 </edmx:Edmx>
