@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Script.Serialization;
 using System.Data.Objects.DataClasses;
+using System.Web.Script.Services;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -31,6 +32,35 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
             writeResponse(new JavaScriptSerializer().Serialize(db.ENCUESTAs.ToList()));
+        }
+
+        [WebMethod]
+        public void pruebaJoins()
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            /*
+            var data = db.Categorie
+            .Join(db.CategoryMap,
+            cat => cat.CategoryId,
+            catmap => catmap.ChildCategoryId,
+            (cat, catmap) => new { Category = cat, CategoryMap = catmap })
+            .Select(x => x.Category);
+             */
+            int code = 1;
+            var data = db.ACCESOes.Join(db.ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
+                       (a, ra) => new { ACCESO = a, ROL_ACCESO = ra })
+                       .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
+                       .Where(y => y.CODIGOROL == code).ToList();
+
+            writeResponse(new JavaScriptSerializer().Serialize(data));
+        }
+
+        [WebMethod]
+        public void getDefaultEncuesta()
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            writeResponse(new JavaScriptSerializer().Serialize(db.ENCUESTAs.First()));
         }
 
         [WebMethod]
