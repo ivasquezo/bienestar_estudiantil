@@ -15,6 +15,7 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.Web.Script.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
@@ -1568,6 +1569,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1586,6 +1588,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA> ENCUESTAReference
@@ -1741,6 +1744,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1759,6 +1763,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
