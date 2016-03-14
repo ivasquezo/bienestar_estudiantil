@@ -32,8 +32,9 @@
 </head>
 
 <body ng-app="BienestarApp">
-    <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script type="text/javascript" src="../../Scripts/ui-grid/ui-grid-stable.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script type="text/javascript" src="../../Scripts/ng-dialog/ngDialog.min.js"></script>
     <script type="text/javascript" src="../../Scripts/app.js"></script>
 
@@ -54,6 +55,7 @@
                     <li><% if (accessValid){ %><%: Html.ActionLink("Roles", "Roles", "Home")%><% } %></li>
                     <li><% if (accessValid){ %><%: Html.ActionLink("Datos", "Datos", "Home")%><% } %></li>
                     <li><% if (accessValid){ %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Encuestas", "Encuestas", "Home")%><% } %></li>
                     <li><% if (accessValid){ %><%: Html.ActionLink("Cerrar sesión", "LogOut", "Home")%><% } %></li>
                 </ul>
             </div>

@@ -130,11 +130,21 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult Tareas()
         {
-            if (!Class.Utils.validateAccess())
+            if (!Utils.validateAccess())
             {
                 return RedirectToAction("Index", "Home");
             }
             return View();
+        }
+
+        public ActionResult Encuestas()
+        {
+            return View();
+            /*if (!Utils.validateAccess())
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");*/
         }
 
         public ActionResult LogOn()

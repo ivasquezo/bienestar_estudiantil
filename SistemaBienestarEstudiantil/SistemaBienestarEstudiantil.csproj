@@ -84,6 +84,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebServices\Rols.asmx.cs">
       <DependentUpon>Rols.asmx</DependentUpon>
+    <Compile Include="WebServices\Encuestas.asmx.cs">
+      <DependentUpon>Encuestas.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WebServices\Users.asmx.cs">
@@ -132,6 +134,7 @@
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
     <Content Include="WebServices\Rols.asmx" />
+    <Content Include="WebServices\Encuestas.asmx" />
     <Content Include="WebServices\Users.asmx" />
   </ItemGroup>
   <ItemGroup>
