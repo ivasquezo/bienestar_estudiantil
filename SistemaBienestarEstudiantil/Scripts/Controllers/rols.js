@@ -19,19 +19,6 @@
             });
         };
 		
-		 $scope.prueba = function () {
-            $http.post('../../WebServices/Rols.asmx/getAccessByRolId', {
-				rolId: 1
-            }).success(function (data, status, headers, config) {
-                console.log("acceso",data);
-                $scope.gridOptions.data = data;
-            }).error(function (data, status, headers, config) {
-                console.log("error al cargar los roles...", data);
-            });
-        };
-
-		$scope.prueba();
-		
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: false,
@@ -70,6 +57,7 @@
             var rol = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
             $scope.rolCopy.CODIGO = rol.CODIGO;
             $scope.rolCopy.NOMBRE = rol.NOMBRE;
+			$scope.getAccessByRol(code);
 
             ngDialog.open({
                 template: 'editRol.html',
@@ -121,7 +109,18 @@
 		
         $scope.addElementArray = function(arrayRol, newRol) {
             arrayRol.push(newRol);
-        };        
+        }; 
+
+		$scope.getAccessByRol = function (code) {
+            $http.post('../../WebServices/Rols.asmx/getAccessByRolId', {
+				rolId: code
+            }).success(function (data, status, headers, config) {
+                console.log("acceso",data);
+                $scope.rolsAccess = data;
+            }).error(function (data, status, headers, config) {
+                console.log("error al cargar los roles...", data);
+            });
+        };
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {

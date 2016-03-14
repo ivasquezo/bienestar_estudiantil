@@ -51,15 +51,13 @@
                                 <th></th>
                                 <th>Código</th>
                                 <th>Nombre</th> 
-                                <th>Estado</th>
                             </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Eve</td>
-    <td>Jackson</td> 
-    <td>94</td>
-  </tr>
-</table>
+                            <tr ng-repeat="rolAccess in rolsAccess">
+                                <td><input type="checkbox" ng-model="rolAccess.ROL_ACCESO.VALIDO"></td>
+                                <td>{{ rol_acceso.CODIGOACCESO }}</td>
+                                <td>{{ access.NOMBRE }}</td>
+                            </tr>
+                        </table>
                     </div>
 
                     <div class="form-group">

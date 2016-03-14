@@ -39,7 +39,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            ROL rol = db.ROLs.Single(u => u.CODIGO == id);
+            ROL rol = db.ROLs.Single(r => r.CODIGO == id);
 
             db.ROLs.DeleteObject(rol);
             db.SaveChanges();
@@ -54,7 +54,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            ROL rol = db.ROLs.Single(u => u.CODIGO == rolId);
+            ROL rol = db.ROLs.Single(r => r.CODIGO == rolId);
 
             rol.NOMBRE = rolName;
 
@@ -87,7 +87,18 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             var access = rol.ROL_ACCESO.Select(ra => ra.CODIGOACCESO).ToList();
 
-            writeResponse(new JavaScriptSerializer().Serialize(db.ACCESOes.Where(a => access.Contains(a.CODIGO))));
+            var data = db.ACCESOes.Join(db.ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
+                (a, ra) => new { Acceso = a, RolAcceso = ra }).Select(x => x.Acceso).Distinct().Where(ra => access.Contains(ra.CODIGO));
+
+            writeResponse(new JavaScriptSerializer().Serialize(data));
+        }
+
+        [WebMethod]
+        public void getAccessById(int accessId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            writeResponse(new JavaScriptSerializer().Serialize(db.ACCESOes.Single(a => a.CODIGO == accessId)));
         }
     }
 }
