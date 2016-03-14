@@ -21,9 +21,6 @@ namespace SistemaBienestarEstudiantil.Tests.Controllers
             // Actuar
             ViewResult result = controller.Index() as ViewResult;
 
-            // Declarar
-            ViewDataDictionary viewData = result.ViewData;
-            Assert.AreEqual("ASP.NET MVC", viewData["Message"]);
         }
 
         [TestMethod]

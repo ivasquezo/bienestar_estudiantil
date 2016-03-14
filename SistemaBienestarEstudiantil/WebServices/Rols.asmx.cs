@@ -56,7 +56,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             ROL rol = db.ROLs.Single(u => u.CODIGO == rolId);
 
             rol.NOMBRE = rolName;
-            rol.ESTADO = rolStatus;
 
             db.SaveChanges();
 
@@ -71,7 +70,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             ROL newRol = new ROL();
 
             newRol.NOMBRE = rolName;
-            newRol.ESTADO = rolStatus;
 
             db.ROLs.AddObject(newRol);
             db.SaveChanges();
@@ -81,16 +79,6 @@ namespace SistemaBienestarEstudiantil.WebServices
 
 
         [WebMethod]
-        public void getAllActiveRols()
-        {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-
-            Context.Response.Write(new JavaScriptSerializer().Serialize(db.ROLs.Where(u => u.ESTADO == true).ToList()));
-            Context.Response.Flush();
-            Context.Response.End();
-        }
-
-        [WebMethod]
         public void getRolByCode(int id)
         {
             bienestarEntities db = new bienestarEntities();
@@ -98,19 +86,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             ROL rol = db.ROLs.Single(u => u.CODIGO == id);
 
             writeResponse(new JavaScriptSerializer().Serialize(rol));
-        }
-
-        public void inactiveRolById(int id)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            ROL rol = db.ROLs.Single(u => u.CODIGO == id);
-
-            rol.ESTADO = false;
-
-            db.SaveChanges();
-
-            writeResponse("ok");
         }
     }
 }

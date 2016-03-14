@@ -84,6 +84,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebServices\Rols.asmx.cs">
       <DependentUpon>Rols.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WebServices\Encuestas.asmx.cs">
       <DependentUpon>Encuestas.asmx</DependentUpon>
       <SubType>Component</SubType>

@@ -15,22 +15,21 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using System.Web.Script.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
 
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACCESO), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ADJUNTO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ADJUNTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ADJUNTO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ASISTENCIA_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ASISTENCIA_GRUPO", "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRUPO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
-[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "MODULO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.MODULO), "ROL_MODULO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_MODULO), true)]
-[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "ROL_MODULO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_MODULO), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA), "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), "ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "GRUPO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "NIVEL_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "NIVEL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.NIVEL))]
-[assembly: EdmRelationshipAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "USUARIO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
-[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA), "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA))]
-[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), "ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA))]
 
 #endregion
 
@@ -81,6 +80,22 @@ namespace SistemaBienestarEstudiantil.Models
         #endregion
     
         #region Propiedades de ObjectSet
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ACCESO> ACCESOes
+        {
+            get
+            {
+                if ((_ACCESOes == null))
+                {
+                    _ACCESOes = base.CreateObjectSet<ACCESO>("ACCESOes");
+                }
+                return _ACCESOes;
+            }
+        }
+        private ObjectSet<ACCESO> _ACCESOes;
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -149,118 +164,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        public ObjectSet<GRUPO> GRUPOes
-        {
-            get
-            {
-                if ((_GRUPOes == null))
-                {
-                    _GRUPOes = base.CreateObjectSet<GRUPO>("GRUPOes");
-                }
-                return _GRUPOes;
-            }
-        }
-        private ObjectSet<GRUPO> _GRUPOes;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<MODULO> MODULOes
-        {
-            get
-            {
-                if ((_MODULOes == null))
-                {
-                    _MODULOes = base.CreateObjectSet<MODULO>("MODULOes");
-                }
-                return _MODULOes;
-            }
-        }
-        private ObjectSet<MODULO> _MODULOes;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<NIVEL> NIVELs
-        {
-            get
-            {
-                if ((_NIVELs == null))
-                {
-                    _NIVELs = base.CreateObjectSet<NIVEL>("NIVELs");
-                }
-                return _NIVELs;
-            }
-        }
-        private ObjectSet<NIVEL> _NIVELs;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<ROL> ROLs
-        {
-            get
-            {
-                if ((_ROLs == null))
-                {
-                    _ROLs = base.CreateObjectSet<ROL>("ROLs");
-                }
-                return _ROLs;
-            }
-        }
-        private ObjectSet<ROL> _ROLs;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<ROL_MODULO> ROL_MODULO
-        {
-            get
-            {
-                if ((_ROL_MODULO == null))
-                {
-                    _ROL_MODULO = base.CreateObjectSet<ROL_MODULO>("ROL_MODULO");
-                }
-                return _ROL_MODULO;
-            }
-        }
-        private ObjectSet<ROL_MODULO> _ROL_MODULO;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<sysdiagram> sysdiagrams
-        {
-            get
-            {
-                if ((_sysdiagrams == null))
-                {
-                    _sysdiagrams = base.CreateObjectSet<sysdiagram>("sysdiagrams");
-                }
-                return _sysdiagrams;
-            }
-        }
-        private ObjectSet<sysdiagram> _sysdiagrams;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<USUARIO> USUARIOs
-        {
-            get
-            {
-                if ((_USUARIOs == null))
-                {
-                    _USUARIOs = base.CreateObjectSet<USUARIO>("USUARIOs");
-                }
-                return _USUARIOs;
-            }
-        }
-        private ObjectSet<USUARIO> _USUARIOs;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
         public ObjectSet<ENCUESTA> ENCUESTAs
         {
             get
@@ -305,10 +208,98 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<ENCUESTA_RESPUESTA> _ENCUESTA_RESPUESTA;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<GRUPO> GRUPOes
+        {
+            get
+            {
+                if ((_GRUPOes == null))
+                {
+                    _GRUPOes = base.CreateObjectSet<GRUPO>("GRUPOes");
+                }
+                return _GRUPOes;
+            }
+        }
+        private ObjectSet<GRUPO> _GRUPOes;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<NIVEL> NIVELs
+        {
+            get
+            {
+                if ((_NIVELs == null))
+                {
+                    _NIVELs = base.CreateObjectSet<NIVEL>("NIVELs");
+                }
+                return _NIVELs;
+            }
+        }
+        private ObjectSet<NIVEL> _NIVELs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ROL> ROLs
+        {
+            get
+            {
+                if ((_ROLs == null))
+                {
+                    _ROLs = base.CreateObjectSet<ROL>("ROLs");
+                }
+                return _ROLs;
+            }
+        }
+        private ObjectSet<ROL> _ROLs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ROL_ACCESO> ROL_ACCESO
+        {
+            get
+            {
+                if ((_ROL_ACCESO == null))
+                {
+                    _ROL_ACCESO = base.CreateObjectSet<ROL_ACCESO>("ROL_ACCESO");
+                }
+                return _ROL_ACCESO;
+            }
+        }
+        private ObjectSet<ROL_ACCESO> _ROL_ACCESO;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<USUARIO> USUARIOs
+        {
+            get
+            {
+                if ((_USUARIOs == null))
+                {
+                    _USUARIOs = base.CreateObjectSet<USUARIO>("USUARIOs");
+                }
+                return _USUARIOs;
+            }
+        }
+        private ObjectSet<USUARIO> _USUARIOs;
 
         #endregion
 
         #region Métodos AddTo
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ACCESOes. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToACCESOes(ACCESO aCCESO)
+        {
+            base.AddObject("ACCESOes", aCCESO);
+        }
     
         /// <summary>
         /// Método desusado para agregar un nuevo objeto al EntitySet ACTIVIDADs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
@@ -343,62 +334,6 @@ namespace SistemaBienestarEstudiantil.Models
         }
     
         /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet GRUPOes. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToGRUPOes(GRUPO gRUPO)
-        {
-            base.AddObject("GRUPOes", gRUPO);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet MODULOes. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToMODULOes(MODULO mODULO)
-        {
-            base.AddObject("MODULOes", mODULO);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet NIVELs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToNIVELs(NIVEL nIVEL)
-        {
-            base.AddObject("NIVELs", nIVEL);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet ROLs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToROLs(ROL rOL)
-        {
-            base.AddObject("ROLs", rOL);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet ROL_MODULO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToROL_MODULO(ROL_MODULO rOL_MODULO)
-        {
-            base.AddObject("ROL_MODULO", rOL_MODULO);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet sysdiagrams. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddTosysdiagrams(sysdiagram sysdiagram)
-        {
-            base.AddObject("sysdiagrams", sysdiagram);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet USUARIOs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToUSUARIOs(USUARIO uSUARIO)
-        {
-            base.AddObject("USUARIOs", uSUARIO);
-        }
-    
-        /// <summary>
         /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTAs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
         /// </summary>
         public void AddToENCUESTAs(ENCUESTA eNCUESTA)
@@ -421,6 +356,46 @@ namespace SistemaBienestarEstudiantil.Models
         {
             base.AddObject("ENCUESTA_RESPUESTA", eNCUESTA_RESPUESTA);
         }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet GRUPOes. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToGRUPOes(GRUPO gRUPO)
+        {
+            base.AddObject("GRUPOes", gRUPO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet NIVELs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToNIVELs(NIVEL nIVEL)
+        {
+            base.AddObject("NIVELs", nIVEL);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ROLs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToROLs(ROL rOL)
+        {
+            base.AddObject("ROLs", rOL);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ROL_ACCESO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToROL_ACCESO(ROL_ACCESO rOL_ACCESO)
+        {
+            base.AddObject("ROL_ACCESO", rOL_ACCESO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet USUARIOs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToUSUARIOs(USUARIO uSUARIO)
+        {
+            base.AddObject("USUARIOs", uSUARIO);
+        }
 
         #endregion
 
@@ -429,6 +404,115 @@ namespace SistemaBienestarEstudiantil.Models
     #endregion
 
     #region Entidades
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ACCESO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ACCESO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ACCESO.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        public static ACCESO CreateACCESO(global::System.Decimal cODIGO, global::System.String nOMBRE)
+        {
+            ACCESO aCCESO = new ACCESO();
+            aCCESO.CODIGO = cODIGO;
+            aCCESO.NOMBRE = nOMBRE;
+            return aCCESO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NOMBRE
+        {
+            get
+            {
+                return _NOMBRE;
+            }
+            set
+            {
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
+            }
+        }
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "ROL_ACCESO")]
+        public EntityCollection<ROL_ACCESO> ROL_ACCESO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ROL_ACCESO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ROL_ACCESO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ROL_ACCESO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ROL_ACCESO", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
     
     /// <summary>
     /// No hay documentación de metadatos disponible.
@@ -615,28 +699,6 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "GRUPO_ACTIVIDAD", "GRUPO")]
-        public EntityCollection<GRUPO> GRUPOes
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<GRUPO>("bienestarModel.GRUPO_ACTIVIDAD", "GRUPO");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<GRUPO>("bienestarModel.GRUPO_ACTIVIDAD", "GRUPO", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "USUARIO")]
         public EntityCollection<USUARIO> USUARIOs
         {
@@ -649,6 +711,28 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO>("bienestarModel.ACTIVIDAD_USUARIO", "USUARIO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "GRUPO_ACTIVIDAD", "GRUPO")]
+        public EntityCollection<GRUPO> GRUPOes
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<GRUPO>("bienestarModel.GRUPO_ACTIVIDAD", "GRUPO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<GRUPO>("bienestarModel.GRUPO_ACTIVIDAD", "GRUPO", value);
                 }
             }
         }
@@ -673,14 +757,12 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="cODIGOACTIVIDAD">Valor inicial de la propiedad CODIGOACTIVIDAD.</param>
         /// <param name="aDJUNTO1">Valor inicial de la propiedad ADJUNTO1.</param>
-        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
-        public static ADJUNTO CreateADJUNTO(global::System.Decimal cODIGO, global::System.Decimal cODIGOACTIVIDAD, global::System.Byte[] aDJUNTO1, global::System.Boolean eSTADO)
+        public static ADJUNTO CreateADJUNTO(global::System.Decimal cODIGO, global::System.Decimal cODIGOACTIVIDAD, global::System.Byte[] aDJUNTO1)
         {
             ADJUNTO aDJUNTO = new ADJUNTO();
             aDJUNTO.CODIGO = cODIGO;
             aDJUNTO.CODIGOACTIVIDAD = cODIGOACTIVIDAD;
             aDJUNTO.ADJUNTO1 = aDJUNTO1;
-            aDJUNTO.ESTADO = eSTADO;
             return aDJUNTO;
         }
 
@@ -789,30 +871,6 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.String _NOMBRE;
         partial void OnNOMBREChanging(global::System.String value);
         partial void OnNOMBREChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean ESTADO
-        {
-            get
-            {
-                return _ESTADO;
-            }
-            set
-            {
-                OnESTADOChanging(value);
-                ReportPropertyChanging("ESTADO");
-                _ESTADO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADO");
-                OnESTADOChanged();
-            }
-        }
-        private global::System.Boolean _ESTADO;
-        partial void OnESTADOChanging(global::System.Boolean value);
-        partial void OnESTADOChanged();
 
         #endregion
 
@@ -1360,13 +1418,15 @@ namespace SistemaBienestarEstudiantil.Models
         /// Crear un nuevo objeto ENCUESTA_PREGUNTA.
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="cODIGOENCUESTA">Valor inicial de la propiedad CODIGOENCUESTA.</param>
         /// <param name="tITULO">Valor inicial de la propiedad TITULO.</param>
         /// <param name="tIPO">Valor inicial de la propiedad TIPO.</param>
         /// <param name="rEQUERIDO">Valor inicial de la propiedad REQUERIDO.</param>
-        public static ENCUESTA_PREGUNTA CreateENCUESTA_PREGUNTA(global::System.Int32 cODIGO, global::System.String tITULO, global::System.Int32 tIPO, global::System.Boolean rEQUERIDO)
+        public static ENCUESTA_PREGUNTA CreateENCUESTA_PREGUNTA(global::System.Int32 cODIGO, global::System.Int32 cODIGOENCUESTA, global::System.String tITULO, global::System.Int32 tIPO, global::System.Boolean rEQUERIDO)
         {
             ENCUESTA_PREGUNTA eNCUESTA_PREGUNTA = new ENCUESTA_PREGUNTA();
             eNCUESTA_PREGUNTA.CODIGO = cODIGO;
+            eNCUESTA_PREGUNTA.CODIGOENCUESTA = cODIGOENCUESTA;
             eNCUESTA_PREGUNTA.TITULO = tITULO;
             eNCUESTA_PREGUNTA.TIPO = tIPO;
             eNCUESTA_PREGUNTA.REQUERIDO = rEQUERIDO;
@@ -1403,6 +1463,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.Int32 _CODIGO;
         partial void OnCODIGOChanging(global::System.Int32 value);
         partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 CODIGOENCUESTA
+        {
+            get
+            {
+                return _CODIGOENCUESTA;
+            }
+            set
+            {
+                OnCODIGOENCUESTAChanging(value);
+                ReportPropertyChanging("CODIGOENCUESTA");
+                _CODIGOENCUESTA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOENCUESTA");
+                OnCODIGOENCUESTAChanged();
+            }
+        }
+        private global::System.Int32 _CODIGOENCUESTA;
+        partial void OnCODIGOENCUESTAChanging(global::System.Int32 value);
+        partial void OnCODIGOENCUESTAChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -1484,7 +1568,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1503,7 +1586,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA> ENCUESTAReference
@@ -1562,11 +1644,13 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="tEXTO">Valor inicial de la propiedad TEXTO.</param>
-        public static ENCUESTA_RESPUESTA CreateENCUESTA_RESPUESTA(global::System.Int32 cODIGO, global::System.String tEXTO)
+        /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
+        public static ENCUESTA_RESPUESTA CreateENCUESTA_RESPUESTA(global::System.Int32 cODIGO, global::System.String tEXTO, global::System.Int32 cODIGOPREGUNTA)
         {
             ENCUESTA_RESPUESTA eNCUESTA_RESPUESTA = new ENCUESTA_RESPUESTA();
             eNCUESTA_RESPUESTA.CODIGO = cODIGO;
             eNCUESTA_RESPUESTA.TEXTO = tEXTO;
+            eNCUESTA_RESPUESTA.CODIGOPREGUNTA = cODIGOPREGUNTA;
             return eNCUESTA_RESPUESTA;
         }
 
@@ -1624,6 +1708,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.String _TEXTO;
         partial void OnTEXTOChanging(global::System.String value);
         partial void OnTEXTOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 CODIGOPREGUNTA
+        {
+            get
+            {
+                return _CODIGOPREGUNTA;
+            }
+            set
+            {
+                OnCODIGOPREGUNTAChanging(value);
+                ReportPropertyChanging("CODIGOPREGUNTA");
+                _CODIGOPREGUNTA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOPREGUNTA");
+                OnCODIGOPREGUNTAChanged();
+            }
+        }
+        private global::System.Int32 _CODIGOPREGUNTA;
+        partial void OnCODIGOPREGUNTAChanging(global::System.Int32 value);
+        partial void OnCODIGOPREGUNTAChanged();
 
         #endregion
 
@@ -1633,7 +1741,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1652,7 +1759,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
@@ -1689,13 +1795,11 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="nIVEL">Valor inicial de la propiedad NIVEL.</param>
-        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
-        public static GRUPO CreateGRUPO(global::System.Decimal cODIGO, global::System.String nIVEL, global::System.Boolean eSTADO)
+        public static GRUPO CreateGRUPO(global::System.Decimal cODIGO, global::System.String nIVEL)
         {
             GRUPO gRUPO = new GRUPO();
             gRUPO.CODIGO = cODIGO;
             gRUPO.NIVEL = nIVEL;
-            gRUPO.ESTADO = eSTADO;
             return gRUPO;
         }
 
@@ -1801,30 +1905,6 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.String _MODALIDAD;
         partial void OnMODALIDADChanging(global::System.String value);
         partial void OnMODALIDADChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean ESTADO
-        {
-            get
-            {
-                return _ESTADO;
-            }
-            set
-            {
-                OnESTADOChanging(value);
-                ReportPropertyChanging("ESTADO");
-                _ESTADO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADO");
-                OnESTADOChanged();
-            }
-        }
-        private global::System.Boolean _ESTADO;
-        partial void OnESTADOChanging(global::System.Boolean value);
-        partial void OnESTADOChanged();
 
         #endregion
 
@@ -1871,167 +1951,6 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ACTIVIDAD>("bienestarModel.GRUPO_ACTIVIDAD", "ACTIVIDAD", value);
-                }
-            }
-        }
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No hay documentación de metadatos disponible.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="MODULO")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class MODULO : EntityObject
-    {
-        #region Método de generador
-    
-        /// <summary>
-        /// Crear un nuevo objeto MODULO.
-        /// </summary>
-        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
-        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
-        /// <param name="eNLACE">Valor inicial de la propiedad ENLACE.</param>
-        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
-        public static MODULO CreateMODULO(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.String eNLACE, global::System.Boolean eSTADO)
-        {
-            MODULO mODULO = new MODULO();
-            mODULO.CODIGO = cODIGO;
-            mODULO.NOMBRE = nOMBRE;
-            mODULO.ENLACE = eNLACE;
-            mODULO.ESTADO = eSTADO;
-            return mODULO;
-        }
-
-        #endregion
-
-        #region Propiedades primitivas
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Decimal CODIGO
-        {
-            get
-            {
-                return _CODIGO;
-            }
-            set
-            {
-                if (_CODIGO != value)
-                {
-                    OnCODIGOChanging(value);
-                    ReportPropertyChanging("CODIGO");
-                    _CODIGO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGO");
-                    OnCODIGOChanged();
-                }
-            }
-        }
-        private global::System.Decimal _CODIGO;
-        partial void OnCODIGOChanging(global::System.Decimal value);
-        partial void OnCODIGOChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String NOMBRE
-        {
-            get
-            {
-                return _NOMBRE;
-            }
-            set
-            {
-                OnNOMBREChanging(value);
-                ReportPropertyChanging("NOMBRE");
-                _NOMBRE = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("NOMBRE");
-                OnNOMBREChanged();
-            }
-        }
-        private global::System.String _NOMBRE;
-        partial void OnNOMBREChanging(global::System.String value);
-        partial void OnNOMBREChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String ENLACE
-        {
-            get
-            {
-                return _ENLACE;
-            }
-            set
-            {
-                OnENLACEChanging(value);
-                ReportPropertyChanging("ENLACE");
-                _ENLACE = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ENLACE");
-                OnENLACEChanged();
-            }
-        }
-        private global::System.String _ENLACE;
-        partial void OnENLACEChanging(global::System.String value);
-        partial void OnENLACEChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean ESTADO
-        {
-            get
-            {
-                return _ESTADO;
-            }
-            set
-            {
-                OnESTADOChanging(value);
-                ReportPropertyChanging("ESTADO");
-                _ESTADO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADO");
-                OnESTADOChanged();
-            }
-        }
-        private global::System.Boolean _ESTADO;
-        partial void OnESTADOChanging(global::System.Boolean value);
-        partial void OnESTADOChanged();
-
-        #endregion
-
-    
-        #region Propiedades de navegación
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "ROL_MODULO")]
-        public EntityCollection<ROL_MODULO> ROL_MODULO
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ROL_MODULO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ROL_MODULO");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ROL_MODULO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ROL_MODULO", value);
                 }
             }
         }
@@ -2164,13 +2083,11 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
-        /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
-        public static ROL CreateROL(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.Boolean eSTADO)
+        public static ROL CreateROL(global::System.Decimal cODIGO, global::System.String nOMBRE)
         {
             ROL rOL = new ROL();
             rOL.CODIGO = cODIGO;
             rOL.NOMBRE = nOMBRE;
-            rOL.ESTADO = eSTADO;
             return rOL;
         }
 
@@ -2228,30 +2145,6 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.String _NOMBRE;
         partial void OnNOMBREChanging(global::System.String value);
         partial void OnNOMBREChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean ESTADO
-        {
-            get
-            {
-                return _ESTADO;
-            }
-            set
-            {
-                OnESTADOChanging(value);
-                ReportPropertyChanging("ESTADO");
-                _ESTADO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADO");
-                OnESTADOChanged();
-            }
-        }
-        private global::System.Boolean _ESTADO;
-        partial void OnESTADOChanging(global::System.Boolean value);
-        partial void OnESTADOChanged();
 
         #endregion
 
@@ -2264,18 +2157,18 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ROL_MODULO_ROL", "ROL_MODULO")]
-        public EntityCollection<ROL_MODULO> ROL_MODULO
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ROL_MODULO_ROL", "ROL_ACCESO")]
+        public EntityCollection<ROL_ACCESO> ROL_ACCESO
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ROL_MODULO>("bienestarModel.FK_ROL_MODULO_ROL", "ROL_MODULO");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ROL_ACCESO>("bienestarModel.FK_ROL_MODULO_ROL", "ROL_ACCESO");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ROL_MODULO>("bienestarModel.FK_ROL_MODULO_ROL", "ROL_MODULO", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ROL_ACCESO>("bienestarModel.FK_ROL_MODULO_ROL", "ROL_ACCESO", value);
                 }
             }
         }
@@ -2309,24 +2202,26 @@ namespace SistemaBienestarEstudiantil.Models
     /// <summary>
     /// No hay documentación de metadatos disponible.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ROL_MODULO")]
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ROL_ACCESO")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class ROL_MODULO : EntityObject
+    public partial class ROL_ACCESO : EntityObject
     {
         #region Método de generador
     
         /// <summary>
-        /// Crear un nuevo objeto ROL_MODULO.
+        /// Crear un nuevo objeto ROL_ACCESO.
         /// </summary>
         /// <param name="cODIGOROL">Valor inicial de la propiedad CODIGOROL.</param>
-        /// <param name="cODIGOMODULO">Valor inicial de la propiedad CODIGOMODULO.</param>
-        public static ROL_MODULO CreateROL_MODULO(global::System.Decimal cODIGOROL, global::System.Decimal cODIGOMODULO)
+        /// <param name="cODIGOACCESO">Valor inicial de la propiedad CODIGOACCESO.</param>
+        /// <param name="vALIDO">Valor inicial de la propiedad VALIDO.</param>
+        public static ROL_ACCESO CreateROL_ACCESO(global::System.Decimal cODIGOROL, global::System.Decimal cODIGOACCESO, global::System.Boolean vALIDO)
         {
-            ROL_MODULO rOL_MODULO = new ROL_MODULO();
-            rOL_MODULO.CODIGOROL = cODIGOROL;
-            rOL_MODULO.CODIGOMODULO = cODIGOMODULO;
-            return rOL_MODULO;
+            ROL_ACCESO rOL_ACCESO = new ROL_ACCESO();
+            rOL_ACCESO.CODIGOROL = cODIGOROL;
+            rOL_ACCESO.CODIGOACCESO = cODIGOACCESO;
+            rOL_ACCESO.VALIDO = vALIDO;
+            return rOL_ACCESO;
         }
 
         #endregion
@@ -2365,75 +2260,51 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOMODULO
+        public global::System.Decimal CODIGOACCESO
         {
             get
             {
-                return _CODIGOMODULO;
+                return _CODIGOACCESO;
             }
             set
             {
-                if (_CODIGOMODULO != value)
+                if (_CODIGOACCESO != value)
                 {
-                    OnCODIGOMODULOChanging(value);
-                    ReportPropertyChanging("CODIGOMODULO");
-                    _CODIGOMODULO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOMODULO");
-                    OnCODIGOMODULOChanged();
+                    OnCODIGOACCESOChanging(value);
+                    ReportPropertyChanging("CODIGOACCESO");
+                    _CODIGOACCESO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOACCESO");
+                    OnCODIGOACCESOChanged();
                 }
             }
         }
-        private global::System.Decimal _CODIGOMODULO;
-        partial void OnCODIGOMODULOChanging(global::System.Decimal value);
-        partial void OnCODIGOMODULOChanged();
+        private global::System.Decimal _CODIGOACCESO;
+        partial void OnCODIGOACCESOChanging(global::System.Decimal value);
+        partial void OnCODIGOACCESOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> VISUALIZAR
+        public global::System.Boolean VALIDO
         {
             get
             {
-                return _VISUALIZAR;
+                return _VALIDO;
             }
             set
             {
-                OnVISUALIZARChanging(value);
-                ReportPropertyChanging("VISUALIZAR");
-                _VISUALIZAR = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("VISUALIZAR");
-                OnVISUALIZARChanged();
+                OnVALIDOChanging(value);
+                ReportPropertyChanging("VALIDO");
+                _VALIDO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("VALIDO");
+                OnVALIDOChanged();
             }
         }
-        private Nullable<global::System.Boolean> _VISUALIZAR;
-        partial void OnVISUALIZARChanging(Nullable<global::System.Boolean> value);
-        partial void OnVISUALIZARChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> EDITAR
-        {
-            get
-            {
-                return _EDITAR;
-            }
-            set
-            {
-                OnEDITARChanging(value);
-                ReportPropertyChanging("EDITAR");
-                _EDITAR = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EDITAR");
-                OnEDITARChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _EDITAR;
-        partial void OnEDITARChanging(Nullable<global::System.Boolean> value);
-        partial void OnEDITARChanged();
+        private global::System.Boolean _VALIDO;
+        partial void OnVALIDOChanging(global::System.Boolean value);
+        partial void OnVALIDOChanged();
 
         #endregion
 
@@ -2446,16 +2317,16 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "MODULO")]
-        public MODULO MODULO
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "ACCESO")]
+        public ACCESO ACCESO
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<MODULO>("bienestarModel.FK_ROL_MODULO_MODULO1", "MODULO").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ACCESO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ACCESO").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<MODULO>("bienestarModel.FK_ROL_MODULO_MODULO1", "MODULO").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ACCESO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ACCESO").Value = value;
             }
         }
         /// <summary>
@@ -2463,17 +2334,17 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<MODULO> MODULOReference
+        public EntityReference<ACCESO> ACCESOReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<MODULO>("bienestarModel.FK_ROL_MODULO_MODULO1", "MODULO");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ACCESO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ACCESO");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<MODULO>("bienestarModel.FK_ROL_MODULO_MODULO1", "MODULO", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ACCESO>("bienestarModel.FK_ROL_MODULO_MODULO1", "ACCESO", value);
                 }
             }
         }
@@ -2518,163 +2389,6 @@ namespace SistemaBienestarEstudiantil.Models
 
         #endregion
 
-    }
-    
-    /// <summary>
-    /// No hay documentación de metadatos disponible.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="sysdiagram")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class sysdiagram : EntityObject
-    {
-        #region Método de generador
-    
-        /// <summary>
-        /// Crear un nuevo objeto sysdiagram.
-        /// </summary>
-        /// <param name="name">Valor inicial de la propiedad name.</param>
-        /// <param name="principal_id">Valor inicial de la propiedad principal_id.</param>
-        /// <param name="diagram_id">Valor inicial de la propiedad diagram_id.</param>
-        public static sysdiagram Createsysdiagram(global::System.String name, global::System.Int32 principal_id, global::System.Int32 diagram_id)
-        {
-            sysdiagram sysdiagram = new sysdiagram();
-            sysdiagram.name = name;
-            sysdiagram.principal_id = principal_id;
-            sysdiagram.diagram_id = diagram_id;
-            return sysdiagram;
-        }
-
-        #endregion
-
-        #region Propiedades primitivas
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                OnnameChanging(value);
-                ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("name");
-                OnnameChanged();
-            }
-        }
-        private global::System.String _name;
-        partial void OnnameChanging(global::System.String value);
-        partial void OnnameChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 principal_id
-        {
-            get
-            {
-                return _principal_id;
-            }
-            set
-            {
-                Onprincipal_idChanging(value);
-                ReportPropertyChanging("principal_id");
-                _principal_id = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("principal_id");
-                Onprincipal_idChanged();
-            }
-        }
-        private global::System.Int32 _principal_id;
-        partial void Onprincipal_idChanging(global::System.Int32 value);
-        partial void Onprincipal_idChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 diagram_id
-        {
-            get
-            {
-                return _diagram_id;
-            }
-            set
-            {
-                if (_diagram_id != value)
-                {
-                    Ondiagram_idChanging(value);
-                    ReportPropertyChanging("diagram_id");
-                    _diagram_id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("diagram_id");
-                    Ondiagram_idChanged();
-                }
-            }
-        }
-        private global::System.Int32 _diagram_id;
-        partial void Ondiagram_idChanging(global::System.Int32 value);
-        partial void Ondiagram_idChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Int32> version
-        {
-            get
-            {
-                return _version;
-            }
-            set
-            {
-                OnversionChanging(value);
-                ReportPropertyChanging("version");
-                _version = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("version");
-                OnversionChanged();
-            }
-        }
-        private Nullable<global::System.Int32> _version;
-        partial void OnversionChanging(Nullable<global::System.Int32> value);
-        partial void OnversionChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.Byte[] definition
-        {
-            get
-            {
-                return StructuralObject.GetValidValue(_definition);
-            }
-            set
-            {
-                OndefinitionChanging(value);
-                ReportPropertyChanging("definition");
-                _definition = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("definition");
-                OndefinitionChanged();
-            }
-        }
-        private global::System.Byte[] _definition;
-        partial void OndefinitionChanging(global::System.Byte[] value);
-        partial void OndefinitionChanged();
-
-        #endregion
-
-    
     }
     
     /// <summary>
