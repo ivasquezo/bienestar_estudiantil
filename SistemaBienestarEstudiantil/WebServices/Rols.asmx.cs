@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 using System.Data.SqlClient;
+using System.Data.Objects.DataClasses;
 using System.Web.Script.Serialization;
 using SistemaBienestarEstudiantil.Models;
 
@@ -49,7 +50,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveRolData(int rolId, String rolName, Boolean rolStatus)
+        public void saveRolData(int rolId, String rolName)
         {
             bienestarEntities db = new bienestarEntities();
 
@@ -63,7 +64,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void addNewRol(String rolName, Boolean rolStatus)
+        public void addNewRol(String rolName)
         {
             bienestarEntities db = new bienestarEntities();
 
@@ -77,15 +78,16 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(newRol));
         }
 
-
         [WebMethod]
-        public void getRolByCode(int id)
+        public void getAccessByRolId(int rolId)
         {
             bienestarEntities db = new bienestarEntities();
 
-            ROL rol = db.ROLs.Single(u => u.CODIGO == id);
+            ROL rol = db.ROLs.Single(r => r.CODIGO == rolId);
 
-            writeResponse(new JavaScriptSerializer().Serialize(rol));
+            var access = rol.ROL_ACCESO.Select(ra => ra.CODIGOACCESO).ToList();
+
+            writeResponse(new JavaScriptSerializer().Serialize(db.ACCESOes.Where(a => access.Contains(a.CODIGO))));
         }
     }
 }

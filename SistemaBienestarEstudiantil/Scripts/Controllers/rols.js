@@ -18,14 +18,26 @@
                 console.log("error al cargar los roles...", data);
             });
         };
+		
+		 $scope.prueba = function () {
+            $http.post('../../WebServices/Rols.asmx/getAccessByRolId', {
+				rolId: 1
+            }).success(function (data, status, headers, config) {
+                console.log("acceso",data);
+                $scope.gridOptions.data = data;
+            }).error(function (data, status, headers, config) {
+                console.log("error al cargar los roles...", data);
+            });
+        };
 
+		$scope.prueba();
+		
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: false,
             columnDefs: [
               {name:'Código', field: 'CODIGO'},
               {name:'Nombre', field: 'NOMBRE'},
-              {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
               {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsRols.html' }
             ]
         };
@@ -58,7 +70,6 @@
             var rol = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
             $scope.rolCopy.CODIGO = rol.CODIGO;
             $scope.rolCopy.NOMBRE = rol.NOMBRE;
-            $scope.rolCopy.ESTADO = rol.ESTADO;
 
             ngDialog.open({
                 template: 'editRol.html',
@@ -82,18 +93,17 @@
             return null;
         }
         
-		$scope.updateElementArray = function(arrayRol, rolId, rolName, rolStatus) {
+		$scope.updateElementArray = function(arrayRol, rolId, rolName) {
             for (var i=0; i<arrayRol.length; i++) {
                 if (arrayRol[i].CODIGO == rolId) {
                     arrayRol[i].NOMBRE = rolName;
-					arrayRol[i].ESTADO = rolStatus;
                 }
             }
         };
 		
 		$scope.addNewRolDialog = function() {
             $scope.rolCopy = {
-                ESTADO: true
+                NOMBRE: ''
             };
 
             ngDialog.open({
@@ -118,13 +128,12 @@
         $scope.saveEditedRol = function () {
             $http.post('../../WebServices/Rols.asmx/saveRolData', {
                 rolId: $scope.rolCopy.CODIGO,
-                rolName: $scope.rolCopy.NOMBRE,
-                rolStatus: $scope.rolCopy.ESTADO
+                rolName: $scope.rolCopy.NOMBRE
 
             }).success(function (data, status, headers, config) {
                 console.log("saveEditedRol: ", data);
                 $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Datos del rol guardados...'}]);
-				$scope.updateElementArray($scope.gridOptions.data, $scope.rolCopy.CODIGO, $scope.rolCopy.NOMBRE, $scope.rolCopy.ESTADO);
+				$scope.updateElementArray($scope.gridOptions.data, $scope.rolCopy.CODIGO, $scope.rolCopy.NOMBRE);
             }).error(function (data, status, headers, config) {
                 console.log("error al editar el rol...", data);
             });
@@ -134,8 +143,7 @@
 
         $scope.addNewRolDB = function () {
             $http.post('../../WebServices/Rols.asmx/addNewRol', {                
-                rolName: $scope.rolCopy.NOMBRE,
-                rolStatus: $scope.rolCopy.ESTADO
+                rolName: $scope.rolCopy.NOMBRE
 
             }).success(function (data, status, headers, config) {
                 console.log("addNewRol: ", data);

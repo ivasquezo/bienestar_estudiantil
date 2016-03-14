@@ -62,15 +62,6 @@
 </table>
                     </div>
 
-                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeRolBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="rolCopy.ESTADO" id="activeRolBox" name="activeRolBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveRol"></label>
                         <div class="col-md-8">
@@ -92,15 +83,6 @@
                             <span ng-messages="newRolForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
                             </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeRolBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="rolCopy.ESTADO" id="activeRolBox" name="activeRolBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
-                            </select>
                         </div>
                     </div>
 
