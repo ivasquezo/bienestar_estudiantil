@@ -196,7 +196,8 @@ input[type="text"].ng-valid {
     vertical-align: top;
 }
 .encuestas .poll-preview .content {
-    margin: 10px; 
+    width: 60%;
+    margin: 0 auto; 
 }
 .encuestas .poll-preview .content .response{
     margin: 10px;

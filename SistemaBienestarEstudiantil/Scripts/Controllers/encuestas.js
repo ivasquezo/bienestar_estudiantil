@@ -22,7 +22,6 @@
             selectedItems: $scope.mySelections,
             multiSelect: false,
             columnDefs: [
-                {name:'Código', field: 'CODIGO', width: 70},
                 {name:'Título', field: 'TITULO'},
                 {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 80}
             ]
@@ -42,11 +41,13 @@
 
         // listener for encuesta TITULO
         $scope.$watch('encuesta.TITULO', function() {
+            /*
             var text = document.getElementById('encuestaTitulo');
             if (text != null) {
                 text.style.height = 'auto';
                 text.style.height = text.scrollHeight + 'px';
             }
+            */
         });
 
         // test method for view object in the console
@@ -85,6 +86,15 @@
             $scope.encuesta = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
             $scope.addHandlerEncuesta($scope.encuesta);
         };
+
+        $scope.verifyQuestion = function(question){
+            if (question.TIPO == 3) {
+                question.ENCUESTA_RESPUESTA = [];
+            } else {
+                if (question.ENCUESTA_RESPUESTA.length == 0)
+                    question.addResponse();
+            }
+        }
 
         $scope.addHandlerEncuesta = function(encuesta){
 
@@ -175,7 +185,7 @@
 
                 encuesta.ENCUESTA_PREGUNTA[i].id = $scope.generateId();
                 for (var j = 0; j < encuesta.ENCUESTA_PREGUNTA[i].ENCUESTA_RESPUESTA.length; j++) {
-                    encuesta.ENCUESTA_PREGUNTA[i].ENCUESTA_RESPUESTA[i].id = $scope.generateId();
+                    encuesta.ENCUESTA_PREGUNTA[i].ENCUESTA_RESPUESTA[j].id = $scope.generateId();
                 }
             }
         }; // end addHandlerEncuesta
@@ -194,6 +204,8 @@
         };
 
         $scope.saveEncuesta = function(){
+
+            console.log($scope.encuesta);
 
             $http.post('../../WebServices/Encuestas.asmx/saveEncuesta', {
                 encuestaEdited: $scope.encuesta
@@ -226,6 +238,31 @@
                 }
             }
         };
+
+        $scope.loadDefaultPoll = function(){
+
+            $http.post('../../WebServices/Encuestas.asmx/getDefaultEncuesta', {
+            }).success(function (data, status, headers, config) {
+                console.log(data);
+                $scope.defaultPoll = data;
+            }).error(function (data, status, headers, config) {
+                console.log("error al traer la encuesta seleccionada", data);
+            });
+        };
+
+        $scope.loadDefaultPoll();
+
+        $scope.pruebaJoins = function(){
+
+            $http.post('../../WebServices/Encuestas.asmx/pruebaJoins', {
+            }).success(function (data, status, headers, config) {
+                console.log("pruebaJoins", data);
+            }).error(function (data, status, headers, config) {
+                console.log("error al traer la encuesta seleccionada", data);
+            });
+        };
+
+        $scope.pruebaJoins();
 
     }]);
 
