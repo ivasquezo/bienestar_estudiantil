@@ -114,7 +114,6 @@
         }
 
         $scope.addNewUserDialog = function() {
-
             $scope.userCopy = {
                 ESTADO: true
             };
@@ -130,9 +129,7 @@
                     $http: $http
                 })
             });
-
         };
-
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {

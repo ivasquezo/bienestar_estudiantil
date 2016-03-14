@@ -10,7 +10,7 @@ using SistemaBienestarEstudiantil.Models;
 namespace SistemaBienestarEstudiantil.WebServices
 {
     /// <summary>
-    /// Descripción breve de WebService1
+    /// Descripción breve de Users
     /// </summary>
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -19,7 +19,6 @@ namespace SistemaBienestarEstudiantil.WebServices
     [System.Web.Script.Services.ScriptService]
     public class Users : System.Web.Services.WebService
     {
-
         private void writeResponse(String response)
         {
             Context.Response.Write(response);
@@ -38,7 +37,9 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getAllActivedUser()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
+
             Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.Where(u => u.ESTADO == true).ToList()));
+
             Context.Response.Flush();
             Context.Response.End();
         }
@@ -47,7 +48,9 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getUserByCode(int code)
         {
             bienestarEntities db = new bienestarEntities();
+
             USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == code);
+
             writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
@@ -57,6 +60,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             bienestarEntities db = new bienestarEntities();
 
             USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == id);
+
             db.USUARIOs.DeleteObject(usuario);
             db.SaveChanges();
 
@@ -71,7 +75,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             bienestarEntities db = new bienestarEntities();
 
             USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == id);
+
             usuario.ESTADO = false;
+
             db.SaveChanges();
 
             writeResponse("ok");
@@ -132,13 +138,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             db.SaveChanges();
 
             writeResponse(new JavaScriptSerializer().Serialize(newUser));
-        }
-
-
-        [WebMethod]
-        public string prueba1()
-        {
-            return "prueba michel";
         }
     }
 }

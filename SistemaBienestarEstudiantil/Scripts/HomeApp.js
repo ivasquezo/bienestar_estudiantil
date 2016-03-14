@@ -23,7 +23,7 @@
         $scope.cargarUsuarios = function () {
             $http.post('../../WebServices/Users.asmx/getAllUser', {
             }).success(function (data, status, headers, config) {
-                console.log("cargarUsuarios",data);
+                console.log("cargarUsuarios", data);
                 $scope.gridOptions.data = data;
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...", data);
@@ -34,13 +34,13 @@
             enableSorting: true,
             enableFiltering: false,
             columnDefs: [
-              {name:'Código', field: 'CODIGO'},
-              {name:'Nombre', field: 'NOMBRECOMPLETO'},
-              {name:'Usuario', field: 'NOMBREUSUARIO'},
-              {name:'Cédula', field: 'CEDULA'},
-              {name:'Activo', field: 'ESTADO'},
-              {name:'Estado', field: 'ESTADO', cellTemplate: "<div>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html' }
+              { name: 'Código', field: 'CODIGO' },
+              { name: 'Nombre', field: 'NOMBRECOMPLETO' },
+              { name: 'Usuario', field: 'NOMBREUSUARIO' },
+              { name: 'Cédula', field: 'CEDULA' },
+              { name: 'Activo', field: 'ESTADO' },
+              { name: 'Estado', field: 'ESTADO', cellTemplate: "<div>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>" },
+              { name: 'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html' }
             ]
         };
 
@@ -48,7 +48,7 @@
 
         this.removeUser = function (code) {
             var parentObject = this;
-            
+
             $http.post('../../WebServices/Users.asmx/inactiveUserById', {
                 id: code
             }).success(function (data, status, headers, config) {
@@ -77,20 +77,20 @@
             });
         };
 
-        this.removeElementArray = function(arrayUser, userCode) {
-            for (var i=0; i<arrayUser.length; i++) {
+        this.removeElementArray = function (arrayUser, userCode) {
+            for (var i = 0; i < arrayUser.length; i++) {
                 if (arrayUser[i].CODIGO == userCode) {
                     arrayUser.splice(i, 1);
                 }
             }
         };
 
-        $scope.addElementArray = function(arrayUser, newUser) {
+        $scope.addElementArray = function (arrayUser, newUser) {
             arrayUser.push(newUser);
         };
 
-        $scope.getElementArray = function(arrayUser, userCode) {
-            for (var i=0; i<arrayUser.length; i++) {
+        $scope.getElementArray = function (arrayUser, userCode) {
+            for (var i = 0; i < arrayUser.length; i++) {
                 if (arrayUser[i].CODIGO == userCode) {
                     return arrayUser[i];
                 }
@@ -98,7 +98,7 @@
             return null;
         }
 
-        $scope.addNewUserDialog = function() {
+        $scope.addNewUserDialog = function () {
 
             console.log("addNewUser");
 
@@ -120,9 +120,9 @@
 
         };
 
-    }]);
+    } ]);
 
-    app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
+    app.controller('ngDialogController', ['$scope', '$http', function ($scope, $http) {
 
         $scope.password = {
             reset: false
@@ -131,9 +131,9 @@
         $scope.saveEditedUser = function () {
 
             console.log("saveEditedUser");
-            
+
             $http.post('../../WebServices/Users.asmx/saveUserData', {
-                
+
                 userCode: $scope.user.CODIGO,
                 userName: $scope.user.NOMBREUSUARIO,
                 userCompleteName: $scope.user.NOMBRECOMPLETO,
@@ -153,7 +153,7 @@
         $scope.addNewUser1 = function () {
 
             $http.post('../../WebServices/Users.asmx/addNewUser', {
-                
+
                 userName: $scope.user.NOMBREUSUARIO,
                 userCompleteName: $scope.user.NOMBRECOMPLETO,
                 userIdentificationNumber: $scope.user.CEDULA,
@@ -168,5 +168,5 @@
 
             this.closeThisDialog();
         };
-    }])
+    } ])
 })();
