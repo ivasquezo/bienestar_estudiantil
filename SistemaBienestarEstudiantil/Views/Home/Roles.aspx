@@ -46,16 +46,14 @@
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" >Módulos</label>
-                        <table style="width:100%">
+                        <table style="width:100%; font-size:16px">
                             <tr>
                                 <th></th>
-                                <th>Código</th>
                                 <th>Nombre</th> 
                             </tr>
                             <tr ng-repeat="rolAccess in rolsAccess">
-                                <td><input type="checkbox" ng-model="rolAccess.ROL_ACCESO.VALIDO"></td>
-                                <td>{{ rol_acceso.CODIGOACCESO }}</td>
-                                <td>{{ access.NOMBRE }}</td>
+                                <td><input type="checkbox" ng-model="rolAccess.VALIDO"></td>
+                                <td>{{ rolAccess.NOMBRE }}</td>
                             </tr>
                         </table>
                     </div>
@@ -63,7 +61,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveRol"></label>
                         <div class="col-md-8">
-                            <button type="submit" id="saveRol" name="saveRol" class="btn btn-success">Guardar</button>
+                            <button type="submit" id="saveRol" name="saveRol" class="btn btn-success" style="margin-top= 5px">Guardar</button>
                         </div>
                     </div>
                 </form>

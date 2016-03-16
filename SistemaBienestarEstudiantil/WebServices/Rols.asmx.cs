@@ -83,12 +83,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            ROL rol = db.ROLs.Single(r => r.CODIGO == rolId);
-
-            var access = rol.ROL_ACCESO.Select(ra => ra.CODIGOACCESO).ToList();
-
             var data = db.ACCESOes.Join(db.ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
-                (a, ra) => new { Acceso = a, RolAcceso = ra }).Select(x => x.Acceso).Distinct().Where(ra => access.Contains(ra.CODIGO));
+                       (a, ra) => new { ACCESO = a, ROL_ACCESO = ra })
+                       .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
+                       .Where(y => y.CODIGOROL == rolId).ToList();
 
             writeResponse(new JavaScriptSerializer().Serialize(data));
         }
