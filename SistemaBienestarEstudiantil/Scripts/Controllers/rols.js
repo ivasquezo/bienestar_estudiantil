@@ -41,7 +41,7 @@
                 $('#messages').puigrowl('show', [{severity: 'info', summary: 'Borrar', detail: 'Rol eliminado...'}]);
                 parentObject.removeElementArray($scope.gridOptions.data, code);
             }).error(function (data, status, headers, config) {
-                console.log("error al cargar los roles...");
+                console.log("error al cargar los roles...", data);
             });
         };
 
@@ -54,10 +54,12 @@
         };
 		
         this.editRol = function (code) {
-            var rol = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
-            $scope.rolCopy.CODIGO = rol.CODIGO;
-            $scope.rolCopy.NOMBRE = rol.NOMBRE;
+            $scope.rolEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
+            
+            $scope.rolCopy.CODIGO = $scope.rolEdit.CODIGO;
+            $scope.rolCopy.NOMBRE = $scope.rolEdit.NOMBRE;
 			$scope.getAccessByRol(code);
+            $scope.accessRols = [];
 
             ngDialog.open({
                 template: 'editRol.html',
@@ -93,6 +95,8 @@
             $scope.rolCopy = {
                 NOMBRE: ''
             };
+            $scope.getAccessByRol(0);
+            $scope.accessRols = [];
 
             ngDialog.open({
                 template: 'newRol.html',
@@ -112,22 +116,46 @@
         }; 
 
 		$scope.getAccessByRol = function (code) {
-            $http.post('../../WebServices/Rols.asmx/getAccessByRolId', {
-				rolId: code
-            }).success(function (data, status, headers, config) {
+            if (code > 0) {
+                $http.post('../../WebServices/Rols.asmx/getAccessByRolId', {
+    				rolId: code
+                }).success(function (data, status, headers, config) {
+                    console.log("acceso",data);
+                    $scope.rolsAccess = data;
+                }).error(function (data, status, headers, config) {
+                    console.log("error al cargar los roles...", data);
+                });
+			}
+
+			$http.post('../../WebServices/Rols.asmx/getAllAccess'
+			).success(function (data, status, headers, config) {
                 console.log("acceso",data);
-                $scope.rolsAccess = data;
+                $scope.allAccess = data;
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los roles...", data);
             });
         };
+		
+		$scope.existAccess = function (code) {
+			if ($scope.rolsAccess.length > 0) {
+				for (var i = 0; i < $scope.rolsAccess.length; i++) {
+                    if($scope.rolsAccess[i].CODIGO == code && $scope.rolsAccess[i].VALIDO == true) return true;
+                };
+			}
+            return false;
+		};
+
+        $scope.setAccessRol = function(codeAccess) {            
+            $scope.accessRols.push(codeAccess);            
+        };      
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
         $scope.saveEditedRol = function () {
             $http.post('../../WebServices/Rols.asmx/saveRolData', {
                 rolId: $scope.rolCopy.CODIGO,
-                rolName: $scope.rolCopy.NOMBRE
+                rolName: $scope.rolCopy.NOMBRE,
+                accessRols: $scope.accessRols
 
             }).success(function (data, status, headers, config) {
                 console.log("saveEditedRol: ", data);
@@ -136,13 +164,14 @@
             }).error(function (data, status, headers, config) {
                 console.log("error al editar el rol...", data);
             });
-
+            
             this.closeThisDialog();
         };
 
         $scope.addNewRolDB = function () {
             $http.post('../../WebServices/Rols.asmx/addNewRol', {                
-                rolName: $scope.rolCopy.NOMBRE
+                rolName: $scope.rolCopy.NOMBRE,
+                accessRols: $scope.accessRols
 
             }).success(function (data, status, headers, config) {
                 console.log("addNewRol: ", data);

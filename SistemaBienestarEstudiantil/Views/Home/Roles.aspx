@@ -51,17 +51,19 @@
                                 <th></th>
                                 <th>Nombre</th> 
                             </tr>
-                            <tr ng-repeat="rolAccess in rolsAccess">
-                                <td><input type="checkbox" ng-model="rolAccess.VALIDO"></td>
-                                <td>{{ rolAccess.NOMBRE }}</td>
+                            <tr ng-repeat="access in allAccess">
+                                <td><input type="checkbox" ng-checked="existAccess(access.CODIGO)" 
+                                    ng-click="setAccessRol(access.CODIGO)"></td>
+                                <td>{{ access.NOMBRE }}</td>
                             </tr>
                         </table>
                     </div>
 
+                    <br/>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveRol"></label>
                         <div class="col-md-8">
-                            <button type="submit" id="saveRol" name="saveRol" class="btn btn-success" style="margin-top= 5px">Guardar</button>
+                            <button type="submit" id="saveRol" name="saveRol" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </form>
@@ -82,6 +84,21 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" >Módulos</label>
+                        <table style="width:100%; font-size:16px">
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="access in allAccess">
+                                <td><input type="checkbox" ng-click="setAccessRol(access.CODIGO)"></td>
+                                <td>{{ access.NOMBRE }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br/>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveRol"></label>
                         <div class="col-md-8">

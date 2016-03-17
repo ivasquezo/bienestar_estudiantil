@@ -41,6 +41,8 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             ROL rol = db.ROLs.Single(r => r.CODIGO == id);
 
+            removeRolAccesByRolId(id);
+
             db.ROLs.DeleteObject(rol);
             db.SaveChanges();
 
@@ -50,7 +52,22 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveRolData(int rolId, String rolName)
+        private void removeRolAccesByRolId(int id)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<ROL_ACCESO> rolAccess = db.ROL_ACCESO.Where(ra => ra.CODIGOROL == id).ToList();
+
+            foreach (ROL_ACCESO rol in rolAccess)
+            {
+                db.ROL_ACCESO.DeleteObject(rol);
+            }
+           
+            db.SaveChanges();
+        }
+
+        [WebMethod]
+        public void saveRolData(int rolId, String rolName, int[] accessRols)
         {
             bienestarEntities db = new bienestarEntities();
 
@@ -58,13 +75,21 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             rol.NOMBRE = rolName;
 
+            for (int accRol=0; accRol < accessRols.Length; accRol++) {
+                ROL_ACCESO rolAccess = getStatusRolAccesById(rolId, accessRols[accRol]);
+                if (rolAccess != null)
+                    updateRolAccess(rolId, accessRols[accRol]);
+                else
+                    createRolAccess(rolId, accessRols[accRol]);
+            }
+
             db.SaveChanges();
 
             writeResponse("ok");
         }
 
         [WebMethod]
-        public void addNewRol(String rolName)
+        public void addNewRol(String rolName, int[] accessRols)
         {
             bienestarEntities db = new bienestarEntities();
 
@@ -75,7 +100,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             db.ROLs.AddObject(newRol);
             db.SaveChanges();
 
+            for (int accRol = 0; accRol < accessRols.Length; accRol++)
+                createRolAccess(Decimal.ToInt32(newRol.CODIGO), accessRols[accRol]);
+
             writeResponse(new JavaScriptSerializer().Serialize(newRol));
+        }
+
+        [WebMethod]
+        public void getAllAccess()
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            writeResponse(new JavaScriptSerializer().Serialize(db.ACCESOes.ToList()));
         }
 
         [WebMethod]
@@ -92,11 +128,54 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAccessById(int accessId)
+        private ROL_ACCESO getStatusRolAccesById(int idRol, int idAccess)
         {
             bienestarEntities db = new bienestarEntities();
 
-            writeResponse(new JavaScriptSerializer().Serialize(db.ACCESOes.Single(a => a.CODIGO == accessId)));
+            ROL_ACCESO rolAccess = null;
+
+            try
+            {
+                rolAccess = db.ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
+            }
+            catch (System.InvalidOperationException)
+            {
+                Console.WriteLine("No se encontró un elemento con los filtros ingresados");
+            }
+
+            return rolAccess;
         }
+
+        [WebMethod]
+        private void updateRolAccess(int idRol, int idAccess)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            ROL_ACCESO rolAccess = db.ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
+
+            if (rolAccess.VALIDO)
+                rolAccess.VALIDO = false;
+            else
+                rolAccess.VALIDO = true;
+            
+            db.SaveChanges();
+        }
+
+        [WebMethod]
+        private void createRolAccess(int rolId, int accessId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            ROL_ACCESO newRolAccess = new ROL_ACCESO();
+
+            newRolAccess.CODIGOROL = rolId;
+            newRolAccess.CODIGOACCESO = accessId;
+            newRolAccess.VALIDO = true;
+
+            db.ROL_ACCESO.AddObject(newRolAccess);
+
+            db.SaveChanges();
+        }
+
     }
 }
