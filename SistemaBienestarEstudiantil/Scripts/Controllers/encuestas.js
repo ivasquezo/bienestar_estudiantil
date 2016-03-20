@@ -252,18 +252,6 @@
 
         $scope.loadDefaultPoll();
 
-        $scope.pruebaJoins = function(){
-
-            $http.post('../../WebServices/Encuestas.asmx/pruebaJoins', {
-            }).success(function (data, status, headers, config) {
-                console.log("pruebaJoins", data);
-            }).error(function (data, status, headers, config) {
-                console.log("error al traer la encuesta seleccionada", data);
-            });
-        };
-
-        $scope.pruebaJoins();
-
     }]);
 
 })();

@@ -69,6 +69,14 @@
 
         };
 
+        $scope.pruebaAvailable = function () {
+            ngModel.$setValidity('available', false);
+        };
+
+        $scope.pruebaAvailable1 = function () {
+            ngModel.$setValidity('available', true);
+        };
+
         this.editUser = function (code) {
 
             var user = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
