@@ -24,8 +24,10 @@
 
         <script type="text/ng-template" id="actionsRols.html">
               <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)">Borrar</button>
-                <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)">Editar</button>
+                <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)">
+                <span class="ui-icon ui-icon-trash"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)">
+                <span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>
 
@@ -46,31 +48,20 @@
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" >Módulos</label>
-                        <table style="width:100%">
+                        <table style="width:100%; font-size:16px">
                             <tr>
                                 <th></th>
-                                <th>Código</th>
                                 <th>Nombre</th> 
-                                <th>Estado</th>
                             </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Eve</td>
-    <td>Jackson</td> 
-    <td>94</td>
-  </tr>
-</table>
+                            <tr ng-repeat="access in allAccess">
+                                <td><input type="checkbox" ng-checked="existAccess(access.CODIGO)" 
+                                    ng-click="setAccessRol(access.CODIGO)"></td>
+                                <td>{{ access.NOMBRE }}</td>
+                            </tr>
+                        </table>
                     </div>
 
-                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeRolBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="rolCopy.ESTADO" id="activeRolBox" name="activeRolBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
-                            </select>
-                        </div>
-                    </div>
-
+                    <br/>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveRol"></label>
                         <div class="col-md-8">
@@ -96,14 +87,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeRolBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="rolCopy.ESTADO" id="activeRolBox" name="activeRolBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
-                            </select>
-                        </div>
+                        <label class="col-md-4 control-label" >Módulos</label>
+                        <table style="width:100%; font-size:16px">
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="access in allAccess">
+                                <td><input type="checkbox" ng-click="setAccessRol(access.CODIGO)"></td>
+                                <td>{{ access.NOMBRE }}</td>
+                            </tr>
+                        </table>
                     </div>
 
+                    <br/>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveRol"></label>
                         <div class="col-md-8">
