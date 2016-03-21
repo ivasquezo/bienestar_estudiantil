@@ -147,6 +147,11 @@ namespace SistemaBienestarEstudiantil.Controllers
             return RedirectToAction("Index", "Home");*/
         }
 
+        public ActionResult Encuesta()
+        {
+            return View();
+        }
+
         public ActionResult LogOn()
         {
             return View();

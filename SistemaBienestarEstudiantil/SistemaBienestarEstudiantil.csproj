@@ -105,6 +105,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\HomeApp.js" />
     <Content Include="Views\Home\Datos.aspx" />
+    <Content Include="Views\Home\Encuesta.aspx" />
     <Content Include="Views\Home\Roles.aspx" />
     <Content Include="Views\Home\Tareas.aspx" />
     <Content Include="Views\Home\Usuarios.aspx" />
