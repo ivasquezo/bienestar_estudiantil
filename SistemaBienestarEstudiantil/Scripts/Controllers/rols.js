@@ -185,7 +185,7 @@
 
             $http.post('../../WebServices/Rols.asmx/saveRolData', {
                 rolId: $scope.rolCopy.CODIGO,
-                rolName: $scope.rolCopy.NOMBRE,
+                rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
                 accessRols: $scope.accessRols
             }).success(function (data, status, headers, config) {
                 console.log("Editar rol: ", data);
@@ -208,7 +208,7 @@
             var newParentObject = this;
 
             $http.post('../../WebServices/Rols.asmx/addNewRol', {                
-                rolName: $scope.rolCopy.NOMBRE,
+                rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
                 accessRols: $scope.accessRols
             }).success(function (data, status, headers, config) {
                 console.log("Agregar rol: ", data);

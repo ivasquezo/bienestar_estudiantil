@@ -1,10 +1,10 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
 
-<asp:Content ID="rolTitle" ContentPlaceHolderID="TitleContent" runat="server">
+<asp:Content ID="aboutTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Roles
 </asp:Content>
 
-<asp:Content ID="rolContent" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="aboutContent" ContentPlaceHolderID="MainContent" runat="server">
     <%
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Nombre del rol</label>  
                         <div class="col-md-4">
-                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;">
+                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md">
                             <br/><span class="help-block">Nombre del rol</span>  
                             <span ng-messages="rolForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
@@ -79,7 +79,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Nombre de rol</label>  
                         <div class="col-md-4">
-                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;">
+                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md">
                             <span ng-messages="newRolForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
                             </span>

@@ -83,6 +83,10 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebServices\Activities.asmx.cs">
+      <DependentUpon>Activities.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WebServices\Rols.asmx.cs">
       <DependentUpon>Rols.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -103,7 +107,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\HomeApp.js" />
-    <Content Include="Views\Home\Datos.aspx" />
+    <Content Include="Views\Home\Niveles.aspx" />
     <Content Include="Views\Home\Roles.aspx" />
     <Content Include="Views\Home\Tareas.aspx" />
     <Content Include="Views\Home\Usuarios.aspx" />
@@ -136,6 +140,7 @@
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
+    <Content Include="WebServices\Activities.asmx" />
     <Content Include="WebServices\Rols.asmx" />
     <Content Include="WebServices\Encuestas.asmx" />
     <Content Include="WebServices\Users.asmx" />
