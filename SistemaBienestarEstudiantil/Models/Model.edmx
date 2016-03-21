@@ -12,6 +12,7 @@
           <EntitySet Name="ADJUNTO" EntityType="bienestarModel.Store.ADJUNTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ALUMNO" EntityType="bienestarModel.Store.ALUMNO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ASISTENCIA" EntityType="bienestarModel.Store.ASISTENCIA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="DATOS_SISTEMA" EntityType="bienestarModel.Store.DATOS_SISTEMA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA" EntityType="bienestarModel.Store.ENCUESTA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA_PREGUNTA" EntityType="bienestarModel.Store.ENCUESTA_PREGUNTA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA_RESPUESTA" EntityType="bienestarModel.Store.ENCUESTA_RESPUESTA" store:Type="Tables" Schema="dbo" />
@@ -136,6 +137,15 @@
           <Property Name="CODIGOGRUPO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
           <Property Name="ASISTENCIA" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DATOS_SISTEMA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="VALOR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ACTIVO" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ENCUESTA">
           <Key>
@@ -479,6 +489,7 @@
             <End Role="ROL" EntitySet="ROLs" />
             <End Role="USUARIO" EntitySet="USUARIOs" />
           </AssociationSet>
+          <EntitySet Name="DATOS_SISTEMA" EntityType="bienestarModel.DATOS_SISTEMA" />
         </EntityContainer>
         <EntityType Name="ACCESO">
           <Key>
@@ -719,6 +730,15 @@
           <End Type="bienestarModel.ROL" Role="ROL" Multiplicity="*" />
           <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
         </Association>
+        <EntityType Name="DATOS_SISTEMA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VALOR" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -883,6 +903,16 @@
               <ScalarProperty Name="CODIGO" ColumnName="CODIGOROL" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="DATOS_SISTEMA">
+            <EntityTypeMapping TypeName="bienestarModel.DATOS_SISTEMA">
+              <MappingFragment StoreEntitySet="DATOS_SISTEMA">
+                <ScalarProperty Name="ACTIVO" ColumnName="ACTIVO" />
+                <ScalarProperty Name="VALOR" ColumnName="VALOR" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -982,6 +1012,7 @@
           <ConnectorPoint PointX="5.583333333333333" PointY="4.3939925130208337" />
           <ConnectorPoint PointX="6" PointY="4.3939925130208337" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="bienestarModel.DATOS_SISTEMA" Width="1.5" PointX="0.75" PointY="0.75" Height="1.7879850260416674" />
       </Diagram>
     </Diagrams>
   </Designer>

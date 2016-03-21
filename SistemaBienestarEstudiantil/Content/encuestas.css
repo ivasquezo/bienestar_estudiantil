@@ -165,7 +165,6 @@ input[type="text"].ng-valid {
 }
 .encuestas input[type="text"],
 .encuestas input[type="button"],
-.encuestas button,
 .encuestas select {
     border-radius: 4px;
     height: 27px;
@@ -216,5 +215,5 @@ input[type="text"].ng-valid {
     padding: 5px;
 }
 .encuestas .grid button {
-    height: 24px;
+    /*height: 24px;*/
 }

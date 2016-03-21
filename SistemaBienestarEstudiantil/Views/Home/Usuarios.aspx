@@ -25,8 +25,8 @@
 
         <script type="text/ng-template" id="actionsUsers.html">
               <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)">Borrar</button>
-                <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)">Editar</button>
+                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)"><span class="ui-icon ui-icon-trash"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)"><span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>
 
