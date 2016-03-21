@@ -6,6 +6,7 @@ using System.Web.Services;
 using System.Web.Script.Serialization;
 using System.Data.Objects.DataClasses;
 using System.Web.Script.Services;
+using System.Data.Objects.SqlClient;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -19,7 +20,6 @@ namespace SistemaBienestarEstudiantil.WebServices
     [System.Web.Script.Services.ScriptService]
     public class Encuestas : System.Web.Services.WebService
     {
-
         private void writeResponse(String response)
         {
             Context.Response.Write(response);
@@ -57,10 +57,38 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getDefaultEncuesta()
+        public void getDefaultSurvey()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponse(new JavaScriptSerializer().Serialize(db.ENCUESTAs.First()));
+
+            Models.DATOS_SISTEMA datoSistema = db.DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
+
+            int valor = datoSistema.VALOR != null ? Int32.Parse(datoSistema.VALOR) : 0;
+
+            var encuesta = db.ENCUESTAs.Single(e => e.CODIGO == valor);
+            writeResponse(
+                new JavaScriptSerializer().Serialize(new Class.Response(encuesta != null ? true : false, "info", null, null, encuesta))
+            );
+        }
+
+        [WebMethod]
+        public void setDefaultSurvey(int surveyCode)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            Models.DATOS_SISTEMA datosSistema = db.DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
+
+            bool success = false;
+
+            if (datosSistema != null)
+            {
+                datosSistema.VALOR = surveyCode.ToString();
+                success = true;
+            }
+
+            db.SaveChanges();
+
+            writeResponse(new JavaScriptSerializer().Serialize(new Class.Response(success, null, null, null, null)));
         }
 
         [WebMethod]

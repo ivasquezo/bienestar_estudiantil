@@ -289,6 +289,22 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<USUARIO> _USUARIOs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<DATOS_SISTEMA> DATOS_SISTEMA
+        {
+            get
+            {
+                if ((_DATOS_SISTEMA == null))
+                {
+                    _DATOS_SISTEMA = base.CreateObjectSet<DATOS_SISTEMA>("DATOS_SISTEMA");
+                }
+                return _DATOS_SISTEMA;
+            }
+        }
+        private ObjectSet<DATOS_SISTEMA> _DATOS_SISTEMA;
 
         #endregion
 
@@ -396,6 +412,14 @@ namespace SistemaBienestarEstudiantil.Models
         public void AddToUSUARIOs(USUARIO uSUARIO)
         {
             base.AddObject("USUARIOs", uSUARIO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet DATOS_SISTEMA. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToDATOS_SISTEMA(DATOS_SISTEMA dATOS_SISTEMA)
+        {
+            base.AddObject("DATOS_SISTEMA", dATOS_SISTEMA);
         }
 
         #endregion
@@ -1270,6 +1294,139 @@ namespace SistemaBienestarEstudiantil.Models
 
         #endregion
 
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="DATOS_SISTEMA")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class DATOS_SISTEMA : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto DATOS_SISTEMA.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        /// <param name="aCTIVO">Valor inicial de la propiedad ACTIVO.</param>
+        public static DATOS_SISTEMA CreateDATOS_SISTEMA(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.Boolean aCTIVO)
+        {
+            DATOS_SISTEMA dATOS_SISTEMA = new DATOS_SISTEMA();
+            dATOS_SISTEMA.CODIGO = cODIGO;
+            dATOS_SISTEMA.NOMBRE = nOMBRE;
+            dATOS_SISTEMA.ACTIVO = aCTIVO;
+            return dATOS_SISTEMA;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NOMBRE
+        {
+            get
+            {
+                return _NOMBRE;
+            }
+            set
+            {
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
+            }
+        }
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String VALOR
+        {
+            get
+            {
+                return _VALOR;
+            }
+            set
+            {
+                OnVALORChanging(value);
+                ReportPropertyChanging("VALOR");
+                _VALOR = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("VALOR");
+                OnVALORChanged();
+            }
+        }
+        private global::System.String _VALOR;
+        partial void OnVALORChanging(global::System.String value);
+        partial void OnVALORChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ACTIVO
+        {
+            get
+            {
+                return _ACTIVO;
+            }
+            set
+            {
+                OnACTIVOChanging(value);
+                ReportPropertyChanging("ACTIVO");
+                _ACTIVO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ACTIVO");
+                OnACTIVOChanged();
+            }
+        }
+        private global::System.Boolean _ACTIVO;
+        partial void OnACTIVOChanging(global::System.Boolean value);
+        partial void OnACTIVOChanged();
+
+        #endregion
+
+    
     }
     
     /// <summary>
@@ -2319,7 +2476,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2338,7 +2494,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ACCESO> ACCESOReference
@@ -2359,7 +2514,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2378,7 +2532,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ROL> ROLReference

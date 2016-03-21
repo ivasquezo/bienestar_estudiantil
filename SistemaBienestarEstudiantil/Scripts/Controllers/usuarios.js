@@ -48,7 +48,7 @@
               {name:'Cédula', field: 'CEDULA'},
               {name:'Correo', field: 'CORREO'},
               {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html' }
+              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html', width: 80}
             ]
         };
 
@@ -67,6 +67,14 @@
                 console.log("error al cargar los usuarios...");
             });
 
+        };
+
+        $scope.pruebaAvailable = function () {
+            ngModel.$setValidity('available', false);
+        };
+
+        $scope.pruebaAvailable1 = function () {
+            ngModel.$setValidity('available', true);
         };
 
         this.editUser = function (code) {

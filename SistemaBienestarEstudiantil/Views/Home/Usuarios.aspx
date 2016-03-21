@@ -25,15 +25,15 @@
 
         <script type="text/ng-template" id="actionsUsers.html">
               <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)">Borrar</button>
-                <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)">Editar</button>
+                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)"><span class="ui-icon ui-icon-trash"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)"><span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>
 
         <script type="text/ng-template" id="editUser.html">
             <fieldset>
                 <legend>Editar usuario</legend>
-                <form name="userForm" ng-submit="saveEditedUser()">
+                <form name="userForm">
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
                         <div class="col-md-4">
@@ -63,10 +63,12 @@
                             <br/><span class="help-block">Ingrese la cédula del usuario</span>  
                             <span ng-messages="userForm.cedulausuario.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese la identificación</span>
+                                <span ng-message="available" class="help-block ng-message">Ya existe un usuario ingresado con esta identificación</span>
                             </span>
                         </div>
                     </div>
-
+                    <button ng-click="pruebaAvailable()">pruebaAvailable</button>
+                    <button ng-click="pruebaAvailable1()">pruebaAvailable1</button>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="correousuario">Correo:</label>  
                         <div class="col-md-4">
@@ -100,7 +102,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="buttonsave1"></label>
                         <div class="col-md-8">
-                            <button type="submit" id="buttonsave1" name="buttonsave1" class="btn btn-success">Guardar</button>
+                            <button ng-click="saveEditedUser()" id="buttonsave1" name="buttonsave1" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </form>

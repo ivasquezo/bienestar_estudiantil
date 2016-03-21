@@ -10,6 +10,7 @@
             }).success(function (data, status, headers, config) {
                 console.log("cargarEncuestas",data);
                 $scope.gridOptions.data = data;
+                $scope.loadDefaultSurvey();
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...", data);
             });
@@ -23,7 +24,7 @@
             multiSelect: false,
             columnDefs: [
                 {name:'Título', field: 'TITULO'},
-                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 80}
+                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 84}
             ]
         };
 
@@ -85,6 +86,37 @@
             $scope.mode = "edit";
             $scope.encuesta = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
             $scope.addHandlerEncuesta($scope.encuesta);
+        };
+
+        this.getIcon = function(code){
+            var row = $scope.getElementArray($scope.gridOptions.data, code);
+            return row.selected != undefined && row.selected == true ? "ui-icon-star" : "ui-icon-blank";
+        };
+
+        this.setIcon = function(code){
+            var row = $scope.getElementArray($scope.gridOptions.data, code);
+            if (row.selected != undefined && row.selected){
+                row.selected = false;
+            } else {
+                for (var i = 0; i < $scope.gridOptions.data.length; i++) {
+                    if ($scope.gridOptions.data[i].selected != undefined && $scope.gridOptions.data[i].selected) {
+                        $scope.gridOptions.data[i].selected = false;
+                        break;
+                    }
+                };
+                $scope.setDefaultSurvey(row);
+            }
+        };
+
+        $scope.setDefaultSurvey = function(row){
+            $http.post('../../WebServices/Encuestas.asmx/setDefaultSurvey', {
+                surveyCode: row.CODIGO
+            }).success(function (data, status, headers, config) {
+                console.log("setDefaultSurvey:",data);
+                row.selected = true;
+            }).error(function (data, status, headers, config) {
+                console.log("error in setDefaultSurvey...", data);
+            });
         };
 
         $scope.verifyQuestion = function(question){
@@ -211,7 +243,7 @@
                 encuestaEdited: $scope.encuesta
             }).success(function (data, status, headers, config) {
                 console.log("saveEncuesta", data);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nueva', detail: 'Encuesta guardada.'}]);
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Encuesta guardada.'}]);
             }).error(function (data, status, headers, config) {
                 console.log("error al añadir nueva encuesta...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Ocurrió un error al guardar la encuesta.'}]);
@@ -239,30 +271,20 @@
             }
         };
 
-        $scope.loadDefaultPoll = function(){
+        $scope.loadDefaultSurvey = function(){
 
-            $http.post('../../WebServices/Encuestas.asmx/getDefaultEncuesta', {
+            $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {
             }).success(function (data, status, headers, config) {
-                console.log(data);
-                $scope.defaultPoll = data;
+                console.log("loadDefaultSurvey:", data);
+                if (data.success != undefined && data.success) {
+                    $scope.defaultPoll = data.response;
+                    var row = $scope.getElementArray($scope.gridOptions.data, data.response.CODIGO);
+                    if (row != undefined && row != null) row.selected = true;
+                }
             }).error(function (data, status, headers, config) {
                 console.log("error al traer la encuesta seleccionada", data);
             });
         };
-
-        $scope.loadDefaultPoll();
-
-        $scope.pruebaJoins = function(){
-
-            $http.post('../../WebServices/Encuestas.asmx/pruebaJoins', {
-            }).success(function (data, status, headers, config) {
-                console.log("pruebaJoins", data);
-            }).error(function (data, status, headers, config) {
-                console.log("error al traer la encuesta seleccionada", data);
-            });
-        };
-
-        $scope.pruebaJoins();
 
     }]);
 
