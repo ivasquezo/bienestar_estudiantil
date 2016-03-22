@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var app = angular.module('BienestarApp');
+    var app = angular.module('BienestarApp', ['ngMessages']);
 
     app.controller('EncuestaController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
@@ -17,13 +17,44 @@
 
         $scope.loadDefaultSurvey = function(){
 
-            $scope.defaultPoll = null;
+            $scope.defaultSurvey = null;
             $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {
             }).success(function (data, status, headers, config) {
-                console.log("loadDefaultSurvey:", data);
+
                 if (data.success != undefined && data.success) {
-                    $scope.defaultPoll = data.response;
-                } else $scope.defaultPoll = null;
+                    $scope.defaultSurvey = data.response;
+                    
+                    // if multiple selection, add handler reponse for validations
+                    for (var i = 0; i < $scope.defaultSurvey.ENCUESTA_PREGUNTA.length; i++) {
+                        if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO == 1){
+
+                            $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].addAnswered = function(response){
+
+                                if (response.checked) {
+                                    this.answereds.push(response.CODIGO);
+                                }else{
+                                    this.removeAnswered(response.CODIGO);
+                                };
+                            };
+                            
+                            $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].removeAnswered = function(id){
+                                var index = null;
+                                for (var i = 0; i < this.answereds.length; i++) {
+                                    if (this.answereds[i] == id) {
+                                        index = i;
+                                        break;
+                                    }
+                                };
+                                if (index != null) this.answereds.splice(index,1);
+                            };
+
+                            $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].answereds = [];
+                        }
+                    };
+                } else
+                    $scope.defaultSurvey = null;
+                console.log("loadDefaultSurvey:", data);
+
             }).error(function (data, status, headers, config) {
                 console.log("error al traer la encuesta seleccionada", data);
             });
@@ -32,12 +63,62 @@
         $scope.loadDefaultSurvey();
 
         $scope.enviarForm = function () {
-            alert("enviado");
+
+            var surveyResult = [];
+
+            console.log("$scope.defaultSurvey:", $scope.defaultSurvey);
+
+            for (var i = 0; i < $scope.defaultSurvey.ENCUESTA_PREGUNTA.length; i++) {
+                if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO == 1) {
+
+                    for (var j = 0; j < $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].answereds.length; j++) {
+                        var question = {
+                            TIPO: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO,
+                            CODIGOENCUESTA: $scope.defaultSurvey.CODIGO,
+                            CODIGOALUMNO: $scope.student.CODIGO,
+                            CODIGOPREGUNTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].CODIGO,
+                            CODIGORESPUESTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].answereds[j],
+                            TEXTO: null
+                        };
+                        surveyResult.push(question);
+                    };
+                    
+                } else if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO == 2) {
+
+                    var question = {
+                        TIPO: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO,
+                        CODIGOENCUESTA: $scope.defaultSurvey.CODIGO,
+                        CODIGOALUMNO: $scope.student.CODIGO,
+                        CODIGOPREGUNTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].CODIGO,
+                        CODIGORESPUESTA: parseInt($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE),
+                        TEXTO: null
+                    };
+                    surveyResult.push(question);
+
+                } else {
+
+                    var question = {
+                        TIPO: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO,
+                        CODIGOENCUESTA: $scope.defaultSurvey.CODIGO,
+                        CODIGOALUMNO: $scope.student.CODIGO,
+                        CODIGOPREGUNTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].CODIGO,
+                        CODIGORESPUESTA: 0,
+                        TEXTO: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE
+                    };
+                    surveyResult.push(question);
+
+                }
+            };
+
+            if (!$scope.formEncuesta.$invalid) {
+                console.log("valores:", surveyResult);
+            } else
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Complete los campos erróneos'}]);
         };
 
     }]);
 
-    app.directive('validId', function() {
+    app.directive('validIdentification', ['$http', function($http) {
         return {
 
             // limit usage to argument only
@@ -55,11 +136,28 @@
                     // check if contains uppercase
                     // if it does contain uppercase, set our custom `uppercaseValidator` to valid/true
                     // otherwise set it to non-valid/false
-                    console.log(ngModelValue);
-                    if (ngModelValue == "1234567890") {
-                        ctrl.$setValidity('idValidator', true);
+
+                    if (ngModelValue != null && ngModelValue.toString().length == 10) {
+                        $http.post('../../WebServices/Encuestas.asmx/getStudentByCode', {
+                            id: ngModelValue
+                        }).success(function (data, status, headers, config) {
+
+                            if (data.CEDULA == ngModelValue) {
+                                ctrl.$setValidity('cedulaValidator', true);
+                                scope.student = data;
+                            } else {                            
+                                scope.student = null;
+                                ctrl.$setValidity('cedulaValidator', false);
+                            }
+
+                        }).error(function (data, status, headers, config) {
+                            console.log("error al traer alumno", data);
+                            ctrl.$setValidity('cedulaValidator', false);
+                            scope.student = null;
+                        });
                     } else {
-                        ctrl.$setValidity('idValidator', false);
+                        ctrl.$setValidity('cedulaValidator', false);
+                        scope.student = null;
                     }
 
                     // we need to return our ngModelValue, to be displayed to the user(value of the input)
@@ -72,6 +170,6 @@
                 ctrl.$parsers.push(customValidator);
             }
         };
-    });
+    }]);
 
 })();

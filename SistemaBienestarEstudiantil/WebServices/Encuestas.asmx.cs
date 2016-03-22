@@ -35,6 +35,13 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        public void getStudentByCode(int id)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            writeResponse(new JavaScriptSerializer().Serialize(db.ALUMNOes.Single( a => a.CEDULA == id)));
+        }
+
+        [WebMethod]
         public void pruebaJoins()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
@@ -171,7 +178,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 db.SaveChanges();
 
                 // get code responses edited
-                List<int> codigoRespuestasEditadas = new List<int>();
+                List<decimal> codigoRespuestasEditadas = new List<decimal>();
                 foreach (Models.ENCUESTA_PREGUNTA ep in updatedEncuesta.ENCUESTA_PREGUNTA)
                 {
                     codigoRespuestasEditadas.AddRange(ep.ENCUESTA_RESPUESTA.Select(r => r.CODIGO).ToList());
@@ -267,6 +274,16 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             encuestaEntity.ENCUESTA_PREGUNTA = encPreEntColl;
             return encuestaEntity;
+        }
+
+        [WebMethod]
+        public void saveResponseStudent(Encuesta encuesta)
+        {
+            /*Models.bienestarEntities db = new Models.bienestarEntities();
+            Models.ENCUESTA newEncuesta = convertToENCUESTA(encuesta);
+            db.ENCUESTAs.AddObject(newEncuesta);
+            db.SaveChanges();
+            writeResponse(new JavaScriptSerializer().Serialize(newEncuesta));*/
         }
 
     }

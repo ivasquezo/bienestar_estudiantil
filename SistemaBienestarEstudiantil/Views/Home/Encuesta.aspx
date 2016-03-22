@@ -9,7 +9,7 @@
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
-    <h2>Encuesta</h2>
+    <h2>Responder encuesta</h2>
 
     <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
@@ -18,26 +18,40 @@
     <div ng-controller="EncuestaController as Main" class="encuestas">
     	<hr/>
 		<form name="formEncuesta" ng-submit="enviarForm()">
-		<input ng-model="studientID" ng-required="true" valid-id style="width: 200px;height: 25px;padding: 5px;"
-			placeholder="Ingrese su número de cédula" type="number"/>
+		<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
+			name="validIdentification" placeholder="Número de cédula" type="number"/>
+		<span ng-messages="formEncuesta.validIdentification.$error" style="display: inline-block;">
+            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Número de cédula inválido</span>
+        </span>
+        <span style="display:inline-block;font-size:18px;">
+        	{{student.NOMBRE}}
+        </span>
     	<hr/>
 		<div class="poll-preview">
-			<div class="content" ng-show="defaultPoll != null">
-		    	<div class="title">{{defaultPoll.TITULO}}</div>
-		    	<div ng-repeat="question in defaultPoll.ENCUESTA_PREGUNTA" class="question">
+			<div class="content" ng-show="defaultSurvey != null">
+		    	<div class="title">{{defaultSurvey.TITULO}}</div>
+		    	<div ng-repeat="question in defaultSurvey.ENCUESTA_PREGUNTA" class="question">
 		    		<div style="padding-top:5px;padding-bottom:5px;">{{question.TITULO}} {{question.REQUERIDO ? '*' : ''}}</div>
 			    	<div ng-show="question.TIPO != 3" ng-repeat="response in question.ENCUESTA_RESPUESTA" class="response">
-			    		<div ng-show="question.TIPO == 1"><input ng-model="response.checked" type="checkbox" value="{{response.id}}" ng-required="question.REQUERIDO && question.answereds.length == 0 && question.TIPO == 1" ng-click="question.addAnswered(response)"/>{{response.TEXTO}}</div>
+			    		<div ng-show="question.TIPO == 1">
+			    			<input ng-model="response.checked" type="checkbox" value="{{response.id}}"
+			    				ng-required="question.REQUERIDO && question.answereds.length == 0 && question.TIPO == 1"
+			    				ng-click="question.addAnswered(response)"/>
+			    				{{response.TEXTO}}
+			    		</div>
 			    		<div ng-show="question.TIPO == 2"><input ng-model="question.VALUE" type="radio" name="question{{question.CODIGO}}"
-			    			ng-required="question.REQUERIDO && (question.VALUE == '' || question.VALUE == null || question.VALUE == undefined)"
-			    			value="{{response.CODIGO}}" />{{response.TEXTO}}</div>
+			    			ng-required="question.REQUERIDO && (question.VALUE == '' || question.VALUE == null || question.VALUE == undefined) && question.TIPO == 2"
+			    			value="{{response.CODIGO}}" />
+			    			{{response.TEXTO}}
+			    		</div>
 			    	</div>
-			    	<div ng-show="question.type == 3"><textarea ng-model="prueba3" ng-required="question.required" row="4" style="width:100%;"></textarea></div>
+			    	<div ng-show="question.TIPO == 3"><textarea ng-model="question.VALUE" ng-required="question.REQUERIDO && question.TIPO == 3" row="4"
+			    		style="width:100%;box-sizing:border-box;"></textarea></div>
 		    	</div>
 		    	<br/>
 		    	<br/>
 		    	<center>
-		    		<button type="submit" ng-click="encuesta.removeQuestion(question.id)" style="margin-bottom:5px;"
+		    		<button type="submit" style="margin-bottom:5px;"
 		    			class="ui-button ui-widget ui-corner-all ui-button-text-icon-primary" role="button">
 			    		<span class="ui-button-icon-primary ui-icon ui-icon-mail-closed"></span>
 			    		<span class="ui-button-text">Enviar</span>
@@ -46,7 +60,7 @@
 
 			    prueba {{formEncuesta.$invalid}}
 			</div>
-			<div class="content" ng-show="defaultPoll == null">
+			<div class="content" ng-show="defaultSurvey == null">
 				No se ha definido la encuesta, consulte al administrador del sitio.
 			</div>
 		</form>

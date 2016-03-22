@@ -23,9 +23,15 @@ using System.Web.Script.Serialization;
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_MODULO1", "ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACCESO), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ADJUNTO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ADJUNTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ADJUNTO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ASISTENCIA_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_ALUMNO), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_TEXTO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ASISTENCIA_GRUPO", "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRUPO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_PREGUNTA_ENCUESTA", "ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA), "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA), "ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_ALUMNO), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA), "ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_TEXTO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), "ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), "ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_TEXTO), true)]
+[assembly: EdmRelationshipAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA), "ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "FK_ROL_MODULO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
 [assembly: EdmRelationshipAttribute("bienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("bienestarModel", "GRUPO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO))]
@@ -165,6 +171,22 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        public ObjectSet<DATOS_SISTEMA> DATOS_SISTEMA
+        {
+            get
+            {
+                if ((_DATOS_SISTEMA == null))
+                {
+                    _DATOS_SISTEMA = base.CreateObjectSet<DATOS_SISTEMA>("DATOS_SISTEMA");
+                }
+                return _DATOS_SISTEMA;
+            }
+        }
+        private ObjectSet<DATOS_SISTEMA> _DATOS_SISTEMA;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
         public ObjectSet<ENCUESTA> ENCUESTAs
         {
             get
@@ -209,6 +231,38 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<ENCUESTA_RESPUESTA> _ENCUESTA_RESPUESTA;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
+        {
+            get
+            {
+                if ((_ENCUESTA_RESPUESTA_ALUMNO == null))
+                {
+                    _ENCUESTA_RESPUESTA_ALUMNO = base.CreateObjectSet<ENCUESTA_RESPUESTA_ALUMNO>("ENCUESTA_RESPUESTA_ALUMNO");
+                }
+                return _ENCUESTA_RESPUESTA_ALUMNO;
+            }
+        }
+        private ObjectSet<ENCUESTA_RESPUESTA_ALUMNO> _ENCUESTA_RESPUESTA_ALUMNO;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
+        {
+            get
+            {
+                if ((_ENCUESTA_RESPUESTA_TEXTO == null))
+                {
+                    _ENCUESTA_RESPUESTA_TEXTO = base.CreateObjectSet<ENCUESTA_RESPUESTA_TEXTO>("ENCUESTA_RESPUESTA_TEXTO");
+                }
+                return _ENCUESTA_RESPUESTA_TEXTO;
+            }
+        }
+        private ObjectSet<ENCUESTA_RESPUESTA_TEXTO> _ENCUESTA_RESPUESTA_TEXTO;
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -289,22 +343,6 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<USUARIO> _USUARIOs;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<DATOS_SISTEMA> DATOS_SISTEMA
-        {
-            get
-            {
-                if ((_DATOS_SISTEMA == null))
-                {
-                    _DATOS_SISTEMA = base.CreateObjectSet<DATOS_SISTEMA>("DATOS_SISTEMA");
-                }
-                return _DATOS_SISTEMA;
-            }
-        }
-        private ObjectSet<DATOS_SISTEMA> _DATOS_SISTEMA;
 
         #endregion
 
@@ -351,6 +389,14 @@ namespace SistemaBienestarEstudiantil.Models
         }
     
         /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet DATOS_SISTEMA. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToDATOS_SISTEMA(DATOS_SISTEMA dATOS_SISTEMA)
+        {
+            base.AddObject("DATOS_SISTEMA", dATOS_SISTEMA);
+        }
+    
+        /// <summary>
         /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTAs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
         /// </summary>
         public void AddToENCUESTAs(ENCUESTA eNCUESTA)
@@ -372,6 +418,22 @@ namespace SistemaBienestarEstudiantil.Models
         public void AddToENCUESTA_RESPUESTA(ENCUESTA_RESPUESTA eNCUESTA_RESPUESTA)
         {
             base.AddObject("ENCUESTA_RESPUESTA", eNCUESTA_RESPUESTA);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTA_RESPUESTA_ALUMNO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToENCUESTA_RESPUESTA_ALUMNO(ENCUESTA_RESPUESTA_ALUMNO eNCUESTA_RESPUESTA_ALUMNO)
+        {
+            base.AddObject("ENCUESTA_RESPUESTA_ALUMNO", eNCUESTA_RESPUESTA_ALUMNO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ENCUESTA_RESPUESTA_TEXTO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToENCUESTA_RESPUESTA_TEXTO(ENCUESTA_RESPUESTA_TEXTO eNCUESTA_RESPUESTA_TEXTO)
+        {
+            base.AddObject("ENCUESTA_RESPUESTA_TEXTO", eNCUESTA_RESPUESTA_TEXTO);
         }
     
         /// <summary>
@@ -412,14 +474,6 @@ namespace SistemaBienestarEstudiantil.Models
         public void AddToUSUARIOs(USUARIO uSUARIO)
         {
             base.AddObject("USUARIOs", uSUARIO);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet DATOS_SISTEMA. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToDATOS_SISTEMA(DATOS_SISTEMA dATOS_SISTEMA)
-        {
-            base.AddObject("DATOS_SISTEMA", dATOS_SISTEMA);
         }
 
         #endregion
@@ -958,11 +1012,13 @@ namespace SistemaBienestarEstudiantil.Models
         /// Crear un nuevo objeto ALUMNO.
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="cEDULA">Valor inicial de la propiedad CEDULA.</param>
         /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
-        public static ALUMNO CreateALUMNO(global::System.Decimal cODIGO, global::System.String nOMBRE)
+        public static ALUMNO CreateALUMNO(global::System.Decimal cODIGO, global::System.Decimal cEDULA, global::System.String nOMBRE)
         {
             ALUMNO aLUMNO = new ALUMNO();
             aLUMNO.CODIGO = cODIGO;
+            aLUMNO.CEDULA = cEDULA;
             aLUMNO.NOMBRE = nOMBRE;
             return aLUMNO;
         }
@@ -997,6 +1053,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.Decimal _CODIGO;
         partial void OnCODIGOChanging(global::System.Decimal value);
         partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CEDULA
+        {
+            get
+            {
+                return _CEDULA;
+            }
+            set
+            {
+                OnCEDULAChanging(value);
+                ReportPropertyChanging("CEDULA");
+                _CEDULA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CEDULA");
+                OnCEDULAChanged();
+            }
+        }
+        private global::System.Decimal _CEDULA;
+        partial void OnCEDULAChanging(global::System.Decimal value);
+        partial void OnCEDULAChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -1045,6 +1125,50 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ASISTENCIA>("bienestarModel.FK_ASISTENCIA_ALUMNO", "ASISTENCIA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ENCUESTA_RESPUESTA_ALUMNO")]
+        public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA_ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ENCUESTA_RESPUESTA_ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ENCUESTA_RESPUESTA_ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ENCUESTA_RESPUESTA_TEXTO")]
+        public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ENCUESTA_RESPUESTA_TEXTO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ENCUESTA_RESPUESTA_TEXTO", value);
                 }
             }
         }
@@ -1444,7 +1568,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="tITULO">Valor inicial de la propiedad TITULO.</param>
-        public static ENCUESTA CreateENCUESTA(global::System.Int32 cODIGO, global::System.String tITULO)
+        public static ENCUESTA CreateENCUESTA(global::System.Decimal cODIGO, global::System.String tITULO)
         {
             ENCUESTA eNCUESTA = new ENCUESTA();
             eNCUESTA.CODIGO = cODIGO;
@@ -1461,7 +1585,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGO
+        public global::System.Decimal CODIGO
         {
             get
             {
@@ -1479,8 +1603,8 @@ namespace SistemaBienestarEstudiantil.Models
                 }
             }
         }
-        private global::System.Int32 _CODIGO;
-        partial void OnCODIGOChanging(global::System.Int32 value);
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
         partial void OnCODIGOChanged();
     
         /// <summary>
@@ -1557,6 +1681,52 @@ namespace SistemaBienestarEstudiantil.Models
                 }
             }
         }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA_RESPUESTA_ALUMNO")]
+        public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA_ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA_RESPUESTA_ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA_RESPUESTA_ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA_RESPUESTA_TEXTO")]
+        public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA_RESPUESTA_TEXTO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA_RESPUESTA_TEXTO", value);
+                }
+            }
+        }
 
         #endregion
 
@@ -1580,7 +1750,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="tITULO">Valor inicial de la propiedad TITULO.</param>
         /// <param name="tIPO">Valor inicial de la propiedad TIPO.</param>
         /// <param name="rEQUERIDO">Valor inicial de la propiedad REQUERIDO.</param>
-        public static ENCUESTA_PREGUNTA CreateENCUESTA_PREGUNTA(global::System.Int32 cODIGO, global::System.Int32 cODIGOENCUESTA, global::System.String tITULO, global::System.Int32 tIPO, global::System.Boolean rEQUERIDO)
+        public static ENCUESTA_PREGUNTA CreateENCUESTA_PREGUNTA(global::System.Decimal cODIGO, global::System.Decimal cODIGOENCUESTA, global::System.String tITULO, global::System.Int32 tIPO, global::System.Boolean rEQUERIDO)
         {
             ENCUESTA_PREGUNTA eNCUESTA_PREGUNTA = new ENCUESTA_PREGUNTA();
             eNCUESTA_PREGUNTA.CODIGO = cODIGO;
@@ -1600,7 +1770,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGO
+        public global::System.Decimal CODIGO
         {
             get
             {
@@ -1618,8 +1788,8 @@ namespace SistemaBienestarEstudiantil.Models
                 }
             }
         }
-        private global::System.Int32 _CODIGO;
-        partial void OnCODIGOChanging(global::System.Int32 value);
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
         partial void OnCODIGOChanged();
     
         /// <summary>
@@ -1627,7 +1797,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGOENCUESTA
+        public global::System.Decimal CODIGOENCUESTA
         {
             get
             {
@@ -1642,8 +1812,8 @@ namespace SistemaBienestarEstudiantil.Models
                 OnCODIGOENCUESTAChanged();
             }
         }
-        private global::System.Int32 _CODIGOENCUESTA;
-        partial void OnCODIGOENCUESTAChanging(global::System.Int32 value);
+        private global::System.Decimal _CODIGOENCUESTA;
+        partial void OnCODIGOENCUESTAChanging(global::System.Decimal value);
         partial void OnCODIGOENCUESTAChanged();
     
         /// <summary>
@@ -1784,6 +1954,29 @@ namespace SistemaBienestarEstudiantil.Models
                 }
             }
         }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_RESPUESTA_TEXTO")]
+        public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_RESPUESTA_TEXTO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_RESPUESTA_TEXTO", value);
+                }
+            }
+        }
 
         #endregion
 
@@ -1805,7 +1998,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="tEXTO">Valor inicial de la propiedad TEXTO.</param>
         /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
-        public static ENCUESTA_RESPUESTA CreateENCUESTA_RESPUESTA(global::System.Int32 cODIGO, global::System.String tEXTO, global::System.Int32 cODIGOPREGUNTA)
+        public static ENCUESTA_RESPUESTA CreateENCUESTA_RESPUESTA(global::System.Decimal cODIGO, global::System.String tEXTO, global::System.Decimal cODIGOPREGUNTA)
         {
             ENCUESTA_RESPUESTA eNCUESTA_RESPUESTA = new ENCUESTA_RESPUESTA();
             eNCUESTA_RESPUESTA.CODIGO = cODIGO;
@@ -1823,7 +2016,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGO
+        public global::System.Decimal CODIGO
         {
             get
             {
@@ -1841,8 +2034,8 @@ namespace SistemaBienestarEstudiantil.Models
                 }
             }
         }
-        private global::System.Int32 _CODIGO;
-        partial void OnCODIGOChanging(global::System.Int32 value);
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
         partial void OnCODIGOChanged();
     
         /// <summary>
@@ -1874,7 +2067,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGOPREGUNTA
+        public global::System.Decimal CODIGOPREGUNTA
         {
             get
             {
@@ -1889,8 +2082,8 @@ namespace SistemaBienestarEstudiantil.Models
                 OnCODIGOPREGUNTAChanged();
             }
         }
-        private global::System.Int32 _CODIGOPREGUNTA;
-        partial void OnCODIGOPREGUNTAChanging(global::System.Int32 value);
+        private global::System.Decimal _CODIGOPREGUNTA;
+        partial void OnCODIGOPREGUNTAChanging(global::System.Decimal value);
         partial void OnCODIGOPREGUNTAChanged();
 
         #endregion
@@ -1934,6 +2127,560 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA_ALUMNO")]
+        public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ENCUESTA_RESPUESTA_ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA_ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA_ALUMNO", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ENCUESTA_RESPUESTA_ALUMNO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ENCUESTA_RESPUESTA_ALUMNO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ENCUESTA_RESPUESTA_ALUMNO.
+        /// </summary>
+        /// <param name="cODIGOALUMNO">Valor inicial de la propiedad CODIGOALUMNO.</param>
+        /// <param name="cODIGOENCUESTA">Valor inicial de la propiedad CODIGOENCUESTA.</param>
+        /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
+        /// <param name="cODIGORESPUESTA">Valor inicial de la propiedad CODIGORESPUESTA.</param>
+        public static ENCUESTA_RESPUESTA_ALUMNO CreateENCUESTA_RESPUESTA_ALUMNO(global::System.Decimal cODIGOALUMNO, global::System.Decimal cODIGOENCUESTA, global::System.Decimal cODIGOPREGUNTA, global::System.Decimal cODIGORESPUESTA)
+        {
+            ENCUESTA_RESPUESTA_ALUMNO eNCUESTA_RESPUESTA_ALUMNO = new ENCUESTA_RESPUESTA_ALUMNO();
+            eNCUESTA_RESPUESTA_ALUMNO.CODIGOALUMNO = cODIGOALUMNO;
+            eNCUESTA_RESPUESTA_ALUMNO.CODIGOENCUESTA = cODIGOENCUESTA;
+            eNCUESTA_RESPUESTA_ALUMNO.CODIGOPREGUNTA = cODIGOPREGUNTA;
+            eNCUESTA_RESPUESTA_ALUMNO.CODIGORESPUESTA = cODIGORESPUESTA;
+            return eNCUESTA_RESPUESTA_ALUMNO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOALUMNO
+        {
+            get
+            {
+                return _CODIGOALUMNO;
+            }
+            set
+            {
+                if (_CODIGOALUMNO != value)
+                {
+                    OnCODIGOALUMNOChanging(value);
+                    ReportPropertyChanging("CODIGOALUMNO");
+                    _CODIGOALUMNO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOALUMNO");
+                    OnCODIGOALUMNOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOALUMNO;
+        partial void OnCODIGOALUMNOChanging(global::System.Decimal value);
+        partial void OnCODIGOALUMNOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOENCUESTA
+        {
+            get
+            {
+                return _CODIGOENCUESTA;
+            }
+            set
+            {
+                if (_CODIGOENCUESTA != value)
+                {
+                    OnCODIGOENCUESTAChanging(value);
+                    ReportPropertyChanging("CODIGOENCUESTA");
+                    _CODIGOENCUESTA = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOENCUESTA");
+                    OnCODIGOENCUESTAChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOENCUESTA;
+        partial void OnCODIGOENCUESTAChanging(global::System.Decimal value);
+        partial void OnCODIGOENCUESTAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOPREGUNTA
+        {
+            get
+            {
+                return _CODIGOPREGUNTA;
+            }
+            set
+            {
+                if (_CODIGOPREGUNTA != value)
+                {
+                    OnCODIGOPREGUNTAChanging(value);
+                    ReportPropertyChanging("CODIGOPREGUNTA");
+                    _CODIGOPREGUNTA = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOPREGUNTA");
+                    OnCODIGOPREGUNTAChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOPREGUNTA;
+        partial void OnCODIGOPREGUNTAChanging(global::System.Decimal value);
+        partial void OnCODIGOPREGUNTAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGORESPUESTA
+        {
+            get
+            {
+                return _CODIGORESPUESTA;
+            }
+            set
+            {
+                if (_CODIGORESPUESTA != value)
+                {
+                    OnCODIGORESPUESTAChanging(value);
+                    ReportPropertyChanging("CODIGORESPUESTA");
+                    _CODIGORESPUESTA = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGORESPUESTA");
+                    OnCODIGORESPUESTAChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGORESPUESTA;
+        partial void OnCODIGORESPUESTAChanging(global::System.Decimal value);
+        partial void OnCODIGORESPUESTAChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO")]
+        public ALUMNO ALUMNO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ALUMNO> ALUMNOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA")]
+        public ENCUESTA ENCUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ENCUESTA> ENCUESTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA", "ENCUESTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA")]
+        public ENCUESTA_RESPUESTA ENCUESTA_RESPUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_RESPUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_RESPUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_RESPUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA_RESPUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="bienestarModel", Name="ENCUESTA_RESPUESTA_TEXTO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ENCUESTA_RESPUESTA_TEXTO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ENCUESTA_RESPUESTA_TEXTO.
+        /// </summary>
+        /// <param name="cODIGOALUMNO">Valor inicial de la propiedad CODIGOALUMNO.</param>
+        /// <param name="cODIGOENCUESTA">Valor inicial de la propiedad CODIGOENCUESTA.</param>
+        /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
+        public static ENCUESTA_RESPUESTA_TEXTO CreateENCUESTA_RESPUESTA_TEXTO(global::System.Decimal cODIGOALUMNO, global::System.Decimal cODIGOENCUESTA, global::System.Decimal cODIGOPREGUNTA)
+        {
+            ENCUESTA_RESPUESTA_TEXTO eNCUESTA_RESPUESTA_TEXTO = new ENCUESTA_RESPUESTA_TEXTO();
+            eNCUESTA_RESPUESTA_TEXTO.CODIGOALUMNO = cODIGOALUMNO;
+            eNCUESTA_RESPUESTA_TEXTO.CODIGOENCUESTA = cODIGOENCUESTA;
+            eNCUESTA_RESPUESTA_TEXTO.CODIGOPREGUNTA = cODIGOPREGUNTA;
+            return eNCUESTA_RESPUESTA_TEXTO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOALUMNO
+        {
+            get
+            {
+                return _CODIGOALUMNO;
+            }
+            set
+            {
+                if (_CODIGOALUMNO != value)
+                {
+                    OnCODIGOALUMNOChanging(value);
+                    ReportPropertyChanging("CODIGOALUMNO");
+                    _CODIGOALUMNO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOALUMNO");
+                    OnCODIGOALUMNOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOALUMNO;
+        partial void OnCODIGOALUMNOChanging(global::System.Decimal value);
+        partial void OnCODIGOALUMNOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOENCUESTA
+        {
+            get
+            {
+                return _CODIGOENCUESTA;
+            }
+            set
+            {
+                if (_CODIGOENCUESTA != value)
+                {
+                    OnCODIGOENCUESTAChanging(value);
+                    ReportPropertyChanging("CODIGOENCUESTA");
+                    _CODIGOENCUESTA = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOENCUESTA");
+                    OnCODIGOENCUESTAChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOENCUESTA;
+        partial void OnCODIGOENCUESTAChanging(global::System.Decimal value);
+        partial void OnCODIGOENCUESTAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOPREGUNTA
+        {
+            get
+            {
+                return _CODIGOPREGUNTA;
+            }
+            set
+            {
+                if (_CODIGOPREGUNTA != value)
+                {
+                    OnCODIGOPREGUNTAChanging(value);
+                    ReportPropertyChanging("CODIGOPREGUNTA");
+                    _CODIGOPREGUNTA = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOPREGUNTA");
+                    OnCODIGOPREGUNTAChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOPREGUNTA;
+        partial void OnCODIGOPREGUNTAChanging(global::System.Decimal value);
+        partial void OnCODIGOPREGUNTAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TEXTO
+        {
+            get
+            {
+                return _TEXTO;
+            }
+            set
+            {
+                OnTEXTOChanging(value);
+                ReportPropertyChanging("TEXTO");
+                _TEXTO = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TEXTO");
+                OnTEXTOChanged();
+            }
+        }
+        private global::System.String _TEXTO;
+        partial void OnTEXTOChanging(global::System.String value);
+        partial void OnTEXTOChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO")]
+        public ALUMNO ALUMNO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ALUMNO> ALUMNOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ALUMNO>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA")]
+        public ENCUESTA ENCUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ENCUESTA> ENCUESTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA", "ENCUESTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("bienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA")]
+        public ENCUESTA_PREGUNTA ENCUESTA_PREGUNTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ENCUESTA_PREGUNTA>("bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", value);
                 }
             }
         }
@@ -2245,11 +2992,13 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
-        public static ROL CreateROL(global::System.Decimal cODIGO, global::System.String nOMBRE)
+        /// <param name="aCTIVO">Valor inicial de la propiedad ACTIVO.</param>
+        public static ROL CreateROL(global::System.Decimal cODIGO, global::System.String nOMBRE, global::System.Boolean aCTIVO)
         {
             ROL rOL = new ROL();
             rOL.CODIGO = cODIGO;
             rOL.NOMBRE = nOMBRE;
+            rOL.ACTIVO = aCTIVO;
             return rOL;
         }
 
@@ -2307,6 +3056,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.String _NOMBRE;
         partial void OnNOMBREChanging(global::System.String value);
         partial void OnNOMBREChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean ACTIVO
+        {
+            get
+            {
+                return _ACTIVO;
+            }
+            set
+            {
+                OnACTIVOChanging(value);
+                ReportPropertyChanging("ACTIVO");
+                _ACTIVO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ACTIVO");
+                OnACTIVOChanged();
+            }
+        }
+        private global::System.Boolean _ACTIVO;
+        partial void OnACTIVOChanging(global::System.Boolean value);
+        partial void OnACTIVOChanged();
 
         #endregion
 
