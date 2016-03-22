@@ -306,13 +306,12 @@ namespace SistemaBienestarEstudiantil.WebServices
                     agregar = false;
                 }
                 else
-                {
                     agregar = true;
-                    newRol.NOMBRE = rolName;
-                }
 
                 if (agregar)
                 {
+                    newRol.NOMBRE = rolName;
+
                     // Agrega el rol
                     db.ROLs.AddObject(newRol);
                     db.SaveChanges();

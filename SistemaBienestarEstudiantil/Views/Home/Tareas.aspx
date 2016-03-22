@@ -18,7 +18,7 @@
     <div id="messages"></div>
 
     <div ng-controller="ActivitiesController as Main">
-        <%--<button type="button" ng-click="addNewRolDialog()">Nuevo Rol</button>--%><br /><br />
+        <button type="button" ng-click="addNewActivityDialog()">Nueva Actividad</button><br /><br />
 
         <div ui-grid="gridOptions"></div>
 
@@ -82,43 +82,55 @@
             </fieldset>
         </script>
 
-        <%--<script type="text/ng-template" id="newRol.html">
+        <script type="text/ng-template" id="newActivity.html">
             <fieldset>
-                <legend>Nuevo rol</legend>
-                <form name="newRolForm" ng-submit="addNewRolDB()">
+                <legend>Nueva actividad</legend>
+                <form name="newActivityForm" ng-submit="addNewActivityDB()">
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombre">Nombre de rol</label>  
+                        <label class="col-md-4 control-label" for="nombre">Actividad</label>  
                         <div class="col-md-4">
-                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md">
-                            <span ng-messages="newRolForm.nombre.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
+                            <input required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
+                            <br/><span class="help-block">Nombre de la actividad</span>  
+                            <span ng-messages="activityForm.nombre.$error">
+                                <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" >Módulos</label>
-                        <table style="width:100%; font-size:16px">
-                            <tr>
-                                <th></th>
-                                <th>Nombre</th> 
-                            </tr>
-                            <tr ng-repeat="access in allAccess">
-                                <td><input type="checkbox" ng-click="setAccessRol(access.CODIGO)"></td>
-                                <td>{{ access.NOMBRE }}</td>
-                            </tr>
-                        </table>
+                        <label class="col-md-4 control-label" for="fecha">Fecha</label>  
+                        <div class="col-md-4">
+                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="Fecha" class="form-control input-md">
+                            <br/><span class="help-block">Fecha de ejecución de la actividad</span>  
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
+                        <div class="col-md-4">
+                            <select ng-model="activityCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
+                            </select>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+                        <label class="col-md-4 control-label" for="observacion">Observación</label>  
+                        <div class="col-md-4">
+                        	<textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observación" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;"></textarea>
+                            <br/><span class="help-block">Observación sobre la actividad</span>
+                        </div>
                     </div>
 
                     <br/>
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="saveRol"></label>
+                        <label class="col-md-4 control-label" for="saveActivity"></label>
                         <div class="col-md-8">
-                            <button type="submit" id="saveRol" name="saveRol" class="btn btn-success">Guardar</button>
+                            <button type="submit" id="saveActivity" name="saveActivity" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </form>
             </fieldset>
-        </script>--%>
+        </script>
     </div>
 </asp:Content>
