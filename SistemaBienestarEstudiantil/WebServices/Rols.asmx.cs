@@ -145,10 +145,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 // Validacion del nombre del rol que se va a actualizar
                 if (rolUpdated.NOMBRE == rolName)
-                {
-                    rolUpdated.NOMBRE = rolName;
                     actualizar = true;
-                }
                 else
                 {
                     // Busca su el nombre existe
@@ -161,14 +158,13 @@ namespace SistemaBienestarEstudiantil.WebServices
                         actualizar = false;
                     }
                     else
-                    {
                         actualizar = true;
-                        rolUpdated.NOMBRE = rolName;
-                    }
                 }
 
                 if (actualizar)
                 {
+                    rolUpdated.NOMBRE = rolName;
+
                     // Actualiza los accesos del rol
                     for (int accRol = 0; accRol < accessRols.Length; accRol++)
                     {
@@ -189,13 +185,13 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             catch (InvalidOperationException)
             {
-                // Error al eliminar el rol
+                // Error al actualizar el rol
                 response = new Response(false, "error", "Error", "Error al obtener rol para actualizar", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
             catch (Exception)
             {
-                // Error al eliminar el rol
+                // Error al actualizar el rol
                 response = new Response(false, "error", "Error", "Error al actualizar el rol", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
