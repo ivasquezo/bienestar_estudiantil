@@ -12,11 +12,6 @@ Encuestas
     <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
-    <style type="text/css">
-    	.button-text {
-    		display: inline;
-    	}
-    </style>
     <div id="messages"></div>
     <div ng-controller="EncuestasController as Main" class="encuestas">
     	<script type="text/ng-template" id="actionsEncuestas.html">
@@ -108,22 +103,8 @@ Encuestas
     		<span style="vertical-align:middle;font-size:27px;">Edite o ingrese una nueva encuesta, click en el botón "Nueva".</span>
     		<br/>
     		<br/>
-    		<a href="#" style="vertical-align:middle;font-size:18px;">Clic para visualizar encuesta seleccionada</a>
+    		<a href="/Home/Encuesta" style="vertical-align:middle;font-size:18px;">Clic para visualizar encuesta seleccionada</a>
     	</div>
-    	<hr/>
-		<div class="poll-preview">
-			<div class="content">
-		    	<div class="title">{{defaultPoll.TITULO}}</div>
-		    	<div ng-repeat="question in defaultPoll.ENCUESTA_PREGUNTA" class="question">
-		    		<div style="padding-top:5px;padding-bottom:5px;">{{question.TITULO}} {{question.REQUERIDO ? '*' : ''}}</div>
-			    	<div ng-show="question.TIPO != 3" ng-repeat="response in question.ENCUESTA_RESPUESTA" class="response">
-			    		<div ng-show="question.TIPO == 1"><input ng-model="response.checked" type="checkbox" value="{{response.id}}" ng-required="question.REQUERIDO && question.answereds.length == 0" ng-click="question.addAnswered(response)"/>{{response.TEXTO}}</div>
-			    		<div ng-show="question.TIPO == 2"><input ng-model="prueba2" type="radio" name="response{{question.CODIGO}}"  ng-required="question.REQUERIDO" value="{{response.CODIGO}}" />{{response.TEXTO}}</div>
-			    	</div>
-			    	<div ng-show="question.type == 3"><textarea ng-model="prueba3" ng-required="question.required" row="4" style="width:100%;"></textarea></div>
-		    	</div>
-			</div>
-		</div>
     </div>
 	    
 </asp:Content>
