@@ -163,5 +163,62 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
+
+        /**
+         * Agregar un rol
+         */
+        [WebMethod]
+        public void addNewActivity(String activityName, DateTime activityDate, Boolean activityStatus, String activityObservation)
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                // Conecta con las entidades
+                bienestarEntities db = new bienestarEntities();
+
+                // Inicializa la actividad que se va a agregar
+                ACTIVIDAD newActivity = new ACTIVIDAD();
+
+                // Busca si el nombre existe
+                List<ACTIVIDAD> activitiesExist = db.ACTIVIDADs.Where(a => a.NOMBRE == activityName).ToList();
+
+                Boolean agregar = false;
+
+                // Si el nombre del rol ya existe presenta un mensaje caso contrario actualiza el nombre
+                if (activitiesExist != null && activitiesExist.Count > 0)
+                {
+                    response = new Response(false, "error", "Error", "El nombre de la actividad ya existe", null);
+                    agregar = false;
+                }
+                else
+                    agregar = true;
+
+                if (agregar)
+                {
+                    newActivity.NOMBRE = activityName.ToUpper();
+                    newActivity.FECHA = activityDate;
+                    newActivity.ESTADO = activityStatus;
+                    if (activityObservation != null || activityObservation != "")
+                        newActivity.OBSERVACION = activityObservation.ToUpper();
+                    else
+                        newActivity.OBSERVACION = null;
+
+                    // Agrega la actividad
+                    db.ACTIVIDADs.AddObject(newActivity);
+                    db.SaveChanges();
+
+                    response = new Response(true, "info", "Agregar", "La actividad se agregó correctamente", newActivity);
+                }
+            }
+            catch (Exception)
+            {
+                // Error al agregar la actividad
+                response = new Response(false, "error", "Error", "Error al agregar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
     }
 }

@@ -139,15 +139,15 @@
             }
         };
 		
-		$scope.addNewRolDialog = function() {
-            $scope.rolCopy = {
-                NOMBRE: ''
+        // Para agregar una actividad
+		$scope.addNewActivityDialog = function() {
+            $scope.activityCopy = {
+                ESTADO: true,
+                OBSERVACION: ''
             };
-            $scope.getAccessByRol(0);
-            $scope.accessRols = [];
 
             ngDialog.open({
-                template: 'newRol.html',
+                template: 'newActivity.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
                 closeByDocument: true,
                 closeByEscape: true,
@@ -159,24 +159,11 @@
             });
         };
 		
-        $scope.addElementArray = function(arrayRol, newRol) {
-            arrayRol.push(newRol);
+        // Agrega item a la lista
+        $scope.addElementArray = function(arrayActivity, newActivity, activityDate) {
+            newActivity.FECHA = activityDate;
+            arrayActivity.push(newActivity);
         }; 
-
-		
-		
-		$scope.existAccess = function (code) {
-			if ($scope.rolsAccess.length > 0) {
-				for (var i = 0; i < $scope.rolsAccess.length; i++) {
-                    if($scope.rolsAccess[i].CODIGO == code && $scope.rolsAccess[i].VALIDO == true) return true;
-                };
-			}
-            return false;
-		};
-
-        $scope.setAccessRol = function(codeAccess) {            
-            $scope.accessRols.push(codeAccess);            
-        };      
     }]);
 
     // Pop up para actualizar y agregar actividades
@@ -208,17 +195,19 @@
             });
         };
 
-        // Al agregar un rol
-        $scope.addNewRolDB = function () {
+        // Al agregar una actividad
+        $scope.addNewActivityDB = function () {
             var newParentObject = this;
 
-            $http.post('../../WebServices/Rols.asmx/addNewRol', {                
-                rolName: $scope.rolCopy.NOMBRE,
-                accessRols: $scope.accessRols
+            $http.post('../../WebServices/Activities.asmx/addNewActivity', {                
+                activityName: $scope.activityCopy.NOMBRE,
+                activityDate: $scope.activityCopy.FECHA,
+                activityStatus: $scope.activityCopy.ESTADO,
+                activityObservation: $scope.activityCopy.OBSERVACION
             }).success(function (data, status, headers, config) {
-                console.log("Agregar rol: ", data);
+                console.log("Agregar actividad: ", data);
                 if (data.success) {
-                    $scope.addElementArray($scope.gridOptions.data, data.response);
+                    $scope.addElementArray($scope.gridOptions.data, data.response, Date.parse($scope.activityCopy.FECHA));
                     // Se cierra el pop up
                     newParentObject.closeThisDialog();
                 }
