@@ -109,20 +109,19 @@ Encuestas
     		<br/>
     		<a href="/Home/Encuesta" style="vertical-align:middle;font-size:18px;">Clic para visualizar encuesta seleccionada</a>
     	</div>
-    	<div ng-show="preguntas != null" style="border:1px solid black;">
-    		<table border="2">
-    			<tr ng-repeat="pregunta in preguntas">
-    				<td>{{pregunta.pregunta}}</td>
-    				<td>
-    					<table border="2">
+    	<div ng-show="preguntas != null">
+    			<div class="title-report">RESUMEN</div>
+    			<div ng-repeat="pregunta in preguntas">
+    				<div class="preguntas">{{pregunta.pregunta}}</div>
+    				<div class="respuestas">
+    					<table>
     						<tr ng-repeat="respuesta in pregunta.respuestas">
-    							<td>{{respuesta.nombre}}</td>
-    							<td>{{respuesta.cantidad}}</td>
+    							<td class="opcion">{{respuesta.nombre}}</td>
+    							<td class="valor">{{respuesta.cantidad}}</td>
     						</tr>
     					</table>
-    				</td>
-    			</tr>
-    		</table>
+    				</div>
+    			</div>
     	</div>
     </div>
 	    

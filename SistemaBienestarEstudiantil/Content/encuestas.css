@@ -217,3 +217,30 @@ input[type="text"].ng-valid {
 .encuestas .grid button {
     /*height: 24px;*/
 }
+
+/* report */
+.encuestas .title-report {
+    font-size: 25px;
+    font-weight: bold;
+    color: #59598C;
+}
+.encuestas .preguntas {
+    font-size: 20px;
+    border-bottom: 1px solid gray;
+}
+.encuestas .preguntas,
+.encuestas .respuestas .opcion {
+    width: 350px;
+    padding: 5px;
+    margin: 5px;
+}
+.encuestas .respuestas {
+    font-size: 16px;
+    padding-left: 25px;
+}
+.encuestas .opcion {
+    font-style: italic;
+}
+.encuestas .respuestas .valor {
+    width: 20px;
+}
