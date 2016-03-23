@@ -26,6 +26,10 @@ Encuestas
 					title="Click para seleccionar encuesta que se va a mostrar a los estudintes">
 					<span class="ui-icon" ng-class="grid.appScope.Main.getIcon(COL_FIELD)"></span>
 				</button>
+				<button type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.showReport(COL_FIELD)"
+					title="Ver reportes">
+					<span class="ui-icon ui-icon-note"></span>
+				</button>
 			</div>
         </script>
     	<button ng-click="addEncuesta()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
@@ -104,6 +108,21 @@ Encuestas
     		<br/>
     		<br/>
     		<a href="/Home/Encuesta" style="vertical-align:middle;font-size:18px;">Clic para visualizar encuesta seleccionada</a>
+    	</div>
+    	<div ng-show="preguntas != null" style="border:1px solid black;">
+    		<table border="2">
+    			<tr ng-repeat="pregunta in preguntas">
+    				<td>{{pregunta.pregunta}}</td>
+    				<td>
+    					<table border="2">
+    						<tr ng-repeat="respuesta in pregunta.respuestas">
+    							<td>{{respuesta.nombre}}</td>
+    							<td>{{respuesta.cantidad}}</td>
+    						</tr>
+    					</table>
+    				</td>
+    			</tr>
+    		</table>
     	</div>
     </div>
 	    

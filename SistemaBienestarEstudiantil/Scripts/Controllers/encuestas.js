@@ -24,7 +24,7 @@
             multiSelect: false,
             columnDefs: [
                 {name:'Título', field: 'TITULO'},
-                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 84}
+                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 110}
             ]
         };
 
@@ -106,6 +106,18 @@
                 };
                 $scope.setDefaultSurvey(row);
             }
+        };
+
+        this.showReport = function(code){
+            console.log(code);
+            $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
+                surveyCode: code
+            }).success(function (data, status, headers, config) {
+                console.log("report:", data);
+                $scope.preguntas = data;
+            }).error(function (data, status, headers, config) {
+                console.log("error in setDefaultSurvey...", data);
+            });
         };
 
         $scope.setDefaultSurvey = function(row){

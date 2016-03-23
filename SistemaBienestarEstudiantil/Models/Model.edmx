@@ -211,6 +211,7 @@
           <Property Name="CODIGOENCUESTA" Type="numeric" Nullable="false" />
           <Property Name="CODIGOPREGUNTA" Type="numeric" Nullable="false" />
           <Property Name="CODIGORESPUESTA" Type="numeric" Nullable="false" />
+          <Property Name="FECHA" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ENCUESTA_RESPUESTA_TEXTO">
           <Key>
@@ -222,6 +223,7 @@
           <Property Name="CODIGOENCUESTA" Type="numeric" Nullable="false" />
           <Property Name="CODIGOPREGUNTA" Type="numeric" Nullable="false" />
           <Property Name="TEXTO" Type="varchar" MaxLength="250" />
+          <Property Name="FECHA" Type="datetime" />
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
@@ -754,6 +756,7 @@
           <NavigationProperty Name="ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" FromRole="ENCUESTA_RESPUESTA_ALUMNO" ToRole="ALUMNO" />
           <NavigationProperty Name="ENCUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" FromRole="ENCUESTA_RESPUESTA_ALUMNO" ToRole="ENCUESTA" />
           <NavigationProperty Name="ENCUESTA_RESPUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" FromRole="ENCUESTA_RESPUESTA_ALUMNO" ToRole="ENCUESTA_RESPUESTA" />
+          <Property Type="DateTime" Name="FECHA" Nullable="false" />
         </EntityType>
         <EntityType Name="ENCUESTA_RESPUESTA_TEXTO">
           <Key>
@@ -768,6 +771,7 @@
           <NavigationProperty Name="ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" FromRole="ENCUESTA_RESPUESTA_TEXTO" ToRole="ALUMNO" />
           <NavigationProperty Name="ENCUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" FromRole="ENCUESTA_RESPUESTA_TEXTO" ToRole="ENCUESTA" />
           <NavigationProperty Name="ENCUESTA_PREGUNTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_RESPUESTA_TEXTO" ToRole="ENCUESTA_PREGUNTA" />
+          <Property Type="DateTime" Name="FECHA" />
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
@@ -1093,6 +1097,7 @@
           <EntitySetMapping Name="ENCUESTA_RESPUESTA_ALUMNO">
             <EntityTypeMapping TypeName="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO">
               <MappingFragment StoreEntitySet="ENCUESTA_RESPUESTA_ALUMNO">
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
                 <ScalarProperty Name="CODIGORESPUESTA" ColumnName="CODIGORESPUESTA" />
                 <ScalarProperty Name="CODIGOPREGUNTA" ColumnName="CODIGOPREGUNTA" />
                 <ScalarProperty Name="CODIGOENCUESTA" ColumnName="CODIGOENCUESTA" />
@@ -1103,6 +1108,7 @@
           <EntitySetMapping Name="ENCUESTA_RESPUESTA_TEXTO">
             <EntityTypeMapping TypeName="bienestarModel.ENCUESTA_RESPUESTA_TEXTO">
               <MappingFragment StoreEntitySet="ENCUESTA_RESPUESTA_TEXTO">
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
                 <ScalarProperty Name="TEXTO" ColumnName="TEXTO" />
                 <ScalarProperty Name="CODIGOPREGUNTA" ColumnName="CODIGOPREGUNTA" />
                 <ScalarProperty Name="CODIGOENCUESTA" ColumnName="CODIGOENCUESTA" />

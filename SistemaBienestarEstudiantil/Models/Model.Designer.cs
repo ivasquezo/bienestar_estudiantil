@@ -1685,7 +1685,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1708,7 +1707,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2175,13 +2173,15 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="cODIGOENCUESTA">Valor inicial de la propiedad CODIGOENCUESTA.</param>
         /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
         /// <param name="cODIGORESPUESTA">Valor inicial de la propiedad CODIGORESPUESTA.</param>
-        public static ENCUESTA_RESPUESTA_ALUMNO CreateENCUESTA_RESPUESTA_ALUMNO(global::System.Decimal cODIGOALUMNO, global::System.Decimal cODIGOENCUESTA, global::System.Decimal cODIGOPREGUNTA, global::System.Decimal cODIGORESPUESTA)
+        /// <param name="fECHA">Valor inicial de la propiedad FECHA.</param>
+        public static ENCUESTA_RESPUESTA_ALUMNO CreateENCUESTA_RESPUESTA_ALUMNO(global::System.Decimal cODIGOALUMNO, global::System.Decimal cODIGOENCUESTA, global::System.Decimal cODIGOPREGUNTA, global::System.Decimal cODIGORESPUESTA, global::System.DateTime fECHA)
         {
             ENCUESTA_RESPUESTA_ALUMNO eNCUESTA_RESPUESTA_ALUMNO = new ENCUESTA_RESPUESTA_ALUMNO();
             eNCUESTA_RESPUESTA_ALUMNO.CODIGOALUMNO = cODIGOALUMNO;
             eNCUESTA_RESPUESTA_ALUMNO.CODIGOENCUESTA = cODIGOENCUESTA;
             eNCUESTA_RESPUESTA_ALUMNO.CODIGOPREGUNTA = cODIGOPREGUNTA;
             eNCUESTA_RESPUESTA_ALUMNO.CODIGORESPUESTA = cODIGORESPUESTA;
+            eNCUESTA_RESPUESTA_ALUMNO.FECHA = fECHA;
             return eNCUESTA_RESPUESTA_ALUMNO;
         }
 
@@ -2296,6 +2296,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.Decimal _CODIGORESPUESTA;
         partial void OnCODIGORESPUESTAChanging(global::System.Decimal value);
         partial void OnCODIGORESPUESTAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime FECHA
+        {
+            get
+            {
+                return _FECHA;
+            }
+            set
+            {
+                OnFECHAChanging(value);
+                ReportPropertyChanging("FECHA");
+                _FECHA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FECHA");
+                OnFECHAChanged();
+            }
+        }
+        private global::System.DateTime _FECHA;
+        partial void OnFECHAChanging(global::System.DateTime value);
+        partial void OnFECHAChanged();
 
         #endregion
 
@@ -2559,6 +2583,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.String _TEXTO;
         partial void OnTEXTOChanging(global::System.String value);
         partial void OnTEXTOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> FECHA
+        {
+            get
+            {
+                return _FECHA;
+            }
+            set
+            {
+                OnFECHAChanging(value);
+                ReportPropertyChanging("FECHA");
+                _FECHA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FECHA");
+                OnFECHAChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _FECHA;
+        partial void OnFECHAChanging(Nullable<global::System.DateTime> value);
+        partial void OnFECHAChanged();
 
         #endregion
 

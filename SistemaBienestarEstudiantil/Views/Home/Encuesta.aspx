@@ -17,11 +17,13 @@
     <div id="messages"></div>
     <div ng-controller="EncuestaController as Main" class="encuestas">
     	<hr/>
-		<form name="formEncuesta" ng-submit="enviarForm()">
+		<form id="formEncuesta" name="formEncuesta" ng-submit="enviarForm()">
 		<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
 			name="validIdentification" placeholder="Número de cédula" type="number"/>
 		<span ng-messages="formEncuesta.validIdentification.$error" style="display: inline-block;">
-            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Número de cédula inválido</span>
+            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
+            <span ng-message="cedulaSurveyDone" class="help-block ng-message" style="font-size: 18px;">Usted ya realizó la encuesta</span>
+            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
         </span>
         <span style="display:inline-block;font-size:18px;">
         	{{student.NOMBRE}}
@@ -57,12 +59,11 @@
 			    		<span class="ui-button-text">Enviar</span>
 			    	</button>
 			    </center>
-
-			    prueba {{formEncuesta.$invalid}}
 			</div>
 			<div class="content" ng-show="defaultSurvey == null">
 				No se ha definido la encuesta, consulte al administrador del sitio.
 			</div>
+
 		</form>
 		</div>
     </div>
