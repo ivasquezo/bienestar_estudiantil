@@ -290,57 +290,64 @@ namespace SistemaBienestarEstudiantil.WebServices
             bienestarEntities db = new bienestarEntities();
             ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == surveyCode);
 
+            int stuResp = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+            int stuText = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+
             List<ResultadoSeleccione> resultadoSeleccione = new List<ResultadoSeleccione>();
 
             // cada pregunta
             foreach (Models.ENCUESTA_PREGUNTA enpre in encuesta.ENCUESTA_PREGUNTA)
             {
-                ResultadoSeleccione rs = new ResultadoSeleccione(enpre.TITULO, new List<Respuesta>());
+                ResultadoSeleccione rs = new ResultadoSeleccione(enpre.TIPO, enpre.TITULO, new List<Respuesta>());
                 if (enpre.TIPO != 3)
                 {
                     // cada respuesta
                     foreach (Models.ENCUESTA_RESPUESTA enres in enpre.ENCUESTA_RESPUESTA)
                     {
-                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.ENCUESTA_RESPUESTA_ALUMNO.Count()));
+                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.ENCUESTA_RESPUESTA_ALUMNO.Count(), null));
                     }
                 }
-                else {
-                    
+                else foreach (Models.ENCUESTA_RESPUESTA_TEXTO ert in enpre.ENCUESTA_RESPUESTA_TEXTO)
+                {
+                    rs.respuestas.Add(new Respuesta(null, 0, ert.TEXTO));
                 }
+
                 resultadoSeleccione.Add(rs);
             }
-            writeResponse(new JavaScriptSerializer().Serialize(resultadoSeleccione));
+
+            writeResponse(
+                "{\"encuestados\": " + (stuResp > stuText ? stuResp : stuText) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\",\"preguntas\":" +
+                new JavaScriptSerializer().Serialize(resultadoSeleccione)
+                + "}"
+            );
         }
 
     }
 
     public class ResultadoSeleccione
     {
-        public ResultadoSeleccione(string pregunta, List<Respuesta> respuestas)
+        public ResultadoSeleccione(int tipo, string pregunta, List<Respuesta> respuestas)
         {
-            // TODO: Complete member initialization
+            this.tipo = tipo;
             this.pregunta = pregunta;
             this.respuestas = respuestas;
         }
-        public String pregunta { get; set; }
+        public int tipo { get; set; }
+        public string pregunta { get; set; }
         public List<Respuesta> respuestas { get; set; }
-    }
-
-    public class ResultadoParrafo
-    {
-        public String pregunta { get; set; }
-        public List<String> respuestas { get; set; }
     }
 
     public class Respuesta
     {
-        public Respuesta(string nombre, int cantidad)
+        public Respuesta(string nombre, int cantidad, string parrafo)
         {
             this.nombre = nombre;
             this.cantidad = cantidad;
+            this.parrafo = parrafo;
         }
-        public String nombre { get; set; }
+        public string nombre { get; set; }
         public int cantidad { get; set; }
+        public string parrafo { get; set; }
     }
 
     public class Encuesta

@@ -10,7 +10,10 @@ Encuestas
     <h2>Encuestas</h2>
 
     <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/angular-chart/angular-chart.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
+	<script type="text/javascript" src="../../Scripts/angular-chart/Chart.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/angular-chart/angular-chart.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
     <div id="messages"></div>
     <div ng-controller="EncuestasController as Main" class="encuestas">
@@ -32,11 +35,13 @@ Encuestas
 				</button>
 			</div>
         </script>
-    	<button ng-click="addEncuesta()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
-    		<span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span>
-    		<span class="ui-button-text">Nueva</span>
-    	</button><br/>
-    	<div ui-grid="gridOptions" style="width:39%;display:inline-block;" class="grid"></div>
+    	<div style="width:39%;display:inline-block;">
+	    	<button ng-click="addEncuesta()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+	    		<span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span>
+	    		<span class="ui-button-text">Nueva</span>
+	    	</button><br/>
+    		<div ui-grid="gridOptions" class="grid"></div>
+    	</div>
     	<div ng-show="mode == 'edit' || mode == 'new'" style="width:60%;display:inline-block;vertical-align:top;">
     	    <form name="formNewEncuesta" id="formNewEncuesta">
 	    	    <div class="poll-display">
@@ -100,7 +105,7 @@ Encuestas
 		    	</div>
 	    	</form>
     	</div>
-    	<div ng-show="mode != 'edit' && mode != 'new'"
+    	<div ng-show="mode != 'edit' && mode != 'new' && mode != 'report'"
     		style="width:60%;display:inline-block;vertical-align:top;text-align:center;height:370px;">
     		<br/>
     		<br/>
@@ -109,19 +114,32 @@ Encuestas
     		<br/>
     		<a href="/Home/Encuesta" style="vertical-align:middle;font-size:18px;">Clic para visualizar encuesta seleccionada</a>
     	</div>
-    	<div ng-show="preguntas != null">
-    			<div class="title-report">RESUMEN</div>
-    			<div ng-repeat="pregunta in preguntas">
-    				<div class="preguntas">{{pregunta.pregunta}}</div>
-    				<div class="respuestas">
-    					<table>
-    						<tr ng-repeat="respuesta in pregunta.respuestas">
-    							<td class="opcion">{{respuesta.nombre}}</td>
-    							<td class="valor">{{respuesta.cantidad}}</td>
-    						</tr>
-    					</table>
-    				</div>
-    			</div>
+    	<div ng-show="encuestaReport != null && mode == 'report'" style="margin-left:5px;width:60%;display:inline-block;vertical-align:top;">
+			<div class="title-report">RESUMEN</div>
+			<div style="display:inline-block;font-size: 18px;">Encuesta:</div>
+			<div style="display:inline-block;font-size: 18px;font-style: italic;color: #5C87B2;">{{encuestaReport.TITULO}}</div>
+			<div style="display:inline-block;font-size: 12px;color: rgba(106, 108, 109, 0.68);">({{encuestaReport.encuestados}} respuestas)</div>
+			<div ng-repeat="pregunta in encuestaReport.preguntas">
+				<div class="preguntas">{{pregunta.pregunta}}</div>
+				<div class="respuestas" style="display:inline-block;vertical-align: top;">
+					<table>
+						<tr ng-show="pregunta.tipo != 3" ng-repeat="respuesta in pregunta.respuestas">
+							<td class="opcion">{{respuesta.nombre}}</td>
+							<td class="valor">
+								<div style="display: inline-block;">{{respuesta.cantidad}}</div>
+								<div style="font-size:10px;display:inline-block;color:#5C87B2;">({{respuesta.cantidad*100/encuestaReport.encuestados | number:1}}%)</div>
+							</td>
+						</tr>
+						<tr ng-show="pregunta.tipo == 3" ng-repeat="respuesta in pregunta.respuestas">
+							<td colspan="2" class="opcion">{{respuesta.parrafo}}</td>
+						</tr>
+					</table>
+				</div>
+				<div ng-if="pregunta.tipo != 3" style="display:inline-block;">
+					<canvas class="chart chart-pie" chart-data="pregunta.valorRespuestas" chart-labels="pregunta.labelRespuestas"
+						width="200" height="120"></canvas>
+				</div>
+			</div>
     	</div>
     </div>
 	    
