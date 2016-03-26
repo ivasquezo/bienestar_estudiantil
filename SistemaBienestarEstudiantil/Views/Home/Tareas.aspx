@@ -42,9 +42,11 @@
                 	<div class="form-group">
                         <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
                         <div class="col-md-4">                            
-                            <select ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities">
-                            </select>
-                            <br/><span class="help-block">Nombre de la actividad general</span> 
+                            <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities"></select>
+                            <br/><span class="help-block">Nombre de la actividad general</span>
+                            <span ng-messages="activityForm.generalActivityBox.$error">
+                                <span ng-message="required" class="help-block ng-message">Seleccione una actividad general</span>
+                            </span>
                         </div>
                     </div>
 
@@ -96,7 +98,7 @@
                             <tr ng-repeat="nivel in allGroupLevel">
                                 <td><input type="checkbox" ng-checked="existGroupLevel(nivel.CODIGO)" 
                                     ng-click="setGroupLevel(nivel.CODIGO)"></td>
-                                <td>{{ nivel.NOMBRE }}</td>
+                                <td>{{ nivel.NIVEL }}</td>
                                 <td>{{ nivel.PARALELO }}</td>
                                 <td>{{ nivel.MODALIDAD }}</td>
                             </tr>
@@ -128,21 +130,28 @@
             <fieldset>
                 <legend>Nueva actividad</legend>
                 <form name="newActivityForm" ng-submit="addNewActivityDB()">
-                	<table style="width:100%">
-                	<tr>
-                	<td>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
+                        <div class="col-md-4">                            
+                            <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities">
+                            </select>
+                            <br/><span class="help-block">Nombre de la actividad general</span>
+                            <span ng-messages="newActivityForm.generalActivityBox.$error">
+                                <span ng-message="required" class="help-block ng-message">Seleccione una actividad general</span>
+                            </span>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Actividad</label>  
                         <div class="col-md-4">
                             <input required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
                             <br/><span class="help-block">Nombre de la actividad</span>  
-                            <span ng-messages="activityForm.nombre.$error">
+                            <span ng-messages="newActivityForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
                             </span>
                         </div>
                     </div>
-</td>
-<td>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="fecha">Fecha</label>  
                         <div class="col-md-4">
@@ -150,9 +159,6 @@
                             <br/><span class="help-block">Fecha de ejecución de la actividad</span>  
                         </div>
                     </div>
-                    </td>
-</tr>
-</table>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
                         <div class="col-md-4">
