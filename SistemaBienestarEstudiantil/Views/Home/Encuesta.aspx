@@ -19,17 +19,19 @@
     	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
     	<hr/>
 		<form id="formEncuesta" name="formEncuesta" ng-submit="enviarForm()">
-		<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
-			name="validIdentification" placeholder="Número de cédula" type="number"/>
-		<span ng-messages="formEncuesta.validIdentification.$error" style="display: inline-block;">
-            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
-            <span ng-message="cedulaSurveyDone" class="help-block ng-message" style="font-size: 18px;">Usted ya realizó la encuesta</span>
-            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
-        </span>
-        <span style="display:inline-block;font-size:18px;">
-        	{{student.NOMBRE}}
-        </span>
-    	<hr/>
+		<div ng-show="defaultSurvey != null">
+			<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
+				name="validIdentification" placeholder="Número de cédula" type="number"/>
+			<span ng-messages="formEncuesta.validIdentification.$error" style="display: inline-block;">
+	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
+	            <span ng-message="cedulaSurveyDone" class="help-block ng-message" style="font-size: 18px;">Usted ya realizó la encuesta</span>
+	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
+	        </span>
+	        <span style="display:inline-block;font-size:18px;">
+	        	{{student.NOMBRE}}
+	        </span>
+	    	<hr/>
+		</div>
 		<div class="poll-preview">
 			<div class="content" ng-show="defaultSurvey != null">
 		    	<div class="title">{{defaultSurvey.TITULO}}</div>
@@ -62,7 +64,7 @@
 			    </center>
 			</div>
 			<div class="content" ng-show="defaultSurvey == null">
-				No se ha definido la encuesta, consulte al administrador del sitio.
+				No se ha habilitado ninguna encuesta, consulte al administrador del sitio.
 			</div>
 
 		</form>

@@ -28,7 +28,7 @@ Encuestas
 				</button>
 				<input type="checkbox" ng-checked="grid.appScope.Main.getSurverDefaultInput(COL_FIELD)"
 					ng-click="grid.appScope.Main.setSurverDefaultInput(COL_FIELD)" style="width:23px;height:23px;margin:0 0 8px 0;"
-					title="Encuesta habilitada para los estudiantes"/>
+					title="Habilitar/Deshabilitar encuestas para los estudiantes"/>
 				<button type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.showReport(COL_FIELD)"
 					title="Ver reportes">
 					<span class="ui-icon ui-icon-calculator"></span>

@@ -111,13 +111,14 @@
 
         this.getSurverDefaultInput = function(code) {
             var row = $scope.getElementArray($scope.gridOptions.data, code);
-            return row.selected != undefined && row.selected == true ? true : false;
+            return row != null && row.selected != undefined && row.selected == true ? true : false;
         }
 
         this.setSurverDefaultInput = function(code) {
             var row = $scope.getElementArray($scope.gridOptions.data, code);
             if (row.selected != undefined && row.selected){
                 row.selected = false;
+                $scope.setDefaultSurvey(0);
             } else {
                 for (var i = 0; i < $scope.gridOptions.data.length; i++) {
                     if ($scope.gridOptions.data[i].selected != undefined && $scope.gridOptions.data[i].selected) {
@@ -125,7 +126,7 @@
                         break;
                     }
                 };
-                $scope.setDefaultSurvey(row);
+                $scope.setDefaultSurvey(row.CODIGO);
             }
         }
 
@@ -156,9 +157,9 @@
             });
         };
 
-        $scope.setDefaultSurvey = function(row){
+        $scope.setDefaultSurvey = function(code){
             $scope.promise = $http.post('../../WebServices/Encuestas.asmx/setDefaultSurvey', {
-                surveyCode: row.CODIGO
+                surveyCode: code
             }).success(function (data, status, headers, config) {
                 console.log("setDefaultSurvey:",data);
                 row.selected = true;
