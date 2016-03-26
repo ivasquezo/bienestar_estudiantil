@@ -153,7 +153,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                            (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
                            .Select(x => new { x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, x.GRUPO_ACTIVIDAD.CODIGOGRUPO })
                            .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
-
+                
                 response = new Response(true, "", "", "", data);
             }
             catch (Exception)
@@ -168,30 +168,34 @@ namespace SistemaBienestarEstudiantil.WebServices
         /**
          * Busca todos los docentes registrados para realizar una actividad
          */
-        //[WebMethod]
-        //public void getAllResponsables()
-        //{
-        //    Response response = new Response(true, "", "", "", null);
-        //    bienestarEntities db = new bienestarEntities();
+        [WebMethod]
+        public void getAllResponsables()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
-        //    try
-        //    {
-        //        // Busca todos los docentes registrados
-        //        var data = db.USUARIOs.Join(db.usua, g => g.CODIGO, ga => ga.CODIGOGRUPO,
-        //                   (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
-        //                   .Select(x => new { x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, x.GRUPO_ACTIVIDAD.CODIGOGRUPO })
-        //                   .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
+            try
+            {
+                // Busca todos los docentes registrados
+                //var data = db.USUARIOs.Join(db.USUARIO_ROL, u => u.CODIGO, ur => ur.CODIGOUSUARIO,
+                //    (u, ur) => new { u, ur }).Join(db.ROL, uur => uur.ur.CODIGOROL, r => r.CODIGO,
+                //    (uur, r) => new { uur, r }).Select(x => new
+                //    {
+                //        NOMBREROL = x.r.NOMBRE,
+                //        CODIGOUSUARIO = x.uur.u.CODIGO,
+                //        NOMBREUSUARIO = x.uur.u.NOMBRECOMPLETO
+                //    }).Where(y => y.NOMBREROL == "DOCENTE").ToList();
 
-        //        response = new Response(true, "", "", "", data);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        response = new Response(false, "error", "Error", "Error al obtener los niveles academicos", null);
-        //        writeResponse(new JavaScriptSerializer().Serialize(response));
-        //    }
+                response = new Response(true, "", "", "", null);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los niveles academicos", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
 
-        //    writeResponse(new JavaScriptSerializer().Serialize(response));
-        //}
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
 
         [WebMethod]
         public void removeActivityById(int activityId)
