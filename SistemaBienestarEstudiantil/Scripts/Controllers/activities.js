@@ -178,14 +178,43 @@
             });
         };
 
-        $scope.updateElementArray = function(arrayActivity, activityId, activityName, activityDate, activityStatus) {
+        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus) {
             for (var i=0; i<arrayActivity.length; i++) {
-                if (arrayActivity[i].CODIGO == activityId) {
+                if (arrayActivity[i].CODIGO == activityId) {                    
+                    arrayActivity[i].CODIGOACTIVIDAD = generalActivityId;
                     arrayActivity[i].NOMBRE = activityName;
                     arrayActivity[i].FECHA = activityDate;
                     arrayActivity[i].ESTADO = activityStatus;
+
+                    
+                        
                 }
             }
+
+            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                        console.log("act: ", $scope.allGeneralActivities[i].value);
+        };
+
+        $scope.addNewActivityDialog = function() {
+            $scope.activityCopy = {
+                ESTADO: true,
+                OBSERVACION: ''
+            };
+
+            // Llena el combo de las actividades            
+            $scope.getGeneralActivities();
+
+            ngDialog.open({
+                template: 'newActivity.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
         };
 
 
@@ -221,28 +250,6 @@
                 }
             }
         };		
-
-		
-		
-        // Para agregar una actividad
-		$scope.addNewActivityDialog = function() {
-            $scope.activityCopy = {
-                ESTADO: true,
-                OBSERVACION: ''
-            };
-
-            ngDialog.open({
-                template: 'newActivity.html',
-                className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                closeByDocument: true,
-                closeByEscape: true,
-                scope: $scope,
-                controller: $controller('ngDialogController', {
-                    $scope: $scope,
-                    $http: $http
-                })
-            });
-        };
 		
         // Agrega item a la lista
         $scope.addElementArray = function(arrayActivity, newActivity, activityDate) {
@@ -267,7 +274,7 @@
             }).success(function (data, status, headers, config) {
                 console.log("Editar actividad: ", data);
                 if (data.success) {
-                    $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGO, $scope.activityCopy.NOMBRE.toUpperCase(), 
+                    $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO, $scope.activityCopy.NOMBRE.toUpperCase(), 
                         Date.parse($scope.activityCopy.FECHA), $scope.activityCopy.ESTADO);
                     parentObject.closeThisDialog();
                 } 
