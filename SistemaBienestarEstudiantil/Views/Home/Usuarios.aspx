@@ -62,11 +62,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="cedulausuario">Cédula:</label>  
                         <div class="col-md-4">
-                            <input ng-model="userCopy.CEDULA" type="text" id="cedulausuario" name="cedulausuario" placeholder="Cédula" required class="form-control input-md">
-                            <br/><span class="help-block">Ingrese la cédula del usuario</span>  
+                            <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="Cédula" class="form-control input-md">
                             <span ng-messages="userForm.cedulausuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese la identificación</span>
-                                <span ng-message="available" class="help-block ng-message">Ya existe un usuario ingresado con esta identificación</span>
+                                <span ng-message="required" class="help-block ng-message">Ingrese una identificación</span>
+                                <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un número de cédula válido</span>
+                                <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este número de cédula</span>
+                                <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
                             </span>
                         </div>
                     </div>

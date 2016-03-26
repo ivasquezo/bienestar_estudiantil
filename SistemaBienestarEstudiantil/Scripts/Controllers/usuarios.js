@@ -83,17 +83,11 @@
 
         };
 
-        $scope.pruebaAvailable = function () {
-            ngModel.$setValidity('available', false);
-        };
-
-        $scope.pruebaAvailable1 = function () {
-            ngModel.$setValidity('available', true);
-        };
-
         this.editUser = function (code) {
 
             $scope.userCopy = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
+
+            $scope.userSavedCedula = $scope.userCopy.CEDULA;
 
             ngDialog.open({
                 template: 'editUser.html',
@@ -133,6 +127,8 @@
             $scope.userCopy = {
                 ESTADO: true
             };
+
+            $scope.userSavedCedula = null;
 
             ngDialog.open({
                 template: 'newUser.html',
@@ -215,25 +211,32 @@
                     
                     if (ngModelValue != null && ngModelValue.toString().length == 10) {
                         
-                        ctrl.$setValidity('cedulaChecking', false);
+                        if (ngModelValue != scope.userSavedCedula) {
 
-                        scope.promise = $http.post('../../WebServices/Users.asmx/countUserWithCedula', {
-                            cedula: ngModelValue
-                        }).success(function (data, status, headers, config) {
+                            ctrl.$setValidity('cedulaChecking', false);
 
-                            if (data.cantidad == 0) {
-                                ctrl.$setValidity('cedulaValidator', true);
-                                ctrl.$setValidity('cedulaChecking', true);
-                                ctrl.$setValidity('cedulaExist', true);
-                            } else {                            
-                                ctrl.$setValidity('cedulaExist', false);
-                                ctrl.$setValidity('cedulaValidator', true);
-                            }
+                            scope.promise = $http.post('../../WebServices/Users.asmx/countUserWithCedula', {
+                                cedula: ngModelValue
+                            }).success(function (data, status, headers, config) {
 
-                        }).error(function (data, status, headers, config) {
-                            console.log("error al traer alumno", data);
-                            ctrl.$setValidity('cedulaValidator', false);
-                        });
+                                if (data.cantidad == 0) {
+                                    ctrl.$setValidity('cedulaValidator', true);
+                                    ctrl.$setValidity('cedulaChecking', true);
+                                    ctrl.$setValidity('cedulaExist', true);
+                                } else {                            
+                                    ctrl.$setValidity('cedulaExist', false);
+                                    ctrl.$setValidity('cedulaValidator', true);
+                                }
+
+                            }).error(function (data, status, headers, config) {
+                                console.log("error al traer alumno", data);
+                                ctrl.$setValidity('cedulaValidator', false);
+                            });
+                        } else {
+                            ctrl.$setValidity('cedulaValidator', true);
+                            ctrl.$setValidity('cedulaChecking', true);
+                            ctrl.$setValidity('cedulaExist', true);
+                        }
                     } else {
                         ctrl.$setValidity('cedulaValidator', false);
                     }
