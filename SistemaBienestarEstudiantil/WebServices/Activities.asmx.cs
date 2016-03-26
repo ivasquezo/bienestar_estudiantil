@@ -37,21 +37,21 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca las actividades
-                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL, 
-                    (ag, aga) => new { ag, aga }).Join(db.ACTIVIDADs, agaga => agaga.aga.CODIGOACTIVIDAD, a => a.CODIGO,
-                    (agaga, a) => new { agaga, a }).Select(x => new
-                    {
-                        CODIGOACTIVIDAD = x.agaga.ag.CODIGO,
-                        NOMBREACTIVIDAD = x.agaga.ag.NOMBRE,
-                        CODIGO = x.a.CODIGO,
-                        NOMBRE = x.a.NOMBRE,
-                        FECHA = x.a.FECHA,
-                        ESTADO = x.a.ESTADO
-                    }).ToList();
-                // Verifica si se encontraron resultados
-                if (data != null && data.Count > 0)
-                    response = new Response(true, "", "", "", data);
-                else
+                //var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL, 
+                //    (ag, aga) => new { ag, aga }).Join(db.ACTIVIDADs, agaga => agaga.aga.CODIGOACTIVIDAD, a => a.CODIGO,
+                //    (agaga, a) => new { agaga, a }).Select(x => new
+                //    {
+                //        CODIGOACTIVIDAD = x.agaga.ag.CODIGO,
+                //        NOMBREACTIVIDAD = x.agaga.ag.NOMBRE,
+                //        CODIGO = x.a.CODIGO,
+                //        NOMBRE = x.a.NOMBRE,
+                //        FECHA = x.a.FECHA,
+                //        ESTADO = x.a.ESTADO
+                //    }).ToList();
+                //// Verifica si se encontraron resultados
+                //if (data != null && data.Count > 0)
+                //    response = new Response(true, "", "", "", data);
+                //else
                     response = new Response(false, "info", "Información", "No se han encontrado actividades", null);
             }
             catch (Exception e)
@@ -75,12 +75,12 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca las actividades generales de la actividad seleccionada
-                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL,
-                           (ag, aga) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD_GENERAL_ACTIVIDAD = aga })
-                           .Select(x => new { x.ACTIVIDAD_GENERAL.NOMBRE, x.ACTIVIDAD_GENERAL_ACTIVIDAD.ACTIVIDAD_GENERAL.CODIGO, x.ACTIVIDAD_GENERAL_ACTIVIDAD.CODIGOACTIVIDAD })
-                           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
+                //var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL,
+                //           (ag, aga) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD_GENERAL_ACTIVIDAD = aga })
+                //           .Select(x => new { x.ACTIVIDAD_GENERAL.NOMBRE, x.ACTIVIDAD_GENERAL_ACTIVIDAD.ACTIVIDAD_GENERAL.CODIGO, x.ACTIVIDAD_GENERAL_ACTIVIDAD.CODIGOACTIVIDAD })
+                //           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
 
-                response = new Response(true, "", "", "", data);
+                //response = new Response(true, "", "", "", data);
             }
             catch (Exception)
             {
@@ -177,20 +177,43 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca todos los docentes registrados
-                //var data = db.USUARIOs.Join(db.USUARIO_ROL, u => u.CODIGO, ur => ur.CODIGOUSUARIO,
-                //    (u, ur) => new { u, ur }).Join(db.ROL, uur => uur.ur.CODIGOROL, r => r.CODIGO,
-                //    (uur, r) => new { uur, r }).Select(x => new
-                //    {
-                //        NOMBREROL = x.r.NOMBRE,
-                //        CODIGOUSUARIO = x.uur.u.CODIGO,
-                //        NOMBREUSUARIO = x.uur.u.NOMBRECOMPLETO
-                //    }).Where(y => y.NOMBREROL == "DOCENTE").ToList();
+                var data = db.USUARIOs.Join(db.ROLs, u => u.CODIGOROL, r => r.CODIGO, 
+                    (u, r) => new { USUARIO = u, ROL = r })
+                    .Select(x => new { ROL = x.ROL.NOMBRE, CODIGO = x.USUARIO.CODIGO, NOMBRECOMPLETO = x.USUARIO.NOMBRECOMPLETO })
+                    .Where(y => y.ROL == "DOCENTE").ToList();
 
-                response = new Response(true, "", "", "", null);
+                response = new Response(true, "", "", "", data);
             }
             catch (Exception)
             {
-                response = new Response(false, "error", "Error", "Error al obtener los niveles academicos", null);
+                response = new Response(false, "error", "Error", "Error al obtener los usuarios responsables", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getResponsablesByActivity(int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                 //rolAccess = db.ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
+
+                // Busca todos los docentes registrados
+                var data = db.USUARIOs.Join(db.ROLs, u => u.CODIGOROL, r => r.CODIGO,
+                    (u, r) => new { USUARIO = u, ROL = r })
+                    .Select(x => new { ROL = x.ROL.NOMBRE, CODIGO = x.USUARIO.CODIGO, NOMBRECOMPLETO = x.USUARIO.NOMBRECOMPLETO })
+                    .Where(y => y.ROL == "DOCENTE").ToList();
+
+                response = new Response(true, "", "", "", data);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los usuarios responsables", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
 
@@ -207,11 +230,11 @@ namespace SistemaBienestarEstudiantil.WebServices
                 bienestarEntities db = new bienestarEntities();
 
                 ACTIVIDAD activityDeleted = db.ACTIVIDADs.Single(a => a.CODIGO == activityId);
-                ACTIVIDAD_GENERAL_ACTIVIDAD activityGeneralDeleted = db.ACTIVIDAD_GENERAL_ACTIVIDAD.Single(ag => ag.CODIGOACTIVIDAD == activityId);
+                //ACTIVIDAD_GENERAL_ACTIVIDAD activityGeneralDeleted = db.ACTIVIDAD_GENERAL_ACTIVIDAD.Single(ag => ag.CODIGOACTIVIDAD == activityId);
                
-                db.ACTIVIDADs.DeleteObject(activityDeleted);
-                db.ACTIVIDAD_GENERAL_ACTIVIDAD.DeleteObject(activityGeneralDeleted);
-                db.SaveChanges();
+                //db.ACTIVIDADs.DeleteObject(activityDeleted);
+                //db.ACTIVIDAD_GENERAL_ACTIVIDAD.DeleteObject(activityGeneralDeleted);
+                //db.SaveChanges();
 
                 response = new Response(true, "info", "Eliminar", "Actividad eliminada correctamente", null);
             }

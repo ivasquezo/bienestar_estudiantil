@@ -8,10 +8,8 @@
         <EntityContainer Name="BienestarModelStoreContainer">
           <EntitySet Name="ACCESO" EntityType="BienestarModel.Store.ACCESO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ACTIVIDAD" EntityType="BienestarModel.Store.ACTIVIDAD" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ACTIVIDAD_ADJUNTO" EntityType="BienestarModel.Store.ACTIVIDAD_ADJUNTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ACTIVIDAD_GENERAL" EntityType="BienestarModel.Store.ACTIVIDAD_GENERAL" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ACTIVIDAD_GENERAL_ACTIVIDAD" EntityType="BienestarModel.Store.ACTIVIDAD_GENERAL_ACTIVIDAD" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ACTIVIDAD_USUARIO" EntityType="BienestarModel.Store.ACTIVIDAD_USUARIO" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ADJUNTO" EntityType="BienestarModel.Store.ADJUNTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ALUMNO" EntityType="BienestarModel.Store.ALUMNO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ASISTENCIA" EntityType="BienestarModel.Store.ASISTENCIA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="DATOS_SISTEMA" EntityType="BienestarModel.Store.DATOS_SISTEMA" store:Type="Tables" Schema="dbo" />
@@ -25,25 +23,17 @@
           <EntitySet Name="ROL" EntityType="BienestarModel.Store.ROL" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ROL_ACCESO" EntityType="BienestarModel.Store.ROL_ACCESO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="USUARIO" EntityType="BienestarModel.Store.USUARIO" store:Type="Tables" Schema="dbo" />
-          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" Association="BienestarModel.Store.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
-            <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
-            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" Association="BienestarModel.Store.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
+          <AssociationSet Name="FK_ACTIVIDAD_ACTIVIDAD_GENERAL" Association="BienestarModel.Store.FK_ACTIVIDAD_ACTIVIDAD_GENERAL">
             <End Role="ACTIVIDAD_GENERAL" EntitySet="ACTIVIDAD_GENERAL" />
-            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_USUARIO_ACTIVIDAD" Association="BienestarModel.Store.FK_ACTIVIDAD_USUARIO_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
-            <End Role="ACTIVIDAD_USUARIO" EntitySet="ACTIVIDAD_USUARIO" />
           </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_USUARIO_USUARIO" Association="BienestarModel.Store.FK_ACTIVIDAD_USUARIO_USUARIO">
+          <AssociationSet Name="FK_ACTIVIDAD_USUARIO" Association="BienestarModel.Store.FK_ACTIVIDAD_USUARIO">
             <End Role="USUARIO" EntitySet="USUARIO" />
-            <End Role="ACTIVIDAD_USUARIO" EntitySet="ACTIVIDAD_USUARIO" />
+            <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
           </AssociationSet>
           <AssociationSet Name="FK_ADJUNTO_ACTIVIDAD" Association="BienestarModel.Store.FK_ADJUNTO_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
-            <End Role="ADJUNTO" EntitySet="ADJUNTO" />
+            <End Role="ACTIVIDAD_ADJUNTO" EntitySet="ACTIVIDAD_ADJUNTO" />
           </AssociationSet>
           <AssociationSet Name="FK_ASISTENCIA_ALUMNO" Association="BienestarModel.Store.FK_ASISTENCIA_ALUMNO">
             <End Role="ALUMNO" EntitySet="ALUMNO" />
@@ -122,6 +112,18 @@
           <Property Name="FECHA" Type="datetime" />
           <Property Name="ESTADO" Type="int" Nullable="false" />
           <Property Name="OBSERVACION" Type="nvarchar(max)" />
+          <Property Name="CODIGOACTIVIDADGENERAL" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOUSUARIO" Type="numeric" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ACTIVIDAD_ADJUNTO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
+          <Property Name="ADJUNTO" Type="varbinary(max)" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CONTENTTYPE" Type="varchar" Nullable="false" MaxLength="20" />
         </EntityType>
         <EntityType Name="ACTIVIDAD_GENERAL">
           <Key>
@@ -129,34 +131,6 @@
           </Key>
           <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="ACTIVIDAD_GENERAL_ACTIVIDAD">
-          <Key>
-            <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
-            <PropertyRef Name="CODIGOACTIVIDAD" />
-          </Key>
-          <Property Name="CODIGOACTIVIDADGENERAL" Type="numeric" Nullable="false" />
-          <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
-          <Property Name="ESTADO" Type="bit" />
-        </EntityType>
-        <EntityType Name="ACTIVIDAD_USUARIO">
-          <Key>
-            <PropertyRef Name="CODIGOUSUARIO" />
-            <PropertyRef Name="CODIGOACTIVIDAD" />
-          </Key>
-          <Property Name="CODIGOUSUARIO" Type="numeric" Nullable="false" />
-          <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
-          <Property Name="ESTADO" Type="bit" />
-        </EntityType>
-        <EntityType Name="ADJUNTO">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-            <PropertyRef Name="CODIGOACTIVIDAD" />
-          </Key>
-          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
-          <Property Name="ADJUNTO" Type="varbinary(max)" Nullable="false" />
-          <Property Name="NOMBRE" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ALUMNO">
           <Key>
@@ -278,71 +252,46 @@
           </Key>
           <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="NOMBREUSUARIO" Type="varchar" Nullable="false" MaxLength="20" />
-          <Property Name="NOMBRECOMPLETO" Type="varchar" MaxLength="50" />
+          <Property Name="NOMBRECOMPLETO" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="CEDULA" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="CORREO" Type="varchar" Nullable="false" MaxLength="40" />
           <Property Name="CONTRASENAANTERIOR" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="CONTRASENAACTUAL" Type="varchar" Nullable="false" MaxLength="10" />
-          <Property Name="TIPO" Type="varchar" MaxLength="10" />
           <Property Name="ESTADO" Type="bit" Nullable="false" />
           <Property Name="CODIGOROL" Type="numeric" Nullable="false" />
         </EntityType>
-        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
-          <End Role="ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
-          <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
+        <Association Name="FK_ACTIVIDAD_ACTIVIDAD_GENERAL">
           <End Role="ACTIVIDAD_GENERAL" Type="BienestarModel.Store.ACTIVIDAD_GENERAL" Multiplicity="1" />
-          <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
+          <End Role="ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD_GENERAL">
               <PropertyRef Name="CODIGO" />
             </Principal>
-            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
+            <Dependent Role="ACTIVIDAD">
               <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ACTIVIDAD_USUARIO_ACTIVIDAD">
-          <End Role="ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
-          <End Role="ACTIVIDAD_USUARIO" Type="BienestarModel.Store.ACTIVIDAD_USUARIO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="ACTIVIDAD_USUARIO">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ACTIVIDAD_USUARIO_USUARIO">
+        <Association Name="FK_ACTIVIDAD_USUARIO">
           <End Role="USUARIO" Type="BienestarModel.Store.USUARIO" Multiplicity="1" />
-          <End Role="ACTIVIDAD_USUARIO" Type="BienestarModel.Store.ACTIVIDAD_USUARIO" Multiplicity="*" />
+          <End Role="ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="USUARIO">
               <PropertyRef Name="CODIGO" />
             </Principal>
-            <Dependent Role="ACTIVIDAD_USUARIO">
+            <Dependent Role="ACTIVIDAD">
               <PropertyRef Name="CODIGOUSUARIO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ADJUNTO_ACTIVIDAD">
           <End Role="ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
-          <End Role="ADJUNTO" Type="BienestarModel.Store.ADJUNTO" Multiplicity="*" />
+          <End Role="ACTIVIDAD_ADJUNTO" Type="BienestarModel.Store.ACTIVIDAD_ADJUNTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD">
               <PropertyRef Name="CODIGO" />
             </Principal>
-            <Dependent Role="ADJUNTO">
+            <Dependent Role="ACTIVIDAD_ADJUNTO">
               <PropertyRef Name="CODIGOACTIVIDAD" />
             </Dependent>
           </ReferentialConstraint>
@@ -542,10 +491,8 @@
         <EntityContainer Name="bienestarEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ACCESOes" EntityType="BienestarModel.ACCESO" />
           <EntitySet Name="ACTIVIDADs" EntityType="BienestarModel.ACTIVIDAD" />
+          <EntitySet Name="ACTIVIDAD_ADJUNTO" EntityType="BienestarModel.ACTIVIDAD_ADJUNTO" />
           <EntitySet Name="ACTIVIDAD_GENERAL" EntityType="BienestarModel.ACTIVIDAD_GENERAL" />
-          <EntitySet Name="ACTIVIDAD_GENERAL_ACTIVIDAD" EntityType="BienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" />
-          <EntitySet Name="ACTIVIDAD_USUARIO" EntityType="BienestarModel.ACTIVIDAD_USUARIO" />
-          <EntitySet Name="ADJUNTOes" EntityType="BienestarModel.ADJUNTO" />
           <EntitySet Name="ALUMNOes" EntityType="BienestarModel.ALUMNO" />
           <EntitySet Name="ASISTENCIAs" EntityType="BienestarModel.ASISTENCIA" />
           <EntitySet Name="DATOS_SISTEMA" EntityType="BienestarModel.DATOS_SISTEMA" />
@@ -563,29 +510,21 @@
             <End Role="ACCESO" EntitySet="ACCESOes" />
             <End Role="ROL_ACCESO" EntitySet="ROL_ACCESO" />
           </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" Association="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
+          <AssociationSet Name="FK_ACTIVIDAD_ACTIVIDAD_GENERAL" Association="BienestarModel.FK_ACTIVIDAD_ACTIVIDAD_GENERAL">
+            <End Role="ACTIVIDAD_GENERAL" EntitySet="ACTIVIDAD_GENERAL" />
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
-            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
           </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_USUARIO_ACTIVIDAD" Association="BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD">
+          <AssociationSet Name="FK_ACTIVIDAD_USUARIO" Association="BienestarModel.FK_ACTIVIDAD_USUARIO">
+            <End Role="USUARIO" EntitySet="USUARIOs" />
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
-            <End Role="ACTIVIDAD_USUARIO" EntitySet="ACTIVIDAD_USUARIO" />
           </AssociationSet>
           <AssociationSet Name="FK_ADJUNTO_ACTIVIDAD" Association="BienestarModel.FK_ADJUNTO_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
-            <End Role="ADJUNTO" EntitySet="ADJUNTOes" />
+            <End Role="ACTIVIDAD_ADJUNTO" EntitySet="ACTIVIDAD_ADJUNTO" />
           </AssociationSet>
           <AssociationSet Name="FK_GRUPO_ACTIVIDAD_ACTIVIDAD" Association="BienestarModel.FK_GRUPO_ACTIVIDAD_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
             <End Role="GRUPO_ACTIVIDAD" EntitySet="GRUPO_ACTIVIDAD" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" Association="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
-            <End Role="ACTIVIDAD_GENERAL" EntitySet="ACTIVIDAD_GENERAL" />
-            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ACTIVIDAD_USUARIO_USUARIO" Association="BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO">
-            <End Role="USUARIO" EntitySet="USUARIOs" />
-            <End Role="ACTIVIDAD_USUARIO" EntitySet="ACTIVIDAD_USUARIO" />
           </AssociationSet>
           <AssociationSet Name="FK_ASISTENCIA_ALUMNO" Association="BienestarModel.FK_ASISTENCIA_ALUMNO">
             <End Role="ALUMNO" EntitySet="ALUMNOes" />
@@ -657,10 +596,23 @@
           <Property Type="DateTime" Name="FECHA" />
           <Property Type="Int32" Name="ESTADO" Nullable="false" />
           <Property Type="String" Name="OBSERVACION" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ACTIVIDAD_GENERAL_ACTIVIDAD" Relationship="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ACTIVIDAD_GENERAL_ACTIVIDAD" />
-          <NavigationProperty Name="ACTIVIDAD_USUARIO" Relationship="BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ACTIVIDAD_USUARIO" />
-          <NavigationProperty Name="ADJUNTOes" Relationship="BienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ADJUNTO" />
+          <Property Type="Decimal" Name="CODIGOACTIVIDADGENERAL" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOUSUARIO" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="ACTIVIDAD_GENERAL" Relationship="BienestarModel.FK_ACTIVIDAD_ACTIVIDAD_GENERAL" FromRole="ACTIVIDAD" ToRole="ACTIVIDAD_GENERAL" />
+          <NavigationProperty Name="USUARIO" Relationship="BienestarModel.FK_ACTIVIDAD_USUARIO" FromRole="ACTIVIDAD" ToRole="USUARIO" />
+          <NavigationProperty Name="ACTIVIDAD_ADJUNTO" Relationship="BienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ACTIVIDAD_ADJUNTO" />
           <NavigationProperty Name="GRUPO_ACTIVIDAD" Relationship="BienestarModel.FK_GRUPO_ACTIVIDAD_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="GRUPO_ACTIVIDAD" />
+        </EntityType>
+        <EntityType Name="ACTIVIDAD_ADJUNTO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOACTIVIDAD" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Binary" Name="ADJUNTO" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="CONTENTTYPE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ACTIVIDAD" Relationship="BienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ACTIVIDAD_ADJUNTO" ToRole="ACTIVIDAD" />
         </EntityType>
         <EntityType Name="ACTIVIDAD_GENERAL">
           <Key>
@@ -668,40 +620,7 @@
           </Key>
           <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ACTIVIDAD_GENERAL_ACTIVIDAD" Relationship="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" FromRole="ACTIVIDAD_GENERAL" ToRole="ACTIVIDAD_GENERAL_ACTIVIDAD" />
-        </EntityType>
-        <EntityType Name="ACTIVIDAD_GENERAL_ACTIVIDAD">
-          <Key>
-            <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
-            <PropertyRef Name="CODIGOACTIVIDAD" />
-          </Key>
-          <Property Type="Decimal" Name="CODIGOACTIVIDADGENERAL" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="CODIGOACTIVIDAD" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="ESTADO" />
-          <NavigationProperty Name="ACTIVIDAD" Relationship="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" FromRole="ACTIVIDAD_GENERAL_ACTIVIDAD" ToRole="ACTIVIDAD" />
-          <NavigationProperty Name="ACTIVIDAD_GENERAL" Relationship="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" FromRole="ACTIVIDAD_GENERAL_ACTIVIDAD" ToRole="ACTIVIDAD_GENERAL" />
-        </EntityType>
-        <EntityType Name="ACTIVIDAD_USUARIO">
-          <Key>
-            <PropertyRef Name="CODIGOUSUARIO" />
-            <PropertyRef Name="CODIGOACTIVIDAD" />
-          </Key>
-          <Property Type="Decimal" Name="CODIGOUSUARIO" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Decimal" Name="CODIGOACTIVIDAD" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="ESTADO" />
-          <NavigationProperty Name="ACTIVIDAD" Relationship="BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD" FromRole="ACTIVIDAD_USUARIO" ToRole="ACTIVIDAD" />
-          <NavigationProperty Name="USUARIO" Relationship="BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO" FromRole="ACTIVIDAD_USUARIO" ToRole="USUARIO" />
-        </EntityType>
-        <EntityType Name="ADJUNTO">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-            <PropertyRef Name="CODIGOACTIVIDAD" />
-          </Key>
-          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Decimal" Name="CODIGOACTIVIDAD" Nullable="false" Precision="18" Scale="0" />
-          <Property Type="Binary" Name="ADJUNTO1" Nullable="false" MaxLength="Max" FixedLength="false" />
-          <Property Type="String" Name="NOMBRE" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ACTIVIDAD" Relationship="BienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ADJUNTO" ToRole="ACTIVIDAD" />
+          <NavigationProperty Name="ACTIVIDADs" Relationship="BienestarModel.FK_ACTIVIDAD_ACTIVIDAD_GENERAL" FromRole="ACTIVIDAD_GENERAL" ToRole="ACTIVIDAD" />
         </EntityType>
         <EntityType Name="ALUMNO">
           <Key>
@@ -850,15 +769,14 @@
           </Key>
           <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="NOMBREUSUARIO" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="NOMBRECOMPLETO" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="NOMBRECOMPLETO" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CEDULA" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CORREO" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CONTRASENAANTERIOR" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="CONTRASENAACTUAL" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Type="String" Name="TIPO" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="ESTADO" Nullable="false" />
           <Property Type="Decimal" Name="CODIGOROL" Nullable="false" Precision="18" Scale="0" />
-          <NavigationProperty Name="ACTIVIDAD_USUARIO" Relationship="BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO" FromRole="USUARIO" ToRole="ACTIVIDAD_USUARIO" />
+          <NavigationProperty Name="ACTIVIDADs" Relationship="BienestarModel.FK_ACTIVIDAD_USUARIO" FromRole="USUARIO" ToRole="ACTIVIDAD" />
           <NavigationProperty Name="ROL" Relationship="BienestarModel.FK_USUARIO_ROL" FromRole="USUARIO" ToRole="ROL" />
         </EntityType>
         <Association Name="FK_ROL_MODULO_MODULO1">
@@ -873,38 +791,38 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
-          <End Type="BienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
-          <End Type="BienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
+        <Association Name="FK_ACTIVIDAD_ACTIVIDAD_GENERAL">
+          <End Type="BienestarModel.ACTIVIDAD_GENERAL" Role="ACTIVIDAD_GENERAL" Multiplicity="1" />
+          <End Type="BienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ACTIVIDAD">
+            <Principal Role="ACTIVIDAD_GENERAL">
               <PropertyRef Name="CODIGO" />
             </Principal>
-            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
+            <Dependent Role="ACTIVIDAD">
+              <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ACTIVIDAD_USUARIO_ACTIVIDAD">
-          <End Type="BienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
-          <End Type="BienestarModel.ACTIVIDAD_USUARIO" Role="ACTIVIDAD_USUARIO" Multiplicity="*" />
+        <Association Name="FK_ACTIVIDAD_USUARIO">
+          <End Type="BienestarModel.USUARIO" Role="USUARIO" Multiplicity="1" />
+          <End Type="BienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ACTIVIDAD">
+            <Principal Role="USUARIO">
               <PropertyRef Name="CODIGO" />
             </Principal>
-            <Dependent Role="ACTIVIDAD_USUARIO">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
+            <Dependent Role="ACTIVIDAD">
+              <PropertyRef Name="CODIGOUSUARIO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ADJUNTO_ACTIVIDAD">
           <End Type="BienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
-          <End Type="BienestarModel.ADJUNTO" Role="ADJUNTO" Multiplicity="*" />
+          <End Type="BienestarModel.ACTIVIDAD_ADJUNTO" Role="ACTIVIDAD_ADJUNTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ACTIVIDAD">
               <PropertyRef Name="CODIGO" />
             </Principal>
-            <Dependent Role="ADJUNTO">
+            <Dependent Role="ACTIVIDAD_ADJUNTO">
               <PropertyRef Name="CODIGOACTIVIDAD" />
             </Dependent>
           </ReferentialConstraint>
@@ -918,30 +836,6 @@
             </Principal>
             <Dependent Role="GRUPO_ACTIVIDAD">
               <PropertyRef Name="CODIGOACTIVIDAD" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
-          <End Type="BienestarModel.ACTIVIDAD_GENERAL" Role="ACTIVIDAD_GENERAL" Multiplicity="1" />
-          <End Type="BienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ACTIVIDAD_GENERAL">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
-              <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ACTIVIDAD_USUARIO_USUARIO">
-          <End Type="BienestarModel.USUARIO" Role="USUARIO" Multiplicity="1" />
-          <End Type="BienestarModel.ACTIVIDAD_USUARIO" Role="ACTIVIDAD_USUARIO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="USUARIO">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="ACTIVIDAD_USUARIO">
-              <PropertyRef Name="CODIGOUSUARIO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1118,6 +1012,8 @@
           <EntitySetMapping Name="ACTIVIDADs">
             <EntityTypeMapping TypeName="BienestarModel.ACTIVIDAD">
               <MappingFragment StoreEntitySet="ACTIVIDAD">
+                <ScalarProperty Name="CODIGOUSUARIO" ColumnName="CODIGOUSUARIO" />
+                <ScalarProperty Name="CODIGOACTIVIDADGENERAL" ColumnName="CODIGOACTIVIDADGENERAL" />
                 <ScalarProperty Name="OBSERVACION" ColumnName="OBSERVACION" />
                 <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
                 <ScalarProperty Name="FECHA" ColumnName="FECHA" />
@@ -1126,38 +1022,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ACTIVIDAD_GENERAL">
-            <EntityTypeMapping TypeName="BienestarModel.ACTIVIDAD_GENERAL">
-              <MappingFragment StoreEntitySet="ACTIVIDAD_GENERAL">
+          <EntitySetMapping Name="ACTIVIDAD_ADJUNTO">
+            <EntityTypeMapping TypeName="BienestarModel.ACTIVIDAD_ADJUNTO">
+              <MappingFragment StoreEntitySet="ACTIVIDAD_ADJUNTO">
+                <ScalarProperty Name="CONTENTTYPE" ColumnName="CONTENTTYPE" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ADJUNTO" ColumnName="ADJUNTO" />
+                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ACTIVIDAD_GENERAL_ACTIVIDAD">
-            <EntityTypeMapping TypeName="BienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD">
-              <MappingFragment StoreEntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
-                <ScalarProperty Name="CODIGOACTIVIDADGENERAL" ColumnName="CODIGOACTIVIDADGENERAL" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ACTIVIDAD_USUARIO">
-            <EntityTypeMapping TypeName="BienestarModel.ACTIVIDAD_USUARIO">
-              <MappingFragment StoreEntitySet="ACTIVIDAD_USUARIO">
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
-                <ScalarProperty Name="CODIGOUSUARIO" ColumnName="CODIGOUSUARIO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ADJUNTOes">
-            <EntityTypeMapping TypeName="BienestarModel.ADJUNTO">
-              <MappingFragment StoreEntitySet="ADJUNTO">
+          <EntitySetMapping Name="ACTIVIDAD_GENERAL">
+            <EntityTypeMapping TypeName="BienestarModel.ACTIVIDAD_GENERAL">
+              <MappingFragment StoreEntitySet="ACTIVIDAD_GENERAL">
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="ADJUNTO1" ColumnName="ADJUNTO" />
-                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1284,7 +1163,6 @@
               <MappingFragment StoreEntitySet="USUARIO">
                 <ScalarProperty Name="CODIGOROL" ColumnName="CODIGOROL" />
                 <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="TIPO" ColumnName="TIPO" />
                 <ScalarProperty Name="CONTRASENAACTUAL" ColumnName="CONTRASENAACTUAL" />
                 <ScalarProperty Name="CONTRASENAANTERIOR" ColumnName="CONTRASENAANTERIOR" />
                 <ScalarProperty Name="CORREO" ColumnName="CORREO" />
@@ -1316,148 +1194,119 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="ModelBienestar">
-        <EntityTypeShape EntityType="BienestarModel.ACCESO" Width="1.5" PointX="1.5" PointY="19.5" Height="1.595683593749996" />
-        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD" Width="1.5" PointX="0.75" PointY="6.875" Height="2.749492187499996" />
-        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD_GENERAL" Width="1.5" PointX="0.75" PointY="10.5" Height="1.595683593749996" />
-        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" Width="1.5" PointX="3" PointY="7.25" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD_USUARIO" Width="1.5" PointX="3" PointY="4.25" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="BienestarModel.ADJUNTO" Width="1.5" PointX="3" PointY="12.75" Height="1.9802864583333246" />
-        <EntityTypeShape EntityType="BienestarModel.ALUMNO" Width="1.5" PointX="8.75" PointY="6.375" Height="2.1725878906250102" />
-        <EntityTypeShape EntityType="BienestarModel.ASISTENCIA" Width="1.5" PointX="11" PointY="3.75" Height="2.1725878906250102" />
-        <EntityTypeShape EntityType="BienestarModel.DATOS_SISTEMA" Width="1.5" PointX="5.75" PointY="2.625" Height="1.7879850260416674" />
-        <EntityTypeShape EntityType="BienestarModel.ENCUESTA" Width="1.5" PointX="11.75" PointY="0.75" Height="2.1725878906250102" />
-        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_PREGUNTA" Width="1.5" PointX="11.75" PointY="10.625" Height="2.5571907552083246" />
-        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_RESPUESTA" Width="1.5" PointX="8.75" PointY="9.5" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_RESPUESTA_ALUMNO" Width="1.5" PointX="11" PointY="7.25" Height="2.5571907552083246" />
-        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_RESPUESTA_TEXTO" Width="1.5" PointX="14" PointY="6.25" Height="2.5571907552083246" />
-        <EntityTypeShape EntityType="BienestarModel.GRUPO" Width="1.5" PointX="3.75" PointY="1.125" Height="2.1725878906250102" />
-        <EntityTypeShape EntityType="BienestarModel.GRUPO_ACTIVIDAD" Width="1.5" PointX="6" PointY="7.25" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="BienestarModel.ROL" Width="1.5" PointX="1.5" PointY="16.25" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="BienestarModel.ROL_ACCESO" Width="1.5" PointX="3.75" PointY="16.25" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="BienestarModel.USUARIO" Width="1.5" PointX="0.75" PointY="2.625" Height="3.3263964843750102" />
+        <EntityTypeShape EntityType="BienestarModel.ACCESO" Width="1.5" PointX="0.75" PointY="2" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD" Width="1.5" PointX="5.25" PointY="7" Height="3.1340950520833308" />
+        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD_ADJUNTO" Width="1.5" PointX="7.5" PointY="7.5" Height="2.1725878906249951" />
+        <EntityTypeShape EntityType="BienestarModel.ACTIVIDAD_GENERAL" Width="1.5" PointX="3" PointY="11.75" Height="1.595683593749996" />
+        <EntityTypeShape EntityType="BienestarModel.ALUMNO" Width="1.5" PointX="9.75" PointY="5.375" Height="2.1725878906250102" />
+        <EntityTypeShape EntityType="BienestarModel.ASISTENCIA" Width="1.5" PointX="12" PointY="4.5" Height="2.1725878906250102" />
+        <EntityTypeShape EntityType="BienestarModel.DATOS_SISTEMA" Width="1.5" PointX="7.75" PointY="1.625" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="BienestarModel.ENCUESTA" Width="1.5" PointX="12.75" PointY="0.75" Height="2.1725878906250102" />
+        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_PREGUNTA" Width="1.5" PointX="12.75" PointY="11.625" Height="2.5571907552083246" />
+        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_RESPUESTA" Width="1.5" PointX="9.75" PointY="8.5" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_RESPUESTA_ALUMNO" Width="1.5" PointX="12" PointY="8.25" Height="2.5571907552083246" />
+        <EntityTypeShape EntityType="BienestarModel.ENCUESTA_RESPUESTA_TEXTO" Width="1.5" PointX="15" PointY="5.25" Height="2.5571907552083246" />
+        <EntityTypeShape EntityType="BienestarModel.GRUPO" Width="1.5" PointX="5.25" PointY="3.5" Height="2.1725878906250102" />
+        <EntityTypeShape EntityType="BienestarModel.GRUPO_ACTIVIDAD" Width="1.5" PointX="7.5" PointY="4.625" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="BienestarModel.ROL" Width="1.5" PointX="0.75" PointY="4.875" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="BienestarModel.ROL_ACCESO" Width="1.5" PointX="3" PointY="3.875" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="BienestarModel.USUARIO" Width="1.5" PointX="3" PointY="7" Height="3.1340950520833379" />
         <AssociationConnector Association="BienestarModel.FK_ROL_MODULO_MODULO1" >
-          <ConnectorPoint PointX="3" PointY="20.297841796874998" />
-          <ConnectorPoint PointX="4.5" PointY="20.297841796874998" />
-          <ConnectorPoint PointX="4.5" PointY="18.230286458333339" />
+          <ConnectorPoint PointX="2.25" PointY="2.7978417968750016" />
+          <ConnectorPoint PointX="3.75" PointY="2.7978417968750016" />
+          <ConnectorPoint PointX="3.75" PointY="3.875" />
         </AssociationConnector>
-        <AssociationConnector Association="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" >
-          <ConnectorPoint PointX="2.25" PointY="8.24014322916667" />
-          <ConnectorPoint PointX="2.7135416666666665" PointY="8.24014322916667" />
-          <ConnectorPoint PointX="2.8802083333333335" PointY="8.24014322916667" />
-          <ConnectorPoint PointX="3" PointY="8.24014322916667" />
+        <AssociationConnector Association="BienestarModel.FK_ACTIVIDAD_ACTIVIDAD_GENERAL" >
+          <ConnectorPoint PointX="4.5" PointY="12.547841796874998" />
+          <ConnectorPoint PointX="6" PointY="12.547841796874998" />
+          <ConnectorPoint PointX="6" PointY="10.134095052083332" />
         </AssociationConnector>
-        <AssociationConnector Association="BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD" >
-          <ConnectorPoint PointX="2.25" PointY="6.8819220769230771" />
-          <ConnectorPoint PointX="2.65625" PointY="6.4756720769230771" />
-          <ConnectorPoint PointX="2.65625" PointY="6.5740364583333388" />
-          <ConnectorPoint PointX="2.7379494349011204" PointY="6.4923370234322171" />
-          <ConnectorPoint PointX="2.8558005650988791" PointY="6.37448589323446" />
-          <ConnectorPoint PointX="3" PointY="6.2302864583333388" />
+        <AssociationConnector Association="BienestarModel.FK_ACTIVIDAD_USUARIO" >
+          <ConnectorPoint PointX="4.5" PointY="8.5670475260416659" />
+          <ConnectorPoint PointX="5.25" PointY="8.5670475260416659" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ADJUNTO_ACTIVIDAD" >
-          <ConnectorPoint PointX="2.2499999999999996" PointY="9.624492187499996" />
-          <ConnectorPoint PointX="2.625" PointY="9.999492187499996" />
-          <ConnectorPoint PointX="2.625" PointY="13.740143229166662" />
-          <ConnectorPoint PointX="2.7135416666666665" PointY="13.740143229166662" />
-          <ConnectorPoint PointX="2.8802083333333335" PointY="13.740143229166662" />
-          <ConnectorPoint PointX="3" PointY="13.740143229166662" />
+          <ConnectorPoint PointX="6.75" PointY="8.586293945312498" />
+          <ConnectorPoint PointX="7.5" PointY="8.586293945312498" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_GRUPO_ACTIVIDAD_ACTIVIDAD" >
-          <ConnectorPoint PointX="2.25" PointY="6.900383615384615" />
-          <ConnectorPoint PointX="2.5" PointY="6.6503836153846159" />
-          <ConnectorPoint PointX="2.5" PointY="6.875" />
-          <ConnectorPoint PointX="2.7135416666666665" PointY="6.8749999999999991" />
-          <ConnectorPoint PointX="2.8802083333333335" PointY="6.875" />
-          <ConnectorPoint PointX="5.625" PointY="6.875" />
-          <ConnectorPoint PointX="6" PointY="7.25" />
-        </AssociationConnector>
-        <AssociationConnector Association="BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" >
-          <ConnectorPoint PointX="2.25" PointY="11.297841796874998" />
-          <ConnectorPoint PointX="2.5416666666666665" PointY="11.297841796874998" />
-          <ConnectorPoint PointX="2.7083333333333335" PointY="11.297841796874998" />
-          <ConnectorPoint PointX="2.7135416666666665" PointY="11.297841796874998" />
-          <ConnectorPoint PointX="2.8802083333333335" PointY="11.297841796874998" />
-          <ConnectorPoint PointX="3.75" PointY="11.297841796874998" />
-          <ConnectorPoint PointX="3.75" PointY="9.2302864583333388" />
-        </AssociationConnector>
-        <AssociationConnector Association="BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO" >
-          <ConnectorPoint PointX="2.25" PointY="5.1006982421875051" />
-          <ConnectorPoint PointX="2.7135416666666665" PointY="5.1006982421875042" />
-          <ConnectorPoint PointX="2.8802083333333335" PointY="5.1006982421875051" />
-          <ConnectorPoint PointX="3" PointY="5.1006982421875051" />
+          <ConnectorPoint PointX="6.75" PointY="7" />
+          <ConnectorPoint PointX="7.125" PointY="6.625" />
+          <ConnectorPoint PointX="7.125" PointY="6.9802864583333388" />
+          <ConnectorPoint PointX="7.5" PointY="6.6052864583333388" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ASISTENCIA_ALUMNO" >
-          <ConnectorPoint PointX="9.5" PointY="6.375" />
-          <ConnectorPoint PointX="9.5" PointY="4.8362939453125051" />
-          <ConnectorPoint PointX="11" PointY="4.8362939453125051" />
+          <ConnectorPoint PointX="11.25" PointY="6.0237939453125051" />
+          <ConnectorPoint PointX="12" PointY="6.0237939453125051" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" >
-          <ConnectorPoint PointX="10.25" PointY="7.8987939453125051" />
-          <ConnectorPoint PointX="11" PointY="7.8987939453125051" />
+          <ConnectorPoint PointX="11.25" PointY="7.546433044471164" />
+          <ConnectorPoint PointX="11.625" PointY="7.921433044471164" />
+          <ConnectorPoint PointX="11.625" PointY="9.5285953776041623" />
+          <ConnectorPoint PointX="12" PointY="9.5285953776041623" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" >
-          <ConnectorPoint PointX="10.25" PointY="6.78125" />
-          <ConnectorPoint PointX="12.822916666666666" PointY="6.7812499999999991" />
-          <ConnectorPoint PointX="12.989583333333334" PointY="6.78125" />
-          <ConnectorPoint PointX="13.026044166666667" PointY="6.7812499999999991" />
-          <ConnectorPoint PointX="13.192710833333335" PointY="6.78125" />
-          <ConnectorPoint PointX="14" PointY="6.78125" />
+          <ConnectorPoint PointX="11.25" PointY="7.1095079675480939" />
+          <ConnectorPoint PointX="13.619789166666665" PointY="7.109507967548093" />
+          <ConnectorPoint PointX="13.786455833333333" PointY="7.1095079675480939" />
+          <ConnectorPoint PointX="13.822916666666666" PointY="7.109507967548093" />
+          <ConnectorPoint PointX="13.989583333333334" PointY="7.1095079675480939" />
+          <ConnectorPoint PointX="14.026044166666667" PointY="7.109507967548093" />
+          <ConnectorPoint PointX="14.263022083333334" PointY="7.1095079675480939" />
+          <ConnectorPoint PointX="15" PointY="7.1095079675480939" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ASISTENCIA_GRUPO" >
-          <ConnectorPoint PointX="5.25" PointY="1.8437505" />
-          <ConnectorPoint PointX="7.322916666666667" PointY="1.8437504999999994" />
-          <ConnectorPoint PointX="7.489583333333333" PointY="1.8437505" />
-          <ConnectorPoint PointX="11.5" PointY="1.8437505" />
-          <ConnectorPoint PointX="11.5" PointY="3.1725878906250102" />
-          <ConnectorPoint PointX="11.75" PointY="3.1725878906250102" />
-          <ConnectorPoint PointX="11.75" PointY="3.75" />
+          <ConnectorPoint PointX="6.75" PointY="4.53125" />
+          <ConnectorPoint PointX="12" PointY="4.53125" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" >
-          <ConnectorPoint PointX="12.90625" PointY="2.9225878906250102" />
-          <ConnectorPoint PointX="12.90625" PointY="10.625" />
+          <ConnectorPoint PointX="13.90625" PointY="2.9225878906250102" />
+          <ConnectorPoint PointX="13.90625" PointY="11.625" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" >
-          <ConnectorPoint PointX="13.1093775" PointY="2.9225878906250102" />
-          <ConnectorPoint PointX="13.1093775" PointY="8.5285953776041623" />
-          <ConnectorPoint PointX="12.989583333333334" PointY="8.5285953776041623" />
-          <ConnectorPoint PointX="12.822916666666666" PointY="8.5285953776041623" />
-          <ConnectorPoint PointX="12.5" PointY="8.5285953776041623" />
+          <ConnectorPoint PointX="14.1093775" PointY="2.9225878906250102" />
+          <ConnectorPoint PointX="14.1093775" PointY="9.5285953776041623" />
+          <ConnectorPoint PointX="13.989583333333334" PointY="9.5285953776041623" />
+          <ConnectorPoint PointX="13.822916666666666" PointY="9.5285953776041623" />
+          <ConnectorPoint PointX="13.5" PointY="9.5285953776041623" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" >
-          <ConnectorPoint PointX="12.7031225" PointY="2.9225878906250102" />
-          <ConnectorPoint PointX="12.7031225" PointY="6.4843725000000063" />
-          <ConnectorPoint PointX="12.822916666666666" PointY="6.4843725000000054" />
-          <ConnectorPoint PointX="12.989583333333334" PointY="6.4843725000000063" />
-          <ConnectorPoint PointX="13.026044166666667" PointY="6.4843725000000054" />
-          <ConnectorPoint PointX="13.192710833333335" PointY="6.4843725000000063" />
-          <ConnectorPoint PointX="14" PointY="6.4843725000000063" />
+          <ConnectorPoint PointX="13.7031225" PointY="2.9225878906250102" />
+          <ConnectorPoint PointX="13.7031225" PointY="7.4896018613782029" />
+          <ConnectorPoint PointX="13.822916666666666" PointY="7.4896018613782021" />
+          <ConnectorPoint PointX="13.989583333333334" PointY="7.4896018613782029" />
+          <ConnectorPoint PointX="14.026044166666667" PointY="7.4896018613782021" />
+          <ConnectorPoint PointX="14.263022083333334" PointY="7.4896018613782029" />
+          <ConnectorPoint PointX="15" PointY="7.4896018613782029" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" >
-          <ConnectorPoint PointX="11.75" PointY="11.052643229166669" />
-          <ConnectorPoint PointX="10.25" PointY="11.052643229166669" />
+          <ConnectorPoint PointX="12.75" PointY="12.903595377604162" />
+          <ConnectorPoint PointX="10.5" PointY="12.903595377604162" />
+          <ConnectorPoint PointX="10.5" PointY="10.480286458333339" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" >
-          <ConnectorPoint PointX="13.17968875" PointY="10.625" />
-          <ConnectorPoint PointX="13.17968875" PointY="7.0156274999999937" />
-          <ConnectorPoint PointX="14" PointY="7.0156274999999937" />
+          <ConnectorPoint PointX="14.17968875" PointY="11.625" />
+          <ConnectorPoint PointX="14.17968875" PointY="6.8910454290865584" />
+          <ConnectorPoint PointX="15" PointY="6.8910454290865584" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" >
-          <ConnectorPoint PointX="10.25" PointY="9.6535953776041623" />
-          <ConnectorPoint PointX="11" PointY="9.6535953776041623" />
+          <ConnectorPoint PointX="11.25" PointY="8.9517976888020812" />
+          <ConnectorPoint PointX="11.541666666666666" PointY="8.9517976888020812" />
+          <ConnectorPoint PointX="11.708333333333334" PointY="8.9517976888020812" />
+          <ConnectorPoint PointX="12" PointY="8.9517976888020812" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_GRUPO_ACTIVIDAD_GRUPO" >
-          <ConnectorPoint PointX="5.25" PointY="1.4531227500000064" />
-          <ConnectorPoint PointX="7.40625" PointY="1.4531227500000064" />
-          <ConnectorPoint PointX="7.40625" PointY="7.25" />
+          <ConnectorPoint PointX="6.75" PointY="5.1487939453125051" />
+          <ConnectorPoint PointX="7.5" PointY="5.1487939453125051" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ROL_MODULO_ROL" >
-          <ConnectorPoint PointX="3" PointY="17.240143229166669" />
-          <ConnectorPoint PointX="3.75" PointY="17.240143229166669" />
+          <ConnectorPoint PointX="2.25" PointY="5.3651432291666694" />
+          <ConnectorPoint PointX="3" PointY="5.3651432291666694" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_USUARIO_ROL" >
-          <ConnectorPoint PointX="2.796875" PointY="16.25" />
-          <ConnectorPoint PointX="2.796875" PointY="3.8315966210937589" />
-          <ConnectorPoint PointX="2.25" PointY="3.8315966210937589" />
+          <ConnectorPoint PointX="1.5" PointY="6.8552864583333388" />
+          <ConnectorPoint PointX="1.5" PointY="8.56704752604167" />
+          <ConnectorPoint PointX="3" PointY="8.56704752604167" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

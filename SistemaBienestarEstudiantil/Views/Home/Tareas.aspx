@@ -42,8 +42,7 @@
                 	<div class="form-group">
                         <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
                         <div class="col-md-4">                            
-                            <select ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control"
-                                ng-options="o.value as o.name for o in allGeneralActivities">
+                            <select ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities">
                             </select>
                             <br/><span class="help-block">Nombre de la actividad general</span> 
                         </div>
@@ -57,6 +56,15 @@
                             <span ng-messages="activityForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
                             </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="responsableBox">Responsable</label>
+                        <div class="col-md-4">                            
+                            <select ng-model="activityCopy.CODIGORESPONSABLE" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
+                            </select>
+                            <br/><span class="help-block">Responsable de ejecutar la actividad</span> 
                         </div>
                     </div>
 

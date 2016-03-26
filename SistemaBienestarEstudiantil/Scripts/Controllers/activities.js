@@ -56,10 +56,12 @@
             $scope.activityCopy.FECHA = $scope.toDate($scope.activityEdit.FECHA);
             $scope.activityCopy.ESTADO = $scope.activityEdit.ESTADO;
             $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
+            $scope.activityCopy.CODIGORESPONSABLE = 
             $scope.getGeneralActivities();
             $scope.getGroupLevel($scope.activityEdit.CODIGO);
             $scope.groupActivity = [];
             $scope.groupLevelActivity = [];
+            $scope.getAllResponsables();
 
             ngDialog.open({
                 template: 'editActivity.html',
@@ -71,6 +73,20 @@
                     $scope: $scope,
                     $http: $http
                 })
+            });
+        };
+
+        $scope.getAllResponsables = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllResponsables'
+            ).success(function (data, status, headers, config) {
+                console.log("Docentes... ", data);
+                $scope.allResponsables = [];
+
+                for (var i = 0; i < data.response.length; i++)
+                    $scope.allResponsables.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRECOMPLETO});
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar los docentes...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes'}]);
             });
         };
 
