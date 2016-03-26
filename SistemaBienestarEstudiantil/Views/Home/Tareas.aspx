@@ -62,7 +62,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="responsableBox">Responsable</label>
                         <div class="col-md-4">                            
-                            <select ng-model="activityCopy.CODIGORESPONSABLE" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
+                            <select ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
                             </select>
                             <br/><span class="help-block">Responsable de ejecutar la actividad</span> 
                         </div>
