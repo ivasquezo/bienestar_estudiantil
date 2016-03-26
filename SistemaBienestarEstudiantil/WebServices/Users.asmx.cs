@@ -80,7 +80,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             db.SaveChanges();
 
-            writeResponse("ok");
+            writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
         [WebMethod]
@@ -105,7 +105,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             db.SaveChanges();
 
-            writeResponse("ok");
+            writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
         [WebMethod]

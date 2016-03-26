@@ -34,6 +34,13 @@
             return n;
         };
 
+        $scope.arrayObjectIndexOf = function (arrayList, searchTerm, property) {
+            for(var i = 0, len = arrayList.length; i < len; i++) {
+                if (arrayList[i][property] === searchTerm) return i;
+            }
+            return -1;
+        }
+
         $scope.cargarUsuarios = function () {
             $scope.promise = $http.post('../../WebServices/Users.asmx/getAllUser', {
             }).success(function (data, status, headers, config) {
@@ -152,19 +159,24 @@
 
         $scope.saveEditedUser = function () {
 
-            $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
+            if (!this.userForm.$invalid) {
+                $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
                 
-                user: $scope.userCopy,
-                resetPassword: $scope.password.reset
+                    user: $scope.userCopy,
+                    resetPassword: $scope.password.reset
 
-            }).success(function (data, status, headers, config) {
-                console.log("saveEditedUser: ", data);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Datos del usuario guardados correctamente.'}]);
-            }).error(function (data, status, headers, config) {
-                console.log("error al editar el usuario...", data);
-            });
+                }).success(function (data, status, headers, config) {
+                    var index = $scope.arrayObjectIndexOf($scope.gridOptions.data, data.CODIGO, "CODIGO");
+                    $scope.gridOptions.data[index] = data;
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Datos del usuario guardados correctamente.'}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("error al editar el usuario...", data);
+                });
 
-            this.closeThisDialog();
+                this.closeThisDialog();
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+            }
         };
 
         $scope.addNewUserDB = function () {
