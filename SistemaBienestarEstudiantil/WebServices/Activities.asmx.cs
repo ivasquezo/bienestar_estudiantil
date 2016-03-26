@@ -177,7 +177,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         //    try
         //    {
         //        // Busca todos los docentes registrados
-        //        var data = db.USUARIOs.Join(db.USUARIOs, g => g.CODIGO, ga => ga.CODIGOGRUPO,
+        //        var data = db.USUARIOs.Join(db.usua, g => g.CODIGO, ga => ga.CODIGOGRUPO,
         //                   (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
         //                   .Select(x => new { x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, x.GRUPO_ACTIVIDAD.CODIGOGRUPO })
         //                   .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
@@ -369,11 +369,11 @@ namespace SistemaBienestarEstudiantil.WebServices
             if (users != null && users.Count > 0)
             {
                 // Verificar la existencia de roles en cada usuario
-                foreach (USUARIO user in users)
-                    if (user.ROLs != null && user.ROLs.Count > 0)
-                        foreach (ROL rol in user.ROLs)
-                            if (rol.NOMBRE == "DOCENTE")
-                                usersByRol.Add(user);
+                //foreach (USUARIO user in users)
+                //    if (user.USUARIO_ROL != null && user.USUARIO_ROL.Count > 0)
+                //        foreach (ROL rol in user.USUARIO_ROL)
+                //            if (rol.NOMBRE == "DOCENTE")
+                //                usersByRol.Add(user);
             }
 
             if (usersByRol != null && usersByRol.Count > 0)
