@@ -97,13 +97,7 @@
 
         this.editUser = function (code) {
 
-            var user = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
-            $scope.userCopy.CODIGO = user.CODIGO;
-            $scope.userCopy.CEDULA = user.CEDULA;
-            $scope.userCopy.CORREO = user.CORREO;
-            $scope.userCopy.NOMBREUSUARIO = user.NOMBREUSUARIO;
-            $scope.userCopy.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
-            $scope.userCopy.ESTADO = user.ESTADO;
+            $scope.userCopy = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
 
             ngDialog.open({
                 template: 'editUser.html',
@@ -166,19 +160,14 @@
 
         $scope.saveEditedUser = function () {
 
-            $http.post('../../WebServices/Users.asmx/saveUserData', {
+            $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
                 
-                userCode: $scope.userCopy.CODIGO,
-                userName: $scope.userCopy.NOMBREUSUARIO,
-                userCompleteName: $scope.userCopy.NOMBRECOMPLETO,
-                userIdentificationNumber: $scope.userCopy.CEDULA,
-                userMail: $scope.userCopy.CORREO,
-                userState: $scope.userCopy.ESTADO,
+                user: $scope.userCopy,
                 resetPassword: $scope.password.reset
 
             }).success(function (data, status, headers, config) {
                 console.log("saveEditedUser: ", data);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Datos del usuario guardados...'}]);
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Datos del usuario guardados correctamente.'}]);
             }).error(function (data, status, headers, config) {
                 console.log("error al editar el usuario...", data);
             });
@@ -190,15 +179,11 @@
 
             $http.post('../../WebServices/Users.asmx/addNewUser', {
                 
-                userName: $scope.userCopy.NOMBREUSUARIO,
-                userCompleteName: $scope.userCopy.NOMBRECOMPLETO,
-                userIdentificationNumber: $scope.userCopy.CEDULA,
-                userMail: $scope.userCopy.CORREO,
-                userState: $scope.userCopy.ESTADO
+                newUser: $scope.userCopy
 
             }).success(function (data, status, headers, config) {
                 console.log("addNewUser: ", data);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Usuario añadido...'}]);
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Usuario añadido correctamente.'}]);
                 $scope.addElementArray($scope.gridOptions.data, data);
             }).error(function (data, status, headers, config) {
                 console.log("error al añadir un nuevo usuario...", data);

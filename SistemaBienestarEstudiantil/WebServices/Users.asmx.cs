@@ -84,29 +84,23 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveUserData(
-            int userCode,
-            String userName,
-            String userCompleteName,
-            String userIdentificationNumber,
-            String userMail,
-            Boolean userState,
-            Boolean resetPassword)
+        public void saveUserData(USUARIO user, Boolean resetPassword)
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == userCode);
+            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == user.CODIGO);
 
-            usuario.NOMBREUSUARIO = userName;
-            usuario.NOMBRECOMPLETO = userCompleteName;
-            usuario.CEDULA = userIdentificationNumber;
-            usuario.CORREO = userMail;
-            usuario.ESTADO = userState;
+            usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
+            usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
+            usuario.CEDULA = user.CEDULA;
+            usuario.CORREO = user.CORREO;
+            usuario.ESTADO = user.ESTADO;
+            usuario.CODIGOROL = user.CODIGOROL;
 
             if (resetPassword)
             {
-                usuario.CONTRASENAACTUAL = userIdentificationNumber;
-                usuario.CONTRASENAANTERIOR = userIdentificationNumber;
+                usuario.CONTRASENAACTUAL = user.CEDULA;
+                usuario.CONTRASENAANTERIOR = user.CEDULA;
             }
 
             db.SaveChanges();
@@ -115,28 +109,13 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void addNewUser(
-            String userName,
-            String userCompleteName,
-            String userIdentificationNumber,
-            String userMail,
-            Boolean userState)
+        public void addNewUser(USUARIO newUser)
         {
             bienestarEntities db = new bienestarEntities();
-
-            USUARIO newUser = new USUARIO();
-
-            newUser.NOMBREUSUARIO = userName;
-            newUser.NOMBRECOMPLETO = userCompleteName;
-            newUser.CEDULA = userIdentificationNumber;
-            newUser.CORREO = userMail;
-            newUser.ESTADO = userState;
-            newUser.CONTRASENAACTUAL = userIdentificationNumber;
-            newUser.CONTRASENAANTERIOR = userIdentificationNumber;
-
+            newUser.CONTRASENAACTUAL = newUser.CEDULA;
+            newUser.CONTRASENAANTERIOR = newUser.CEDULA;
             db.USUARIOs.AddObject(newUser);
             db.SaveChanges();
-
             writeResponse(new JavaScriptSerializer().Serialize(newUser));
         }
     }
