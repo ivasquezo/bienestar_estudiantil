@@ -47,7 +47,7 @@
               {name:'Cédula', field: 'CEDULA'},
               {name:'Correo', field: 'CORREO'},
               {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html', width: 80}
+              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html', width: 80, enableFiltering: false}
             ]
         };
 

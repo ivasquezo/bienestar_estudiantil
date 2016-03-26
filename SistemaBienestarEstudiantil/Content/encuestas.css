@@ -222,8 +222,18 @@ input[type="text"].ng-valid {
 .encuestas .title-report {
     font-size: 25px;
     font-weight: bold;
-    color: #59598C;
+    color: #5C87B2;
     padding-right: 10px;
+    display: inline-block;
+    padding: 5px;
+    line-height: 23px;
+    cursor: pointer;
+    border: 1px solid #5C87B2;
+    margin-left: -5px;
+}
+.encuestas .selected {
+    background-color: #5C87B2;
+    color: white;
 }
 .encuestas .preguntas {
     font-size: 20px;
@@ -244,4 +254,13 @@ input[type="text"].ng-valid {
 }
 .encuestas .respuestas .valor {
     width: 100px;
+}
+.encuestas .student-list {
+}
+.encuestas .student-list td {
+    padding: 5px;
+    border: 1px solid #5C87B2;
+}
+.encuestas .student-list .name {
+    min-width: 250px;
 }
