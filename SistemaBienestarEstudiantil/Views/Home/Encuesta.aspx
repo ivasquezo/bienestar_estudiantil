@@ -14,8 +14,9 @@
     <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/encuesta.js?nocache=<%=RandomNumber%>"></script>
-    <div id="messages"></div>
+	<div id="messages"></div>
     <div ng-controller="EncuestaController as Main" class="encuestas">
+    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
     	<hr/>
 		<form id="formEncuesta" name="formEncuesta" ng-submit="enviarForm()">
 		<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"

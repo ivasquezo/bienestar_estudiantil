@@ -1,14 +1,30 @@
 ﻿(function () {
 
-    var app = angular.module('BienestarApp', ['ngMessages']);
+    var app = angular.module('BienestarApp', ['ngMessages','cgBusy']);
 
     app.controller('EncuestaController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
         $scope.validName = false;
+        $scope.student = {
+            CEDULA: ""
+        };
+        
+        // procesing message
+        $scope.promise = null;
+        $scope.message = 'Procesando...';
+        $scope.backdrop = true;
+        $scope.delay = 2;
+        $scope.minDuration = 2;
 
         // prepare messages
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
+
+        $scope.$watch('student.CEDULA', function() {
+            
+            if ($scope.student != null && $scope.student.CEDULA != undefined && $scope.student.CEDULA.toString().length > 10)
+                $scope.student.CEDULA = Number($scope.student.CEDULA.toString().substring(0, 10));
+        });
 
         // function for generate aleatory number for id in encuestas object, for manipulate
         $scope.generateId = function(){
@@ -18,7 +34,7 @@
         $scope.loadDefaultSurvey = function(){
 
             $scope.defaultSurvey = null;
-            $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {
+            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {
             }).success(function (data, status, headers, config) {
 
                 if (data.success != undefined && data.success) {
@@ -127,7 +143,7 @@
                 console.log("surveySelectResult:", surveySelectResult);
                 console.log("surveyTextResult:", surveyTextResult);
 
-                $http.post('../../WebServices/Encuestas.asmx/saveResponseStudent', {
+                $scope.promise = $http.post('../../WebServices/Encuestas.asmx/saveResponseStudent', {
                     listResponseSelect: surveySelectResult,
                     listResponseText: surveyTextResult
                 }).success(function (data, status, headers, config) {
@@ -168,7 +184,7 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
-                        $http.post('../../WebServices/Encuestas.asmx/getStudentByCedula', {
+                        scope.promise = $http.post('../../WebServices/Encuestas.asmx/getStudentByCedula', {
                             cedula: ngModelValue,
                             codigoEncuesta: scope.defaultSurvey.CODIGO
                         }).success(function (data, status, headers, config) {

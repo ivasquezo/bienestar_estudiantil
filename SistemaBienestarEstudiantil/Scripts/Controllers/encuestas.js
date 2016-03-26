@@ -1,30 +1,54 @@
 ﻿(function () {
 
-    var app = angular.module('BienestarApp', ['ui.grid','chart.js']);
+    var app = angular.module('BienestarApp', ['ui.grid','chart.js','cgBusy']);
 
     app.controller('EncuestasController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
+        $scope.promise = null;
+        $scope.message = 'Procesando...';
+        $scope.backdrop = true;
+        $scope.delay = 2;
+        $scope.minDuration = 2;
+
         // method for load encuestas from server
         $scope.cargarEncuestas = function () {
-            $http.post('../../WebServices/Encuestas.asmx/getAllEncuestas', {
+            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/getAllEncuestas', {
             }).success(function (data, status, headers, config) {
-                console.log("cargarEncuestas",data);
                 $scope.gridOptions.data = data;
                 $scope.loadDefaultSurvey();
+                $scope.cargarEncuestasContestadas(data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...", data);
+            });
+        };
+
+        // get survey answered
+        $scope.cargarEncuestasContestadas = function () {
+
+            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveyAnsweredCodesServices', {
+            }).success(function (data, status, headers, config) {
+                
+                for (var i = 0; i < data.length; i++) {
+                    var row = $scope.getElementArray($scope.gridOptions.data, data[i]);
+                    row.answered = true;
+                };
+
+                console.log($scope.gridOptions.data);
+
+            }).error(function (data, status, headers, config) {
+                console.log("error al cargar encuestas contestadas ...", data);
             });
         };
 
         // grid define options
         $scope.gridOptions = {
             enableSorting: true,
-            enableFiltering: false,
+            enableFiltering: true,
             selectedItems: $scope.mySelections,
             multiSelect: false,
             columnDefs: [
                 {name:'Título', field: 'TITULO'},
-                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 110}
+                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 110, enableFiltering: false}
             ]
         };
 
@@ -75,17 +99,23 @@
         }
 
         this.editEncuesta = function(code){
-            $scope.mode = "edit";
-            $scope.encuesta = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
-            $scope.addHandlerEncuesta($scope.encuesta);
+            var encuesta = $scope.getElementArray($scope.gridOptions.data, code);
+            if (encuesta.answered == undefined || !encuesta.answered) {
+                $scope.mode = "edit";
+                $scope.encuesta = angular.copy(encuesta);
+                $scope.addHandlerEncuesta($scope.encuesta);
+            } else {
+                $scope.mode = "init";
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'No se puede editar esta encuesta'}]);
+            }
         };
 
-        this.getIcon = function(code){
+        this.getSurverDefaultInput = function(code) {
             var row = $scope.getElementArray($scope.gridOptions.data, code);
-            return row.selected != undefined && row.selected == true ? "ui-icon-star" : "ui-icon-blank";
-        };
+            return row.selected != undefined && row.selected == true ? true : false;
+        }
 
-        this.setIcon = function(code){
+        this.setSurverDefaultInput = function(code) {
             var row = $scope.getElementArray($scope.gridOptions.data, code);
             if (row.selected != undefined && row.selected){
                 row.selected = false;
@@ -98,7 +128,7 @@
                 };
                 $scope.setDefaultSurvey(row);
             }
-        };
+        }
 
         $scope.separateQuestionResponse = function (encuesta) {
             for (var i = 0; i < encuesta.preguntas.length; i++) {
@@ -115,7 +145,7 @@
 
         this.showReport = function(code){
             $scope.mode = "report";
-            $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
+            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
                 surveyCode: code
             }).success(function (data, status, headers, config) {
                 $scope.separateQuestionResponse(data);
@@ -127,7 +157,7 @@
         };
 
         $scope.setDefaultSurvey = function(row){
-            $http.post('../../WebServices/Encuestas.asmx/setDefaultSurvey', {
+            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/setDefaultSurvey', {
                 surveyCode: row.CODIGO
             }).success(function (data, status, headers, config) {
                 console.log("setDefaultSurvey:",data);
@@ -289,6 +319,7 @@
             }
         };
 
+        // marca de inicio como seleccionada la encuesta habilitada para los estudiantes 
         $scope.loadDefaultSurvey = function(){
 
             $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {

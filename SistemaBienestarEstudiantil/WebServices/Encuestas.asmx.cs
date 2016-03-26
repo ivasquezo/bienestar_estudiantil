@@ -129,70 +129,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveEncuesta1(Encuesta encuestaEdited)
-        {
-            Models.ENCUESTA updatedEncuesta = convertToENCUESTA(encuestaEdited);
-
-            using (Models.bienestarEntities db = new Models.bienestarEntities())
-            {
-
-                // get current Encuesta in db
-                var encuestaInDB = db.ENCUESTAs.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
-
-                var codigosPreguntasEditadas = updatedEncuesta.ENCUESTA_PREGUNTA.Select(p => p.CODIGO).ToList();
-
-                // all questions in database from encuesta is editing
-                var preguntas = db.ENCUESTA_PREGUNTA.Where(p => p.ENCUESTA.CODIGO == updatedEncuesta.CODIGO).ToList<Models.ENCUESTA_PREGUNTA>();
-
-                // get questions for be removed, diferent to edited
-                var preguntasBorrar = encuestaInDB.ENCUESTA_PREGUNTA.Where(p => !codigosPreguntasEditadas.Contains(p.CODIGO)).ToList();
-                // mark for remove each question
-                preguntasBorrar.ForEach(p => db.ENCUESTA_PREGUNTA.DeleteObject(p));
-                db.SaveChanges();
-
-                // get code responses edited
-                List<decimal> codigoRespuestasEditadas = new List<decimal>();
-                foreach (Models.ENCUESTA_PREGUNTA ep in updatedEncuesta.ENCUESTA_PREGUNTA)
-                {
-                    codigoRespuestasEditadas.AddRange(ep.ENCUESTA_RESPUESTA.Select(r => r.CODIGO).ToList());
-                    // mark as modificated
-                    /*
-                    foreach(Models.ENCUESTA_RESPUESTA er in ep.ENCUESTA_RESPUESTA){
-                        db.ENCUESTA_RESPUESTA.Attach(er);
-                        db.ObjectStateManager.ChangeObjectState(er, System.Data.EntityState.Modified);
-                    }
-                    db.ENCUESTA_PREGUNTA.Attach(ep);
-                    db.ObjectStateManager.ChangeObjectState(ep, System.Data.EntityState.Modified);
-                    */
-                }
-
-                // get responses for be removed
-                foreach (Models.ENCUESTA_PREGUNTA ep in encuestaInDB.ENCUESTA_PREGUNTA)
-                {
-                    var respuestasBorrar = ep.ENCUESTA_RESPUESTA.Where(r => !codigoRespuestasEditadas.Contains(r.CODIGO)).ToList();
-                    respuestasBorrar.ForEach(r => db.ENCUESTA_RESPUESTA.DeleteObject(r));
-                }
-                db.SaveChanges();
-
-            }
-
-            using (Models.bienestarEntities db = new Models.bienestarEntities())
-            {
-                db.ENCUESTAs.Attach(updatedEncuesta);
-                db.ObjectStateManager.ChangeObjectState(updatedEncuesta, System.Data.EntityState.Modified);
-                db.SaveChanges();
-                writeResponse(new JavaScriptSerializer().Serialize(updatedEncuesta));
-            }
-
-            /*writeResponse("["
-                + new JavaScriptSerializer().Serialize(preguntas) + ","
-                + new JavaScriptSerializer().Serialize(preguntasBorrar) + ","
-                + new JavaScriptSerializer().Serialize(updatedEncuesta.ENCUESTA_PREGUNTA)
-                + "]");
-             */
-        }
-
-        [WebMethod]
         public void addNewEncuesta(Encuesta encuesta)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
@@ -251,7 +187,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         /// metodo devuelve el alumno si no ha respondido encuesta
         [WebMethod]
-        public void getStudentByCedula(int cedula, int codigoEncuesta)
+        public void getStudentByCedula(Decimal cedula, int codigoEncuesta)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
             ALUMNO alumno = db.ALUMNOes.Single(a => a.CEDULA == cedula);
@@ -265,6 +201,11 @@ namespace SistemaBienestarEstudiantil.WebServices
                 writeResponse(new JavaScriptSerializer().Serialize(null));
         }
 
+        /// <summary>
+        /// guarda la respuesta a la encuesta del estudiante
+        /// </summary>
+        /// <param name="listResponseSelect"></param>
+        /// <param name="listResponseText"></param>
         [WebMethod]
         public void saveResponseStudent(List<ENCUESTA_RESPUESTA_ALUMNO> listResponseSelect, List<ENCUESTA_RESPUESTA_TEXTO> listResponseText)
         {
@@ -284,14 +225,15 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse("ok");
         }
 
+        /// <summary>
+        /// devuelve json para el reporte de las respuestas de la encuesta
+        /// </summary>
+        /// <param name="surveyCode"></param>
         [WebMethod]
         public void surveysReport(int surveyCode)
         {
             bienestarEntities db = new bienestarEntities();
             ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == surveyCode);
-
-            int stuResp = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
-            int stuText = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
 
             List<ResultadoSeleccione> resultadoSeleccione = new List<ResultadoSeleccione>();
 
@@ -316,10 +258,50 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             writeResponse(
-                "{\"encuestados\": " + (stuResp > stuText ? stuResp : stuText) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\",\"preguntas\":" +
+                "{\"encuestados\": " + getSurveyAnsweredCount(surveyCode) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\",\"preguntas\":" +
                 new JavaScriptSerializer().Serialize(resultadoSeleccione)
                 + "}"
             );
+        }
+
+        //[ScriptMethod(UseHttpGet = true)]
+        [WebMethod]
+        public void surveyAnsweredCodesServices()
+        {
+            writeResponse(new JavaScriptSerializer().Serialize(getAnsweredSurveyCodes()));
+        }
+
+        /// <summary>
+        /// devuelve la cantidad de estudiantes que hicieron la encuesta
+        /// </summary>
+        /// <param name="surveyCode"></param>
+        /// <returns>cantidad</returns>
+        private int getSurveyAnsweredCount(int surveyCode)
+        {
+            bienestarEntities db = new bienestarEntities();
+            ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == surveyCode);
+            
+            int stuResp = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+            int stuText = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+            
+            return stuResp > stuText ? stuResp : stuText;
+        }
+
+        private List<int> getAnsweredSurveyCodes() {
+
+            bienestarEntities db = new bienestarEntities();
+            List<ENCUESTA> listEncuestas = db.ENCUESTAs.ToList();
+
+            List<int> surveyCodes = new List<int>();
+
+            foreach (ENCUESTA e in listEncuestas)
+            {
+                if (getSurveyAnsweredCount((int)e.CODIGO) > 0) {
+                    surveyCodes.Add((int)e.CODIGO);
+                }
+            }
+
+            return surveyCodes;
         }
 
     }

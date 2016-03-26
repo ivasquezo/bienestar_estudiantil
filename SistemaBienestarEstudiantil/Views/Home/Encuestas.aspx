@@ -11,12 +11,13 @@ Encuestas
 
     <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/angular-chart/angular-chart.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
 	<script type="text/javascript" src="../../Scripts/angular-chart/Chart.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/angular-chart/angular-chart.js"></script>
-    <script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
+	<script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
     <div id="messages"></div>
     <div ng-controller="EncuestasController as Main" class="encuestas">
+	    <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
     	<script type="text/ng-template" id="actionsEncuestas.html">
 			<div class="ui-grid-cell-contents">
 				<button type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.removeEncuesta(COL_FIELD)">
@@ -25,10 +26,9 @@ Encuestas
 				<button type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.editEncuesta(COL_FIELD)">
 					<span class="ui-icon ui-icon-pencil"></span>
 				</button>
-				<button type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.setIcon(COL_FIELD)"
-					title="Click para seleccionar encuesta que se va a mostrar a los estudintes">
-					<span class="ui-icon" ng-class="grid.appScope.Main.getIcon(COL_FIELD)"></span>
-				</button>
+				<input type="checkbox" ng-checked="grid.appScope.Main.getSurverDefaultInput(COL_FIELD)"
+					ng-click="grid.appScope.Main.setSurverDefaultInput(COL_FIELD)" style="width:23px;height:23px;margin:0 0 8px 0;"
+					title="Encuesta habilitada para los estudiantes"/>
 				<button type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.showReport(COL_FIELD)"
 					title="Ver reportes">
 					<span class="ui-icon ui-icon-note"></span>

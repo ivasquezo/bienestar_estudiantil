@@ -18,7 +18,8 @@
     <link href="../../Scripts/ng-dialog/ngDialog.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/ng-dialog/ngDialog-theme-default.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/ng-dialog/ngDialog-theme-flat.css" rel="stylesheet" type="text/css" />
-
+    <link href="../../Scripts/angular-busy/angular-busy.css" rel="stylesheet" type="text/css" />
+    
     <link href="../../Scripts/Utils/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
 
     <link href="../../Scripts/Utils/primeui/css/growl/growl.css" rel="stylesheet" type="text/css" />
@@ -35,6 +36,7 @@
 
 <body ng-app="BienestarApp">
     <script type="text/javascript" src="../../Scripts/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/angular-busy/angular-busy.js"></script>
     <script type="text/javascript" src="../../Scripts/ui-grid/ui-grid-stable.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
     <script type="text/javascript" src="../../Scripts/ng-dialog/ngDialog.min.js"></script>

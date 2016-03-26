@@ -17,7 +17,6 @@
 
         $scope.onlyNumber = function(number, countMax){
             var n = '';
-            console.log("number: " + number);
             if (number === undefined || number === '') return '';
             for (var i=0; i<number.length; i++) {
                 if (number.charCodeAt(i) > 47 && number.charCodeAt(i) < 58) {
