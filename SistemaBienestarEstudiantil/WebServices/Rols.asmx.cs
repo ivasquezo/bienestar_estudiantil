@@ -26,17 +26,20 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.End();
         }
 
+        /**
+         * Obtener todos los roles existentes
+         */
         [WebMethod]
         public void getAllRols()
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca todos los roles
                 List<ROL> rols = db.ROLs.ToList();
-
+                // Verifica si la busqueda retorno valores
                 if (rols != null && rols.Count > 0)
                     response = new Response(true, "", "", "", rols);
                 else
@@ -51,29 +54,22 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
-        public void getRolStatus(int rolId)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            ROL rol = db.ROLs.Single(r => r.CODIGO == rolId);
-
-            writeResponse(new JavaScriptSerializer().Serialize(rol));
-        }
-
+        /**
+         * Elimina rol seleccionado
+         */
         [WebMethod]
         public void removeRolById(int rolId)
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca rol a eliminar
                 ROL rolDeleted = db.ROLs.Single(r => r.CODIGO == rolId);
-
+                // Elimina los accesos del rol
                 this.removeRolAccesByRolId(rolId);
-
+                // Elimina el rol
                 db.ROLs.DeleteObject(rolDeleted);
                 db.SaveChanges();
 
@@ -93,16 +89,16 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Elimina los accesos del rol seleccionado
+         */
         [WebMethod]
         private void removeRolAccesByRolId(int rolId)
         {
-            List<ROL_ACCESO> rolAccessDeleted;
-            bienestarEntities db;
-
-            db = new bienestarEntities();
-
-            rolAccessDeleted = db.ROL_ACCESO.Where(ra => ra.CODIGOROL == rolId).ToList();
-
+            bienestarEntities db = new bienestarEntities();
+            // Busca los accesos del rol
+            List<ROL_ACCESO> rolAccessDeleted = db.ROL_ACCESO.Where(ra => ra.CODIGOROL == rolId).ToList();
+            // Si se encontraron accesos se los elimina
             if (rolAccessDeleted != null && rolAccessDeleted.Count > 0)
             {
                 foreach (ROL_ACCESO rolAccess in rolAccessDeleted)
@@ -112,25 +108,29 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
+        /**
+         * Guarda el rol modificado
+         */
         [WebMethod]
         public void saveRolData(int rolId, String rolName, int[] accessRols)
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca el rol a modificar
                 ROL rolUpdated = db.ROLs.Single(r => r.CODIGO == rolId);
 
                 Boolean actualizar = false;
-
+                // Verifica si el rol va a cambiar su nombre
                 if (rolUpdated.NOMBRE == rolName)
                     actualizar = true;
                 else
                 {
+                    // Verifica si existen otros roles con el nombre a cambiar
                     List<ROL> rolsExist = db.ROLs.Where(r => r.NOMBRE == rolName).ToList();
-
+                    // Si encontro roles con el mismo nombre no lo guarda
                     if (rolsExist != null && rolsExist.Count > 0)
                     {
                         response = new Response(false, "error", "Error", "El nombre del rol ya existe", null);
@@ -139,15 +139,16 @@ namespace SistemaBienestarEstudiantil.WebServices
                     else
                         actualizar = true;
                 }
-
+                // Si no hay problema para actualiar el rol
                 if (actualizar)
                 {
                     rolUpdated.NOMBRE = rolName;
-
+                    // Guarda los accesos seleccionados
                     for (int accRol = 0; accRol < accessRols.Length; accRol++)
                     {
+                        // Verifica si el acceso ya existe
                         ROL_ACCESO rolAccess = getStatusRolAccesById(rolId, accessRols[accRol]);
-
+                        // Si el acceso existe se lo actualiza, caso contrario se lo agrega
                         if (rolAccess != null)
                             updateRolAccess(rolId, accessRols[accRol]);
                         else
@@ -173,6 +174,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Verifica la existencia del acceso
+         */
         [WebMethod]
         private ROL_ACCESO getStatusRolAccesById(int idRol, int idAccess)
         {
@@ -182,6 +186,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
+                // Busca el acceso del rol
                 rolAccess = db.ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
             }
             catch (System.InvalidOperationException)
@@ -192,15 +197,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             return rolAccess;
         }
 
+        /**
+         * Obtiene los accesos del rol seleccionado
+         */
         [WebMethod]
         public void getAccessByRolId(int rolId)
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca los accesos del rol
                 var data = db.ACCESOes.Join(db.ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
                            (a, ra) => new { ACCESO = a, ROL_ACCESO = ra })
                            .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
@@ -217,15 +225,17 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Obtiene todos los accesos existentes
+         */
         [WebMethod]
         public void getAllAccess()
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
                 response = new Response(true, "", "", "", db.ACCESOes.ToList());
             }
             catch (Exception)
@@ -237,21 +247,23 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Crea un nuevo rol
+         */
         [WebMethod]
         public void addNewRol(String rolName, int[] accessRols)
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
                 ROL newRol = new ROL();
-
+                // Verifica si existe un rol con el nombre que se desea guardar
                 List<ROL> rolsExist = db.ROLs.Where(r => r.NOMBRE == rolName).ToList();
 
                 Boolean agregar = false;
-
+                // Si ya existe ek rol no lo guarda
                 if (rolsExist != null && rolsExist.Count > 0)
                 {
                     response = new Response(false, "error", "Error", "El nombre del rol ya existe", null);
@@ -259,14 +271,14 @@ namespace SistemaBienestarEstudiantil.WebServices
                 }
                 else
                     agregar = true;
-
+                // Si no hay problemas para crear el rol
                 if (agregar)
                 {
                     newRol.NOMBRE = rolName;
-
+                    // Guarda el rol nuevo
                     db.ROLs.AddObject(newRol);
                     db.SaveChanges();
-
+                    // Crea los accesos seleccionados para el rol nuevo
                     for (int accRol = 0; accRol < accessRols.Length; accRol++)
                         createRolAccess(Decimal.ToInt32(newRol.CODIGO), accessRols[accRol]);
 
@@ -282,13 +294,16 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Actualiza los estados del los accesos existentes
+         */
         [WebMethod]
         private void updateRolAccess(int idRol, int idAccess)
         {
             bienestarEntities db = new bienestarEntities();
-
+            // Busca el acceso a actualizar
             ROL_ACCESO rolAccess = db.ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
-
+            // Verifica el estado del acceso para modificarlo
             if (rolAccess.VALIDO)
                 rolAccess.VALIDO = false;
             else
@@ -297,13 +312,16 @@ namespace SistemaBienestarEstudiantil.WebServices
             db.SaveChanges();
         }
 
+        /**
+         * Crea un acceso nuevo en determinado rol
+         */
         [WebMethod]
         private void createRolAccess(int rolId, int accessId)
         {
             bienestarEntities db = new bienestarEntities();
 
             ROL_ACCESO newRolAccess = new ROL_ACCESO();
-
+            // Setea los datos del acceso
             newRolAccess.CODIGOROL = rolId;
             newRolAccess.CODIGOACCESO = accessId;
             newRolAccess.VALIDO = true;

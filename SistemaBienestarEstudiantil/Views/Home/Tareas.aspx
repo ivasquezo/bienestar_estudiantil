@@ -24,10 +24,14 @@
 
         <script type="text/ng-template" id="actionsActivities.html">
             <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeActivity(COL_FIELD)">
+                <button type="button" ng-click="grid.appScope.Main.removeActivity(COL_FIELD)" title="Elimiar actividad">
                 <span class="ui-icon ui-icon-trash"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)">
+                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad">
                 <span class="ui-icon ui-icon-pencil"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Asistencia alumnos">
+                <span class="ui-icon ui-icon-person"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Adjuntar archivos">
+                <span class="ui-icon ui-icon-document"></span></button>
             </div>
         </script>
 
@@ -69,11 +73,11 @@
                         <div class="col-md-4">
                             <select ng-model="activityCopy.ESTADO" id="statusActivityBox" name="statusActivityBox" class="form-control" ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: 0 }, { n: 'En Proceso', v: 1 }, { n: 'Procesado', v: 2 }, { n: 'Finalizado', v: 3 }]">
                             </select>
+                            <br/><span class="help-block">Estado en que se encuentra la actividad</span> 
                         </div>
                     </div>
-
+					
                     <div class="form-group">
-                        <label class="col-md-4 control-label" >Niveles</label>
                         <table style="width:100%; font-size:16px">
                             <tr>
                                 <th></th>

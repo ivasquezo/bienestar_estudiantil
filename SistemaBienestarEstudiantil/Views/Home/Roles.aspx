@@ -25,9 +25,9 @@
         <script type="text/ng-template" id="actionsRols.html">
               <div class="ui-grid-cell-contents">
                 <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)" 
-                    ng-hide="grid.appScope.Main.getRolStatus(COL_FIELD)">
+                    ng-hide="grid.appScope.Main.getRolStatus(COL_FIELD)" title="Eliminar rol">
                     <span class="ui-icon ui-icon-trash"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)">
+                <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)" title="Editar rol">
                     <span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>

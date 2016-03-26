@@ -25,15 +25,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.End();
         }
 
+        /**
+         * Obtiene todas las actividades existentes
+         */
         [WebMethod]
         public void getAllGeneralActivities()
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca las actividades
                 var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL, 
                     (ag, aga) => new { ag, aga }).Join(db.ACTIVIDADs, agaga => agaga.aga.CODIGOACTIVIDAD, a => a.CODIGO,
                     (agaga, a) => new { agaga, a }).Select(x => new
@@ -45,7 +48,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         FECHA = x.a.FECHA,
                         ESTADO = x.a.ESTADO
                     }).ToList();
-
+                // Verifica si se encontraron resultados
                 if (data != null && data.Count > 0)
                     response = new Response(true, "", "", "", data);
                 else
@@ -60,15 +63,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Obtiene las actividades generales de la actividad a modificar
+         */
         [WebMethod]
         public void getGeneralActivityByActivityId(int activityId)
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca las actividades generales de la actividad seleccionada
                 var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL,
                            (ag, aga) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD_GENERAL_ACTIVIDAD = aga })
                            .Select(x => new { x.ACTIVIDAD_GENERAL.NOMBRE, x.ACTIVIDAD_GENERAL_ACTIVIDAD.ACTIVIDAD_GENERAL.CODIGO, x.ACTIVIDAD_GENERAL_ACTIVIDAD.CODIGOACTIVIDAD })
@@ -85,15 +91,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Obtiene todas las actividades generales
+         */
         [WebMethod]
         public void getAllGeneralActivity()
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca todas las actividades generales
                 response = new Response(true, "", "", "", db.ACTIVIDAD_GENERAL.ToList());
             }
             catch (Exception)
@@ -105,15 +114,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Obtiene todos los niveles academicos
+         */
         [WebMethod]
         public void getAllGroupLevels()
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca todos los niveles existentes
                 response = new Response(true, "", "", "", db.GRUPOes.ToList());
             }
             catch (Exception)
@@ -125,15 +137,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        /**
+         * Obtiene los niveles asignados a una actividad
+         */
         [WebMethod]
         public void getGroupLevelByActivityId(int activityId)
         {
             Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
             try
             {
-                bienestarEntities db = new bienestarEntities();
-
+                // Busca los niveles de la actividad seleccionada
                 var data = db.GRUPOes.Join(db.GRUPO_ACTIVIDAD, g => g.CODIGO, ga => ga.CODIGOGRUPO,
                            (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
                            .Select(x => new { x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, x.GRUPO_ACTIVIDAD.CODIGOGRUPO })
@@ -144,6 +159,34 @@ namespace SistemaBienestarEstudiantil.WebServices
             catch (Exception)
             {
                 response = new Response(false, "error", "Error", "Error al obtener los niveles de la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        /**
+         * Busca todos los docentes registrados para realizar una actividad
+         */
+        [WebMethod]
+        public void getAllResponsables()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                // Busca todos los docentes registrados
+                var data = db.USUARIOs.Join(db.U, g => g.CODIGO, ga => ga.CODIGOGRUPO,
+                           (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
+                           .Select(x => new { x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, x.GRUPO_ACTIVIDAD.CODIGOGRUPO })
+                           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
+
+                response = new Response(true, "", "", "", data);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los niveles academicos", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
 

@@ -40,7 +40,7 @@
               {name:'Actividad', field: 'NOMBRE'},
               {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\''},
               {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == 0 ? 'Inactivo' : row.entity.ESTADO == 1 ? 'En Proceso' : row.entity.ESTADO == 2 ? 'Procesado' : 'Finalizado'}}</div>"},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 80, enableFiltering: false}
+              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 160, enableFiltering: false}
             ]
         };
 
