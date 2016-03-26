@@ -38,7 +38,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca todos los roles
-                List<ROL> rols = db.ROL.ToList();
+                List<ROL> rols = db.ROLs.ToList();
                 // Verifica si la busqueda retorno valores
                 if (rols != null && rols.Count > 0)
                     response = new Response(true, "", "", "", rols);
@@ -66,11 +66,11 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca rol a eliminar
-                ROL rolDeleted = db.ROL.Single(r => r.CODIGO == rolId);
+                ROL rolDeleted = db.ROLs.Single(r => r.CODIGO == rolId);
                 // Elimina los accesos del rol
                 this.removeRolAccesByRolId(rolId);
                 // Elimina el rol
-                db.ROL.DeleteObject(rolDeleted);
+                db.ROLs.DeleteObject(rolDeleted);
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Eliminar", "Rol eliminado correctamente", null);
@@ -120,7 +120,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca el rol a modificar
-                ROL rolUpdated = db.ROL.Single(r => r.CODIGO == rolId);
+                ROL rolUpdated = db.ROLs.Single(r => r.CODIGO == rolId);
 
                 Boolean actualizar = false;
                 // Verifica si el rol va a cambiar su nombre
@@ -129,7 +129,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 else
                 {
                     // Verifica si existen otros roles con el nombre a cambiar
-                    List<ROL> rolsExist = db.ROL.Where(r => r.NOMBRE == rolName).ToList();
+                    List<ROL> rolsExist = db.ROLs.Where(r => r.NOMBRE == rolName).ToList();
                     // Si encontro roles con el mismo nombre no lo guarda
                     if (rolsExist != null && rolsExist.Count > 0)
                     {
@@ -260,7 +260,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 ROL newRol = new ROL();
                 // Verifica si existe un rol con el nombre que se desea guardar
-                List<ROL> rolsExist = db.ROL.Where(r => r.NOMBRE == rolName).ToList();
+                List<ROL> rolsExist = db.ROLs.Where(r => r.NOMBRE == rolName).ToList();
 
                 Boolean agregar = false;
                 // Si ya existe ek rol no lo guarda
@@ -276,7 +276,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 {
                     newRol.NOMBRE = rolName;
                     // Guarda el rol nuevo
-                    db.ROL.AddObject(newRol);
+                    db.ROLs.AddObject(newRol);
                     db.SaveChanges();
                     // Crea los accesos seleccionados para el rol nuevo
                     for (int accRol = 0; accRol < accessRols.Length; accRol++)

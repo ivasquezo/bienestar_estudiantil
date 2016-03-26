@@ -22,9 +22,11 @@ using System.Web.Script.Serialization;
 
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ROL_MODULO_MODULO1", "ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACCESO), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ACTIVIDAD_GENERAL_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD_GENERAL_ACTIVIDAD), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ACTIVIDAD_USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD_USUARIO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ADJUNTO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ADJUNTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ADJUNTO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_GRUPO_ACTIVIDAD_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "GRUPO_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO_ACTIVIDAD), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL", "ACTIVIDAD_GENERAL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD_GENERAL), "ACTIVIDAD_GENERAL_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD_GENERAL_ACTIVIDAD), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_ACTIVIDAD_USUARIO_USUARIO", "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.USUARIO), "ACTIVIDAD_USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD_USUARIO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ASISTENCIA_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_TEXTO), true)]
@@ -36,10 +38,8 @@ using System.Web.Script.Serialization;
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA", "ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_PREGUNTA), "ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_TEXTO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA", "ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA), "ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_GRUPO_ACTIVIDAD_GRUPO", "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRUPO), "GRUPO_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO_ACTIVIDAD), true)]
-[assembly: EdmRelationshipAttribute("BienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO))]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ROL_MODULO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
-[assembly: EdmRelationshipAttribute("BienestarModel", "FK_USUARIO_ROL_ROL1", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "USUARIO_ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO_ROL), true)]
-[assembly: EdmRelationshipAttribute("BienestarModel", "FK_USUARIO_ROL_USUARIO1", "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.USUARIO), "USUARIO_ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO_ROL), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_USUARIO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO), true)]
 
 #endregion
 
@@ -154,6 +154,22 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<ACTIVIDAD_GENERAL_ACTIVIDAD> _ACTIVIDAD_GENERAL_ACTIVIDAD;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<ACTIVIDAD_USUARIO> ACTIVIDAD_USUARIO
+        {
+            get
+            {
+                if ((_ACTIVIDAD_USUARIO == null))
+                {
+                    _ACTIVIDAD_USUARIO = base.CreateObjectSet<ACTIVIDAD_USUARIO>("ACTIVIDAD_USUARIO");
+                }
+                return _ACTIVIDAD_USUARIO;
+            }
+        }
+        private ObjectSet<ACTIVIDAD_USUARIO> _ACTIVIDAD_USUARIO;
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -334,6 +350,22 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        public ObjectSet<ROL> ROLs
+        {
+            get
+            {
+                if ((_ROLs == null))
+                {
+                    _ROLs = base.CreateObjectSet<ROL>("ROLs");
+                }
+                return _ROLs;
+            }
+        }
+        private ObjectSet<ROL> _ROLs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
         public ObjectSet<ROL_ACCESO> ROL_ACCESO
         {
             get
@@ -362,38 +394,6 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<USUARIO> _USUARIOs;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<ROL> ROL
-        {
-            get
-            {
-                if ((_ROL == null))
-                {
-                    _ROL = base.CreateObjectSet<ROL>("ROL");
-                }
-                return _ROL;
-            }
-        }
-        private ObjectSet<ROL> _ROL;
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        public ObjectSet<USUARIO_ROL> USUARIO_ROL
-        {
-            get
-            {
-                if ((_USUARIO_ROL == null))
-                {
-                    _USUARIO_ROL = base.CreateObjectSet<USUARIO_ROL>("USUARIO_ROL");
-                }
-                return _USUARIO_ROL;
-            }
-        }
-        private ObjectSet<USUARIO_ROL> _USUARIO_ROL;
 
         #endregion
 
@@ -429,6 +429,14 @@ namespace SistemaBienestarEstudiantil.Models
         public void AddToACTIVIDAD_GENERAL_ACTIVIDAD(ACTIVIDAD_GENERAL_ACTIVIDAD aCTIVIDAD_GENERAL_ACTIVIDAD)
         {
             base.AddObject("ACTIVIDAD_GENERAL_ACTIVIDAD", aCTIVIDAD_GENERAL_ACTIVIDAD);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ACTIVIDAD_USUARIO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToACTIVIDAD_USUARIO(ACTIVIDAD_USUARIO aCTIVIDAD_USUARIO)
+        {
+            base.AddObject("ACTIVIDAD_USUARIO", aCTIVIDAD_USUARIO);
         }
     
         /// <summary>
@@ -520,6 +528,14 @@ namespace SistemaBienestarEstudiantil.Models
         }
     
         /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet ROLs. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToROLs(ROL rOL)
+        {
+            base.AddObject("ROLs", rOL);
+        }
+    
+        /// <summary>
         /// Método desusado para agregar un nuevo objeto al EntitySet ROL_ACCESO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
         /// </summary>
         public void AddToROL_ACCESO(ROL_ACCESO rOL_ACCESO)
@@ -533,22 +549,6 @@ namespace SistemaBienestarEstudiantil.Models
         public void AddToUSUARIOs(USUARIO uSUARIO)
         {
             base.AddObject("USUARIOs", uSUARIO);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet ROL. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToROL(ROL rOL)
-        {
-            base.AddObject("ROL", rOL);
-        }
-    
-        /// <summary>
-        /// Método desusado para agregar un nuevo objeto al EntitySet USUARIO_ROL. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
-        /// </summary>
-        public void AddToUSUARIO_ROL(USUARIO_ROL uSUARIO_ROL)
-        {
-            base.AddObject("USUARIO_ROL", uSUARIO_ROL);
         }
 
         #endregion
@@ -852,6 +852,29 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD_USUARIO")]
+        public EntityCollection<ACTIVIDAD_USUARIO> ACTIVIDAD_USUARIO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ACTIVIDAD_USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD_USUARIO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ACTIVIDAD_USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD_USUARIO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -890,29 +913,6 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<GRUPO_ACTIVIDAD>("BienestarModel.FK_GRUPO_ACTIVIDAD_ACTIVIDAD", "GRUPO_ACTIVIDAD", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [ScriptIgnore]
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "ACTIVIDAD_USUARIO", "USUARIO")]
-        public EntityCollection<USUARIO> USUARIOs
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<USUARIO>("BienestarModel.ACTIVIDAD_USUARIO", "USUARIO");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO>("BienestarModel.ACTIVIDAD_USUARIO", "USUARIO", value);
                 }
             }
         }
@@ -1214,6 +1214,196 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ACTIVIDAD_GENERAL>("BienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL", "ACTIVIDAD_GENERAL", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BienestarModel", Name="ACTIVIDAD_USUARIO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ACTIVIDAD_USUARIO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto ACTIVIDAD_USUARIO.
+        /// </summary>
+        /// <param name="cODIGOUSUARIO">Valor inicial de la propiedad CODIGOUSUARIO.</param>
+        /// <param name="cODIGOACTIVIDAD">Valor inicial de la propiedad CODIGOACTIVIDAD.</param>
+        public static ACTIVIDAD_USUARIO CreateACTIVIDAD_USUARIO(global::System.Decimal cODIGOUSUARIO, global::System.Decimal cODIGOACTIVIDAD)
+        {
+            ACTIVIDAD_USUARIO aCTIVIDAD_USUARIO = new ACTIVIDAD_USUARIO();
+            aCTIVIDAD_USUARIO.CODIGOUSUARIO = cODIGOUSUARIO;
+            aCTIVIDAD_USUARIO.CODIGOACTIVIDAD = cODIGOACTIVIDAD;
+            return aCTIVIDAD_USUARIO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOUSUARIO
+        {
+            get
+            {
+                return _CODIGOUSUARIO;
+            }
+            set
+            {
+                if (_CODIGOUSUARIO != value)
+                {
+                    OnCODIGOUSUARIOChanging(value);
+                    ReportPropertyChanging("CODIGOUSUARIO");
+                    _CODIGOUSUARIO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOUSUARIO");
+                    OnCODIGOUSUARIOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOUSUARIO;
+        partial void OnCODIGOUSUARIOChanging(global::System.Decimal value);
+        partial void OnCODIGOUSUARIOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOACTIVIDAD
+        {
+            get
+            {
+                return _CODIGOACTIVIDAD;
+            }
+            set
+            {
+                if (_CODIGOACTIVIDAD != value)
+                {
+                    OnCODIGOACTIVIDADChanging(value);
+                    ReportPropertyChanging("CODIGOACTIVIDAD");
+                    _CODIGOACTIVIDAD = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOACTIVIDAD");
+                    OnCODIGOACTIVIDADChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGOACTIVIDAD;
+        partial void OnCODIGOACTIVIDADChanging(global::System.Decimal value);
+        partial void OnCODIGOACTIVIDADChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> ESTADO
+        {
+            get
+            {
+                return _ESTADO;
+            }
+            set
+            {
+                OnESTADOChanging(value);
+                ReportPropertyChanging("ESTADO");
+                _ESTADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ESTADO");
+                OnESTADOChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _ESTADO;
+        partial void OnESTADOChanging(Nullable<global::System.Boolean> value);
+        partial void OnESTADOChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD")]
+        public ACTIVIDAD ACTIVIDAD
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ACTIVIDAD>("BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ACTIVIDAD>("BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ACTIVIDAD> ACTIVIDADReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ACTIVIDAD>("BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ACTIVIDAD>("BienestarModel.FK_ACTIVIDAD_USUARIO_ACTIVIDAD", "ACTIVIDAD", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ACTIVIDAD_USUARIO_USUARIO", "USUARIO")]
+        public USUARIO USUARIO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO", "USUARIO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO", "USUARIO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<USUARIO> USUARIOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO", "USUARIO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO", "USUARIO", value);
                 }
             }
         }
@@ -3626,18 +3816,18 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_USUARIO_ROL_ROL1", "USUARIO_ROL")]
-        public EntityCollection<USUARIO_ROL> USUARIO_ROL
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_USUARIO_ROL", "USUARIO")]
+        public EntityCollection<USUARIO> USUARIOs
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<USUARIO_ROL>("BienestarModel.FK_USUARIO_ROL_ROL1", "USUARIO_ROL");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<USUARIO>("BienestarModel.FK_USUARIO_ROL", "USUARIO");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO_ROL>("BienestarModel.FK_USUARIO_ROL_ROL1", "USUARIO_ROL", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO>("BienestarModel.FK_USUARIO_ROL", "USUARIO", value);
                 }
             }
         }
@@ -3860,7 +4050,8 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="cONTRASENAANTERIOR">Valor inicial de la propiedad CONTRASENAANTERIOR.</param>
         /// <param name="cONTRASENAACTUAL">Valor inicial de la propiedad CONTRASENAACTUAL.</param>
         /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
-        public static USUARIO CreateUSUARIO(global::System.Decimal cODIGO, global::System.String nOMBREUSUARIO, global::System.String cEDULA, global::System.String cORREO, global::System.String cONTRASENAANTERIOR, global::System.String cONTRASENAACTUAL, global::System.Boolean eSTADO)
+        /// <param name="cODIGOROL">Valor inicial de la propiedad CODIGOROL.</param>
+        public static USUARIO CreateUSUARIO(global::System.Decimal cODIGO, global::System.String nOMBREUSUARIO, global::System.String cEDULA, global::System.String cORREO, global::System.String cONTRASENAANTERIOR, global::System.String cONTRASENAACTUAL, global::System.Boolean eSTADO, global::System.Decimal cODIGOROL)
         {
             USUARIO uSUARIO = new USUARIO();
             uSUARIO.CODIGO = cODIGO;
@@ -3870,6 +4061,7 @@ namespace SistemaBienestarEstudiantil.Models
             uSUARIO.CONTRASENAANTERIOR = cONTRASENAANTERIOR;
             uSUARIO.CONTRASENAACTUAL = cONTRASENAACTUAL;
             uSUARIO.ESTADO = eSTADO;
+            uSUARIO.CODIGOROL = cODIGOROL;
             return uSUARIO;
         }
 
@@ -4095,119 +4287,11 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.Boolean _ESTADO;
         partial void OnESTADOChanging(global::System.Boolean value);
         partial void OnESTADOChanged();
-
-        #endregion
-
-    
-        #region Propiedades de navegación
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "ACTIVIDAD_USUARIO", "ACTIVIDAD")]
-        public EntityCollection<ACTIVIDAD> ACTIVIDADs
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ACTIVIDAD>("BienestarModel.ACTIVIDAD_USUARIO", "ACTIVIDAD");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ACTIVIDAD>("BienestarModel.ACTIVIDAD_USUARIO", "ACTIVIDAD", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [ScriptIgnore]
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_USUARIO_ROL_USUARIO1", "USUARIO_ROL")]
-        public EntityCollection<USUARIO_ROL> USUARIO_ROL
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<USUARIO_ROL>("BienestarModel.FK_USUARIO_ROL_USUARIO1", "USUARIO_ROL");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<USUARIO_ROL>("BienestarModel.FK_USUARIO_ROL_USUARIO1", "USUARIO_ROL", value);
-                }
-            }
-        }
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No hay documentación de metadatos disponible.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="BienestarModel", Name="USUARIO_ROL")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class USUARIO_ROL : EntityObject
-    {
-        #region Método de generador
-    
-        /// <summary>
-        /// Crear un nuevo objeto USUARIO_ROL.
-        /// </summary>
-        /// <param name="cODIGOUSUARIO">Valor inicial de la propiedad CODIGOUSUARIO.</param>
-        /// <param name="cODIGOROL">Valor inicial de la propiedad CODIGOROL.</param>
-        public static USUARIO_ROL CreateUSUARIO_ROL(global::System.Decimal cODIGOUSUARIO, global::System.Decimal cODIGOROL)
-        {
-            USUARIO_ROL uSUARIO_ROL = new USUARIO_ROL();
-            uSUARIO_ROL.CODIGOUSUARIO = cODIGOUSUARIO;
-            uSUARIO_ROL.CODIGOROL = cODIGOROL;
-            return uSUARIO_ROL;
-        }
-
-        #endregion
-
-        #region Propiedades primitivas
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Decimal CODIGOUSUARIO
-        {
-            get
-            {
-                return _CODIGOUSUARIO;
-            }
-            set
-            {
-                if (_CODIGOUSUARIO != value)
-                {
-                    OnCODIGOUSUARIOChanging(value);
-                    ReportPropertyChanging("CODIGOUSUARIO");
-                    _CODIGOUSUARIO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOUSUARIO");
-                    OnCODIGOUSUARIOChanged();
-                }
-            }
-        }
-        private global::System.Decimal _CODIGOUSUARIO;
-        partial void OnCODIGOUSUARIOChanging(global::System.Decimal value);
-        partial void OnCODIGOUSUARIOChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Decimal CODIGOROL
         {
@@ -4217,43 +4301,16 @@ namespace SistemaBienestarEstudiantil.Models
             }
             set
             {
-                if (_CODIGOROL != value)
-                {
-                    OnCODIGOROLChanging(value);
-                    ReportPropertyChanging("CODIGOROL");
-                    _CODIGOROL = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOROL");
-                    OnCODIGOROLChanged();
-                }
+                OnCODIGOROLChanging(value);
+                ReportPropertyChanging("CODIGOROL");
+                _CODIGOROL = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOROL");
+                OnCODIGOROLChanged();
             }
         }
         private global::System.Decimal _CODIGOROL;
         partial void OnCODIGOROLChanging(global::System.Decimal value);
         partial void OnCODIGOROLChanged();
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> ESTADO
-        {
-            get
-            {
-                return _ESTADO;
-            }
-            set
-            {
-                OnESTADOChanging(value);
-                ReportPropertyChanging("ESTADO");
-                _ESTADO = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ESTADO");
-                OnESTADOChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _ESTADO;
-        partial void OnESTADOChanging(Nullable<global::System.Boolean> value);
-        partial void OnESTADOChanged();
 
         #endregion
 
@@ -4267,34 +4324,18 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_USUARIO_ROL_ROL1", "ROL")]
-        public ROL ROL
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ACTIVIDAD_USUARIO_USUARIO", "ACTIVIDAD_USUARIO")]
+        public EntityCollection<ACTIVIDAD_USUARIO> ACTIVIDAD_USUARIO
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL_ROL1", "ROL").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL_ROL1", "ROL").Value = value;
-            }
-        }
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<ROL> ROLReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL_ROL1", "ROL");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ACTIVIDAD_USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO", "ACTIVIDAD_USUARIO");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL_ROL1", "ROL", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ACTIVIDAD_USUARIO>("BienestarModel.FK_ACTIVIDAD_USUARIO_USUARIO", "ACTIVIDAD_USUARIO", value);
                 }
             }
         }
@@ -4306,34 +4347,35 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_USUARIO_ROL_USUARIO1", "USUARIO")]
-        public USUARIO USUARIO
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_USUARIO_ROL", "ROL")]
+        public ROL ROL
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<USUARIO>("BienestarModel.FK_USUARIO_ROL_USUARIO1", "USUARIO").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL", "ROL").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<USUARIO>("BienestarModel.FK_USUARIO_ROL_USUARIO1", "USUARIO").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL", "ROL").Value = value;
             }
         }
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<USUARIO> USUARIOReference
+        public EntityReference<ROL> ROLReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<USUARIO>("BienestarModel.FK_USUARIO_ROL_USUARIO1", "USUARIO");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL", "ROL");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<USUARIO>("BienestarModel.FK_USUARIO_ROL_USUARIO1", "USUARIO", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ROL>("BienestarModel.FK_USUARIO_ROL", "ROL", value);
                 }
             }
         }
