@@ -9,8 +9,6 @@
             CODIGO: ''
         };
 
-        $scope.selectObject = [{ name: 'Inactivo', value: false }, { name: 'Activo', value: true }];
-
         $scope.convertDate = function(arrayActivity) {
             for (var i = 0; i < arrayActivity.length; i++) {
                 if (arrayActivity[i].FECHA != null)
@@ -48,6 +46,95 @@
 
         $scope.chargeGeneralActivities();
 
+        this.editActivity = function (code) {
+            $scope.activityEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
+            
+            $scope.activityCopy.CODIGOACTIVIDAD = $scope.activityEdit.CODIGOACTIVIDAD;
+            $scope.activityCopy.NOMBREACTIVIDAD = $scope.activityEdit.NOMBREACTIVIDAD;
+            $scope.activityCopy.CODIGO = $scope.activityEdit.CODIGO;
+            $scope.activityCopy.NOMBRE = $scope.activityEdit.NOMBRE;
+            $scope.activityCopy.FECHA = $scope.toDate($scope.activityEdit.FECHA);
+            $scope.activityCopy.ESTADO = $scope.activityEdit.ESTADO;
+            $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
+            $scope.getGeneralActivities();
+            $scope.getGroupLevel($scope.activityEdit.CODIGO);
+            $scope.groupActivity = [];
+            $scope.groupLevelActivity = [];
+
+            ngDialog.open({
+                template: 'editActivity.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
+        $scope.getGroupLevel = function (code) {
+            if (code > 0) {
+                $http.post('../../WebServices/Activities.asmx/getGroupLevelByActivityId', {
+                    activityId: code
+                }).success(function (data, status, headers, config) {
+                    console.log("Niveles de la actividad... ", data);
+                    $scope.groupActivity = data.response;
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al cargar niveles de actividad...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad'}]);
+                });
+            }
+
+            $http.post('../../WebServices/Activities.asmx/getAllGroupLevels'
+            ).success(function (data, status, headers, config) {
+                console.log("Niveles existentes... ", data);
+                $scope.allGroupLevel = data.response;
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar los niveles...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles existentes'}]);
+            });
+        };
+
+        $scope.existGroupLevel = function (code) {
+            if ($scope.groupActivity.length > 0) {
+                for (var i = 0; i < $scope.groupActivity.length; i++) {
+                    if($scope.groupActivity[i].CODIGOGRUPO == code) 
+                        return true;
+                };
+            }
+            return false;
+        };
+
+        $scope.setGroupLevel = function(code) {            
+            $scope.groupLevelActivity.push(code);            
+        };  
+
+        $scope.getGeneralActivities = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivity'
+            ).success(function (data, status, headers, config) {
+                console.log("Actividades generales existentes... ", data);
+                $scope.allGeneralActivities = [];
+
+                for (var i = 0; i < data.response.length; i++)
+                    $scope.allGeneralActivities.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRE});
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar las actividades generales...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes'}]);
+            });
+        };
+
+        $scope.toDate = function(dateTime) {
+            var mEpoch = parseInt(dateTime); 
+            var dDate = new Date();
+
+            if(mEpoch<10000000000) mEpoch *= 1000;
+        
+            dDate.setTime(mEpoch)
+            return dDate;
+        }
+
         this.removeActivity = function (code) {
             var parentObject = this;
             
@@ -74,55 +161,6 @@
                 }
             }
         };
-		
-        this.editActivity = function (code) {
-            $scope.activityEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
-            
-            $scope.activityCopy.CODIGOACTIVIDAD = $scope.activityEdit.CODIGOACTIVIDAD;
-            $scope.activityCopy.NOMBREACTIVIDAD = $scope.activityEdit.NOMBREACTIVIDAD;
-            $scope.activityCopy.CODIGO = $scope.activityEdit.CODIGO;
-            $scope.activityCopy.NOMBRE = $scope.activityEdit.NOMBRE;
-            $scope.activityCopy.FECHA = $scope.toDate($scope.activityEdit.FECHA);
-            $scope.activityCopy.ESTADO = $scope.activityEdit.ESTADO;
-            $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
-			$scope.getGeneralActivities(code);
-
-            ngDialog.open({
-                template: 'editActivity.html',
-                className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                closeByDocument: true,
-                closeByEscape: true,
-                scope: $scope,
-                controller: $controller('ngDialogController', {
-                    $scope: $scope,
-                    $http: $http
-                })
-            });
-        };
-
-        $scope.getGeneralActivities = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivity'
-            ).success(function (data, status, headers, config) {
-                console.log("Actividades generales existentes... ", data);
-                $scope.allGeneralActivities = [];
-
-                for (var i = 0; i < data.response.length; i++)
-                    $scope.allGeneralActivities.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRE});
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar las actividades generales...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes'}]);
-            });
-        };
-
-        $scope.toDate = function(dateTime) {
-            var mEpoch = parseInt(dateTime); 
-            var dDate = new Date();
-
-            if(mEpoch<10000000000) mEpoch *= 1000;
-        
-            dDate.setTime(mEpoch)
-            return dDate;
-        }
 
         // Obtiene los datos de una actividad
 		$scope.getElementArray = function(arrayActividad, activityCode) {

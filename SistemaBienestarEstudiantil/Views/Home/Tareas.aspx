@@ -73,6 +73,27 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-md-4 control-label" >Niveles</label>
+                        <table style="width:100%; font-size:16px">
+                            <tr>
+                                <th></th>
+                                <th>Nivel</th>
+                                <th>Paralelo</th>
+                                <th>Modalidad</th>
+                            </tr>
+                            <tr ng-repeat="nivel in allGroupLevel">
+                                <td><input type="checkbox" ng-checked="existGroupLevel(nivel.CODIGO)" 
+                                    ng-click="setGroupLevel(nivel.CODIGO)"></td>
+                                <td>{{ nivel.NOMBRE }}</td>
+                                <td>{{ nivel.PARALELO }}</td>
+                                <td>{{ nivel.MODALIDAD }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br/>
+
+                    <div class="form-group">
                         <label class="col-md-4 control-label" for="observacion">Observación</label>  
                         <div class="col-md-4">
                         	<textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observación" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;"></textarea>
