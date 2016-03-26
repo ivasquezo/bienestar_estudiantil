@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BienestarModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="BienestarModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="BienestarModelStoreContainer">
           <EntitySet Name="ACCESO" EntityType="BienestarModel.Store.ACCESO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ACTIVIDAD" EntityType="BienestarModel.Store.ACTIVIDAD" store:Type="Tables" Schema="dbo" />
@@ -151,6 +151,7 @@
           </Key>
           <Property Name="CODIGOUSUARIO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
+          <Property Name="ESTADO" Type="bit" />
         </EntityType>
         <EntityType Name="ADJUNTO">
           <Key>
@@ -297,6 +298,7 @@
           </Key>
           <Property Name="CODIGOUSUARIO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOROL" Type="numeric" Nullable="false" />
+          <Property Name="ESTADO" Type="bit" />
         </EntityType>
         <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
           <End Role="ACTIVIDAD" Type="BienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
@@ -409,7 +411,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA">
-          <End Role="ENCUESTA" Type="BienestarModel.Store.ENCUESTA" Multiplicity="1" />
+          <End Role="ENCUESTA" Type="BienestarModel.Store.ENCUESTA" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ENCUESTA_RESPUESTA_ALUMNO" Type="BienestarModel.Store.ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ENCUESTA">
@@ -459,7 +463,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA">
-          <End Role="ENCUESTA" Type="BienestarModel.Store.ENCUESTA" Multiplicity="1" />
+          <End Role="ENCUESTA" Type="BienestarModel.Store.ENCUESTA" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="ENCUESTA_RESPUESTA_TEXTO" Type="BienestarModel.Store.ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ENCUESTA">
@@ -554,8 +560,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BienestarModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
