@@ -59,6 +59,7 @@
                     <li><% if (accessValid){ %><%: Html.ActionLink("Roles", "Roles", "Home")%><% } %></li>
                     <li><% if (accessValid){ %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
                     <li><% if (accessValid){ %><%: Html.ActionLink("Encuestas", "Encuestas", "Home")%><% } %></li>
+                    <li><% if (accessValid){ %><%: Html.ActionLink("Becas", "Becas", "Home")%><% } %></li>
                     <li><% if (accessValid){ %><%: Html.ActionLink("Cerrar sesión", "LogOut", "Home")%><% } %></li>
                 </ul>
             </div>

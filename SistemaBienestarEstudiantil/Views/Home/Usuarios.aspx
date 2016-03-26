@@ -94,7 +94,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
                         <div class="col-md-4">
-                            <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                            <select ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
                                 ng-options="o.CODIGO as o.NOMBRE for o in Rols">
                             </select>
                         </div>
@@ -169,6 +169,15 @@
                         <div class="col-md-4">
                             <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
                                 ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
+                        <div class="col-md-4">
+                            <select ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
+                                ng-options="o.CODIGO as o.NOMBRE for o in Rols">
                             </select>
                         </div>
                     </div>

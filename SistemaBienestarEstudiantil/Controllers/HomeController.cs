@@ -139,16 +139,25 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult Encuestas()
         {
-            return View();
-            /*if (!Utils.validateAccess())
+            if (!Utils.validateAccess())
             {
-                return View();
+                return RedirectToAction("Index", "Home"); 
             }
-            return RedirectToAction("Index", "Home");*/
+            return View();
+            
         }
 
         public ActionResult Encuesta()
         {
+            return View();
+        }
+
+        public ActionResult Becas()
+        {
+            if (!Utils.validateAccess())
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
