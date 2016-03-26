@@ -15,7 +15,6 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using System.Web.Script.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
@@ -38,6 +37,10 @@ using System.Web.Script.Serialization;
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_GRUPO_ACTIVIDAD_GRUPO", "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRUPO), "GRUPO_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO_ACTIVIDAD), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ROL_MODULO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ROL_ACCESO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_USUARIO_ROL", "ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ROL), "USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.USUARIO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BECA_SOLICITUD_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "BECA_SOLICITUD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BECA_SOLICITUD), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_SOLICITUD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BECA_SOLICITUD), "BECA_ADJUNTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BECA_ADJUNTO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BECA_SOLICITUD_BECA_TIPO", "BECA_TIPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BECA_TIPO), "BECA_SOLICITUD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BECA_SOLICITUD), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BECA_TIPO), "BECA_TIPO_DOCUMENTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BECA_TIPO_DOCUMENTO), true)]
 
 #endregion
 
@@ -360,6 +363,70 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
         private ObjectSet<USUARIO> _USUARIOs;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<BECA_ADJUNTO> BECA_ADJUNTO
+        {
+            get
+            {
+                if ((_BECA_ADJUNTO == null))
+                {
+                    _BECA_ADJUNTO = base.CreateObjectSet<BECA_ADJUNTO>("BECA_ADJUNTO");
+                }
+                return _BECA_ADJUNTO;
+            }
+        }
+        private ObjectSet<BECA_ADJUNTO> _BECA_ADJUNTO;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<BECA_SOLICITUD> BECA_SOLICITUD
+        {
+            get
+            {
+                if ((_BECA_SOLICITUD == null))
+                {
+                    _BECA_SOLICITUD = base.CreateObjectSet<BECA_SOLICITUD>("BECA_SOLICITUD");
+                }
+                return _BECA_SOLICITUD;
+            }
+        }
+        private ObjectSet<BECA_SOLICITUD> _BECA_SOLICITUD;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<BECA_TIPO> BECA_TIPO
+        {
+            get
+            {
+                if ((_BECA_TIPO == null))
+                {
+                    _BECA_TIPO = base.CreateObjectSet<BECA_TIPO>("BECA_TIPO");
+                }
+                return _BECA_TIPO;
+            }
+        }
+        private ObjectSet<BECA_TIPO> _BECA_TIPO;
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        public ObjectSet<BECA_TIPO_DOCUMENTO> BECA_TIPO_DOCUMENTO
+        {
+            get
+            {
+                if ((_BECA_TIPO_DOCUMENTO == null))
+                {
+                    _BECA_TIPO_DOCUMENTO = base.CreateObjectSet<BECA_TIPO_DOCUMENTO>("BECA_TIPO_DOCUMENTO");
+                }
+                return _BECA_TIPO_DOCUMENTO;
+            }
+        }
+        private ObjectSet<BECA_TIPO_DOCUMENTO> _BECA_TIPO_DOCUMENTO;
 
         #endregion
 
@@ -500,6 +567,38 @@ namespace SistemaBienestarEstudiantil.Models
         {
             base.AddObject("USUARIOs", uSUARIO);
         }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet BECA_ADJUNTO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToBECA_ADJUNTO(BECA_ADJUNTO bECA_ADJUNTO)
+        {
+            base.AddObject("BECA_ADJUNTO", bECA_ADJUNTO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet BECA_SOLICITUD. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToBECA_SOLICITUD(BECA_SOLICITUD bECA_SOLICITUD)
+        {
+            base.AddObject("BECA_SOLICITUD", bECA_SOLICITUD);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet BECA_TIPO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToBECA_TIPO(BECA_TIPO bECA_TIPO)
+        {
+            base.AddObject("BECA_TIPO", bECA_TIPO);
+        }
+    
+        /// <summary>
+        /// Método desusado para agregar un nuevo objeto al EntitySet BECA_TIPO_DOCUMENTO. Considere la posibilidad de usar el método .Add de la propiedad ObjectSet&lt;T&gt; asociada.
+        /// </summary>
+        public void AddToBECA_TIPO_DOCUMENTO(BECA_TIPO_DOCUMENTO bECA_TIPO_DOCUMENTO)
+        {
+            base.AddObject("BECA_TIPO_DOCUMENTO", bECA_TIPO_DOCUMENTO);
+        }
 
         #endregion
 
@@ -595,7 +694,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -831,7 +929,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -850,7 +947,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ACTIVIDAD_GENERAL> ACTIVIDAD_GENERALReference
@@ -871,7 +967,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1119,7 +1214,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1138,7 +1232,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ACTIVIDAD> ACTIVIDADReference
@@ -1246,7 +1339,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1404,7 +1496,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1427,7 +1518,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1443,6 +1533,28 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ENCUESTA_RESPUESTA_TEXTO>("BienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO", "ENCUESTA_RESPUESTA_TEXTO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_SOLICITUD_ALUMNO", "BECA_SOLICITUD")]
+        public EntityCollection<BECA_SOLICITUD> BECA_SOLICITUD
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BECA_SOLICITUD>("BienestarModel.FK_BECA_SOLICITUD_ALUMNO", "BECA_SOLICITUD");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BECA_SOLICITUD>("BienestarModel.FK_BECA_SOLICITUD_ALUMNO", "BECA_SOLICITUD", value);
                 }
             }
         }
@@ -1595,7 +1707,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -1614,7 +1725,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ALUMNO> ALUMNOReference
@@ -1666,6 +1776,800 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<GRUPO>("BienestarModel.FK_ASISTENCIA_GRUPO", "GRUPO", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BienestarModel", Name="BECA_ADJUNTO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class BECA_ADJUNTO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto BECA_ADJUNTO.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="cODIGOSOLICITUD">Valor inicial de la propiedad CODIGOSOLICITUD.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        public static BECA_ADJUNTO CreateBECA_ADJUNTO(global::System.Decimal cODIGO, global::System.Decimal cODIGOSOLICITUD, global::System.String nOMBRE)
+        {
+            BECA_ADJUNTO bECA_ADJUNTO = new BECA_ADJUNTO();
+            bECA_ADJUNTO.CODIGO = cODIGO;
+            bECA_ADJUNTO.CODIGOSOLICITUD = cODIGOSOLICITUD;
+            bECA_ADJUNTO.NOMBRE = nOMBRE;
+            return bECA_ADJUNTO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOSOLICITUD
+        {
+            get
+            {
+                return _CODIGOSOLICITUD;
+            }
+            set
+            {
+                OnCODIGOSOLICITUDChanging(value);
+                ReportPropertyChanging("CODIGOSOLICITUD");
+                _CODIGOSOLICITUD = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOSOLICITUD");
+                OnCODIGOSOLICITUDChanged();
+            }
+        }
+        private global::System.Decimal _CODIGOSOLICITUD;
+        partial void OnCODIGOSOLICITUDChanging(global::System.Decimal value);
+        partial void OnCODIGOSOLICITUDChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NOMBRE
+        {
+            get
+            {
+                return _NOMBRE;
+            }
+            set
+            {
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
+            }
+        }
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.Byte[] ADJUNTO
+        {
+            get
+            {
+                return StructuralObject.GetValidValue(_ADJUNTO);
+            }
+            set
+            {
+                OnADJUNTOChanging(value);
+                ReportPropertyChanging("ADJUNTO");
+                _ADJUNTO = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ADJUNTO");
+                OnADJUNTOChanged();
+            }
+        }
+        private global::System.Byte[] _ADJUNTO;
+        partial void OnADJUNTOChanging(global::System.Byte[] value);
+        partial void OnADJUNTOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CONTENTTYPE
+        {
+            get
+            {
+                return _CONTENTTYPE;
+            }
+            set
+            {
+                OnCONTENTTYPEChanging(value);
+                ReportPropertyChanging("CONTENTTYPE");
+                _CONTENTTYPE = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CONTENTTYPE");
+                OnCONTENTTYPEChanged();
+            }
+        }
+        private global::System.String _CONTENTTYPE;
+        partial void OnCONTENTTYPEChanging(global::System.String value);
+        partial void OnCONTENTTYPEChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_SOLICITUD")]
+        public BECA_SOLICITUD BECA_SOLICITUD
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_SOLICITUD>("BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_SOLICITUD").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_SOLICITUD>("BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_SOLICITUD").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<BECA_SOLICITUD> BECA_SOLICITUDReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_SOLICITUD>("BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_SOLICITUD");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BECA_SOLICITUD>("BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_SOLICITUD", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BienestarModel", Name="BECA_SOLICITUD")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class BECA_SOLICITUD : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto BECA_SOLICITUD.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="cODIGOALUMNO">Valor inicial de la propiedad CODIGOALUMNO.</param>
+        /// <param name="cODIGOTIPO">Valor inicial de la propiedad CODIGOTIPO.</param>
+        /// <param name="aPROBADA">Valor inicial de la propiedad APROBADA.</param>
+        /// <param name="oTORGADO">Valor inicial de la propiedad OTORGADO.</param>
+        public static BECA_SOLICITUD CreateBECA_SOLICITUD(global::System.Decimal cODIGO, global::System.Decimal cODIGOALUMNO, global::System.Decimal cODIGOTIPO, global::System.Boolean aPROBADA, global::System.Decimal oTORGADO)
+        {
+            BECA_SOLICITUD bECA_SOLICITUD = new BECA_SOLICITUD();
+            bECA_SOLICITUD.CODIGO = cODIGO;
+            bECA_SOLICITUD.CODIGOALUMNO = cODIGOALUMNO;
+            bECA_SOLICITUD.CODIGOTIPO = cODIGOTIPO;
+            bECA_SOLICITUD.APROBADA = aPROBADA;
+            bECA_SOLICITUD.OTORGADO = oTORGADO;
+            return bECA_SOLICITUD;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOALUMNO
+        {
+            get
+            {
+                return _CODIGOALUMNO;
+            }
+            set
+            {
+                OnCODIGOALUMNOChanging(value);
+                ReportPropertyChanging("CODIGOALUMNO");
+                _CODIGOALUMNO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOALUMNO");
+                OnCODIGOALUMNOChanged();
+            }
+        }
+        private global::System.Decimal _CODIGOALUMNO;
+        partial void OnCODIGOALUMNOChanging(global::System.Decimal value);
+        partial void OnCODIGOALUMNOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOTIPO
+        {
+            get
+            {
+                return _CODIGOTIPO;
+            }
+            set
+            {
+                OnCODIGOTIPOChanging(value);
+                ReportPropertyChanging("CODIGOTIPO");
+                _CODIGOTIPO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOTIPO");
+                OnCODIGOTIPOChanged();
+            }
+        }
+        private global::System.Decimal _CODIGOTIPO;
+        partial void OnCODIGOTIPOChanging(global::System.Decimal value);
+        partial void OnCODIGOTIPOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean APROBADA
+        {
+            get
+            {
+                return _APROBADA;
+            }
+            set
+            {
+                OnAPROBADAChanging(value);
+                ReportPropertyChanging("APROBADA");
+                _APROBADA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("APROBADA");
+                OnAPROBADAChanged();
+            }
+        }
+        private global::System.Boolean _APROBADA;
+        partial void OnAPROBADAChanging(global::System.Boolean value);
+        partial void OnAPROBADAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal OTORGADO
+        {
+            get
+            {
+                return _OTORGADO;
+            }
+            set
+            {
+                OnOTORGADOChanging(value);
+                ReportPropertyChanging("OTORGADO");
+                _OTORGADO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("OTORGADO");
+                OnOTORGADOChanged();
+            }
+        }
+        private global::System.Decimal _OTORGADO;
+        partial void OnOTORGADOChanging(global::System.Decimal value);
+        partial void OnOTORGADOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String OBSERVACION
+        {
+            get
+            {
+                return _OBSERVACION;
+            }
+            set
+            {
+                OnOBSERVACIONChanging(value);
+                ReportPropertyChanging("OBSERVACION");
+                _OBSERVACION = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("OBSERVACION");
+                OnOBSERVACIONChanged();
+            }
+        }
+        private global::System.String _OBSERVACION;
+        partial void OnOBSERVACIONChanging(global::System.String value);
+        partial void OnOBSERVACIONChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_SOLICITUD_ALUMNO", "ALUMNO")]
+        public ALUMNO ALUMNO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("BienestarModel.FK_BECA_SOLICITUD_ALUMNO", "ALUMNO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("BienestarModel.FK_BECA_SOLICITUD_ALUMNO", "ALUMNO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<ALUMNO> ALUMNOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ALUMNO>("BienestarModel.FK_BECA_SOLICITUD_ALUMNO", "ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ALUMNO>("BienestarModel.FK_BECA_SOLICITUD_ALUMNO", "ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_ADJUNTO")]
+        public EntityCollection<BECA_ADJUNTO> BECA_ADJUNTO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BECA_ADJUNTO>("BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_ADJUNTO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BECA_ADJUNTO>("BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD", "BECA_ADJUNTO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_SOLICITUD_BECA_TIPO", "BECA_TIPO")]
+        public BECA_TIPO BECA_TIPO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO", "BECA_TIPO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO", "BECA_TIPO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<BECA_TIPO> BECA_TIPOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO", "BECA_TIPO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO", "BECA_TIPO", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BienestarModel", Name="BECA_TIPO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class BECA_TIPO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto BECA_TIPO.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        public static BECA_TIPO CreateBECA_TIPO(global::System.Decimal cODIGO, global::System.String nOMBRE)
+        {
+            BECA_TIPO bECA_TIPO = new BECA_TIPO();
+            bECA_TIPO.CODIGO = cODIGO;
+            bECA_TIPO.NOMBRE = nOMBRE;
+            return bECA_TIPO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NOMBRE
+        {
+            get
+            {
+                return _NOMBRE;
+            }
+            set
+            {
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
+            }
+        }
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_SOLICITUD_BECA_TIPO", "BECA_SOLICITUD")]
+        public EntityCollection<BECA_SOLICITUD> BECA_SOLICITUD
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BECA_SOLICITUD>("BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO", "BECA_SOLICITUD");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BECA_SOLICITUD>("BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO", "BECA_SOLICITUD", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO_DOCUMENTO")]
+        public EntityCollection<BECA_TIPO_DOCUMENTO> BECA_TIPO_DOCUMENTO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BECA_TIPO_DOCUMENTO>("BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO_DOCUMENTO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BECA_TIPO_DOCUMENTO>("BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO_DOCUMENTO", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No hay documentación de metadatos disponible.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BienestarModel", Name="BECA_TIPO_DOCUMENTO")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class BECA_TIPO_DOCUMENTO : EntityObject
+    {
+        #region Método de generador
+    
+        /// <summary>
+        /// Crear un nuevo objeto BECA_TIPO_DOCUMENTO.
+        /// </summary>
+        /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="cODIGOTIPO">Valor inicial de la propiedad CODIGOTIPO.</param>
+        /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
+        /// <param name="dESCRIPCION">Valor inicial de la propiedad DESCRIPCION.</param>
+        public static BECA_TIPO_DOCUMENTO CreateBECA_TIPO_DOCUMENTO(global::System.Decimal cODIGO, global::System.Decimal cODIGOTIPO, global::System.String nOMBRE, global::System.String dESCRIPCION)
+        {
+            BECA_TIPO_DOCUMENTO bECA_TIPO_DOCUMENTO = new BECA_TIPO_DOCUMENTO();
+            bECA_TIPO_DOCUMENTO.CODIGO = cODIGO;
+            bECA_TIPO_DOCUMENTO.CODIGOTIPO = cODIGOTIPO;
+            bECA_TIPO_DOCUMENTO.NOMBRE = nOMBRE;
+            bECA_TIPO_DOCUMENTO.DESCRIPCION = dESCRIPCION;
+            return bECA_TIPO_DOCUMENTO;
+        }
+
+        #endregion
+
+        #region Propiedades primitivas
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGO
+        {
+            get
+            {
+                return _CODIGO;
+            }
+            set
+            {
+                if (_CODIGO != value)
+                {
+                    OnCODIGOChanging(value);
+                    ReportPropertyChanging("CODIGO");
+                    _CODIGO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGO");
+                    OnCODIGOChanged();
+                }
+            }
+        }
+        private global::System.Decimal _CODIGO;
+        partial void OnCODIGOChanging(global::System.Decimal value);
+        partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOTIPO
+        {
+            get
+            {
+                return _CODIGOTIPO;
+            }
+            set
+            {
+                OnCODIGOTIPOChanging(value);
+                ReportPropertyChanging("CODIGOTIPO");
+                _CODIGOTIPO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOTIPO");
+                OnCODIGOTIPOChanged();
+            }
+        }
+        private global::System.Decimal _CODIGOTIPO;
+        partial void OnCODIGOTIPOChanging(global::System.Decimal value);
+        partial void OnCODIGOTIPOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NOMBRE
+        {
+            get
+            {
+                return _NOMBRE;
+            }
+            set
+            {
+                OnNOMBREChanging(value);
+                ReportPropertyChanging("NOMBRE");
+                _NOMBRE = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("NOMBRE");
+                OnNOMBREChanged();
+            }
+        }
+        private global::System.String _NOMBRE;
+        partial void OnNOMBREChanging(global::System.String value);
+        partial void OnNOMBREChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String DESCRIPCION
+        {
+            get
+            {
+                return _DESCRIPCION;
+            }
+            set
+            {
+                OnDESCRIPCIONChanging(value);
+                ReportPropertyChanging("DESCRIPCION");
+                _DESCRIPCION = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("DESCRIPCION");
+                OnDESCRIPCIONChanged();
+            }
+        }
+        private global::System.String _DESCRIPCION;
+        partial void OnDESCRIPCIONChanging(global::System.String value);
+        partial void OnDESCRIPCIONChanged();
+
+        #endregion
+
+    
+        #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO")]
+        public BECA_TIPO BECA_TIPO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<BECA_TIPO> BECA_TIPOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BECA_TIPO>("BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO", "BECA_TIPO", value);
                 }
             }
         }
@@ -2148,7 +3052,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2167,7 +3070,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA> ENCUESTAReference
@@ -2345,7 +3247,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2364,7 +3265,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
@@ -2599,7 +3499,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ALUMNO> ALUMNOReference
@@ -2620,7 +3519,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2639,7 +3537,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA> ENCUESTAReference
@@ -2660,7 +3557,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2679,7 +3575,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTAReference
@@ -2885,7 +3780,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ALUMNO> ALUMNOReference
@@ -2906,7 +3800,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2925,7 +3818,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA> ENCUESTAReference
@@ -2946,7 +3838,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2965,7 +3856,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
@@ -3279,7 +4169,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -3298,7 +4187,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ACTIVIDAD> ACTIVIDADReference
@@ -3319,7 +4207,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -3338,7 +4225,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<GRUPO> GRUPOReference
@@ -3472,7 +4358,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -3495,7 +4380,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -3979,7 +4863,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -4020,7 +4903,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ROL> ROLReference

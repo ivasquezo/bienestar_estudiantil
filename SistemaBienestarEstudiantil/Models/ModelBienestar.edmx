@@ -12,6 +12,10 @@
           <EntitySet Name="ACTIVIDAD_GENERAL" EntityType="BienestarModel.Store.ACTIVIDAD_GENERAL" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ALUMNO" EntityType="BienestarModel.Store.ALUMNO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ASISTENCIA" EntityType="BienestarModel.Store.ASISTENCIA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BECA_ADJUNTO" EntityType="BienestarModel.Store.BECA_ADJUNTO" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BECA_SOLICITUD" EntityType="BienestarModel.Store.BECA_SOLICITUD" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BECA_TIPO" EntityType="BienestarModel.Store.BECA_TIPO" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="BECA_TIPO_DOCUMENTO" EntityType="BienestarModel.Store.BECA_TIPO_DOCUMENTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="DATOS_SISTEMA" EntityType="BienestarModel.Store.DATOS_SISTEMA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA" EntityType="BienestarModel.Store.ENCUESTA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA_PREGUNTA" EntityType="BienestarModel.Store.ENCUESTA_PREGUNTA" store:Type="Tables" Schema="dbo" />
@@ -42,6 +46,22 @@
           <AssociationSet Name="FK_ASISTENCIA_GRUPO" Association="BienestarModel.Store.FK_ASISTENCIA_GRUPO">
             <End Role="GRUPO" EntitySet="GRUPO" />
             <End Role="ASISTENCIA" EntitySet="ASISTENCIA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_ADJUNTO_BECA_SOLICITUD" Association="BienestarModel.Store.FK_BECA_ADJUNTO_BECA_SOLICITUD">
+            <End Role="BECA_SOLICITUD" EntitySet="BECA_SOLICITUD" />
+            <End Role="BECA_ADJUNTO" EntitySet="BECA_ADJUNTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_SOLICITUD_ALUMNO" Association="BienestarModel.Store.FK_BECA_SOLICITUD_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNO" />
+            <End Role="BECA_SOLICITUD" EntitySet="BECA_SOLICITUD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_SOLICITUD_BECA_TIPO" Association="BienestarModel.Store.FK_BECA_SOLICITUD_BECA_TIPO">
+            <End Role="BECA_TIPO" EntitySet="BECA_TIPO" />
+            <End Role="BECA_SOLICITUD" EntitySet="BECA_SOLICITUD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_TIPO_DOCUMENTO_BECA_TIPO" Association="BienestarModel.Store.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO">
+            <End Role="BECA_TIPO" EntitySet="BECA_TIPO" />
+            <End Role="BECA_TIPO_DOCUMENTO" EntitySet="BECA_TIPO_DOCUMENTO" />
           </AssociationSet>
           <AssociationSet Name="FK_ENCUESTA_PREGUNTA_ENCUESTA" Association="BienestarModel.Store.FK_ENCUESTA_PREGUNTA_ENCUESTA">
             <End Role="ENCUESTA" EntitySet="ENCUESTA" />
@@ -150,6 +170,43 @@
           <Property Name="CODIGOGRUPO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
           <Property Name="ASISTENCIA" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BECA_ADJUNTO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CODIGOSOLICITUD" Type="numeric" Nullable="false" />
+          <Property Name="NOMBRE" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ADJUNTO" Type="varbinary(max)" />
+          <Property Name="CONTENTTYPE" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BECA_SOLICITUD">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOTIPO" Type="numeric" Nullable="false" />
+          <Property Name="APROBADA" Type="bit" Nullable="false" />
+          <Property Name="OTORGADO" Type="decimal" Nullable="false" />
+          <Property Name="OBSERVACION" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="BECA_TIPO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="BECA_TIPO_DOCUMENTO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CODIGOTIPO" Type="numeric" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DESCRIPCION" Type="varchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="DATOS_SISTEMA">
           <Key>
@@ -317,6 +374,54 @@
             </Principal>
             <Dependent Role="ASISTENCIA">
               <PropertyRef Name="CODIGOGRUPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_ADJUNTO_BECA_SOLICITUD">
+          <End Role="BECA_SOLICITUD" Type="BienestarModel.Store.BECA_SOLICITUD" Multiplicity="1" />
+          <End Role="BECA_ADJUNTO" Type="BienestarModel.Store.BECA_ADJUNTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BECA_SOLICITUD">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_ADJUNTO">
+              <PropertyRef Name="CODIGOSOLICITUD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_SOLICITUD_ALUMNO">
+          <End Role="ALUMNO" Type="BienestarModel.Store.ALUMNO" Multiplicity="1" />
+          <End Role="BECA_SOLICITUD" Type="BienestarModel.Store.BECA_SOLICITUD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_SOLICITUD">
+              <PropertyRef Name="CODIGOALUMNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_SOLICITUD_BECA_TIPO">
+          <End Role="BECA_TIPO" Type="BienestarModel.Store.BECA_TIPO" Multiplicity="1" />
+          <End Role="BECA_SOLICITUD" Type="BienestarModel.Store.BECA_SOLICITUD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BECA_TIPO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_SOLICITUD">
+              <PropertyRef Name="CODIGOTIPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_TIPO_DOCUMENTO_BECA_TIPO">
+          <End Role="BECA_TIPO" Type="BienestarModel.Store.BECA_TIPO" Multiplicity="1" />
+          <End Role="BECA_TIPO_DOCUMENTO" Type="BienestarModel.Store.BECA_TIPO_DOCUMENTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BECA_TIPO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_TIPO_DOCUMENTO">
+              <PropertyRef Name="CODIGOTIPO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -578,6 +683,26 @@
             <End Role="ROL" EntitySet="ROLs" />
             <End Role="USUARIO" EntitySet="USUARIOs" />
           </AssociationSet>
+          <EntitySet Name="BECA_ADJUNTO" EntityType="BienestarModel.BECA_ADJUNTO" />
+          <EntitySet Name="BECA_SOLICITUD" EntityType="BienestarModel.BECA_SOLICITUD" />
+          <EntitySet Name="BECA_TIPO" EntityType="BienestarModel.BECA_TIPO" />
+          <EntitySet Name="BECA_TIPO_DOCUMENTO" EntityType="BienestarModel.BECA_TIPO_DOCUMENTO" />
+          <AssociationSet Name="FK_BECA_SOLICITUD_ALUMNO" Association="BienestarModel.FK_BECA_SOLICITUD_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNOes" />
+            <End Role="BECA_SOLICITUD" EntitySet="BECA_SOLICITUD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_ADJUNTO_BECA_SOLICITUD" Association="BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD">
+            <End Role="BECA_SOLICITUD" EntitySet="BECA_SOLICITUD" />
+            <End Role="BECA_ADJUNTO" EntitySet="BECA_ADJUNTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_SOLICITUD_BECA_TIPO" Association="BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO">
+            <End Role="BECA_TIPO" EntitySet="BECA_TIPO" />
+            <End Role="BECA_SOLICITUD" EntitySet="BECA_SOLICITUD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BECA_TIPO_DOCUMENTO_BECA_TIPO" Association="BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO">
+            <End Role="BECA_TIPO" EntitySet="BECA_TIPO" />
+            <End Role="BECA_TIPO_DOCUMENTO" EntitySet="BECA_TIPO_DOCUMENTO" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ACCESO">
           <Key>
@@ -632,6 +757,7 @@
           <NavigationProperty Name="ASISTENCIAs" Relationship="BienestarModel.FK_ASISTENCIA_ALUMNO" FromRole="ALUMNO" ToRole="ASISTENCIA" />
           <NavigationProperty Name="ENCUESTA_RESPUESTA_ALUMNO" Relationship="BienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" FromRole="ALUMNO" ToRole="ENCUESTA_RESPUESTA_ALUMNO" />
           <NavigationProperty Name="ENCUESTA_RESPUESTA_TEXTO" Relationship="BienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" FromRole="ALUMNO" ToRole="ENCUESTA_RESPUESTA_TEXTO" />
+          <NavigationProperty Name="BECA_SOLICITUD" Relationship="BienestarModel.FK_BECA_SOLICITUD_ALUMNO" FromRole="ALUMNO" ToRole="BECA_SOLICITUD" />
         </EntityType>
         <EntityType Name="ASISTENCIA">
           <Key>
@@ -995,6 +1121,98 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="BECA_ADJUNTO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOSOLICITUD" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Binary" Name="ADJUNTO" MaxLength="Max" FixedLength="false" />
+          <Property Type="String" Name="CONTENTTYPE" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BECA_SOLICITUD" Relationship="BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD" FromRole="BECA_ADJUNTO" ToRole="BECA_SOLICITUD" />
+        </EntityType>
+        <EntityType Name="BECA_SOLICITUD">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOALUMNO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOTIPO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="APROBADA" Nullable="false" />
+          <Property Type="Decimal" Name="OTORGADO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="OBSERVACION" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ALUMNO" Relationship="BienestarModel.FK_BECA_SOLICITUD_ALUMNO" FromRole="BECA_SOLICITUD" ToRole="ALUMNO" />
+          <NavigationProperty Name="BECA_ADJUNTO" Relationship="BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD" FromRole="BECA_SOLICITUD" ToRole="BECA_ADJUNTO" />
+          <NavigationProperty Name="BECA_TIPO" Relationship="BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO" FromRole="BECA_SOLICITUD" ToRole="BECA_TIPO" />
+        </EntityType>
+        <EntityType Name="BECA_TIPO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BECA_SOLICITUD" Relationship="BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO" FromRole="BECA_TIPO" ToRole="BECA_SOLICITUD" />
+          <NavigationProperty Name="BECA_TIPO_DOCUMENTO" Relationship="BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO" FromRole="BECA_TIPO" ToRole="BECA_TIPO_DOCUMENTO" />
+        </EntityType>
+        <EntityType Name="BECA_TIPO_DOCUMENTO">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOTIPO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="DESCRIPCION" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BECA_TIPO" Relationship="BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO" FromRole="BECA_TIPO_DOCUMENTO" ToRole="BECA_TIPO" />
+        </EntityType>
+        <Association Name="FK_BECA_SOLICITUD_ALUMNO">
+          <End Type="BienestarModel.ALUMNO" Role="ALUMNO" Multiplicity="1" />
+          <End Type="BienestarModel.BECA_SOLICITUD" Role="BECA_SOLICITUD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_SOLICITUD">
+              <PropertyRef Name="CODIGOALUMNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_ADJUNTO_BECA_SOLICITUD">
+          <End Type="BienestarModel.BECA_SOLICITUD" Role="BECA_SOLICITUD" Multiplicity="1" />
+          <End Type="BienestarModel.BECA_ADJUNTO" Role="BECA_ADJUNTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BECA_SOLICITUD">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_ADJUNTO">
+              <PropertyRef Name="CODIGOSOLICITUD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_SOLICITUD_BECA_TIPO">
+          <End Type="BienestarModel.BECA_TIPO" Role="BECA_TIPO" Multiplicity="1" />
+          <End Type="BienestarModel.BECA_SOLICITUD" Role="BECA_SOLICITUD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BECA_TIPO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_SOLICITUD">
+              <PropertyRef Name="CODIGOTIPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BECA_TIPO_DOCUMENTO_BECA_TIPO">
+          <End Type="BienestarModel.BECA_TIPO" Role="BECA_TIPO" Multiplicity="1" />
+          <End Type="BienestarModel.BECA_TIPO_DOCUMENTO" Role="BECA_TIPO_DOCUMENTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BECA_TIPO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="BECA_TIPO_DOCUMENTO">
+              <PropertyRef Name="CODIGOTIPO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1173,6 +1391,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BECA_ADJUNTO">
+            <EntityTypeMapping TypeName="BienestarModel.BECA_ADJUNTO">
+              <MappingFragment StoreEntitySet="BECA_ADJUNTO">
+                <ScalarProperty Name="CONTENTTYPE" ColumnName="CONTENTTYPE" />
+                <ScalarProperty Name="ADJUNTO" ColumnName="ADJUNTO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGOSOLICITUD" ColumnName="CODIGOSOLICITUD" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BECA_SOLICITUD">
+            <EntityTypeMapping TypeName="BienestarModel.BECA_SOLICITUD">
+              <MappingFragment StoreEntitySet="BECA_SOLICITUD">
+                <ScalarProperty Name="OBSERVACION" ColumnName="OBSERVACION" />
+                <ScalarProperty Name="OTORGADO" ColumnName="OTORGADO" />
+                <ScalarProperty Name="APROBADA" ColumnName="APROBADA" />
+                <ScalarProperty Name="CODIGOTIPO" ColumnName="CODIGOTIPO" />
+                <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BECA_TIPO">
+            <EntityTypeMapping TypeName="BienestarModel.BECA_TIPO">
+              <MappingFragment StoreEntitySet="BECA_TIPO">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BECA_TIPO_DOCUMENTO">
+            <EntityTypeMapping TypeName="BienestarModel.BECA_TIPO_DOCUMENTO">
+              <MappingFragment StoreEntitySet="BECA_TIPO_DOCUMENTO">
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGOTIPO" ColumnName="CODIGOTIPO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1240,23 +1499,25 @@
           <ConnectorPoint PointX="12" PointY="6.0237939453125051" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" >
-          <ConnectorPoint PointX="11.25" PointY="7.546433044471164" />
-          <ConnectorPoint PointX="11.625" PointY="7.921433044471164" />
-          <ConnectorPoint PointX="11.625" PointY="9.5285953776041623" />
-          <ConnectorPoint PointX="12" PointY="9.5285953776041623" />
+          <ConnectorPoint PointX="11.25" PointY="7.7387344767628212" />
+          <ConnectorPoint PointX="11.625" PointY="8.1137344767628221" />
+          <ConnectorPoint PointX="11.625" PointY="7.875" />
+          <ConnectorPoint PointX="12" PointY="8.25" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" >
-          <ConnectorPoint PointX="11.25" PointY="7.1095079675480939" />
-          <ConnectorPoint PointX="13.619789166666665" PointY="7.109507967548093" />
-          <ConnectorPoint PointX="13.786455833333333" PointY="7.1095079675480939" />
-          <ConnectorPoint PointX="13.822916666666666" PointY="7.109507967548093" />
-          <ConnectorPoint PointX="13.989583333333334" PointY="7.1095079675480939" />
-          <ConnectorPoint PointX="14.026044166666667" PointY="7.109507967548093" />
-          <ConnectorPoint PointX="14.263022083333334" PointY="7.1095079675480939" />
-          <ConnectorPoint PointX="15" PointY="7.1095079675480939" />
+          <ConnectorPoint PointX="11.25" PointY="7.1903236452323807" />
+          <ConnectorPoint PointX="13.619789166666665" PointY="7.19032364523238" />
+          <ConnectorPoint PointX="13.786455833333333" PointY="7.1903236452323807" />
+          <ConnectorPoint PointX="13.822916666666666" PointY="7.19032364523238" />
+          <ConnectorPoint PointX="13.989583333333334" PointY="7.1903236452323807" />
+          <ConnectorPoint PointX="14.026044166666667" PointY="7.19032364523238" />
+          <ConnectorPoint PointX="14.263022083333334" PointY="7.1903236452323807" />
+          <ConnectorPoint PointX="15" PointY="7.1903236452323807" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ASISTENCIA_GRUPO" >
           <ConnectorPoint PointX="6.75" PointY="4.53125" />
+          <ConnectorPoint PointX="10.416666666666666" PointY="4.5312499999999991" />
+          <ConnectorPoint PointX="10.583333333333334" PointY="4.53125" />
           <ConnectorPoint PointX="12" PointY="4.53125" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" >
@@ -1291,8 +1552,6 @@
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" >
           <ConnectorPoint PointX="11.25" PointY="8.9517976888020812" />
-          <ConnectorPoint PointX="11.541666666666666" PointY="8.9517976888020812" />
-          <ConnectorPoint PointX="11.708333333333334" PointY="8.9517976888020812" />
           <ConnectorPoint PointX="12" PointY="8.9517976888020812" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_GRUPO_ACTIVIDAD_GRUPO" >
@@ -1307,6 +1566,34 @@
           <ConnectorPoint PointX="1.5" PointY="6.8552864583333388" />
           <ConnectorPoint PointX="1.5" PointY="8.56704752604167" />
           <ConnectorPoint PointX="3" PointY="8.56704752604167" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="BienestarModel.BECA_ADJUNTO" Width="1.5" PointX="17.125" PointY="1.125" Height="2.1725878906250031" />
+        <EntityTypeShape EntityType="BienestarModel.BECA_SOLICITUD" Width="1.5" PointX="15" PointY="1.125" Height="2.7494921875000031" />
+        <EntityTypeShape EntityType="BienestarModel.BECA_TIPO" Width="1.5" PointX="17.125" PointY="3.625" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="BienestarModel.BECA_TIPO_DOCUMENTO" Width="1.5" PointX="19" PointY="4.125" Height="1.9802864583333388" />
+        <AssociationConnector Association="BienestarModel.FK_BECA_SOLICITUD_ALUMNO" >
+          <ConnectorPoint PointX="10.5" PointY="5.375" />
+          <ConnectorPoint PointX="10.5" PointY="3.4297900390625067" />
+          <ConnectorPoint PointX="13.619789166666665" PointY="3.4297900390625062" />
+          <ConnectorPoint PointX="13.786455833333333" PointY="3.4297900390625067" />
+          <ConnectorPoint PointX="13.822916666666666" PointY="3.4297900390625062" />
+          <ConnectorPoint PointX="13.989583333333334" PointY="3.4297900390625067" />
+          <ConnectorPoint PointX="14.026044166666667" PointY="3.4297900390625062" />
+          <ConnectorPoint PointX="14.192710833333335" PointY="3.4297900390625067" />
+          <ConnectorPoint PointX="15" PointY="3.4297900390625067" />
+        </AssociationConnector>
+        <AssociationConnector Association="BienestarModel.FK_BECA_ADJUNTO_BECA_SOLICITUD" >
+          <ConnectorPoint PointX="16.5" PointY="2.2112939453125016" />
+          <ConnectorPoint PointX="17.125" PointY="2.2112939453125016" />
+        </AssociationConnector>
+        <AssociationConnector Association="BienestarModel.FK_BECA_SOLICITUD_BECA_TIPO" >
+          <ConnectorPoint PointX="17.125" PointY="4.5189925130208337" />
+          <ConnectorPoint PointX="15.75" PointY="4.5189925130208337" />
+          <ConnectorPoint PointX="15.75" PointY="3.8744921875000031" />
+        </AssociationConnector>
+        <AssociationConnector Association="BienestarModel.FK_BECA_TIPO_DOCUMENTO_BECA_TIPO" >
+          <ConnectorPoint PointX="18.625" PointY="4.7689925130208337" />
+          <ConnectorPoint PointX="19" PointY="4.7689925130208337" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>
