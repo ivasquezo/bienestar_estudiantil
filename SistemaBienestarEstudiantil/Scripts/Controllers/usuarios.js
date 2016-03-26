@@ -40,7 +40,7 @@
 
         $scope.gridOptions = {
             enableSorting: true,
-            enableFiltering: false,
+            enableFiltering: true,
             columnDefs: [
               {name:'Código', field: 'CODIGO'},
               {name:'Nombre', field: 'NOMBRECOMPLETO'},

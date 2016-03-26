@@ -18,6 +18,8 @@
           <EntitySet Name="ENCUESTA" EntityType="bienestarModel.Store.ENCUESTA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA_PREGUNTA" EntityType="bienestarModel.Store.ENCUESTA_PREGUNTA" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ENCUESTA_RESPUESTA" EntityType="bienestarModel.Store.ENCUESTA_RESPUESTA" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ENCUESTA_RESPUESTA_ALUMNO" EntityType="bienestarModel.Store.ENCUESTA_RESPUESTA_ALUMNO" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ENCUESTA_RESPUESTA_TEXTO" EntityType="bienestarModel.Store.ENCUESTA_RESPUESTA_TEXTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GRUPO" EntityType="bienestarModel.Store.GRUPO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GRUPO_ACTIVIDAD" EntityType="bienestarModel.Store.GRUPO_ACTIVIDAD" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ROL" EntityType="bienestarModel.Store.ROL" store:Type="Tables" Schema="dbo" />
@@ -56,9 +58,33 @@
             <End Role="ENCUESTA" EntitySet="ENCUESTA" />
             <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
           </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNO" />
+            <End Role="ENCUESTA_RESPUESTA_ALUMNO" EntitySet="ENCUESTA_RESPUESTA_ALUMNO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA">
+            <End Role="ENCUESTA" EntitySet="ENCUESTA" />
+            <End Role="ENCUESTA_RESPUESTA_ALUMNO" EntitySet="ENCUESTA_RESPUESTA_ALUMNO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA">
+            <End Role="ENCUESTA_RESPUESTA" EntitySet="ENCUESTA_RESPUESTA" />
+            <End Role="ENCUESTA_RESPUESTA_ALUMNO" EntitySet="ENCUESTA_RESPUESTA_ALUMNO" />
+          </AssociationSet>
           <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
             <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
             <End Role="ENCUESTA_RESPUESTA" EntitySet="ENCUESTA_RESPUESTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNO" />
+            <End Role="ENCUESTA_RESPUESTA_TEXTO" EntitySet="ENCUESTA_RESPUESTA_TEXTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA">
+            <End Role="ENCUESTA" EntitySet="ENCUESTA" />
+            <End Role="ENCUESTA_RESPUESTA_TEXTO" EntitySet="ENCUESTA_RESPUESTA_TEXTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" Association="bienestarModel.Store.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA">
+            <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
+            <End Role="ENCUESTA_RESPUESTA_TEXTO" EntitySet="ENCUESTA_RESPUESTA_TEXTO" />
           </AssociationSet>
           <AssociationSet Name="FK_GRUPO_ACTIVIDAD_ACTIVIDAD" Association="bienestarModel.Store.FK_GRUPO_ACTIVIDAD_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
@@ -189,6 +215,32 @@
           <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="TEXTO" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CODIGOPREGUNTA" Type="numeric" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_RESPUESTA_ALUMNO">
+          <Key>
+            <PropertyRef Name="CODIGOALUMNO" />
+            <PropertyRef Name="CODIGOENCUESTA" />
+            <PropertyRef Name="CODIGOPREGUNTA" />
+            <PropertyRef Name="CODIGORESPUESTA" />
+          </Key>
+          <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOENCUESTA" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOPREGUNTA" Type="numeric" Nullable="false" />
+          <Property Name="CODIGORESPUESTA" Type="numeric" Nullable="false" />
+          <Property Name="FECHA" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_RESPUESTA_TEXTO">
+          <Key>
+            <PropertyRef Name="CODIGOALUMNO" />
+            <PropertyRef Name="CODIGOENCUESTA" />
+            <PropertyRef Name="CODIGOPREGUNTA" />
+          </Key>
+          <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOENCUESTA" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOPREGUNTA" Type="numeric" Nullable="false" />
+          <Property Name="TEXTO" Type="varchar" MaxLength="250" />
+          <Property Name="FECHA" Type="datetime" />
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
@@ -345,6 +397,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO">
+          <End Role="ALUMNO" Type="bienestarModel.Store.ALUMNO" Multiplicity="1" />
+          <End Role="ENCUESTA_RESPUESTA_ALUMNO" Type="bienestarModel.Store.ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_ALUMNO">
+              <PropertyRef Name="CODIGOALUMNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA">
+          <End Role="ENCUESTA" Type="bienestarModel.Store.ENCUESTA" Multiplicity="1" />
+          <End Role="ENCUESTA_RESPUESTA_ALUMNO" Type="bienestarModel.Store.ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_ALUMNO">
+              <PropertyRef Name="CODIGOENCUESTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA">
+          <End Role="ENCUESTA_RESPUESTA" Type="bienestarModel.Store.ENCUESTA_RESPUESTA" Multiplicity="1" />
+          <End Role="ENCUESTA_RESPUESTA_ALUMNO" Type="bienestarModel.Store.ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA_RESPUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_ALUMNO">
+              <PropertyRef Name="CODIGORESPUESTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
           <End Role="ENCUESTA_PREGUNTA" Type="bienestarModel.Store.ENCUESTA_PREGUNTA" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -355,6 +443,42 @@
               <PropertyRef Name="CODIGO" />
             </Principal>
             <Dependent Role="ENCUESTA_RESPUESTA">
+              <PropertyRef Name="CODIGOPREGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO">
+          <End Role="ALUMNO" Type="bienestarModel.Store.ALUMNO" Multiplicity="1" />
+          <End Role="ENCUESTA_RESPUESTA_TEXTO" Type="bienestarModel.Store.ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_TEXTO">
+              <PropertyRef Name="CODIGOALUMNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA">
+          <End Role="ENCUESTA" Type="bienestarModel.Store.ENCUESTA" Multiplicity="1" />
+          <End Role="ENCUESTA_RESPUESTA_TEXTO" Type="bienestarModel.Store.ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_TEXTO">
+              <PropertyRef Name="CODIGOENCUESTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA">
+          <End Role="ENCUESTA_PREGUNTA" Type="bienestarModel.Store.ENCUESTA_PREGUNTA" Multiplicity="1" />
+          <End Role="ENCUESTA_RESPUESTA_TEXTO" Type="bienestarModel.Store.ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA_PREGUNTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_TEXTO">
               <PropertyRef Name="CODIGOPREGUNTA" />
             </Dependent>
           </ReferentialConstraint>
@@ -440,9 +564,12 @@
           <EntitySet Name="ADJUNTOes" EntityType="bienestarModel.ADJUNTO" />
           <EntitySet Name="ALUMNOes" EntityType="bienestarModel.ALUMNO" />
           <EntitySet Name="ASISTENCIAs" EntityType="bienestarModel.ASISTENCIA" />
+          <EntitySet Name="DATOS_SISTEMA" EntityType="bienestarModel.DATOS_SISTEMA" />
           <EntitySet Name="ENCUESTAs" EntityType="bienestarModel.ENCUESTA" />
           <EntitySet Name="ENCUESTA_PREGUNTA" EntityType="bienestarModel.ENCUESTA_PREGUNTA" />
           <EntitySet Name="ENCUESTA_RESPUESTA" EntityType="bienestarModel.ENCUESTA_RESPUESTA" />
+          <EntitySet Name="ENCUESTA_RESPUESTA_ALUMNO" EntityType="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO" />
+          <EntitySet Name="ENCUESTA_RESPUESTA_TEXTO" EntityType="bienestarModel.ENCUESTA_RESPUESTA_TEXTO" />
           <EntitySet Name="GRUPOes" EntityType="bienestarModel.GRUPO" />
           <EntitySet Name="NIVELs" EntityType="bienestarModel.NIVEL" />
           <EntitySet Name="ROLs" EntityType="bienestarModel.ROL" />
@@ -456,6 +583,14 @@
             <End Role="ALUMNO" EntitySet="ALUMNOes" />
             <End Role="ASISTENCIA" EntitySet="ASISTENCIAs" />
           </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNOes" />
+            <End Role="ENCUESTA_RESPUESTA_ALUMNO" EntitySet="ENCUESTA_RESPUESTA_ALUMNO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNOes" />
+            <End Role="ENCUESTA_RESPUESTA_TEXTO" EntitySet="ENCUESTA_RESPUESTA_TEXTO" />
+          </AssociationSet>
           <AssociationSet Name="FK_ASISTENCIA_GRUPO" Association="bienestarModel.FK_ASISTENCIA_GRUPO">
             <End Role="GRUPO" EntitySet="GRUPOes" />
             <End Role="ASISTENCIA" EntitySet="ASISTENCIAs" />
@@ -464,9 +599,25 @@
             <End Role="ENCUESTA" EntitySet="ENCUESTAs" />
             <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
           </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA">
+            <End Role="ENCUESTA" EntitySet="ENCUESTAs" />
+            <End Role="ENCUESTA_RESPUESTA_ALUMNO" EntitySet="ENCUESTA_RESPUESTA_ALUMNO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA">
+            <End Role="ENCUESTA" EntitySet="ENCUESTAs" />
+            <End Role="ENCUESTA_RESPUESTA_TEXTO" EntitySet="ENCUESTA_RESPUESTA_TEXTO" />
+          </AssociationSet>
           <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
             <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
             <End Role="ENCUESTA_RESPUESTA" EntitySet="ENCUESTA_RESPUESTA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA">
+            <End Role="ENCUESTA_PREGUNTA" EntitySet="ENCUESTA_PREGUNTA" />
+            <End Role="ENCUESTA_RESPUESTA_TEXTO" EntitySet="ENCUESTA_RESPUESTA_TEXTO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA">
+            <End Role="ENCUESTA_RESPUESTA" EntitySet="ENCUESTA_RESPUESTA" />
+            <End Role="ENCUESTA_RESPUESTA_ALUMNO" EntitySet="ENCUESTA_RESPUESTA_ALUMNO" />
           </AssociationSet>
           <AssociationSet Name="FK_ROL_MODULO_ROL" Association="bienestarModel.FK_ROL_MODULO_ROL">
             <End Role="ROL" EntitySet="ROLs" />
@@ -529,8 +680,11 @@
             <PropertyRef Name="CODIGO" />
           </Key>
           <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CEDULA" Nullable="false" Precision="10" Scale="0" />
           <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ASISTENCIAs" Relationship="bienestarModel.FK_ASISTENCIA_ALUMNO" FromRole="ALUMNO" ToRole="ASISTENCIA" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA_ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" FromRole="ALUMNO" ToRole="ENCUESTA_RESPUESTA_ALUMNO" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA_TEXTO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" FromRole="ALUMNO" ToRole="ENCUESTA_RESPUESTA_TEXTO" />
           <NavigationProperty Name="NIVELs" Relationship="bienestarModel.NIVEL_ALUMNO" FromRole="ALUMNO" ToRole="NIVEL" />
           <Property Type="Decimal" Name="CEDULA" Nullable="false" Precision="10" Scale="0" />
         </EntityType>
@@ -547,35 +701,79 @@
           <NavigationProperty Name="ALUMNO" Relationship="bienestarModel.FK_ASISTENCIA_ALUMNO" FromRole="ASISTENCIA" ToRole="ALUMNO" />
           <NavigationProperty Name="GRUPO" Relationship="bienestarModel.FK_ASISTENCIA_GRUPO" FromRole="ASISTENCIA" ToRole="GRUPO" />
         </EntityType>
+        <EntityType Name="DATOS_SISTEMA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VALOR" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
+        </EntityType>
         <EntityType Name="ENCUESTA">
           <Key>
             <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Type="Int32" Name="CODIGO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="TITULO" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="DESCRIPCION" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ENCUESTA_PREGUNTA" Relationship="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" FromRole="ENCUESTA" ToRole="ENCUESTA_PREGUNTA" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA_ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" FromRole="ENCUESTA" ToRole="ENCUESTA_RESPUESTA_ALUMNO" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA_TEXTO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" FromRole="ENCUESTA" ToRole="ENCUESTA_RESPUESTA_TEXTO" />
         </EntityType>
         <EntityType Name="ENCUESTA_PREGUNTA">
           <Key>
             <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Type="Int32" Name="CODIGO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="Int32" Name="CODIGOENCUESTA" Nullable="false" />
-          <Property Type="String" Name="TITULO" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGOENCUESTA" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TITULO" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="TIPO" Nullable="false" />
           <Property Type="Boolean" Name="REQUERIDO" Nullable="false" />
           <NavigationProperty Name="ENCUESTA" Relationship="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" FromRole="ENCUESTA_PREGUNTA" ToRole="ENCUESTA" />
           <NavigationProperty Name="ENCUESTA_RESPUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_PREGUNTA" ToRole="ENCUESTA_RESPUESTA" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA_TEXTO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_PREGUNTA" ToRole="ENCUESTA_RESPUESTA_TEXTO" />
         </EntityType>
         <EntityType Name="ENCUESTA_RESPUESTA">
           <Key>
             <PropertyRef Name="CODIGO" />
           </Key>
-          <Property Type="Int32" Name="CODIGO" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="TEXTO" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="CODIGOPREGUNTA" Nullable="false" />
+          <Property Type="Decimal" Name="CODIGOPREGUNTA" Nullable="false" Precision="18" Scale="0" />
           <NavigationProperty Name="ENCUESTA_PREGUNTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_RESPUESTA" ToRole="ENCUESTA_PREGUNTA" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA_ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" FromRole="ENCUESTA_RESPUESTA" ToRole="ENCUESTA_RESPUESTA_ALUMNO" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_RESPUESTA_ALUMNO">
+          <Key>
+            <PropertyRef Name="CODIGOALUMNO" />
+            <PropertyRef Name="CODIGOENCUESTA" />
+            <PropertyRef Name="CODIGOPREGUNTA" />
+            <PropertyRef Name="CODIGORESPUESTA" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGOALUMNO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOENCUESTA" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOPREGUNTA" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGORESPUESTA" Nullable="false" Precision="18" Scale="0" />
+          <NavigationProperty Name="ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" FromRole="ENCUESTA_RESPUESTA_ALUMNO" ToRole="ALUMNO" />
+          <NavigationProperty Name="ENCUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" FromRole="ENCUESTA_RESPUESTA_ALUMNO" ToRole="ENCUESTA" />
+          <NavigationProperty Name="ENCUESTA_RESPUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" FromRole="ENCUESTA_RESPUESTA_ALUMNO" ToRole="ENCUESTA_RESPUESTA" />
+          <Property Type="DateTime" Name="FECHA" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ENCUESTA_RESPUESTA_TEXTO">
+          <Key>
+            <PropertyRef Name="CODIGOALUMNO" />
+            <PropertyRef Name="CODIGOENCUESTA" />
+            <PropertyRef Name="CODIGOPREGUNTA" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGOALUMNO" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOENCUESTA" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOPREGUNTA" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TEXTO" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" FromRole="ENCUESTA_RESPUESTA_TEXTO" ToRole="ALUMNO" />
+          <NavigationProperty Name="ENCUESTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" FromRole="ENCUESTA_RESPUESTA_TEXTO" ToRole="ENCUESTA" />
+          <NavigationProperty Name="ENCUESTA_PREGUNTA" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" FromRole="ENCUESTA_RESPUESTA_TEXTO" ToRole="ENCUESTA_PREGUNTA" />
+          <Property Type="DateTime" Name="FECHA" />
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
@@ -602,6 +800,7 @@
           </Key>
           <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
           <NavigationProperty Name="ROL_ACCESO" Relationship="bienestarModel.FK_ROL_MODULO_ROL" FromRole="ROL" ToRole="ROL_ACCESO" />
           <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.USUARIO_ROL" FromRole="ROL" ToRole="USUARIO" />
           <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
@@ -657,6 +856,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO">
+          <End Type="bienestarModel.ALUMNO" Role="ALUMNO" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO" Role="ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_ALUMNO">
+              <PropertyRef Name="CODIGOALUMNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO">
+          <End Type="bienestarModel.ALUMNO" Role="ALUMNO" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA_TEXTO" Role="ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNO">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_TEXTO">
+              <PropertyRef Name="CODIGOALUMNO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ASISTENCIA_GRUPO">
           <End Type="bienestarModel.GRUPO" Role="GRUPO" Multiplicity="1" />
           <End Type="bienestarModel.ASISTENCIA" Role="ASISTENCIA" Multiplicity="*" />
@@ -681,6 +904,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA">
+          <End Type="bienestarModel.ENCUESTA" Role="ENCUESTA" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO" Role="ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_ALUMNO">
+              <PropertyRef Name="CODIGOENCUESTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA">
+          <End Type="bienestarModel.ENCUESTA" Role="ENCUESTA" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA_TEXTO" Role="ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_TEXTO">
+              <PropertyRef Name="CODIGOENCUESTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA">
           <End Type="bienestarModel.ENCUESTA_PREGUNTA" Role="ENCUESTA_PREGUNTA" Multiplicity="1" />
           <End Type="bienestarModel.ENCUESTA_RESPUESTA" Role="ENCUESTA_RESPUESTA" Multiplicity="*" />
@@ -690,6 +937,30 @@
             </Principal>
             <Dependent Role="ENCUESTA_RESPUESTA">
               <PropertyRef Name="CODIGOPREGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA">
+          <End Type="bienestarModel.ENCUESTA_PREGUNTA" Role="ENCUESTA_PREGUNTA" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA_TEXTO" Role="ENCUESTA_RESPUESTA_TEXTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA_PREGUNTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_TEXTO">
+              <PropertyRef Name="CODIGOPREGUNTA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA">
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA" Role="ENCUESTA_RESPUESTA" Multiplicity="1" />
+          <End Type="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO" Role="ENCUESTA_RESPUESTA_ALUMNO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENCUESTA_RESPUESTA">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ENCUESTA_RESPUESTA_ALUMNO">
+              <PropertyRef Name="CODIGORESPUESTA" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -713,6 +984,7 @@
           <End Type="bienestarModel.ROL" Role="ROL" Multiplicity="*" />
           <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
         </Association>
+<<<<<<< HEAD
         <EntityType Name="DATOS_SISTEMA">
           <Key>
             <PropertyRef Name="CODIGO" />
@@ -799,6 +1071,8 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+=======
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -828,6 +1102,7 @@
               <MappingFragment StoreEntitySet="ALUMNO">
                 <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -838,6 +1113,16 @@
                 <ScalarProperty Name="ASISTENCIA1" ColumnName="ASISTENCIA" />
                 <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
                 <ScalarProperty Name="CODIGOGRUPO" ColumnName="CODIGOGRUPO" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DATOS_SISTEMA">
+            <EntityTypeMapping TypeName="bienestarModel.DATOS_SISTEMA">
+              <MappingFragment StoreEntitySet="DATOS_SISTEMA">
+                <ScalarProperty Name="ACTIVO" ColumnName="ACTIVO" />
+                <ScalarProperty Name="VALOR" ColumnName="VALOR" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -868,6 +1153,28 @@
                 <ScalarProperty Name="CODIGOPREGUNTA" ColumnName="CODIGOPREGUNTA" />
                 <ScalarProperty Name="TEXTO" ColumnName="TEXTO" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ENCUESTA_RESPUESTA_ALUMNO">
+            <EntityTypeMapping TypeName="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO">
+              <MappingFragment StoreEntitySet="ENCUESTA_RESPUESTA_ALUMNO">
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="CODIGORESPUESTA" ColumnName="CODIGORESPUESTA" />
+                <ScalarProperty Name="CODIGOPREGUNTA" ColumnName="CODIGOPREGUNTA" />
+                <ScalarProperty Name="CODIGOENCUESTA" ColumnName="CODIGOENCUESTA" />
+                <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ENCUESTA_RESPUESTA_TEXTO">
+            <EntityTypeMapping TypeName="bienestarModel.ENCUESTA_RESPUESTA_TEXTO">
+              <MappingFragment StoreEntitySet="ENCUESTA_RESPUESTA_TEXTO">
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="TEXTO" ColumnName="TEXTO" />
+                <ScalarProperty Name="CODIGOPREGUNTA" ColumnName="CODIGOPREGUNTA" />
+                <ScalarProperty Name="CODIGOENCUESTA" ColumnName="CODIGOENCUESTA" />
+                <ScalarProperty Name="CODIGOALUMNO" ColumnName="CODIGOALUMNO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -959,6 +1266,7 @@
               <ScalarProperty Name="CODIGO" ColumnName="CODIGOACTIVIDAD" />
             </EndProperty>
           </AssociationSetMapping>
+<<<<<<< HEAD
           <EntitySetMapping Name="ACTIVIDAD_GENERAL">
             <EntityTypeMapping TypeName="bienestarModel.ACTIVIDAD_GENERAL">
               <MappingFragment StoreEntitySet="ACTIVIDAD_GENERAL">
@@ -976,6 +1284,24 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+=======
+          <AssociationSetMapping Name="NIVEL_ALUMNO" TypeName="bienestarModel.NIVEL_ALUMNO" StoreEntitySet="NIVEL_ALUMNO">
+            <EndProperty Name="NIVEL">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGONIVEL" />
+            </EndProperty>
+            <EndProperty Name="ALUMNO">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOALUMNO" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="USUARIO_ROL" TypeName="bienestarModel.USUARIO_ROL" StoreEntitySet="USUARIO_ROL">
+            <EndProperty Name="USUARIO">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOUSUARIO" />
+            </EndProperty>
+            <EndProperty Name="ROL">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOROL" />
+            </EndProperty>
+          </AssociationSetMapping>
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -996,6 +1322,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
+<<<<<<< HEAD
       <Diagram Name="Model" ZoomLevel="94">
         <EntityTypeShape EntityType="bienestarModel.ACCESO" Width="1.5" PointX="0.875" PointY="0.5" Height="1.5956835937500031" />
         <EntityTypeShape EntityType="bienestarModel.ADJUNTO" Width="1.5" PointX="9" PointY="6" Height="1.9802864583333388" />
@@ -1022,16 +1349,87 @@
         <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_GRUPO" >
           <ConnectorPoint PointX="4.5" PointY="9.6164347158203114" />
           <ConnectorPoint PointX="5.25" PointY="9.6164347158203114" />
+=======
+      <Diagram Name="Model" ZoomLevel="82">
+        <EntityTypeShape EntityType="bienestarModel.ACCESO" Width="1.5" PointX="5.625" PointY="10" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD" Width="1.5" PointX="1.375" PointY="21.25" Height="2.5571907552083388" />
+        <EntityTypeShape EntityType="bienestarModel.ADJUNTO" Width="1.5" PointX="3.625" PointY="21.5" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.ALUMNO" Width="1.5" PointX="8.125" PointY="3" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="bienestarModel.ASISTENCIA" Width="1.5" PointX="10.375" PointY="3.125" Height="2.172587890624996" />
+        <EntityTypeShape EntityType="bienestarModel.DATOS_SISTEMA" Width="1.5" PointX="8.125" PointY="0.5" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA" Width="1.5" PointX="1.75" PointY="2" Height="2.1725878906250067" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_PREGUNTA" Width="2.125" PointX="3.5" PointY="6.125" Height="2.5571907552083246" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_RESPUESTA" Width="2" PointX="0.5" PointY="5.875" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_RESPUESTA_ALUMNO" Width="2.625" PointX="4" PointY="0.625" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_RESPUESTA_TEXTO" Width="2.75" PointX="4.25" PointY="3.375" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="bienestarModel.GRUPO" Width="1.5" PointX="3.625" PointY="12" Height="2.1725878906250102" />
+        <EntityTypeShape EntityType="bienestarModel.NIVEL" Width="1.5" PointX="2.875" PointY="14.875" Height="1.595683593749996" />
+        <EntityTypeShape EntityType="bienestarModel.ROL" Width="1.5" PointX="4.375" PointY="18.5" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.ROL_ACCESO" Width="1.5" PointX="6.625" PointY="17.5" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.USUARIO" Width="1.5" PointX="6.625" PointY="20.875" Height="3.1340950520833388" />
+        <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_MODULO1" >
+          <ConnectorPoint PointX="6.875" PointY="11.595683593750003" />
+          <ConnectorPoint PointX="6.875" PointY="17.5" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD" >
+          <ConnectorPoint PointX="2.875" PointY="22.490143229166669" />
+          <ConnectorPoint PointX="3.625" PointY="22.490143229166669" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_ALUMNO" >
+          <ConnectorPoint PointX="9.625" PointY="4.211293945312498" />
+          <ConnectorPoint PointX="10.375" PointY="4.211293945312498" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" >
+          <ConnectorPoint PointX="8.875" PointY="3" />
+          <ConnectorPoint PointX="8.875" PointY="2.5379850260416674" />
+          <ConnectorPoint PointX="7.875" PointY="2.5379850260416674" />
+          <ConnectorPoint PointX="7.875" PointY="1.8074446614583337" />
+          <ConnectorPoint PointX="6.625" PointY="1.8074446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" >
+          <ConnectorPoint PointX="8.125" PointY="4.3699446614583337" />
+          <ConnectorPoint PointX="7" PointY="4.3699446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_GRUPO" >
+          <ConnectorPoint PointX="5.125" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="6.791666666666667" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="6.958333333333333" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="8.3854141666666653" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="8.5520808333333331" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="11.125" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="11.125" PointY="5.297587890624996" />
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </AssociationConnector>
         <AssociationConnector Association="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" >
-          <ConnectorPoint PointX="9.25" PointY="10.268992513020834" />
-          <ConnectorPoint PointX="10" PointY="10.268992513020834" />
+          <ConnectorPoint PointX="2.90625" PointY="4.1725878906250067" />
+          <ConnectorPoint PointX="2.90625" PointY="8.2999886067708317" />
+          <ConnectorPoint PointX="3.5" PointY="8.2999886067708317" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA" >
+          <ConnectorPoint PointX="3.25" PointY="2.4949446614583337" />
+          <ConnectorPoint PointX="4" PointY="2.4949446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA" >
+          <ConnectorPoint PointX="3.25" PointY="3.7737939453125033" />
+          <ConnectorPoint PointX="4.25" PointY="3.7737939453125033" />
         </AssociationConnector>
         <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA" >
-          <ConnectorPoint PointX="11.5" PointY="10.268992513020834" />
-          <ConnectorPoint PointX="12.25" PointY="10.268992513020834" />
+          <ConnectorPoint PointX="3.5" PointY="6.9901432291666694" />
+          <ConnectorPoint PointX="2.9895833333333335" PointY="6.9901432291666685" />
+          <ConnectorPoint PointX="2.8229166666666665" PointY="6.9901432291666694" />
+          <ConnectorPoint PointX="2.5" PointY="6.9901432291666694" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA" >
+          <ConnectorPoint PointX="4.9375" PointY="6.125" />
+          <ConnectorPoint PointX="4.9375" PointY="5.7398893229166674" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA" >
+          <ConnectorPoint PointX="1.09375" PointY="5.875" />
+          <ConnectorPoint PointX="1.09375" PointY="1.28125" />
+          <ConnectorPoint PointX="4" PointY="1.28125" />
         </AssociationConnector>
         <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_ROL" >
+<<<<<<< HEAD
           <ConnectorPoint PointX="4.125" PointY="2.875" />
           <ConnectorPoint PointX="4.125" PointY="2.4802864583333388" />
         </AssociationConnector>
@@ -1069,6 +1467,31 @@
         <AssociationConnector Association="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" >
           <ConnectorPoint PointX="8.5" PointY="1.2978417968750016" />
           <ConnectorPoint PointX="9.25" PointY="1.2978417968750016" />
+=======
+          <ConnectorPoint PointX="5.875" PointY="18.990143229166669" />
+          <ConnectorPoint PointX="6.625" PointY="18.990143229166669" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.ACTIVIDAD_USUARIO" >
+          <ConnectorPoint PointX="2.875" PointY="23.674988606770839" />
+          <ConnectorPoint PointX="6.625" PointY="23.674988606770839" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.GRUPO_ACTIVIDAD" >
+          <ConnectorPoint PointX="2.09375" PointY="21.25" />
+          <ConnectorPoint PointX="2.09375" PointY="13.086293945312505" />
+          <ConnectorPoint PointX="3.625" PointY="13.086293945312505" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.NIVEL_ALUMNO" >
+          <ConnectorPoint PointX="8.4687475" PointY="5.3648893229166674" />
+          <ConnectorPoint PointX="8.4687475" PointY="15.672841796874998" />
+          <ConnectorPoint PointX="6.958333333333333" PointY="15.672841796874998" />
+          <ConnectorPoint PointX="6.791666666666667" PointY="15.672841796874998" />
+          <ConnectorPoint PointX="4.375" PointY="15.672841796874998" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.USUARIO_ROL" >
+          <ConnectorPoint PointX="5.53125" PointY="20.480286458333339" />
+          <ConnectorPoint PointX="5.53125" PointY="21.15625" />
+          <ConnectorPoint PointX="6.625" PointY="21.15625" />
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </AssociationConnector>
       </Diagram>
     </Diagrams>

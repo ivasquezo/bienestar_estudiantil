@@ -7,6 +7,7 @@ using System.Web.Script.Serialization;
 using System.Data.Objects.DataClasses;
 using System.Web.Script.Services;
 using System.Data.Objects.SqlClient;
+using SistemaBienestarEstudiantil.Models;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -128,27 +129,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveEncuesta2(Encuesta encuestaEdited)
-        {
-            /*Models.ENCUESTA updatedEncuesta = convertToENCUESTA(encuestaEdited);
-
-            using (Models.bienestarEntities db = new Models.bienestarEntities())
-            {
-
-                Models.ENCUESTA removeEncuesta = db.ENCUESTAs.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
-
-                db.ENCUESTAs.DeleteObject(removeEncuesta);
-                db.SaveChanges();
-
-                updatedEncuesta.CODIGO = default(int);
-                db.ENCUESTAs.AddObject(updatedEncuesta);
-                db.SaveChanges();
-                writeResponse(new JavaScriptSerializer().Serialize(updatedEncuesta));
-
-            }*/
-        }
-
-        [WebMethod]
         public void saveEncuesta1(Encuesta encuestaEdited)
         {
             Models.ENCUESTA updatedEncuesta = convertToENCUESTA(encuestaEdited);
@@ -171,7 +151,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 db.SaveChanges();
 
                 // get code responses edited
-                List<int> codigoRespuestasEditadas = new List<int>();
+                List<decimal> codigoRespuestasEditadas = new List<decimal>();
                 foreach (Models.ENCUESTA_PREGUNTA ep in updatedEncuesta.ENCUESTA_PREGUNTA)
                 {
                     codigoRespuestasEditadas.AddRange(ep.ENCUESTA_RESPUESTA.Select(r => r.CODIGO).ToList());
@@ -269,6 +249,105 @@ namespace SistemaBienestarEstudiantil.WebServices
             return encuestaEntity;
         }
 
+        /// metodo devuelve el alumno si no ha respondido encuesta
+        [WebMethod]
+        public void getStudentByCedula(int cedula, int codigoEncuesta)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            ALUMNO alumno = db.ALUMNOes.Single(a => a.CEDULA == cedula);
+
+            int count = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOALUMNO == alumno.CODIGO && era.CODIGOENCUESTA == codigoEncuesta).Count();
+            count += db.ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOALUMNO == alumno.CODIGO && ert.CODIGOENCUESTA == codigoEncuesta).Count();
+
+            if (count == 0)
+                writeResponse(new JavaScriptSerializer().Serialize(alumno));
+            else
+                writeResponse(new JavaScriptSerializer().Serialize(null));
+        }
+
+        [WebMethod]
+        public void saveResponseStudent(List<ENCUESTA_RESPUESTA_ALUMNO> listResponseSelect, List<ENCUESTA_RESPUESTA_TEXTO> listResponseText)
+        {
+
+            bienestarEntities db = new bienestarEntities();
+            foreach (ENCUESTA_RESPUESTA_ALUMNO era in listResponseSelect)
+            {
+                db.ENCUESTA_RESPUESTA_ALUMNO.AddObject(era);
+            }
+
+            foreach (ENCUESTA_RESPUESTA_TEXTO ert in listResponseText)
+            {
+                db.ENCUESTA_RESPUESTA_TEXTO.AddObject(ert);
+            }
+
+            db.SaveChanges();
+            writeResponse("ok");
+        }
+
+        [WebMethod]
+        public void surveysReport(int surveyCode)
+        {
+            bienestarEntities db = new bienestarEntities();
+            ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == surveyCode);
+
+            int stuResp = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+            int stuText = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+
+            List<ResultadoSeleccione> resultadoSeleccione = new List<ResultadoSeleccione>();
+
+            // cada pregunta
+            foreach (Models.ENCUESTA_PREGUNTA enpre in encuesta.ENCUESTA_PREGUNTA)
+            {
+                ResultadoSeleccione rs = new ResultadoSeleccione(enpre.TIPO, enpre.TITULO, new List<Respuesta>());
+                if (enpre.TIPO != 3)
+                {
+                    // cada respuesta
+                    foreach (Models.ENCUESTA_RESPUESTA enres in enpre.ENCUESTA_RESPUESTA)
+                    {
+                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.ENCUESTA_RESPUESTA_ALUMNO.Count(), null));
+                    }
+                }
+                else foreach (Models.ENCUESTA_RESPUESTA_TEXTO ert in enpre.ENCUESTA_RESPUESTA_TEXTO)
+                {
+                    rs.respuestas.Add(new Respuesta(null, 0, ert.TEXTO));
+                }
+
+                resultadoSeleccione.Add(rs);
+            }
+
+            writeResponse(
+                "{\"encuestados\": " + (stuResp > stuText ? stuResp : stuText) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\",\"preguntas\":" +
+                new JavaScriptSerializer().Serialize(resultadoSeleccione)
+                + "}"
+            );
+        }
+
+    }
+
+    public class ResultadoSeleccione
+    {
+        public ResultadoSeleccione(int tipo, string pregunta, List<Respuesta> respuestas)
+        {
+            this.tipo = tipo;
+            this.pregunta = pregunta;
+            this.respuestas = respuestas;
+        }
+        public int tipo { get; set; }
+        public string pregunta { get; set; }
+        public List<Respuesta> respuestas { get; set; }
+    }
+
+    public class Respuesta
+    {
+        public Respuesta(string nombre, int cantidad, string parrafo)
+        {
+            this.nombre = nombre;
+            this.cantidad = cantidad;
+            this.parrafo = parrafo;
+        }
+        public string nombre { get; set; }
+        public int cantidad { get; set; }
+        public string parrafo { get; set; }
     }
 
     public class Encuesta

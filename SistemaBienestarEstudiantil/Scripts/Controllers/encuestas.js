@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var app = angular.module('BienestarApp', ['ui.grid']);
+    var app = angular.module('BienestarApp', ['ui.grid','chart.js']);
 
     app.controller('EncuestasController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
@@ -24,12 +24,15 @@
             multiSelect: false,
             columnDefs: [
                 {name:'Título', field: 'TITULO'},
-                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 84}
+                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 110}
             ]
         };
 
         // load encuestas from server and set in the grid
         $scope.cargarEncuestas();
+
+        $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+        $scope.data = [300, 500, 100];
 
         // prepare messages
         $('#messages').puigrowl();
@@ -39,17 +42,6 @@
         $scope.generateId = function(){
             return Math.floor(Math.random() * 999999) + 100000;
         };
-
-        // listener for encuesta TITULO
-        $scope.$watch('encuesta.TITULO', function() {
-            /*
-            var text = document.getElementById('encuestaTitulo');
-            if (text != null) {
-                text.style.height = 'auto';
-                text.style.height = text.scrollHeight + 'px';
-            }
-            */
-        });
 
         // test method for view object in the console
         $scope.encuestaConsole = function(){
@@ -106,6 +98,32 @@
                 };
                 $scope.setDefaultSurvey(row);
             }
+        };
+
+        $scope.separateQuestionResponse = function (encuesta) {
+            for (var i = 0; i < encuesta.preguntas.length; i++) {
+                if (encuesta.preguntas[i].tipo != 3) {
+                    encuesta.preguntas[i].labelRespuestas = [];
+                    encuesta.preguntas[i].valorRespuestas = [];
+                    for (var j = 0; j < encuesta.preguntas[i].respuestas.length; j++) {
+                        encuesta.preguntas[i].labelRespuestas.push(encuesta.preguntas[i].respuestas[j].nombre);
+                        encuesta.preguntas[i].valorRespuestas.push(encuesta.preguntas[i].respuestas[j].cantidad);
+                    };
+                };
+            };
+        };
+
+        this.showReport = function(code){
+            $scope.mode = "report";
+            $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
+                surveyCode: code
+            }).success(function (data, status, headers, config) {
+                $scope.separateQuestionResponse(data);
+                $scope.encuestaReport = data;
+                console.log(data);
+            }).error(function (data, status, headers, config) {
+                console.log("error in report ...", data);
+            });
         };
 
         $scope.setDefaultSurvey = function(row){
