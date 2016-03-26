@@ -1,8 +1,15 @@
 ﻿(function () {
 
-    var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages']);
+    var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages','cgBusy']);
 
     app.controller('UsuariosController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
+
+        // for procesing message
+        $scope.promise = null;
+        $scope.message = 'Procesando...';
+        $scope.backdrop = false;
+        $scope.delay = 2;
+        $scope.minDuration = 2;
 
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
@@ -28,10 +35,21 @@
         };
 
         $scope.cargarUsuarios = function () {
-            $http.post('../../WebServices/Users.asmx/getAllUser', {
+            $scope.promise = $http.post('../../WebServices/Users.asmx/getAllUser', {
             }).success(function (data, status, headers, config) {
                 console.log("cargarUsuarios",data);
                 $scope.gridOptions.data = data;
+            }).error(function (data, status, headers, config) {
+                console.log("error al cargar los usuarios...", data);
+            });
+        };
+
+        $scope.cargarRoles = function () {
+            $scope.promise = $http.post('../../WebServices/Rols.asmx/getAllRols', {
+            }).success(function (data, status, headers, config) {
+                console.log("cargarRoles",data);
+                $scope.Rols = data.response;
+                console.log($scope.Rols);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...", data);
             });
@@ -52,6 +70,7 @@
         };
 
         $scope.cargarUsuarios();
+        $scope.cargarRoles();
 
         this.removeUser = function (code) {
             var parentObject = this;
