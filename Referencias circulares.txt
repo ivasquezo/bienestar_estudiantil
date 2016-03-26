@@ -1,8 +1,24 @@
 class ACCESO
+	
+	[ScriptIgnore]
+	public EntityCollection<ROL_ACCESO> ROL_ACCESO
 
 class ACTIVIDAD
 
+	[ScriptIgnore]
+	public ACTIVIDAD_GENERAL ACTIVIDAD_GENERAL
+	public EntityReference<ACTIVIDAD_GENERAL> ACTIVIDAD_GENERALReference
+	public EntityReference<USUARIO> USUARIOReference
+	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
+
 class ACTIVIDAD_ADJUNTO
+
+	[ScriptIgnore]
+	public ACTIVIDAD ACTIVIDAD
+
+	[ScriptIgnore]
+	public EntityReference<ACTIVIDAD> ACTIVIDADReference
+
 
 class ACTIVIDAD_GENERAL
 
@@ -10,18 +26,45 @@ class ACTIVIDAD_GENERAL
 	public EntityCollection<ACTIVIDAD> ACTIVIDADs
 
 
-
 class ALUMNO
+
+	[ScriptIgnore]
+	public EntityCollection<ASISTENCIA> ASISTENCIAs
+	public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
+	public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
+	public EntityCollection<BECA_SOLICITUD> BECA_SOLICITUD
+
 
 class ASISTENCIA
 
+	[ScriptIgnore]
+	public EntityReference<ALUMNO> ALUMNOReference
+	public EntityReference<GRUPO> GRUPOReference
+
 class BECA_ADJUNTO
+
+	[ScriptIgnore]
+	public BECA_SOLICITUD BECA_SOLICITUD
+	public EntityReference<BECA_SOLICITUD> BECA_SOLICITUDReference
+
 
 class BECA_SOLICITUD
 
+	[ScriptIgnore]
+	public EntityReference<ALUMNO> ALUMNOReference
+	public EntityReference<BECA_TIPO> BECA_TIPOReference
+
 class BECA_TIPO
 
+	[ScriptIgnore]
+	public EntityCollection<BECA_SOLICITUD> BECA_SOLICITUD
+
+
 class BECA_TIPO_DOCUMENTO
+
+	[ScriptIgnore]
+	public BECA_TIPO BECA_TIPO
+	public EntityReference<BECA_TIPO> BECA_TIPOReference
 
 class DATOS_SISTEMA
 
@@ -29,19 +72,64 @@ class ENCUESTA
 
 class ENCUESTA_PREGUNTA
 
+	[ScriptIgnore]
+	public ENCUESTA ENCUESTA
+	public EntityReference<ENCUESTA> ENCUESTAReference
+	public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
+
 class ENCUESTA_RESPUESTA
+
+	[ScriptIgnore]
+	public ENCUESTA_PREGUNTA ENCUESTA_PREGUNTA
+	public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
+	public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
+
+class ENCUESTA_RESPUESTA_ALUMNO
+
+	[ScriptIgnore]
+	public ALUMNO ALUMNO
+	public EntityReference<ALUMNO> ALUMNOReference
+	public ENCUESTA ENCUESTA
+	public EntityReference<ENCUESTA> ENCUESTAReference
+	public ENCUESTA_RESPUESTA ENCUESTA_RESPUESTA
+	public EntityReference<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTAReference
+	
 
 class ENCUESTA_RESPUESTA_TEXTO
 
+	[ScriptIgnore]
+	public ALUMNO ALUMNO
+	public EntityReference<ALUMNO> ALUMNOReference
+	public ENCUESTA ENCUESTA
+	public EntityReference<ENCUESTA> ENCUESTAReference
+	public ENCUESTA_PREGUNTA ENCUESTA_PREGUNTA
+	public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
+
+
 class GRUPO
+
+	[ScriptIgnore]
+	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
+
 
 class GRUPO_ACTIVIDAD
 
 class ROL
 
+	[ScriptIgnore]
+	public EntityCollection<USUARIO> USUARIOs
+
+
 class ROL_ACCESO
+
+	[ScriptIgnore]
+	public EntityReference<ACCESO> ACCESOReference
+	public ROL ROL
+	public EntityReference<ROL> ROLReference
+
 
 class USUARIO
 
 	[ScriptIgnore]
 	public EntityCollection<ACTIVIDAD> ACTIVIDADs
+	public EntityReference<ROL> ROLReference
