@@ -6,9 +6,11 @@
 
         $scope.promise = null;
         $scope.message = 'Procesando...';
-        $scope.backdrop = true;
+        $scope.backdrop = false;
         $scope.delay = 2;
         $scope.minDuration = 2;
+        $scope.mode = 'init';
+        $scope.view = 'summary';
 
         // method for load encuestas from server
         $scope.cargarEncuestas = function () {
@@ -73,9 +75,6 @@
             console.log("ANGULAR:", angular.toJson(this.encuesta));
         }
 
-        // quit mode
-        $scope.mode = null;
-
         $scope.getElementArray = function(arrayElements, codeElement) {
             for (var i=0; i<arrayElements.length; i++) {
                 if (arrayElements[i].CODIGO == codeElement) {
@@ -106,7 +105,7 @@
                 $scope.addHandlerEncuesta($scope.encuesta);
             } else {
                 $scope.mode = "init";
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'No se puede editar esta encuesta'}]);
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Encuesta ya ha sido contestada, no se puede editar'}]);
             }
         };
 
@@ -148,9 +147,10 @@
             $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
                 surveyCode: code
             }).success(function (data, status, headers, config) {
+
                 $scope.separateQuestionResponse(data);
                 $scope.encuestaReport = data;
-                console.log(data);
+
             }).error(function (data, status, headers, config) {
                 console.log("error in report ...", data);
             });
@@ -333,6 +333,10 @@
             }).error(function (data, status, headers, config) {
                 console.log("error al traer la encuesta seleccionada", data);
             });
+        };
+
+        $scope.cambiarVista = function(viewValue) {
+            $scope.view = viewValue;
         };
 
     }]);

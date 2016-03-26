@@ -257,9 +257,23 @@ namespace SistemaBienestarEstudiantil.WebServices
                 resultadoSeleccione.Add(rs);
             }
 
+            // estudiantes que hicieron la encuesta
+            List<Decimal> studentCodesSelect = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().ToList();
+            List<Decimal> studentCodesParagr = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().ToList();
+            foreach (Decimal studCode in studentCodesParagr)
+            {
+                if (!studentCodesSelect.Contains(studCode))
+                {
+                    studentCodesSelect.Add(studCode);
+                }
+            }
+
+            List<ALUMNO> listAlumnos = db.ALUMNOes.Where(a => studentCodesSelect.Contains(a.CODIGO)).ToList();
+
             writeResponse(
-                "{\"encuestados\": " + getSurveyAnsweredCount(surveyCode) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\",\"preguntas\":" +
-                new JavaScriptSerializer().Serialize(resultadoSeleccione)
+                "{\"encuestados\": " + getSurveyAnsweredCount(surveyCode) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\","
+                + "\"" + "estudiantes\":" + new JavaScriptSerializer().Serialize(listAlumnos) + ","
+                + "\"preguntas\":" + new JavaScriptSerializer().Serialize(resultadoSeleccione)
                 + "}"
             );
         }
