@@ -179,7 +179,6 @@
                     // check if contains uppercase
                     // if it does contain uppercase, set our custom `uppercaseValidator` to valid/true
                     // otherwise set it to non-valid/false
-
                     if (ngModelValue != null && ngModelValue.toString().length == 10) {
                         
                         ctrl.$setValidity('cedulaChecking', false);

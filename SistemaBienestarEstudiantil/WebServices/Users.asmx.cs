@@ -80,7 +80,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             db.SaveChanges();
 
-            writeResponse("ok");
+            writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
         [WebMethod]
@@ -105,7 +105,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             db.SaveChanges();
 
-            writeResponse("ok");
+            writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
         [WebMethod]
@@ -117,6 +117,14 @@ namespace SistemaBienestarEstudiantil.WebServices
             db.USUARIOs.AddObject(newUser);
             db.SaveChanges();
             writeResponse(new JavaScriptSerializer().Serialize(newUser));
+        }
+
+        [WebMethod]
+        public void countUserWithCedula(string cedula)
+        {
+            bienestarEntities db = new bienestarEntities();
+            int cantidad = db.USUARIOs.Where(u => cedula != null && u.CEDULA == cedula).Count();
+            writeResponse("{\"cantidad\":" + cantidad + "}");
         }
     }
 }
