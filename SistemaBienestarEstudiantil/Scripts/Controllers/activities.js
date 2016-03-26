@@ -22,6 +22,7 @@
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
                     $scope.convertDate(data.response);
+                    $scope.cargarEstadoActividades(data.response);
                     $scope.gridOptions.data = data.response;
                 } else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
@@ -29,6 +30,20 @@
                 console.log("Error al cargar las actividades... ", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades'}]);
             });
+        };
+
+        $scope.cargarEstadoActividades = function(actividades){
+            for (var i = 0; i < actividades.length; i++) {
+                if (actividades[i].ESTADO == 0) {
+                    actividades[i].NOMBREESTADO = "Inactivo";
+                } else if (actividades[i].ESTADO == 1) {
+                    actividades[i].NOMBREESTADO = "En proceso";
+                } else if (actividades[i].ESTADO == 2) {
+                    actividades[i].NOMBREESTADO = "Procesado";
+                } else if (actividades[i].ESTADO == 3) {
+                    actividades[i].NOMBREESTADO = "Finalizado";
+                }
+            };
         };
 
         $scope.gridOptions = {
@@ -39,7 +54,7 @@
               {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
               {name:'Actividad', field: 'NOMBRE'},
               {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\''},
-              {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == 0 ? 'Inactivo' : row.entity.ESTADO == 1 ? 'En Proceso' : row.entity.ESTADO == 2 ? 'Procesado' : 'Finalizado'}}</div>"},
+              {name:'Estado', field: 'NOMBREESTADO'},
               {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 160, enableFiltering: false}
             ]
         };
