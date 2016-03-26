@@ -122,7 +122,7 @@
         <script type="text/ng-template" id="newUser.html">
             <fieldset>
                 <legend>Nuevo usuario</legend>
-                <form name="newUserForm" ng-submit="addNewUserDB()">
+                <form id="newUserForm" name="newUserForm" ng-submit="addNewUserDB()">
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
                         <div class="col-md-4">
@@ -146,9 +146,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="cedulausuario">Cédula:</label>  
                         <div class="col-md-4">
-                            <input required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="Cédula" class="form-control input-md">
+                            <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="Cédula" class="form-control input-md">
                             <span ng-messages="newUserForm.cedulausuario.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese una identificación</span>
+                                <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un número de cédula válido</span>
+                                <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este número de cédula</span>
+                                <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
                             </span>
                         </div>
                     </div>
@@ -176,9 +179,12 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
                         <div class="col-md-4">
-                            <select ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
-                                ng-options="o.CODIGO as o.NOMBRE for o in Rols">
+                            <select name="rol" ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
+                                ng-options="o.CODIGO as o.NOMBRE for o in Rols" required>
                             </select>
+                            <span ng-messages="newUserForm.rol.$error">
+                                <span ng-message="required" class="help-block ng-message">Ingrese rol</span>
+                            </span>
                         </div>
                     </div>
 
