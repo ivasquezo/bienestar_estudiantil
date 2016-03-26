@@ -8,6 +8,8 @@
         <EntityContainer Name="bienestarModelStoreContainer">
           <EntitySet Name="ACCESO" EntityType="bienestarModel.Store.ACCESO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ACTIVIDAD" EntityType="bienestarModel.Store.ACTIVIDAD" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ACTIVIDAD_GENERAL" EntityType="bienestarModel.Store.ACTIVIDAD_GENERAL" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ACTIVIDAD_GENERAL_ACTIVIDAD" EntityType="bienestarModel.Store.ACTIVIDAD_GENERAL_ACTIVIDAD" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ACTIVIDAD_USUARIO" EntityType="bienestarModel.Store.ACTIVIDAD_USUARIO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ADJUNTO" EntityType="bienestarModel.Store.ADJUNTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ALUMNO" EntityType="bienestarModel.Store.ALUMNO" store:Type="Tables" Schema="dbo" />
@@ -20,12 +22,18 @@
           <EntitySet Name="ENCUESTA_RESPUESTA_TEXTO" EntityType="bienestarModel.Store.ENCUESTA_RESPUESTA_TEXTO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GRUPO" EntityType="bienestarModel.Store.GRUPO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="GRUPO_ACTIVIDAD" EntityType="bienestarModel.Store.GRUPO_ACTIVIDAD" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="NIVEL" EntityType="bienestarModel.Store.NIVEL" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="NIVEL_ALUMNO" EntityType="bienestarModel.Store.NIVEL_ALUMNO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ROL" EntityType="bienestarModel.Store.ROL" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ROL_ACCESO" EntityType="bienestarModel.Store.ROL_ACCESO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="USUARIO" EntityType="bienestarModel.Store.USUARIO" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="USUARIO_ROL" EntityType="bienestarModel.Store.USUARIO_ROL" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" Association="bienestarModel.Store.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
+            <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
+            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" Association="bienestarModel.Store.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
+            <End Role="ACTIVIDAD_GENERAL" EntitySet="ACTIVIDAD_GENERAL" />
+            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
+          </AssociationSet>
           <AssociationSet Name="FK_ACTIVIDAD_USUARIO_ACTIVIDAD" Association="bienestarModel.Store.FK_ACTIVIDAD_USUARIO_ACTIVIDAD">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDAD" />
             <End Role="ACTIVIDAD_USUARIO" EntitySet="ACTIVIDAD_USUARIO" />
@@ -86,14 +94,6 @@
             <End Role="GRUPO" EntitySet="GRUPO" />
             <End Role="GRUPO_ACTIVIDAD" EntitySet="GRUPO_ACTIVIDAD" />
           </AssociationSet>
-          <AssociationSet Name="FK_NIVEL_ALUMNO_ALUMNO" Association="bienestarModel.Store.FK_NIVEL_ALUMNO_ALUMNO">
-            <End Role="ALUMNO" EntitySet="ALUMNO" />
-            <End Role="NIVEL_ALUMNO" EntitySet="NIVEL_ALUMNO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_NIVEL_ALUMNO_NIVEL" Association="bienestarModel.Store.FK_NIVEL_ALUMNO_NIVEL">
-            <End Role="NIVEL" EntitySet="NIVEL" />
-            <End Role="NIVEL_ALUMNO" EntitySet="NIVEL_ALUMNO" />
-          </AssociationSet>
           <AssociationSet Name="FK_ROL_MODULO_MODULO1" Association="bienestarModel.Store.FK_ROL_MODULO_MODULO1">
             <End Role="ACCESO" EntitySet="ACCESO" />
             <End Role="ROL_ACCESO" EntitySet="ROL_ACCESO" />
@@ -125,8 +125,24 @@
           <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="FECHA" Type="datetime" />
-          <Property Name="ESTADO" Type="bit" Nullable="false" />
+          <Property Name="ESTADO" Type="int" Nullable="false" />
           <Property Name="OBSERVACION" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ACTIVIDAD_GENERAL">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ACTIVIDAD_GENERAL_ACTIVIDAD">
+          <Key>
+            <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
+            <PropertyRef Name="CODIGOACTIVIDAD" />
+          </Key>
+          <Property Name="CODIGOACTIVIDADGENERAL" Type="numeric" Nullable="false" />
+          <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
+          <Property Name="ESTADO" Type="bit" />
         </EntityType>
         <EntityType Name="ACTIVIDAD_USUARIO">
           <Key>
@@ -224,6 +240,7 @@
           <Property Name="CODIGOPREGUNTA" Type="numeric" Nullable="false" />
           <Property Name="TEXTO" Type="varchar" MaxLength="250" />
           <Property Name="FECHA" Type="datetime" />
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </EntityType>
         <EntityType Name="GRUPO">
           <Key>
@@ -241,21 +258,7 @@
           </Key>
           <Property Name="CODIGOGRUPO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOACTIVIDAD" Type="numeric" Nullable="false" />
-        </EntityType>
-        <EntityType Name="NIVEL">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Name="CODIGO" Type="numeric" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="NOMBRE" Type="varchar" Nullable="false" MaxLength="20" />
-        </EntityType>
-        <EntityType Name="NIVEL_ALUMNO">
-          <Key>
-            <PropertyRef Name="CODIGOALUMNO" />
-            <PropertyRef Name="CODIGONIVEL" />
-          </Key>
-          <Property Name="CODIGOALUMNO" Type="numeric" Nullable="false" />
-          <Property Name="CODIGONIVEL" Type="numeric" Nullable="false" />
+          <Property Name="ESTADO" Type="bit" />
         </EntityType>
         <EntityType Name="ROL">
           <Key>
@@ -296,6 +299,30 @@
           <Property Name="CODIGOUSUARIO" Type="numeric" Nullable="false" />
           <Property Name="CODIGOROL" Type="numeric" Nullable="false" />
         </EntityType>
+        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
+          <End Role="ACTIVIDAD" Type="bienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
+          <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Type="bienestarModel.Store.ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACTIVIDAD">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
+              <PropertyRef Name="CODIGOACTIVIDAD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
+          <End Role="ACTIVIDAD_GENERAL" Type="bienestarModel.Store.ACTIVIDAD_GENERAL" Multiplicity="1" />
+          <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Type="bienestarModel.Store.ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACTIVIDAD_GENERAL">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
+              <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ACTIVIDAD_USUARIO_ACTIVIDAD">
           <End Role="ACTIVIDAD" Type="bienestarModel.Store.ACTIVIDAD" Multiplicity="1" />
           <End Role="ACTIVIDAD_USUARIO" Type="bienestarModel.Store.ACTIVIDAD_USUARIO" Multiplicity="*" />
@@ -480,30 +507,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_NIVEL_ALUMNO_ALUMNO">
-          <End Role="ALUMNO" Type="bienestarModel.Store.ALUMNO" Multiplicity="1" />
-          <End Role="NIVEL_ALUMNO" Type="bienestarModel.Store.NIVEL_ALUMNO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ALUMNO">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="NIVEL_ALUMNO">
-              <PropertyRef Name="CODIGOALUMNO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_NIVEL_ALUMNO_NIVEL">
-          <End Role="NIVEL" Type="bienestarModel.Store.NIVEL" Multiplicity="1" />
-          <End Role="NIVEL_ALUMNO" Type="bienestarModel.Store.NIVEL_ALUMNO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NIVEL">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="NIVEL_ALUMNO">
-              <PropertyRef Name="CODIGONIVEL" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ROL_MODULO_MODULO1">
           <End Role="ACCESO" Type="bienestarModel.Store.ACCESO" Multiplicity="1" />
           <End Role="ROL_ACCESO" Type="bienestarModel.Store.ROL_ACCESO" Multiplicity="*" />
@@ -558,7 +561,6 @@
       <Schema Namespace="bienestarModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="bienestarEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ACCESOes" EntityType="bienestarModel.ACCESO" />
-          <EntitySet Name="ACTIVIDADs" EntityType="bienestarModel.ACTIVIDAD" />
           <EntitySet Name="ADJUNTOes" EntityType="bienestarModel.ADJUNTO" />
           <EntitySet Name="ALUMNOes" EntityType="bienestarModel.ALUMNO" />
           <EntitySet Name="ASISTENCIAs" EntityType="bienestarModel.ASISTENCIA" />
@@ -576,10 +578,6 @@
           <AssociationSet Name="FK_ROL_MODULO_MODULO1" Association="bienestarModel.FK_ROL_MODULO_MODULO1">
             <End Role="ACCESO" EntitySet="ACCESOes" />
             <End Role="ROL_ACCESO" EntitySet="ROL_ACCESO" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ADJUNTO_ACTIVIDAD" Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD">
-            <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
-            <End Role="ADJUNTO" EntitySet="ADJUNTOes" />
           </AssociationSet>
           <AssociationSet Name="FK_ASISTENCIA_ALUMNO" Association="bienestarModel.FK_ASISTENCIA_ALUMNO">
             <End Role="ALUMNO" EntitySet="ALUMNOes" />
@@ -625,6 +623,20 @@
             <End Role="ROL" EntitySet="ROLs" />
             <End Role="ROL_ACCESO" EntitySet="ROL_ACCESO" />
           </AssociationSet>
+          <AssociationSet Name="NIVEL_ALUMNO" Association="bienestarModel.NIVEL_ALUMNO">
+            <End Role="ALUMNO" EntitySet="ALUMNOes" />
+            <End Role="NIVEL" EntitySet="NIVELs" />
+          </AssociationSet>
+          <AssociationSet Name="USUARIO_ROL" Association="bienestarModel.USUARIO_ROL">
+            <End Role="ROL" EntitySet="ROLs" />
+            <End Role="USUARIO" EntitySet="USUARIOs" />
+          </AssociationSet>
+          <EntitySet Name="DATOS_SISTEMA" EntityType="bienestarModel.DATOS_SISTEMA" />
+          <EntitySet Name="ACTIVIDADs" EntityType="bienestarModel.ACTIVIDAD" />
+          <AssociationSet Name="FK_ADJUNTO_ACTIVIDAD" Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD">
+            <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
+            <End Role="ADJUNTO" EntitySet="ADJUNTOes" />
+          </AssociationSet>
           <AssociationSet Name="ACTIVIDAD_USUARIO" Association="bienestarModel.ACTIVIDAD_USUARIO">
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
             <End Role="USUARIO" EntitySet="USUARIOs" />
@@ -633,13 +645,15 @@
             <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
             <End Role="GRUPO" EntitySet="GRUPOes" />
           </AssociationSet>
-          <AssociationSet Name="NIVEL_ALUMNO" Association="bienestarModel.NIVEL_ALUMNO">
-            <End Role="ALUMNO" EntitySet="ALUMNOes" />
-            <End Role="NIVEL" EntitySet="NIVELs" />
+          <EntitySet Name="ACTIVIDAD_GENERAL" EntityType="bienestarModel.ACTIVIDAD_GENERAL" />
+          <EntitySet Name="ACTIVIDAD_GENERAL_ACTIVIDAD" EntityType="bienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" />
+          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" Association="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
+            <End Role="ACTIVIDAD" EntitySet="ACTIVIDADs" />
+            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
           </AssociationSet>
-          <AssociationSet Name="USUARIO_ROL" Association="bienestarModel.USUARIO_ROL">
-            <End Role="ROL" EntitySet="ROLs" />
-            <End Role="USUARIO" EntitySet="USUARIOs" />
+          <AssociationSet Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" Association="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
+            <End Role="ACTIVIDAD_GENERAL" EntitySet="ACTIVIDAD_GENERAL" />
+            <End Role="ACTIVIDAD_GENERAL_ACTIVIDAD" EntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="ACCESO">
@@ -649,19 +663,6 @@
           <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ROL_ACCESO" Relationship="bienestarModel.FK_ROL_MODULO_MODULO1" FromRole="ACCESO" ToRole="ROL_ACCESO" />
-        </EntityType>
-        <EntityType Name="ACTIVIDAD">
-          <Key>
-            <PropertyRef Name="CODIGO" />
-          </Key>
-          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
-          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="FECHA" />
-          <Property Type="Boolean" Name="ESTADO" Nullable="false" />
-          <Property Type="String" Name="OBSERVACION" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ADJUNTOes" Relationship="bienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ADJUNTO" />
-          <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="ACTIVIDAD" ToRole="USUARIO" />
-          <NavigationProperty Name="GRUPOes" Relationship="bienestarModel.GRUPO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="GRUPO" />
         </EntityType>
         <EntityType Name="ADJUNTO">
           <Key>
@@ -685,6 +686,7 @@
           <NavigationProperty Name="ENCUESTA_RESPUESTA_ALUMNO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO" FromRole="ALUMNO" ToRole="ENCUESTA_RESPUESTA_ALUMNO" />
           <NavigationProperty Name="ENCUESTA_RESPUESTA_TEXTO" Relationship="bienestarModel.FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO" FromRole="ALUMNO" ToRole="ENCUESTA_RESPUESTA_TEXTO" />
           <NavigationProperty Name="NIVELs" Relationship="bienestarModel.NIVEL_ALUMNO" FromRole="ALUMNO" ToRole="NIVEL" />
+          <Property Type="Decimal" Name="CEDULA" Nullable="false" Precision="10" Scale="0" />
         </EntityType>
         <EntityType Name="ASISTENCIA">
           <Key>
@@ -801,6 +803,7 @@
           <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
           <NavigationProperty Name="ROL_ACCESO" Relationship="bienestarModel.FK_ROL_MODULO_ROL" FromRole="ROL" ToRole="ROL_ACCESO" />
           <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.USUARIO_ROL" FromRole="ROL" ToRole="USUARIO" />
+          <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
         </EntityType>
         <EntityType Name="ROL_ACCESO">
           <Key>
@@ -826,8 +829,8 @@
           <Property Type="String" Name="CONTRASENAACTUAL" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="TIPO" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Type="Boolean" Name="ESTADO" Nullable="false" />
-          <NavigationProperty Name="ACTIVIDADs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="USUARIO" ToRole="ACTIVIDAD" />
           <NavigationProperty Name="ROLs" Relationship="bienestarModel.USUARIO_ROL" FromRole="USUARIO" ToRole="ROL" />
+          <NavigationProperty Name="ACTIVIDADs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="USUARIO" ToRole="ACTIVIDAD" />
         </EntityType>
         <Association Name="FK_ROL_MODULO_MODULO1">
           <End Type="bienestarModel.ACCESO" Role="ACCESO" Multiplicity="1" />
@@ -838,18 +841,6 @@
             </Principal>
             <Dependent Role="ROL_ACCESO">
               <PropertyRef Name="CODIGOACCESO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ADJUNTO_ACTIVIDAD">
-          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
-          <End Type="bienestarModel.ADJUNTO" Role="ADJUNTO" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ACTIVIDAD">
-              <PropertyRef Name="CODIGO" />
-            </Principal>
-            <Dependent Role="ADJUNTO">
-              <PropertyRef Name="CODIGOACTIVIDAD" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -985,14 +976,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ACTIVIDAD_USUARIO">
-          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
-          <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
-        </Association>
-        <Association Name="GRUPO_ACTIVIDAD">
-          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
-          <End Type="bienestarModel.GRUPO" Role="GRUPO" Multiplicity="*" />
-        </Association>
         <Association Name="NIVEL_ALUMNO">
           <End Type="bienestarModel.ALUMNO" Role="ALUMNO" Multiplicity="*" />
           <End Type="bienestarModel.NIVEL" Role="NIVEL" Multiplicity="*" />
@@ -1001,6 +984,95 @@
           <End Type="bienestarModel.ROL" Role="ROL" Multiplicity="*" />
           <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
         </Association>
+<<<<<<< HEAD
+        <EntityType Name="DATOS_SISTEMA">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="VALOR" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="ACTIVO" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ACTIVIDAD">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="FECHA" />
+          <Property Type="Int32" Name="ESTADO" Nullable="false" />
+          <Property Type="String" Name="OBSERVACION" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ADJUNTOes" Relationship="bienestarModel.FK_ADJUNTO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ADJUNTO" />
+          <NavigationProperty Name="USUARIOs" Relationship="bienestarModel.ACTIVIDAD_USUARIO" FromRole="ACTIVIDAD" ToRole="USUARIO" />
+          <NavigationProperty Name="GRUPOes" Relationship="bienestarModel.GRUPO_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="GRUPO" />
+          <NavigationProperty Name="ACTIVIDAD_GENERAL_ACTIVIDAD" Relationship="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" FromRole="ACTIVIDAD" ToRole="ACTIVIDAD_GENERAL_ACTIVIDAD" />
+        </EntityType>
+        <Association Name="FK_ADJUNTO_ACTIVIDAD">
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
+          <End Type="bienestarModel.ADJUNTO" Role="ADJUNTO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACTIVIDAD">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ADJUNTO">
+              <PropertyRef Name="CODIGOACTIVIDAD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ACTIVIDAD_USUARIO">
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
+          <End Type="bienestarModel.USUARIO" Role="USUARIO" Multiplicity="*" />
+        </Association>
+        <Association Name="GRUPO_ACTIVIDAD">
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="*" />
+          <End Type="bienestarModel.GRUPO" Role="GRUPO" Multiplicity="*" />
+        </Association>
+        <EntityType Name="ACTIVIDAD_GENERAL">
+          <Key>
+            <PropertyRef Name="CODIGO" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGO" Nullable="false" Precision="18" Scale="0" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ACTIVIDAD_GENERAL_ACTIVIDAD" Relationship="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" FromRole="ACTIVIDAD_GENERAL" ToRole="ACTIVIDAD_GENERAL_ACTIVIDAD" />
+        </EntityType>
+        <EntityType Name="ACTIVIDAD_GENERAL_ACTIVIDAD">
+          <Key>
+            <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
+            <PropertyRef Name="CODIGOACTIVIDAD" />
+          </Key>
+          <Property Type="Decimal" Name="CODIGOACTIVIDADGENERAL" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="CODIGOACTIVIDAD" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="ESTADO" />
+          <NavigationProperty Name="ACTIVIDAD" Relationship="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" FromRole="ACTIVIDAD_GENERAL_ACTIVIDAD" ToRole="ACTIVIDAD" />
+          <NavigationProperty Name="ACTIVIDAD_GENERAL" Relationship="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" FromRole="ACTIVIDAD_GENERAL_ACTIVIDAD" ToRole="ACTIVIDAD_GENERAL" />
+        </EntityType>
+        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD">
+          <End Type="bienestarModel.ACTIVIDAD" Role="ACTIVIDAD" Multiplicity="1" />
+          <End Type="bienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACTIVIDAD">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
+              <PropertyRef Name="CODIGOACTIVIDAD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL">
+          <End Type="bienestarModel.ACTIVIDAD_GENERAL" Role="ACTIVIDAD_GENERAL" Multiplicity="1" />
+          <End Type="bienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" Role="ACTIVIDAD_GENERAL_ACTIVIDAD" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACTIVIDAD_GENERAL">
+              <PropertyRef Name="CODIGO" />
+            </Principal>
+            <Dependent Role="ACTIVIDAD_GENERAL_ACTIVIDAD">
+              <PropertyRef Name="CODIGOACTIVIDADGENERAL" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+=======
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1010,17 +1082,6 @@
           <EntitySetMapping Name="ACCESOes">
             <EntityTypeMapping TypeName="bienestarModel.ACCESO">
               <MappingFragment StoreEntitySet="ACCESO">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ACTIVIDADs">
-            <EntityTypeMapping TypeName="bienestarModel.ACTIVIDAD">
-              <MappingFragment StoreEntitySet="ACTIVIDAD">
-                <ScalarProperty Name="OBSERVACION" ColumnName="OBSERVACION" />
-                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
-                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
               </MappingFragment>
@@ -1039,6 +1100,7 @@
           <EntitySetMapping Name="ALUMNOes">
             <EntityTypeMapping TypeName="bienestarModel.ALUMNO">
               <MappingFragment StoreEntitySet="ALUMNO">
+                <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
                 <ScalarProperty Name="CEDULA" ColumnName="CEDULA" />
                 <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
@@ -1126,14 +1188,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="NIVELs">
-            <EntityTypeMapping TypeName="bienestarModel.NIVEL">
-              <MappingFragment StoreEntitySet="NIVEL">
-                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
-                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ROLs">
             <EntityTypeMapping TypeName="bienestarModel.ROL">
               <MappingFragment StoreEntitySet="ROL">
@@ -1167,6 +1221,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="USUARIO_ROL" TypeName="bienestarModel.USUARIO_ROL" StoreEntitySet="USUARIO_ROL">
+            <EndProperty Name="USUARIO">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOUSUARIO" />
+            </EndProperty>
+            <EndProperty Name="ROL">
+              <ScalarProperty Name="CODIGO" ColumnName="CODIGOROL" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="DATOS_SISTEMA">
+            <EntityTypeMapping TypeName="bienestarModel.DATOS_SISTEMA">
+              <MappingFragment StoreEntitySet="DATOS_SISTEMA">
+                <ScalarProperty Name="ACTIVO" ColumnName="ACTIVO" />
+                <ScalarProperty Name="VALOR" ColumnName="VALOR" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ACTIVIDADs">
+            <EntityTypeMapping TypeName="bienestarModel.ACTIVIDAD">
+              <MappingFragment StoreEntitySet="ACTIVIDAD">
+                <ScalarProperty Name="OBSERVACION" ColumnName="OBSERVACION" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="ACTIVIDAD_USUARIO" TypeName="bienestarModel.ACTIVIDAD_USUARIO" StoreEntitySet="ACTIVIDAD_USUARIO">
             <EndProperty Name="USUARIO">
               <ScalarProperty Name="CODIGO" ColumnName="CODIGOUSUARIO" />
@@ -1183,6 +1266,25 @@
               <ScalarProperty Name="CODIGO" ColumnName="CODIGOACTIVIDAD" />
             </EndProperty>
           </AssociationSetMapping>
+<<<<<<< HEAD
+          <EntitySetMapping Name="ACTIVIDAD_GENERAL">
+            <EntityTypeMapping TypeName="bienestarModel.ACTIVIDAD_GENERAL">
+              <MappingFragment StoreEntitySet="ACTIVIDAD_GENERAL">
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CODIGO" ColumnName="CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ACTIVIDAD_GENERAL_ACTIVIDAD">
+            <EntityTypeMapping TypeName="bienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD">
+              <MappingFragment StoreEntitySet="ACTIVIDAD_GENERAL_ACTIVIDAD">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="CODIGOACTIVIDAD" ColumnName="CODIGOACTIVIDAD" />
+                <ScalarProperty Name="CODIGOACTIVIDADGENERAL" ColumnName="CODIGOACTIVIDADGENERAL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+=======
           <AssociationSetMapping Name="NIVEL_ALUMNO" TypeName="bienestarModel.NIVEL_ALUMNO" StoreEntitySet="NIVEL_ALUMNO">
             <EndProperty Name="NIVEL">
               <ScalarProperty Name="CODIGO" ColumnName="CODIGONIVEL" />
@@ -1199,6 +1301,7 @@
               <ScalarProperty Name="CODIGO" ColumnName="CODIGOROL" />
             </EndProperty>
           </AssociationSetMapping>
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1219,6 +1322,34 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
+<<<<<<< HEAD
+      <Diagram Name="Model" ZoomLevel="94">
+        <EntityTypeShape EntityType="bienestarModel.ACCESO" Width="1.5" PointX="0.875" PointY="0.5" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="bienestarModel.ADJUNTO" Width="1.5" PointX="9" PointY="6" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.ALUMNO" Width="1.5" PointX="3" PointY="12.25" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.ASISTENCIA" Width="1.5" PointX="5.25" PointY="9" Height="2.172587890624996" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA" Width="1.5" PointX="7.75" PointY="9.375" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_PREGUNTA" Width="1.5" PointX="10" PointY="9" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="bienestarModel.ENCUESTA_RESPUESTA" Width="1.5" PointX="12.25" PointY="9.375" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.GRUPO" Width="1.5" PointX="3" PointY="9" Height="2.1725878906250067" />
+        <EntityTypeShape EntityType="bienestarModel.NIVEL" Width="1.5" PointX="5.25" PointY="12.25" Height="1.595683593749996" />
+        <EntityTypeShape EntityType="bienestarModel.ROL" Width="1.5" PointX="3.375" PointY="2.875" Height="1.9802864583333326" />
+        <EntityTypeShape EntityType="bienestarModel.ROL_ACCESO" Width="1.5" PointX="3.375" PointY="0.5" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="bienestarModel.USUARIO" Width="1.5" PointX="3.375" PointY="5.375" Height="3.1340950520833388" />
+        <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_MODULO1" >
+          <ConnectorPoint PointX="2.375" PointY="1.2978417968750016" />
+          <ConnectorPoint PointX="3.375" PointY="1.2978417968750016" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_ALUMNO" >
+          <ConnectorPoint PointX="4.5" PointY="12.251152846153847" />
+          <ConnectorPoint PointX="4.875" PointY="11.876152846153847" />
+          <ConnectorPoint PointX="4.875" PointY="10.086293945312498" />
+          <ConnectorPoint PointX="5.25" PointY="10.086293945312498" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ASISTENCIA_GRUPO" >
+          <ConnectorPoint PointX="4.5" PointY="9.6164347158203114" />
+          <ConnectorPoint PointX="5.25" PointY="9.6164347158203114" />
+=======
       <Diagram Name="Model" ZoomLevel="82">
         <EntityTypeShape EntityType="bienestarModel.ACCESO" Width="1.5" PointX="5.625" PointY="10" Height="1.5956835937500031" />
         <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD" Width="1.5" PointX="1.375" PointY="21.25" Height="2.5571907552083388" />
@@ -1267,6 +1398,7 @@
           <ConnectorPoint PointX="8.5520808333333331" PointY="13.086293945312505" />
           <ConnectorPoint PointX="11.125" PointY="13.086293945312505" />
           <ConnectorPoint PointX="11.125" PointY="5.297587890624996" />
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </AssociationConnector>
         <AssociationConnector Association="bienestarModel.FK_ENCUESTA_PREGUNTA_ENCUESTA" >
           <ConnectorPoint PointX="2.90625" PointY="4.1725878906250067" />
@@ -1297,6 +1429,45 @@
           <ConnectorPoint PointX="4" PointY="1.28125" />
         </AssociationConnector>
         <AssociationConnector Association="bienestarModel.FK_ROL_MODULO_ROL" >
+<<<<<<< HEAD
+          <ConnectorPoint PointX="4.125" PointY="2.875" />
+          <ConnectorPoint PointX="4.125" PointY="2.4802864583333388" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.NIVEL_ALUMNO" >
+          <ConnectorPoint PointX="4.5" PointY="13.079670719951922" />
+          <ConnectorPoint PointX="5.25" PointY="13.079670719951922" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.USUARIO_ROL" >
+          <ConnectorPoint PointX="4.125" PointY="4.8552864583333326" />
+          <ConnectorPoint PointX="4.125" PointY="5.375" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="bienestarModel.DATOS_SISTEMA" Width="1.5" PointX="1.375" PointY="3.125" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD" Width="1.5" PointX="9.625" PointY="3" Height="2.7494921874999996" />
+        <AssociationConnector Association="bienestarModel.FK_ADJUNTO_ACTIVIDAD" >
+          <ConnectorPoint PointX="10.0625" PointY="5.7494921875" />
+          <ConnectorPoint PointX="10.0625" PointY="6" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.ACTIVIDAD_USUARIO" >
+          <ConnectorPoint PointX="9.625" PointY="5.56224609375" />
+          <ConnectorPoint PointX="4.875" PointY="5.56224609375" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.GRUPO_ACTIVIDAD" >
+          <ConnectorPoint PointX="9.625" PointY="5.1151432291666659" />
+          <ConnectorPoint PointX="4.208333333333333" PointY="5.115143229166665" />
+          <ConnectorPoint PointX="4.041666666666667" PointY="5.1151432291666659" />
+          <ConnectorPoint PointX="3.15625" PointY="5.1151432291666659" />
+          <ConnectorPoint PointX="3.15625" PointY="9" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD_GENERAL" Width="2.5" PointX="6" PointY="0.5" Height="1.5956835937500031" />
+        <EntityTypeShape EntityType="bienestarModel.ACTIVIDAD_GENERAL_ACTIVIDAD" Width="2.5" PointX="9.25" PointY="0.5" Height="1.9802864583333388" />
+        <AssociationConnector Association="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD" >
+          <ConnectorPoint PointX="10.375" PointY="3" />
+          <ConnectorPoint PointX="10.375" PointY="2.4802864583333388" />
+        </AssociationConnector>
+        <AssociationConnector Association="bienestarModel.FK_ACTIVIDAD_GENERAL_ACTIVIDAD_ACTIVIDAD_GENERAL" >
+          <ConnectorPoint PointX="8.5" PointY="1.2978417968750016" />
+          <ConnectorPoint PointX="9.25" PointY="1.2978417968750016" />
+=======
           <ConnectorPoint PointX="5.875" PointY="18.990143229166669" />
           <ConnectorPoint PointX="6.625" PointY="18.990143229166669" />
         </AssociationConnector>
@@ -1320,6 +1491,7 @@
           <ConnectorPoint PointX="5.53125" PointY="20.480286458333339" />
           <ConnectorPoint PointX="5.53125" PointY="21.15625" />
           <ConnectorPoint PointX="6.625" PointY="21.15625" />
+>>>>>>> c3c815071d47ae9bf76347960d8d75aa81114ff2
         </AssociationConnector>
       </Diagram>
     </Diagrams>

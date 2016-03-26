@@ -24,10 +24,11 @@
 
         <script type="text/ng-template" id="actionsRols.html">
               <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)">
-                <span class="ui-icon ui-icon-trash"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)" 
+                    ng-hide="grid.appScope.Main.getRolStatus(COL_FIELD)">
+                    <span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)">
-                <span class="ui-icon ui-icon-pencil"></span></button>
+                    <span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>
 
@@ -38,7 +39,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Nombre del rol</label>  
                         <div class="col-md-4">
-                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;">
+                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;" 
+                                ng-disabled="rolCopy.ACTIVO">
                             <br/><span class="help-block">Nombre del rol</span>  
                             <span ng-messages="rolForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
