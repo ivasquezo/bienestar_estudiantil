@@ -91,6 +91,7 @@
             $scope.rolCopy.ACTIVO = $scope.rolEdit.ACTIVO;
 			$scope.getAccessByRol(code);
             $scope.accessRols = [];
+            $scope.rolsAccess = [];
 
             // Abre el pop up para editar el rol
             ngDialog.open({

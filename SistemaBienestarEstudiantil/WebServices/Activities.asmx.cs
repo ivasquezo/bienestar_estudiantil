@@ -61,6 +61,96 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        public void getGeneralActivityByActivityId(int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                bienestarEntities db = new bienestarEntities();
+
+                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL,
+                           (ag, aga) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD_GENERAL_ACTIVIDAD = aga })
+                           .Select(x => new { x.ACTIVIDAD_GENERAL.NOMBRE, x.ACTIVIDAD_GENERAL_ACTIVIDAD.ACTIVIDAD_GENERAL.CODIGO, x.ACTIVIDAD_GENERAL_ACTIVIDAD.CODIGOACTIVIDAD })
+                           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
+
+                response = new Response(true, "", "", "", data);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las actividades generales", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllGeneralActivity()
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                bienestarEntities db = new bienestarEntities();
+
+                response = new Response(true, "", "", "", db.ACTIVIDAD_GENERAL.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener todas las actividades generales", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllGroupLevels()
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                bienestarEntities db = new bienestarEntities();
+
+                response = new Response(true, "", "", "", db.GRUPOes.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los niveles academicos", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getGroupLevelByActivityId(int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                bienestarEntities db = new bienestarEntities();
+
+                var data = db.GRUPOes.Join(db.GRUPO_ACTIVIDAD, g => g.CODIGO, ga => ga.CODIGOGRUPO,
+                           (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
+                           .Select(x => new { x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, x.GRUPO_ACTIVIDAD.CODIGOGRUPO })
+                           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
+
+                response = new Response(true, "", "", "", data);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los niveles de la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
         public void removeActivityById(int activityId)
         {
             Response response = new Response(true, "", "", "", null);
@@ -94,50 +184,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
-        public void getGeneralActivityByActivityId(int activityId)
-        {
-            Response response = new Response(true, "", "", "", null);
-
-            try
-            {
-                bienestarEntities db = new bienestarEntities();
-
-                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL,
-                           (ag, aga) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD_GENERAL_ACTIVIDAD = aga })
-                           .Select(x => new { x.ACTIVIDAD_GENERAL.NOMBRE, x.ACTIVIDAD_GENERAL_ACTIVIDAD.ACTIVIDAD_GENERAL.CODIGO, x.ACTIVIDAD_GENERAL_ACTIVIDAD.CODIGOACTIVIDAD })
-                           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
-
-                 response = new Response(true, "", "", "", data);
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener las actividades generales", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-        [WebMethod]
-        public void getAllGeneralActivity()
-        {
-            Response response = new Response(true, "", "", "", null);
-
-            try
-            {
-                bienestarEntities db = new bienestarEntities();
-
-                response = new Response(true, "", "", "", db.ACTIVIDAD_GENERAL.ToList());
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener todas las actividades generales", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
+        
 
         /**
          * Actualizar una actividad
