@@ -18,8 +18,11 @@
     <div id="messages"></div>
 
     <div ng-controller="UsuariosController as Main">
-
-        <button type="button" ng-click="addNewUserDialog()">Nuevo Usuario</button><br /><br />
+        <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+        <button ng-click="addNewUserDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+            <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span>
+            <span class="ui-button-text">Nuevo</span>
+        </button><br/>
 
         <div ui-grid="gridOptions"></div>
 
@@ -67,8 +70,6 @@
                             </span>
                         </div>
                     </div>
-                    <button ng-click="pruebaAvailable()">pruebaAvailable</button>
-                    <button ng-click="pruebaAvailable1()">pruebaAvailable1</button>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="correousuario">Correo:</label>  
                         <div class="col-md-4">
@@ -86,6 +87,15 @@
                         <div class="col-md-4">
                             <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
                                 ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
+                        <div class="col-md-4">
+                            <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                                ng-options="o.CODIGO as o.NOMBRE for o in Rols">
                             </select>
                         </div>
                     </div>
