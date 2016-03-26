@@ -30,16 +30,26 @@
         // Diseno de los datos de la tabla
         $scope.gridOptions = {
             enableSorting: true,
-            enableFiltering: false,
+            enableFiltering: true,
             columnDefs: [
-              {name:'Código', field: 'CODIGO'},
+              {name:'Código', field: 'CODIGO', width: 120},
               {name:'Nombre', field: 'NOMBRE'},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80}
+              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80, enableFiltering: false}
             ]
         };
 
         // Llama al metodo cargar roles
         $scope.chargeRols();
+
+        // Obtiene el estado del rol
+        this.getRolStatus = function (code) {
+            $scope.rolStatus = $scope.getElementArray($scope.gridOptions.data, code);
+
+            if ($scope.rolStatus != null)
+                return $scope.rolStatus.ACTIVO;
+            else
+                return false;
+        };
 
         // Eliminar un rol
         this.removeRol = function (code) {
@@ -78,6 +88,7 @@
             
             $scope.rolCopy.CODIGO = $scope.rolEdit.CODIGO;
             $scope.rolCopy.NOMBRE = $scope.rolEdit.NOMBRE;
+            $scope.rolCopy.ACTIVO = $scope.rolEdit.ACTIVO;
 			$scope.getAccessByRol(code);
             $scope.accessRols = [];
 
@@ -160,8 +171,6 @@
         $scope.addElementArray = function(arrayRol, newRol) {
             arrayRol.push(newRol);
         }; 
-
-		
 		
 		$scope.existAccess = function (code) {
 			if ($scope.rolsAccess.length > 0) {

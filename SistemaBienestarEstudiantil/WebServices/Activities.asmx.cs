@@ -25,33 +25,34 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.End();
         }
 
-        /**
-         * Obtener todas los actividades de la base de datos
-         */
         [WebMethod]
-        public void getAllActivities()
+        public void getAllGeneralActivities()
         {
             Response response = new Response(true, "", "", "", null);
 
             try
             {
-                // Conecta con las entidades
                 bienestarEntities db = new bienestarEntities();
 
-                // Busca actividades
-                List<ACTIVIDAD> activities = db.ACTIVIDADs.ToList();
+                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL, 
+                    (ag, aga) => new { ag, aga }).Join(db.ACTIVIDADs, agaga => agaga.aga.CODIGOACTIVIDAD, a => a.CODIGO,
+                    (agaga, a) => new { agaga, a }).Select(x => new
+                    {
+                        CODIGOACTIVIDAD = x.agaga.ag.CODIGO,
+                        NOMBREACTIVIDAD = x.agaga.ag.NOMBRE,
+                        CODIGO = x.a.CODIGO,
+                        NOMBRE = x.a.NOMBRE,
+                        FECHA = x.a.FECHA,
+                        ESTADO = x.a.ESTADO
+                    }).ToList();
 
-                // Verifica existencia de actividades
-                if (activities != null && activities.Count > 0)
-                {
-                    response = new Response(true, "", "", "", activities);
-                }
+                if (data != null && data.Count > 0)
+                    response = new Response(true, "", "", "", data);
                 else
                     response = new Response(false, "info", "Información", "No se han encontrado actividades", null);
             }
             catch (Exception e)
             {
-                // Error al obtener actividades
                 response = new Response(false, "error", "Error", "Error al obtener las actividades", e);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
@@ -59,9 +60,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        /**
-         * Eliminar un rol
-         */
         [WebMethod]
         public void removeActivityById(int activityId)
         {
@@ -69,14 +67,13 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                // Conecta con las entidades
                 bienestarEntities db = new bienestarEntities();
 
-                // Obtiene la actividad que va a eliminar
                 ACTIVIDAD activityDeleted = db.ACTIVIDADs.Single(a => a.CODIGO == activityId);
-
-                // Elimina la actividad
+                ACTIVIDAD_GENERAL_ACTIVIDAD activityGeneralDeleted = db.ACTIVIDAD_GENERAL_ACTIVIDAD.Single(ag => ag.CODIGOACTIVIDAD == activityId);
+               
                 db.ACTIVIDADs.DeleteObject(activityDeleted);
+                db.ACTIVIDAD_GENERAL_ACTIVIDAD.DeleteObject(activityGeneralDeleted);
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Eliminar", "Actividad eliminada correctamente", null);
@@ -97,11 +94,56 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        [WebMethod]
+        public void getGeneralActivityByActivityId(int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                bienestarEntities db = new bienestarEntities();
+
+                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDAD_GENERAL_ACTIVIDAD, ag => ag.CODIGO, aga => aga.CODIGOACTIVIDADGENERAL,
+                           (ag, aga) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD_GENERAL_ACTIVIDAD = aga })
+                           .Select(x => new { x.ACTIVIDAD_GENERAL.NOMBRE, x.ACTIVIDAD_GENERAL_ACTIVIDAD.ACTIVIDAD_GENERAL.CODIGO, x.ACTIVIDAD_GENERAL_ACTIVIDAD.CODIGOACTIVIDAD })
+                           .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
+
+                 response = new Response(true, "", "", "", data);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las actividades generales", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllGeneralActivity()
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            try
+            {
+                bienestarEntities db = new bienestarEntities();
+
+                response = new Response(true, "", "", "", db.ACTIVIDAD_GENERAL.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener todas las actividades generales", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
         /**
          * Actualizar una actividad
          */
         [WebMethod]
-        public void saveActivityData(int activityId, String activityName, DateTime activityDate, Boolean activityStatus, String activityObservation)
+        public void saveActivityData(int activityId, String activityName, DateTime activityDate, int activityStatus, String activityObservation)
         {
             Response response = new Response(true, "", "", "", null);
 
@@ -168,7 +210,7 @@ namespace SistemaBienestarEstudiantil.WebServices
          * Agregar un rol
          */
         [WebMethod]
-        public void addNewActivity(String activityName, DateTime activityDate, Boolean activityStatus, String activityObservation)
+        public void addNewActivity(String activityName, DateTime activityDate, int activityStatus, String activityObservation)
         {
             Response response = new Response(true, "", "", "", null);
 
@@ -217,6 +259,57 @@ namespace SistemaBienestarEstudiantil.WebServices
                 response = new Response(false, "error", "Error", "Error al agregar la actividad", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllUsersByRol()
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            // Conecta con las entidades
+            bienestarEntities db = new bienestarEntities();
+
+            // Trae los usuarios en base
+            List<USUARIO> users = db.USUARIOs.ToList();
+            List<USUARIO> usersByRol = new List<USUARIO>();
+
+            // Si existen usuarios
+            if (users != null && users.Count > 0)
+            {
+                // Verificar la existencia de roles en cada usuario
+                foreach (USUARIO user in users)
+                    if (user.ROLs != null && user.ROLs.Count > 0)
+                        foreach (ROL rol in user.ROLs)
+                            if (rol.NOMBRE == "DOCENTE")
+                                usersByRol.Add(user);
+            }
+
+            if (usersByRol != null && usersByRol.Count > 0)
+                response = new Response(true, "", "", "", usersByRol);
+            else
+                response = new Response(false, "error", "Error", "Usuarios y asignarles el rol de Docente", null);
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllLevels()
+        {
+            Response response = new Response(true, "", "", "", null);
+
+            // Conecta con las entidades
+            bienestarEntities db = new bienestarEntities();
+
+            // Trae los niveles en base
+            List<GRUPO> groups = db.GRUPOes.ToList();
+
+            // Si existen usuarios
+            if (groups != null && groups.Count > 0)
+                response = new Response(true, "", "", "", groups);
+            else
+                response = new Response(false, "error", "Error", "No existen niveles registrados", groups);
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }

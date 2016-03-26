@@ -5,25 +5,23 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
-		$scope.activityCopy = {
+        $scope.activityCopy = {
             CODIGO: ''
         };
 
-        // Convierte la fecha en dd/mm/aaaa
+        $scope.selectObject = [{ name: 'Inactivo', value: false }, { name: 'Activo', value: true }];
+
         $scope.convertDate = function(arrayActivity) {
             for (var i = 0; i < arrayActivity.length; i++) {
                 if (arrayActivity[i].FECHA != null)
                     arrayActivity[i].FECHA = arrayActivity[i].FECHA.substring(6, arrayActivity[i].FECHA.length-2);
             };
         };
-		
-        // Cargar todos las actividades
-        $scope.chargeActivities = function () {
-            // Llama al servicio que obtiene todas las actividades
-            $http.post('../../WebServices/Activities.asmx/getAllActivities', {
+
+        $scope.chargeGeneralActivities = function () {
+            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivities', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
-                // Si los datos se obtuvieron sin problemas
                 if (data.success) {
                     $scope.convertDate(data.response);
                     $scope.gridOptions.data = data.response;
@@ -31,37 +29,33 @@
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar las actividades... ", data);
-                // Si hubo error al obtener las actividades
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades'}]);
             });
         };
-		
-        // Diseno de los datos de la tabla
+
         $scope.gridOptions = {
             enableSorting: true,
-            enableFiltering: false,
+            enableFiltering: true,
             columnDefs: [
               {name:'Código', field: 'CODIGO'},
-              {name:'Nombre', field: 'NOMBRE'},
+              {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
+              {name:'Actividad', field: 'NOMBRE'},
               {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\''},
-              {name:'Estado', field: 'ESTADO'},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 80}
+              {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == 0 ? 'Inactivo' : row.entity.ESTADO == 1 ? 'En Proceso' : row.entity.ESTADO == 2 ? 'Procesado' : 'Finalizado'}}</div>"},
+              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 80, enableFiltering: false}
             ]
         };
 
-        // Llama al metodo cargar actividades
-        $scope.chargeActivities();
+        $scope.chargeGeneralActivities();
 
-        // Eliminar una actividad
         this.removeActivity = function (code) {
             var parentObject = this;
             
-            // Llama al servicio que elimina una actividad por su codigo
             $http.post('../../WebServices/Activities.asmx/removeActivityById', {
                 activityId: code
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar actividad... ", data);
-                // Si se elimina correctamente el rol
+                
                 if (data.success)
                     parentObject.removeElementArray($scope.gridOptions.data, code);
 
@@ -73,7 +67,6 @@
             });
         };
 
-        // Elimina la actividad de la vista
 		this.removeElementArray = function(arrayActivity, activityCode) {
             for (var i=0; i<arrayActivity.length; i++) {
                 if (arrayActivity[i].CODIGO == activityCode) {
@@ -82,18 +75,18 @@
             }
         };
 		
-        // Editar una actividad
         this.editActivity = function (code) {
-            // Obtiene la actividad que se va a editar
             $scope.activityEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
             
+            $scope.activityCopy.CODIGOACTIVIDAD = $scope.activityEdit.CODIGOACTIVIDAD;
+            $scope.activityCopy.NOMBREACTIVIDAD = $scope.activityEdit.NOMBREACTIVIDAD;
             $scope.activityCopy.CODIGO = $scope.activityEdit.CODIGO;
             $scope.activityCopy.NOMBRE = $scope.activityEdit.NOMBRE;
             $scope.activityCopy.FECHA = $scope.toDate($scope.activityEdit.FECHA);
             $scope.activityCopy.ESTADO = $scope.activityEdit.ESTADO;
             $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
-			
-            // Abre el pop up para editar la actividad
+			$scope.getGeneralActivities(code);
+
             ngDialog.open({
                 template: 'editActivity.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -107,7 +100,20 @@
             });
         };
 
-        // Tranforma la fecha de milisegundos a fecha completa
+        $scope.getGeneralActivities = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivity'
+            ).success(function (data, status, headers, config) {
+                console.log("Actividades generales existentes... ", data);
+                $scope.allGeneralActivities = [];
+
+                for (var i = 0; i < data.response.length; i++)
+                    $scope.allGeneralActivities.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRE});
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar las actividades generales...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes'}]);
+            });
+        };
+
         $scope.toDate = function(dateTime) {
             var mEpoch = parseInt(dateTime); 
             var dDate = new Date();
