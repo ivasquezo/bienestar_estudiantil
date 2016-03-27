@@ -88,6 +88,10 @@
       <DependentUpon>Activities.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WebServices\Becas.asmx.cs">
+      <DependentUpon>Becas.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WebServices\Rols.asmx.cs">
       <DependentUpon>Rols.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -109,6 +113,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\HomeApp.js" />
     <Content Include="Views\Home\Becas.aspx" />
+    <Content Include="Views\Home\BecaSolicitud.aspx" />
     <Content Include="Views\Home\Encuesta.aspx" />
     <Content Include="Views\Home\Encuestas.aspx" />
     <Content Include="Views\Home\Niveles.aspx" />
@@ -145,6 +150,7 @@
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
     <Content Include="WebServices\Activities.asmx" />
+    <Content Include="WebServices\Becas.asmx" />
     <Content Include="WebServices\Rols.asmx" />
     <Content Include="WebServices\Encuestas.asmx" />
     <Content Include="WebServices\Users.asmx" />

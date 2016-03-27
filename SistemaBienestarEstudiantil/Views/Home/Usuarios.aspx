@@ -9,8 +9,6 @@
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
-
-    <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/usuarios.js?nocache=<%=RandomNumber%>"></script>
     
     <h2>Usuarios</h2>

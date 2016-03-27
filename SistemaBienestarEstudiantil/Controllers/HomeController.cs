@@ -161,6 +161,11 @@ namespace SistemaBienestarEstudiantil.Controllers
             return View();
         }
 
+        public ActionResult BecaSolicitud()
+        {
+            return View();
+        }
+
         public ActionResult LogOn()
         {
             return View();
