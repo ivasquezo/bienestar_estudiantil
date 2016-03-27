@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages']);
 
     app.controller('ActivitiesController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
@@ -32,18 +32,21 @@
             });
         };
 
+        $scope.cargarNombreEstado = function(statusId) {
+            if (statusId == 0) {
+                return "Inactivo";
+            } else if (statusId == 1) {
+                return "En proceso";
+            } else if (statusId == 2) {
+                return "Procesado";
+            } else if (statusId == 3) {
+                return "Finalizado";
+            }
+        };
+
         $scope.cargarEstadoActividades = function(actividades){
-            for (var i = 0; i < actividades.length; i++) {
-                if (actividades[i].ESTADO == 0) {
-                    actividades[i].NOMBREESTADO = "Inactivo";
-                } else if (actividades[i].ESTADO == 1) {
-                    actividades[i].NOMBREESTADO = "En proceso";
-                } else if (actividades[i].ESTADO == 2) {
-                    actividades[i].NOMBREESTADO = "Procesado";
-                } else if (actividades[i].ESTADO == 3) {
-                    actividades[i].NOMBREESTADO = "Finalizado";
-                }
-            };
+            for (var i = 0; i < actividades.length; i++)
+                actividades[i].NOMBREESTADO = $scope.cargarNombreEstado(actividades[i].ESTADO);
         };
 
         $scope.gridOptions = {
@@ -72,7 +75,8 @@
             $scope.activityCopy.ESTADO = $scope.activityEdit.ESTADO;
             $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
             $scope.activityCopy.CODIGOUSUARIO = $scope.activityEdit.CODIGOUSUARIO;
-
+            $scope.activityCopy.NOMBREESTADO = $scope.cargarNombreEstado($scope.activityEdit.ESTADO);
+            
             // Llena el combo de las actividades            
             $scope.getGeneralActivities();
             // Llena los niveles
@@ -177,32 +181,41 @@
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes'}]);
             });
         };
+        
+        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId) {
+            var nameActivity = '';
 
-        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus) {
+            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                if ($scope.allGeneralActivities[i].value == generalActivityId)
+                    nameActivity = $scope.allGeneralActivities[i].name;
+
             for (var i=0; i<arrayActivity.length; i++) {
                 if (arrayActivity[i].CODIGO == activityId) {                    
                     arrayActivity[i].CODIGOACTIVIDAD = generalActivityId;
+                    arrayActivity[i].NOMBREACTIVIDAD = nameActivity;
                     arrayActivity[i].NOMBRE = activityName;
                     arrayActivity[i].FECHA = activityDate;
                     arrayActivity[i].ESTADO = activityStatus;
-
-                    
-                        
+                    arrayActivity[i].NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
+                    arrayActivity[i].OBSERVACION = observation;  
+                    arrayActivity[i].CODIGOUSUARIO = responsableId;
                 }
             }
-
-            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
-                        console.log("act: ", $scope.allGeneralActivities[i].value);
         };
 
         $scope.addNewActivityDialog = function() {
             $scope.activityCopy = {
-                ESTADO: true,
                 OBSERVACION: ''
             };
 
             // Llena el combo de las actividades            
             $scope.getGeneralActivities();
+            // Llena los niveles
+            $scope.getGroupLevel(0);
+            $scope.groupActivity = [];
+            $scope.groupLevelActivity = [];
+            // Llena los responsables
+            $scope.getAllResponsables();
 
             ngDialog.open({
                 template: 'newActivity.html',
@@ -216,6 +229,20 @@
                 })
             });
         };
+
+        $scope.addElementArray = function(arrayActivity, newActivity, activityDate, generalActivityId, activityStatus) {
+            var nameActivity = '';
+
+            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                if ($scope.allGeneralActivities[i].value == generalActivityId)
+                    nameActivity = $scope.allGeneralActivities[i].name;
+            newActivity.FECHA = activityDate;
+            newActivity.CODIGOACTIVIDAD = generalActivityId;
+            newActivity.NOMBREACTIVIDAD = nameActivity;
+            newActivity.NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
+
+            arrayActivity.push(newActivity);
+        }; 
 
 
 
@@ -243,71 +270,78 @@
             });
         };
 
-		this.removeElementArray = function(arrayActivity, activityCode) {
+        this.removeElementArray = function(arrayActivity, activityCode) {
             for (var i=0; i<arrayActivity.length; i++) {
                 if (arrayActivity[i].CODIGO == activityCode) {
                     arrayActivity.splice(i, 1);
                 }
             }
-        };		
-		
-        // Agrega item a la lista
-        $scope.addElementArray = function(arrayActivity, newActivity, activityDate) {
-            newActivity.FECHA = activityDate;
-            arrayActivity.push(newActivity);
-        }; 
+        };      
+        
+        
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
         $scope.saveEditedActivity = function () {
-            var parentObject = this;
+            if (!this.activityForm.$invalid) {
+                var parentObject = this;
 
-            $http.post('../../WebServices/Activities.asmx/saveActivityData', {
-                activityId: $scope.activityCopy.CODIGO,
-                activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
-                activityDate: $scope.activityCopy.FECHA,
-                activityStatus: $scope.activityCopy.ESTADO,
-                activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
-                generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
-                userId: $scope.activityCopy.CODIGOUSUARIO,
-                groupLevelActivity: $scope.groupLevelActivity
-            }).success(function (data, status, headers, config) {
-                console.log("Editar actividad: ", data);
-                if (data.success) {
-                    $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO, $scope.activityCopy.NOMBRE.toUpperCase(), 
-                        Date.parse($scope.activityCopy.FECHA), $scope.activityCopy.ESTADO);
-                    parentObject.closeThisDialog();
-                } 
+                $http.post('../../WebServices/Activities.asmx/saveActivityData', {
+                    activityId: $scope.activityCopy.CODIGO,
+                    activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
+                    activityDate: $scope.activityCopy.FECHA,
+                    activityStatus: $scope.activityCopy.ESTADO,
+                    activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
+                    generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
+                    userId: $scope.activityCopy.CODIGOUSUARIO,
+                    groupLevelActivity: $scope.groupLevelActivity
+                }).success(function (data, status, headers, config) {
+                    console.log("Editar actividad: ", data);
+                    if (data.success) {
+                        $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO, 
+                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), 
+                            $scope.activityCopy.ESTADO, $scope.activityCopy.OBSERVACION.toUpperCase(), $scope.activityCopy.CODIGOUSUARIO);
+                        parentObject.closeThisDialog();
+                    } 
 
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al editar la actividad...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
-            });
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al editar la actividad...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+            }
         };
 
-        // Al agregar una actividad
         $scope.addNewActivityDB = function () {
-            var newParentObject = this;
+            if (!this.newActivityForm.$invalid) {
+                var newParentObject = this;
 
-            $http.post('../../WebServices/Activities.asmx/addNewActivity', {                
-                activityName: $scope.activityCopy.NOMBRE,
-                activityDate: $scope.activityCopy.FECHA,
-                activityStatus: $scope.activityCopy.ESTADO,
-                activityObservation: $scope.activityCopy.OBSERVACION
-            }).success(function (data, status, headers, config) {
-                console.log("Agregar actividad: ", data);
-                if (data.success) {
-                    $scope.addElementArray($scope.gridOptions.data, data.response, Date.parse($scope.activityCopy.FECHA));
-                    // Se cierra el pop up
-                    newParentObject.closeThisDialog();
-                }
+                $http.post('../../WebServices/Activities.asmx/addNewActivity', {                
+                    activityName: $scope.activityCopy.NOMBRE,
+                    activityDate: $scope.activityCopy.FECHA,
+                    activityStatus: $scope.activityCopy.ESTADO,
+                    activityObservation: $scope.activityCopy.OBSERVACION,
+                    generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
+                    userId: $scope.activityCopy.CODIGOUSUARIO,
+                    groupLevelActivity: $scope.groupLevelActivity
+                }).success(function (data, status, headers, config) {
+                    console.log("Agregar actividad: ", data);
+                    if (data.success) {
+                        $scope.addElementArray($scope.gridOptions.data, data.response, Date.parse($scope.activityCopy.FECHA), 
+                            $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.ESTADO);
+                        newParentObject.closeThisDialog();
+                    }
 
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al agregar el rol...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
-            });
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al agregar el rol...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+            }
         };
     }]);
 })();
