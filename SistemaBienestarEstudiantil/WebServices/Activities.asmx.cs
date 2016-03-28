@@ -331,7 +331,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 // Si el nombre del rol ya existe presenta un mensaje caso contrario actualiza el nombre
                 if (activitiesExist != null && activitiesExist.Count > 0)
                 {
-                    response = new Response(false, "error", "Error", "El nombre de la actividad ya existe", null);
+                    response = new Response(false, "info", "Información", "El nombre de la actividad ya existe", null);
                     agregar = false;
                 }
                 else
@@ -370,23 +370,60 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAssistanceList()
+        public void getAssistanceList(int activityId, int levelId)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 
             try
             {
-                List<ASISTENCIA> assistanceList = db.ASISTENCIAs.ToList();
+                List<ASISTENCIA> assistanceList = db.ASISTENCIAs.Where(a => a.CODIGOACTIVIDAD == activityId && a.CODIGOGRUPO == levelId).ToList();
 
                 if (assistanceList != null && assistanceList.Count > 0)
                     response = new Response(true, "", "", "", assistanceList);
                 else
-                    response = new Response(false, "error", "Error", "No existen datos de asistencia", assistanceList);
+                    response = new Response(false, "info", "Información", "No existen datos con el nivel seleccionado", assistanceList);
             }
             catch (Exception)
             {
                 response = new Response(false, "error", "Error", "Error al obtener la asistencia de los alumnos", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void saveAssistanceData(int[] assistance)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                for (int assist = 0; assist < assistance.Length; assist++)
+                {
+                    int code = assistance[assist];
+                    ASISTENCIA student = db.ASISTENCIAs.Single(a => a.CODIGO == code);
+
+                    if (student.ASISTENCIA1 == true)
+                        student.ASISTENCIA1 = false;
+                    else
+                        student.ASISTENCIA1 = true;
+
+                    db.SaveChanges();
+                }
+
+                response = new Response(true, "info", "Actualizar", "Asistencia registrada correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos de asistencia para actualizarla", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al actualizar los datos de asistencia", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
 

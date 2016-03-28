@@ -26,6 +26,7 @@ using System.Web.Script.Serialization;
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ADJUNTO_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ACTIVIDAD_ADJUNTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD_ADJUNTO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ASISTENCIA_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_GRUPO_ACTIVIDAD_ACTIVIDAD", "ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ACTIVIDAD), "GRUPO_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.GRUPO_ACTIVIDAD), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_ALUMNO_GRUPO", "GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRUPO), "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ASISTENCIA_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ASISTENCIA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ASISTENCIA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BECA_SOLICITUD_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "BECA_SOLICITUD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BECA_SOLICITUD), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO", "ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ALUMNO), "ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.ENCUESTA_RESPUESTA_ALUMNO), true)]
@@ -1434,12 +1435,14 @@ namespace SistemaBienestarEstudiantil.Models
         /// Crear un nuevo objeto ALUMNO.
         /// </summary>
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
+        /// <param name="cODIGOGRUPO">Valor inicial de la propiedad CODIGOGRUPO.</param>
         /// <param name="cEDULA">Valor inicial de la propiedad CEDULA.</param>
         /// <param name="nOMBRE">Valor inicial de la propiedad NOMBRE.</param>
-        public static ALUMNO CreateALUMNO(global::System.Decimal cODIGO, global::System.Decimal cEDULA, global::System.String nOMBRE)
+        public static ALUMNO CreateALUMNO(global::System.Decimal cODIGO, global::System.Decimal cODIGOGRUPO, global::System.Decimal cEDULA, global::System.String nOMBRE)
         {
             ALUMNO aLUMNO = new ALUMNO();
             aLUMNO.CODIGO = cODIGO;
+            aLUMNO.CODIGOGRUPO = cODIGOGRUPO;
             aLUMNO.CEDULA = cEDULA;
             aLUMNO.NOMBRE = nOMBRE;
             return aLUMNO;
@@ -1475,6 +1478,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.Decimal _CODIGO;
         partial void OnCODIGOChanging(global::System.Decimal value);
         partial void OnCODIGOChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal CODIGOGRUPO
+        {
+            get
+            {
+                return _CODIGOGRUPO;
+            }
+            set
+            {
+                OnCODIGOGRUPOChanging(value);
+                ReportPropertyChanging("CODIGOGRUPO");
+                _CODIGOGRUPO = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CODIGOGRUPO");
+                OnCODIGOGRUPOChanged();
+            }
+        }
+        private global::System.Decimal _CODIGOGRUPO;
+        partial void OnCODIGOGRUPOChanging(global::System.Decimal value);
+        partial void OnCODIGOGRUPOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -1552,6 +1579,44 @@ namespace SistemaBienestarEstudiantil.Models
 
     
         #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ALUMNO_GRUPO", "GRUPO")]
+        public GRUPO GRUPO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<GRUPO>("BienestarModel.FK_ALUMNO_GRUPO", "GRUPO").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<GRUPO>("BienestarModel.FK_ALUMNO_GRUPO", "GRUPO").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<GRUPO> GRUPOReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<GRUPO>("BienestarModel.FK_ALUMNO_GRUPO", "GRUPO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<GRUPO>("BienestarModel.FK_ALUMNO_GRUPO", "GRUPO", value);
+                }
+            }
+        }
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -1840,6 +1905,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ACTIVIDAD> ACTIVIDADReference
@@ -4306,6 +4372,29 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ALUMNO_GRUPO", "ALUMNO")]
+        public EntityCollection<ALUMNO> ALUMNOes
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ALUMNO>("BienestarModel.FK_ALUMNO_GRUPO", "ALUMNO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ALUMNO>("BienestarModel.FK_ALUMNO_GRUPO", "ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [ScriptIgnore]
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_ASISTENCIA_GRUPO", "ASISTENCIA")]
         public EntityCollection<ASISTENCIA> ASISTENCIAs
         {
@@ -4813,7 +4902,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -4832,6 +4920,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ACCESO> ACCESOReference
