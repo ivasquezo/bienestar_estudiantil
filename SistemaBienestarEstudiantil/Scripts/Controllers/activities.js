@@ -290,6 +290,17 @@
 
         $scope.chargeStudents = function (code) {
             console.log("codi: ", $scope.activityAssistanceCopy.CODIGOACTIVIDAD);
+            $http.post('../../WebServices/Activities.asmx/getAssistanceList', {
+                activityId: $scope.activityAssistanceCopy.CODIGOACTIVIDAD,
+                levelId: code
+            }).success(function (data, status, headers, config) {
+                console.log("Cargar estudiantes... ", data);
+
+                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al eliminar la actividad... ", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la actividad'}]);
+            });
         };
 
 

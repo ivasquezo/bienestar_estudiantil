@@ -370,14 +370,14 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAssistanceList()
+        public void getAssistanceList(int activityId, int levelId)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 
             try
             {
-                List<ASISTENCIA> assistanceList = db.ASISTENCIAs.ToList();
+                List<ASISTENCIA> assistanceList = db.ASISTENCIAs.Where(a => a.CODIGOACTIVIDAD == activityId && a.CODIGOGRUPO == levelId).ToList();
 
                 if (assistanceList != null && assistanceList.Count > 0)
                     response = new Response(true, "", "", "", assistanceList);
