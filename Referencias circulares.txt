@@ -48,6 +48,9 @@ class BECA_ADJUNTO
 	[ScriptIgnore]
 	public BECA_SOLICITUD BECA_SOLICITUD
 	public EntityReference<BECA_SOLICITUD> BECA_SOLICITUDReference
+	public EntityReference<BECA_TIPO_DOCUMENTO> BECA_TIPO_DOCUMENTOReference
+	[ScriptIgnoreAttribute]
+    public global::System.Byte[] ADJUNTO
 
 
 class BECA_SOLICITUD
