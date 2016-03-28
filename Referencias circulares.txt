@@ -112,6 +112,7 @@ class ENCUESTA_RESPUESTA_TEXTO
 class GRUPO
 
 	[ScriptIgnore]
+	public EntityCollection<ALUMNO> ALUMNOes
 	public EntityCollection<ASISTENCIA> ASISTENCIAs
 	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
 
