@@ -9,6 +9,7 @@ class ACTIVIDAD
 	public ACTIVIDAD_GENERAL ACTIVIDAD_GENERAL
 	public EntityReference<ACTIVIDAD_GENERAL> ACTIVIDAD_GENERALReference
 	public EntityReference<USUARIO> USUARIOReference
+	public EntityCollection<ASISTENCIA> ASISTENCIAs
 	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
 
 class ACTIVIDAD_ADJUNTO
@@ -109,6 +110,7 @@ class ENCUESTA_RESPUESTA_TEXTO
 class GRUPO
 
 	[ScriptIgnore]
+	public EntityCollection<ASISTENCIA> ASISTENCIAs
 	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
 
 
