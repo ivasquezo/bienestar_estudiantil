@@ -117,6 +117,7 @@ class GRUPO_ACTIVIDAD
 class ROL
 
 	[ScriptIgnore]
+	public EntityCollection<ROL_ACCESO> ROL_ACCESO
 	public EntityCollection<USUARIO> USUARIOs
 
 
