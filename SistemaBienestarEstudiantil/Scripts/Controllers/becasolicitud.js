@@ -17,8 +17,8 @@
         $('#messages').puigrowl('option', {life: 5000});
 
         $scope.cargarTipos = function () {
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/getTipos', {
-            }).success(function (data, status, headers, config) {
+            $scope.promise = $http.get('../../WebServices/Becas.asmx/getTipos')
+            .success(function (data, status, headers, config) {
                 $scope.TIPOS = data;
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
@@ -27,29 +27,47 @@
 
         $scope.cargarTipos();
 
-        $scope.uploadFile = function () {
-            var formElement = document.getElementById('formFile');
-            var formData = new FormData(formElement);
-            
-            /*
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/saveFileTest', {
-                form: formData
-            }).success(function (data, status, headers, config) {
-                console.log(data);
+        $scope.cargarCodigosAdjunto = function () {
+            $scope.promise = $http.get('../../WebServices/Becas.asmx/getListCodeAttach')
+            .success(function (data, status, headers, config) {
+                $scope.CODIGOSADJUNTOS = data;
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });
-            */
+        };
 
-            $http.post('../../WebServices/Becas.asmx/saveFileTest', formData, {
+        $scope.cargarCodigosAdjunto();
+
+        $scope.uploadFileDataBase = function () {
+            var formElement = document.getElementById('formFiles');
+            var formData = new FormData(formElement);
+
+            $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase', formData, {
                 withCredentials: true,
                 headers: {'Content-Type': undefined },
                 transformRequest: angular.identity
             }).success(function (data, status, headers, config) {
                 console.log(data);
+                $scope.cargarCodigosAdjunto();
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });
+        }
+
+        $scope.removeAttach = function (attachCode) {
+
+            $scope.promise = $http.post('../../WebServices/Becas.asmx/removeAttach', {
+                attachCode: attachCode
+            }).success(function (data, status, headers, config) {
+                console.log(data);
+                $scope.cargarCodigosAdjunto();
+            }).error(function (data, status, headers, config) {
+                console.log("error al eliminarAdjunto...", data);
+            });
+        }
+
+        $scope.printConsole = function () {
+            console.log($scope);
         }
 
     }]);
@@ -106,6 +124,46 @@
                 // I have not notice any performance issues, but it would be worth investigating how much
                 // effect does this have on the performance of the app
                 ctrl.$parsers.push(customValidator);
+            }
+        };
+    }]);
+
+    app.directive('validFileInput', ['$http', function($http) {
+        return {
+
+            // limit usage to argument only
+            restrict: 'A',
+
+            // require NgModelController, i.e. require a controller of ngModel directive
+            require: 'ngModel',
+
+            // create linking function and pass in our NgModelController as a 4th argument
+            link: function(scope, element, attr, ctrl) {
+
+                ctrl.$setValidity('validFile', element.val() != '');
+                //change event is fired when file is selected
+                element.bind('change',function(){
+                    
+                    if (element.get(0).files.length > 0) {
+
+                        ctrl.$setValidity('validFile', true);
+                        ctrl.$setValidity('validFileSize', element.get(0).files[0].size < 2000000);
+                        ctrl.$setValidity('validFileEmpty', element.get(0).files[0].size != 0);
+                        ctrl.$setValidity('validFileType',
+                            element.get(0).files[0].type.toUpperCase().indexOf('APPLICATION/PDF') != -1 || 
+                            element.get(0).files[0].type.toUpperCase().indexOf('IMAGE') != -1);
+                        
+                    } else {
+                        ctrl.$setValidity('validFile', false);
+                        ctrl.$setValidity('validFileSize', true);
+                        ctrl.$setValidity('validFileEmpty', true);
+                        ctrl.$setValidity('validFileType', true);
+                    }
+                    scope.$apply(function(){
+                        ctrl.$setViewValue(element.val());
+                        ctrl.$render();
+                    });
+                });
             }
         };
     }]);

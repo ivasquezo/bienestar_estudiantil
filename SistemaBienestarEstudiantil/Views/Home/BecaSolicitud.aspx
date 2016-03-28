@@ -17,7 +17,7 @@
     <div ng-controller="BecaSolicitudController as Main">
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
-	    	<center><img style="width:210px;" src="../../Content/logo-universidad-israel.png"></center>
+	    	<center><img style="width:170px;" src="../../Content/logo-universidad-israel.png"></center>
 	    	<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
 				name="validIdentification" placeholder="Número de cédula" type="number"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
@@ -29,37 +29,84 @@
 	        	{{student.NOMBRE}}
 	        </span>
 	    	<hr/>
-	    	<div>Documentos para la solicitud de Becas de estudio y apoyo económico a estudiantes</div>
-	        <div>a.	Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario.</div>
-			<div>b.	Copia de la cédula a color del solicitante.</div>
-			<br/><div>Seleccione el tipo de beca que desea solicitar:</div>
+			<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
 			<select required ng-model="becasolicitud.TIPO" id="becaTipo" name="becaTipo" class="form-control"
 	            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
 	        </select>
 			<span ng-messages="becaSolicitudForm.becaTipo.$error">
-				<span ng-message="required" class="help-block ng-message">Debe ingresar el tipo de Beca</span>
+				<span ng-message="required" class="help-block ng-message">* Debe ingresar el tipo de Beca</span>
 			</span>
-
-			<table style="margin-top:10px;">
-				<tr ng-repeat="tipoDocumento in becasolicitud.TIPO.BECA_TIPO_DOCUMENTO">
-					<td>
-						{{tipoDocumento.NOMBRE}}<br/>
-						<div>
-							<input />
-						</div>
-					</td>
-				</tr>
-			</table>
     	</form>
-    	<form id="formFile" enctype="multipart/form-data">
-			<input type="file" name="fileName" id="fileName" accept="image/*"/>
-			<input ng-click="uploadFile()" type="button" value="Guardar" id="upload"/>
+    	<form id="formFiles" name="formFiles" enctype="multipart/form-data">
+    		<div>
+
+	    		<input type="hidden" value="{{student.CEDULA}}" name="cedulaSolicitud" />
+				
+		    	<div class="document-message-title">
+		    		Ingrese los siguientes documentos para la solicitud de Becas de estudio y apoyo económico a estudiantes<br/>
+		    		<div style="font-size:12px;margin-top:5px;">
+		    			Es obligatorio entregar TAMBIÉN el documento físico en recepción o en el departamento de bienestar estudiantil
+		    		</div>
+		    	</div>
+
+				<table style="margin-top:10px;">
+					<tr>
+						<td>
+							<div class="document-message">- Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario</div>
+							<div>
+		        				<input ng-model="documentoSolicitud" valid-file-input type="file" name="documentoSolicitud" id="documentoSolicitud" accept="image/*, application/pdf"/>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="document-message">- Copia de la cédula a color del solicitante</div>
+							<div>
+		        				<input ng-model="documentoCedula" valid-file-input type="file" name="documentoCedula" id="documentoCedula" accept="image/*, application/pdf"/>
+	        				    <span ng-show="formFiles.documentoCedula.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
+					            <span ng-show="formFiles.documentoCedula.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+					            <span ng-show="formFiles.documentoCedula.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
+					            <span ng-show="formFiles.documentoCedula.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
+					        </div>
+						</td>
+					</tr>
+					<tr ng-repeat="tipoDocumento in becasolicitud.TIPO.BECA_TIPO_DOCUMENTO">
+						<td>
+							<div class="document-message">- {{tipoDocumento.NOMBRE}}</div>
+							<div>
+							<ng-form name="innerForm">
+								<input valid-file-input ng-model="fileName[tipoDocumento.CODIGO]" type="file" name="fileName" id="fileName" accept="image/*, application/pdf"/>
+								<span ng-show="innerForm.fileName.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
+					            <span ng-show="innerForm.fileName.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+					            <span ng-show="innerForm.fileName.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
+					            <span ng-show="innerForm.fileName.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
+							</ng-form>
+							</div>
+						</td>
+					</tr>
+				</table>
+				
+				<input ng-click="uploadFileDataBase()" type="button" value="Guardar" id="upload"/>
+
+    		</div>
 		</form>
 
-		<img src="../../WebServices/Becas.asmx/getImage" />
+		<div>
+			<div ng-repeat="codigoAdjunto in CODIGOSADJUNTOS" style="width:140px; display:inline-block; padding: 5px;vertical-align: top;">
+				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;" ng-click="removeAttach(codigoAdjunto)">
+					<span class="ui-icon ui-icon-trash"></span>
+				</button><br/>
+				<div style="width:120px;height:120px;display:inline-block;" >
+					<img style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getImage?codigoAdjunto={{codigoAdjunto}}">
+				</div>
+			</div>
+		</div>
 
-		<asp:Image id="myImage" runat="server" ImageUrl="../../WebServices/Becas.asmx/getImage" />
-
+		<button ng-click="printConsole()">print</button>
     </div>
 
 </asp:Content>

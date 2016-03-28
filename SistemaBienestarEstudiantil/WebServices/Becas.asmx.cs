@@ -42,61 +42,94 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveFileTest()
+        public void addUploadedFileDataBase()
         {
-            int iUploadedCnt = 0;
-            System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
-            byte[] fileBytes = null;
-            // CHECK THE FILE COUNT.
-            for (int iCnt = 0; iCnt <= hfc.Count - 1; iCnt++)
-            {
-                System.Web.HttpPostedFile hpf = hfc[iCnt];
-                string sPath = System.Web.Hosting.HostingEnvironment.MapPath("~/locker/");
+            Models.bienestarEntities db = new Models.bienestarEntities();
 
-                if (hpf.ContentLength > 0)
+            System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
+
+            if (hfc.Count > 0)
+            {
+                Models.BECA_ADJUNTO[] becaAdjunto = new Models.BECA_ADJUNTO[hfc.Count];
+                // CHECK THE FILE COUNT.
+                for (int i = 0; i < hfc.Count; i++)
                 {
-                    // CHECK IF THE SELECTED FILE(S) ALREADY EXISTS IN FOLDER. (AVOID DUPLICATE)
-                    if (!File.Exists(sPath + Path.GetFileName(hpf.FileName)))
+                    System.Web.HttpPostedFile hpf = hfc[i];
+                    if (hpf.ContentLength > 0)
                     {
                         // SAVE THE FILES IN THE FOLDER.
                         using (var memoryStream = new MemoryStream())
                         {
-                             hpf.InputStream.CopyTo(memoryStream);
-                             fileBytes = memoryStream.ToArray();
+                            hpf.InputStream.CopyTo(memoryStream);
+                            byte[] fileBytes = memoryStream.ToArray();
+
+                            becaAdjunto[i] = new Models.BECA_ADJUNTO();
+                            becaAdjunto[i].CODIGOSOLICITUD = 1;
+                            becaAdjunto[i].CONTENTTYPE = hfc[0].ContentType;
+                            becaAdjunto[i].ADJUNTO = fileBytes;
+                            becaAdjunto[i].NOMBRE = hfc[0].FileName;
                         }
-                        iUploadedCnt = iUploadedCnt + 1;
                     }
                 }
+
+                int inserted = 0;
+                for (int i = 0; i < becaAdjunto.Length; i++)
+                {
+                    if (becaAdjunto[i].ADJUNTO.Length > 0)
+                    {
+                        db.BECA_ADJUNTO.AddObject(becaAdjunto[i]);
+                        inserted++;
+                    }
+                }
+                
+                if (inserted > 0)
+                    db.SaveChanges();
             }
 
-            Models.bienestarEntities db = new Models.bienestarEntities();
-            Models.BECA_ADJUNTO ba = new Models.BECA_ADJUNTO();
-
-            ba.CODIGOSOLICITUD = 1;
-            ba.CONTENTTYPE = hfc[0].ContentType;
-            ba.ADJUNTO = fileBytes;
-            ba.NOMBRE = hfc[0].FileName;
-
-            db.BECA_ADJUNTO.AddObject(ba);
-            db.SaveChanges();
-            writeResponse("ok");
+            writeResponse(System.Web.HttpContext.Current.Request.Params.Get("cedulaSolicitud"));
         }
 
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
-        public string getImage()
+        public void getImage(int codigoAdjunto)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
+           Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.BECA_ADJUNTO ba = db.BECA_ADJUNTO.First();
+            Models.BECA_ADJUNTO ba = db.BECA_ADJUNTO.Where(a => a.CODIGO == codigoAdjunto).First();
 
-            byte[] response = ba.ADJUNTO;
+            byte[] response = null;
+
+            if (ba != null && ba.ADJUNTO != null)
+                response = ba.ADJUNTO;
 
             Context.Response.ContentType = ba.CONTENTTYPE;
+            Context.Response.AddHeader("content-disposition", "attachment; filename=" + ba.NOMBRE);
             Context.Response.BinaryWrite(response);
             Context.Response.Flush();
             Context.Response.End();
-            return "as";
         }
+
+        [WebMethod]
+        public void getListCodeAttach()
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            writeResponseObject(db.BECA_ADJUNTO.Select(a => a.CODIGO).ToList());
+        }
+
+        [WebMethod]
+        public void removeAttach(int attachCode)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            Models.BECA_ADJUNTO ba = db.BECA_ADJUNTO.Where(a => a.CODIGO == attachCode).First();
+            if (ba != null)
+            {
+                db.BECA_ADJUNTO.DeleteObject(ba);
+                db.SaveChanges();
+            }
+            writeResponse("ok");
+        }
+
+
     }
 }
