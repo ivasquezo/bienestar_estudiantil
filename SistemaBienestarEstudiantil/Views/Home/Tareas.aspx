@@ -28,7 +28,7 @@
                 <span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad">
                 <span class="ui-icon ui-icon-pencil"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Asistencia alumnos">
+                <button type="button" ng-click="grid.appScope.Main.getAssistance(COL_FIELD)" title="Asistencia alumnos">
                 <span class="ui-icon ui-icon-person"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Adjuntar archivos">
                 <span class="ui-icon ui-icon-document"></span></button>
@@ -222,6 +222,45 @@
                         <label class="col-md-4 control-label" for="saveActivity"></label>
                         <div class="col-md-8">
                             <button type="submit" id="saveActivity" name="saveActivity" class="btn btn-success">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </fieldset>
+        </script>
+
+        <script type="text/ng-template" id="assistanceActivity.html">
+            <fieldset>
+                <legend>Asistencia</legend>
+                <form name="assistanceForm" ng-submit="saveAssistanceDB()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="levelBox">Nivel</label>
+                        <div class="col-md-4">                            
+                            <select ng-model="activityAssistanceCopy.CODIGO" id="levelBox" name="levelBox" class="form-control" ng-options="o.value as o.name for o in allLevelAssistance" ng-change="chargeStudents(activityAssistanceCopy.CODIGO)">
+                            </select>
+                            <br/><span class="help-block">Nivel para tomar asistencia</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <table style="width:100%; font-size:16px">
+                            <tr>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="nivel in groupActivity">                                
+                                <td>{{ nivel.NIVEL }}</td>
+                                <td>{{ nivel.PARALELO }}</td>
+                                <td>{{ nivel.MODALIDAD }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <br/>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="saveAssistance"></label>
+                        <div class="col-md-8">
+                            <button type="submit" id="saveAssistance" name="saveAssistance" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </form>
