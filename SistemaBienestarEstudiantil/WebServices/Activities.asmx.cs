@@ -129,7 +129,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                            { 
                                x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, 
                                x.GRUPO_ACTIVIDAD.CODIGOGRUPO, 
-                               x.GRUPO_ACTIVIDAD.ESTADO, 
+                               ESTADO = x.GRUPO_ACTIVIDAD.ESTADO, 
                                x.GRUPO.NIVEL, 
                                x.GRUPO.PARALELO, 
                                x.GRUPO.MODALIDAD })
@@ -283,11 +283,51 @@ namespace SistemaBienestarEstudiantil.WebServices
             GRUPO_ACTIVIDAD groupActivity = db.GRUPO_ACTIVIDAD.Single(ga => ga.CODIGOACTIVIDAD == activityId && ga.CODIGOGRUPO == groupId);
 
             if (groupActivity.ESTADO == true)
+            {
                 groupActivity.ESTADO = false;
+                deleteStudentsByGroupActivity(activityId, groupId);
+            }
             else
+            {
                 groupActivity.ESTADO = true;
+                createStudentsByGroup(activityId, groupId);
+            }
 
             db.SaveChanges();
+        }
+
+        private void deleteStudentsByGroupActivity(int activityId, int groupId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<ASISTENCIA> assistanceList = db.ASISTENCIAs.Where(a => a.CODIGOGRUPO == groupId && a.CODIGOACTIVIDAD == activityId).ToList();
+
+            foreach (ASISTENCIA assistance in assistanceList)
+            {
+                db.ASISTENCIAs.DeleteObject(assistance);
+                db.SaveChanges();
+            }
+        }
+
+        private void createStudentsByGroup(int activityId, int groupId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<ALUMNO> students = db.ALUMNOes.Where(a => a.CODIGOGRUPO == groupId).ToList();
+
+            foreach (ALUMNO student in students)
+            {
+                ASISTENCIA newAssistance = new ASISTENCIA();
+
+                newAssistance.CODIGOGRUPO = groupId;
+                newAssistance.CODIGOALUMNO = student.CODIGO;
+                newAssistance.CODIGOACTIVIDAD = activityId;
+                newAssistance.ASISTENCIA1 = false;
+
+                db.ASISTENCIAs.AddObject(newAssistance);
+
+                db.SaveChanges();
+            }
         }
 
         /**
@@ -303,6 +343,8 @@ namespace SistemaBienestarEstudiantil.WebServices
             newGroupActivity.CODIGOACTIVIDAD = activityId;
             newGroupActivity.CODIGOGRUPO = groupId;
             newGroupActivity.ESTADO = true;
+
+            createStudentsByGroup(activityId, groupId);
 
             db.GRUPO_ACTIVIDAD.AddObject(newGroupActivity);
 
