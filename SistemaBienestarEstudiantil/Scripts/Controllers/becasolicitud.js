@@ -45,13 +45,16 @@
             
             if ($scope.formFiles.$valid && $scope.becaSolicitudForm.$valid) {
 
-                $scope.BECA_SOLICITUD.CODIGOALUMNO = $scope.ALUMNO.CODIGO;
+                $scope.BECA_SOLICITUD = {
+                    CODIGOALUMNO: $scope.ALUMNO.CODIGO,
+                    CODIGOTIPO: $scope.becasolicitud.TIPO.CODIGO
+                };
 
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/addBecaSolicitud', {
                     beca_solicitud: $scope.BECA_SOLICITUD
                 }).success(function (data, status, headers, config) {
-                    $scope.CODIGOSADJUNTOS = data;
-                    console.log("adjuntos", data);
+                    console.log("beca_solicitud", data);
+                    $scope.BECA_SOLICITUD = data;
                 }).error(function (data, status, headers, config) {
                     console.log("error al cargar los tipos...", data);
                 });
@@ -133,8 +136,14 @@
                                 ctrl.$setValidity('cedulaValidator', true);
                                 ctrl.$setValidity('cedulaChecking', true);
                                 ctrl.$setValidity('cedulaExist', true);
-                                scope.ALUMNO = data.alumno;
-                                scope.BECA_SOLICITUD = data.beca_solicitud;
+                                
+                                scope.BECA_SOLICITUD = data.beca_solicitud;    
+                                if (data.beca_solicitud != null) {
+                                    scope.ALUMNO = data.beca_solicitud.ALUMNO;
+                                } else {
+                                    scope.ALUMNO = data.alumno;
+                                }
+                                
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);
                                 ctrl.$setValidity('cedulaValidator', true);

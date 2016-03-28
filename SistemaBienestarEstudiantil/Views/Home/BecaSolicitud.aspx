@@ -29,15 +29,25 @@
 	        	{{ALUMNO.NOMBRE}}
 	        </span>
 	    	<hr/>
-			<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
-			<select required ng-model="BECA_SOLICITUD.TIPO" id="becaTipo" name="becaTipo" class="form-control"
-	            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
-	        </select>
-			<span ng-messages="becaSolicitudForm.becaTipo.$error">
-				<span ng-message="required" class="help-block ng-message">* Debe ingresar el tipo de Beca</span>
-			</span>
+			<div ng-if="BECA_SOLICITUD == null">
+				<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
+				<select required ng-model="becasolicitud.TIPO" id="becaTipo" name="becaTipo" class="form-control"
+		            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
+		        </select>
+				<span ng-messages="becaSolicitudForm.becaTipo.$error">
+					<span ng-message="required" class="help-block ng-message">* Debe ingresar el tipo de Beca</span>
+				</span>
+			</div>
+			<div ng-if="BECA_SOLICITUD != null">
+				<div class="document-message-title" style="display:inline-block;color: black;">
+					Beca:
+				</div>
+				<div class="document-message-title" style="display:inline-block;">
+					{{BECA_SOLICITUD.BECA_TIPO.NOMBRE}}
+				</div>
+			</div>
     	</form>
-    	<form id="formFiles" name="formFiles" enctype="multipart/form-data">
+    	<form ng-if="BECA_SOLICITUD == null" id="formFiles" name="formFiles" enctype="multipart/form-data">
     		<div>
 
 	    		<div class="document-message-title" ng-show="becasolicitud.TIPO">
@@ -70,12 +80,16 @@
     		</div>
 		</form>
 
-		<div>
-			<div ng-repeat="adjunto in CODIGOSADJUNTOS" style="width:140px; display:inline-block; padding: 5px;vertical-align: top;">
-				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;" ng-click="removeAttach(adjunto.CODIGO)">
+		<div ng-if="BECA_SOLICITUD != null">
+			<div class="document-message-title">
+				Documentos ingresados:
+			</div>
+			<div ng-repeat="adjunto in CODIGOSADJUNTOS" style="width:100%;display:inline-block; padding: 5px;vertical-align:top;">
+				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;display:inline-block;vertical-align:top;"
+					ng-click="removeAttach(adjunto.CODIGO)">
 					<span class="ui-icon ui-icon-trash"></span>
-				</button><br/>
-				<div>{{adjunto.BECA_TIPO_DOCUMENTO.NOMBRE}}</div>
+				</button>
+				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.BECA_TIPO_DOCUMENTO.NOMBRE}}</div>
 				<div style="width:120px;height:120px;display:inline-block;" >
 					<img style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getImage?codigoAdjunto={{adjunto.CODIGO}}">
 				</div>
