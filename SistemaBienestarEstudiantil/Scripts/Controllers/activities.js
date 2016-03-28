@@ -141,8 +141,11 @@
 
                     $scope.allLevelAssistance = [];
 
-                    for (var i = 0; i < $scope.groupActivity.length; i++)
-                        $scope.allLevelAssistance.push({value: $scope.groupActivity[i].CODIGOGRUPO, name:$scope.groupActivity[i].NIVEL + " " + $scope.groupActivity[i].PARALELO + " - " + $scope.groupActivity[i].MODALIDAD});
+                    for (var i = 0; i < $scope.groupActivity.length; i++) {
+                        console.log("Estado: ", $scope.groupActivity[i].ESTADO);
+                        if ($scope.groupActivity[i].ESTADO == true)
+                            $scope.allLevelAssistance.push({value: $scope.groupActivity[i].CODIGOGRUPO, name:$scope.groupActivity[i].NIVEL + " " + $scope.groupActivity[i].PARALELO + " - " + $scope.groupActivity[i].MODALIDAD});
+                    }                        
                 }).error(function (data, status, headers, config) {
                     console.log("Error al cargar niveles de actividad...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad'}]);
@@ -275,6 +278,7 @@
             // Llena los niveles
             $scope.getGroupLevel(code);
             $scope.assistance = [];
+            $scope.studentsData = [];
             
             ngDialog.open({
                 template: 'assistanceActivity.html',
