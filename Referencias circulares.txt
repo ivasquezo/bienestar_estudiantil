@@ -39,6 +39,7 @@ class ALUMNO
 class ASISTENCIA
 
 	[ScriptIgnore]
+	public EntityReference<ACTIVIDAD> ACTIVIDADReference
 	public EntityReference<ALUMNO> ALUMNOReference
 	public EntityReference<GRUPO> GRUPOReference
 
