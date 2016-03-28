@@ -77,3 +77,6 @@ textarea.ng-invalid:focus, input.ng-invalid:focus, select.ng-invalid:focus {
     margin-bottom: 10px;
     margin-top: 10px;
 }
+.cg-busy {
+    z-index:10000;
+}

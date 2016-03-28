@@ -64,6 +64,7 @@ class BECA_TIPO
 class BECA_TIPO_DOCUMENTO
 
 	[ScriptIgnore]
+	public EntityCollection<BECA_ADJUNTO> BECA_ADJUNTO
 	public BECA_TIPO BECA_TIPO
 	public EntityReference<BECA_TIPO> BECA_TIPOReference
 
