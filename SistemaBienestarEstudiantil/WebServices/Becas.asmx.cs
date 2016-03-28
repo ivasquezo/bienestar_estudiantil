@@ -48,6 +48,9 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
 
+            // get codes type document for insert
+            string [] codesTypesDocuments = System.Web.HttpContext.Current.Request.Params.Get("codesTypesDocuments").Split(',');
+            
             if (hfc.Count > 0)
             {
                 Models.BECA_ADJUNTO[] becaAdjunto = new Models.BECA_ADJUNTO[hfc.Count];
@@ -65,9 +68,10 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                             becaAdjunto[i] = new Models.BECA_ADJUNTO();
                             becaAdjunto[i].CODIGOSOLICITUD = 1;
-                            becaAdjunto[i].CONTENTTYPE = hfc[0].ContentType;
+                            becaAdjunto[i].CONTENTTYPE = hfc[i].ContentType;
                             becaAdjunto[i].ADJUNTO = fileBytes;
-                            becaAdjunto[i].NOMBRE = hfc[0].FileName;
+                            becaAdjunto[i].CODIGOTIPODOCUMENTO = Decimal.Parse(codesTypesDocuments[i]);
+                            becaAdjunto[i].NOMBRE = hfc[i].FileName;
                         }
                     }
                 }
@@ -86,7 +90,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     db.SaveChanges();
             }
 
-            writeResponse(System.Web.HttpContext.Current.Request.Params.Get("cedulaSolicitud"));
+            writeResponse(System.Web.HttpContext.Current.Request.Params.Get("codesTypesDocuments"));
         }
 
         [WebMethod]
@@ -110,10 +114,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getListCodeAttach()
+        public void getListAttach()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponseObject(db.BECA_ADJUNTO.Select(a => a.CODIGO).ToList());
+            writeResponseObject(db.BECA_ADJUNTO.Select(a => new { a.CODIGO, a.BECA_TIPO_DOCUMENTO }).ToList());
         }
 
         [WebMethod]
@@ -128,6 +132,19 @@ namespace SistemaBienestarEstudiantil.WebServices
                 db.SaveChanges();
             }
             writeResponse("ok");
+        }
+
+        [WebMethod]
+        public void getStudentSolicitud(decimal cedula)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            Models.ALUMNO alumno = db.ALUMNOes.Where(a => a.CEDULA == cedula).First();
+
+            Models.BECA_SOLICITUD beca_solicitud = null;
+            if (alumno != null) beca_solicitud = db.BECA_SOLICITUD.Where(bs => bs.CODIGOALUMNO == alumno.CODIGO).First();
+
+            writeResponseObject(new { alumno, beca_solicitud });            
         }
 
 

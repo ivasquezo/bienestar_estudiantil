@@ -28,9 +28,10 @@
         $scope.cargarTipos();
 
         $scope.cargarCodigosAdjunto = function () {
-            $scope.promise = $http.get('../../WebServices/Becas.asmx/getListCodeAttach')
+            $scope.promise = $http.get('../../WebServices/Becas.asmx/getListAttach')
             .success(function (data, status, headers, config) {
                 $scope.CODIGOSADJUNTOS = data;
+                console.log("adjuntos", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });
@@ -39,19 +40,25 @@
         $scope.cargarCodigosAdjunto();
 
         $scope.uploadFileDataBase = function () {
-            var formElement = document.getElementById('formFiles');
-            var formData = new FormData(formElement);
+            
+            if ($scope.formFiles.$valid && $scope.becaSolicitudForm.$valid) {
 
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase', formData, {
-                withCredentials: true,
-                headers: {'Content-Type': undefined },
-                transformRequest: angular.identity
-            }).success(function (data, status, headers, config) {
-                console.log(data);
-                $scope.cargarCodigosAdjunto();
-            }).error(function (data, status, headers, config) {
-                console.log("error al cargar los tipos...", data);
-            });
+                var formElement = document.getElementById('formFiles');
+                var formData = new FormData(formElement);
+
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase', formData, {
+                    withCredentials: true,
+                    headers: {'Content-Type': undefined },
+                    transformRequest: angular.identity
+                }).success(function (data, status, headers, config) {
+                    console.log(data);
+                    $scope.cargarCodigosAdjunto();
+                }).error(function (data, status, headers, config) {
+                    console.log("error al cargar los tipos...", data);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Complete los campos erróneos'}]);
+            }
         }
 
         $scope.removeAttach = function (attachCode) {
@@ -68,6 +75,15 @@
 
         $scope.printConsole = function () {
             console.log($scope);
+        }
+
+        $scope.getCodeTypesDocuments = function (typesDocuments) {
+            var codesTypesDocuments = "";
+            if (typesDocuments != undefined)
+                for (var i = 0; i < typesDocuments.length; i++) {
+                    codesTypesDocuments += typesDocuments[i].CODIGO + ",";
+                };
+            return codesTypesDocuments;
         }
 
     }]);
@@ -95,7 +111,7 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Users.asmx/countUserWithCedula', {
+                        scope.promise = $http.post('../../WebServices/Becas.asmx/countUserWithCedula', {
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {
 
