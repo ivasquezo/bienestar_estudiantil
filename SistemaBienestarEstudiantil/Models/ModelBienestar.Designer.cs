@@ -2140,7 +2140,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// No hay documentación de metadatos disponible.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
+        [ScriptIgnoreAttribute]
         public global::System.Byte[] ADJUNTO
         {
             get
@@ -2274,6 +2274,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BECA_TIPO_DOCUMENTO> BECA_TIPO_DOCUMENTOReference

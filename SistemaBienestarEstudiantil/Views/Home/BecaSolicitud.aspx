@@ -26,11 +26,11 @@
 	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
 	        </span>
 	        <span style="display:inline-block;font-size:18px;">
-	        	{{student.NOMBRE}}
+	        	{{ALUMNO.NOMBRE}}
 	        </span>
 	    	<hr/>
 			<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
-			<select required ng-model="becasolicitud.TIPO" id="becaTipo" name="becaTipo" class="form-control"
+			<select required ng-model="BECA_SOLICITUD.TIPO" id="becaTipo" name="becaTipo" class="form-control"
 	            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
 	        </select>
 			<span ng-messages="becaSolicitudForm.becaTipo.$error">
@@ -40,9 +40,7 @@
     	<form id="formFiles" name="formFiles" enctype="multipart/form-data">
     		<div>
 
-	    		<input type="hidden" value="{{student.CEDULA}}" name="cedulaSolicitud" />
-				
-		    	<div class="document-message-title" ng-show="becasolicitud.TIPO">
+	    		<div class="document-message-title" ng-show="becasolicitud.TIPO">
 		    		Ingrese los siguientes documentos para la solicitud de Becas de estudio y apoyo económico a estudiantes<br/>
 		    		<div style="font-size:12px;margin-top:5px;">
 		    			Es obligatorio entregar TAMBIÉN el documento físico en recepción o en el departamento de bienestar estudiantil

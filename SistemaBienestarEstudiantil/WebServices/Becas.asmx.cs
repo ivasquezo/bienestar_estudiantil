@@ -142,11 +142,22 @@ namespace SistemaBienestarEstudiantil.WebServices
             Models.ALUMNO alumno = db.ALUMNOes.Where(a => a.CEDULA == cedula).First();
 
             Models.BECA_SOLICITUD beca_solicitud = null;
-            if (alumno != null) beca_solicitud = db.BECA_SOLICITUD.Where(bs => bs.CODIGOALUMNO == alumno.CODIGO).First();
+            var becas_solicitud = db.BECA_SOLICITUD.Where(bs => bs.CODIGOALUMNO == alumno.CODIGO);
+            if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
 
-            writeResponseObject(new { alumno, beca_solicitud });            
+            var beca_solicitud_test = db.BECA_SOLICITUD.First();
+
+            writeResponseObject(new { alumno, beca_solicitud, beca_solicitud_test });            
         }
 
+        [WebMethod]
+        public void addBecaSolicitud(Models.BECA_SOLICITUD beca_solicitud)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            db.BECA_SOLICITUD.AddObject(beca_solicitud);
+            db.SaveChanges();
+            writeResponseObject(beca_solicitud);
+        }
 
     }
 }

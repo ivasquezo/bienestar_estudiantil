@@ -7,11 +7,13 @@
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
-        $scope.backdrop = false;
+        $scope.backdrop = true;
         $scope.delay = 2;
         $scope.minDuration = 2;
 
         $scope.TIPO = null;
+        $scope.ALUMNO = null;
+        $scope.BECA_SOLICITUD = null;
 
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
@@ -42,6 +44,17 @@
         $scope.uploadFileDataBase = function () {
             
             if ($scope.formFiles.$valid && $scope.becaSolicitudForm.$valid) {
+
+                $scope.BECA_SOLICITUD.CODIGOALUMNO = $scope.ALUMNO.CODIGO;
+
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/addBecaSolicitud', {
+                    beca_solicitud: $scope.BECA_SOLICITUD
+                }).success(function (data, status, headers, config) {
+                    $scope.CODIGOSADJUNTOS = data;
+                    console.log("adjuntos", data);
+                }).error(function (data, status, headers, config) {
+                    console.log("error al cargar los tipos...", data);
+                });
 
                 var formElement = document.getElementById('formFiles');
                 var formData = new FormData(formElement);
@@ -111,25 +124,34 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Becas.asmx/countUserWithCedula', {
+                        scope.promise = $http.post('../../WebServices/Becas.asmx/getStudentSolicitud', {
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {
 
-                            if (data.cantidad == 0) {
+                            console.log("beca_solicitud", data);
+                            if (data.alumno != null) {
                                 ctrl.$setValidity('cedulaValidator', true);
                                 ctrl.$setValidity('cedulaChecking', true);
                                 ctrl.$setValidity('cedulaExist', true);
+                                scope.ALUMNO = data.alumno;
+                                scope.BECA_SOLICITUD = data.beca_solicitud;
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);
                                 ctrl.$setValidity('cedulaValidator', true);
+                                scope.ALUMNO = null;
+                                scope.BECA_SOLICITUD = null;
                             }
 
                         }).error(function (data, status, headers, config) {
-                            console.log("error al traer alumno", data);
+                            console.log("error getStudentSolicitud", data);
                             ctrl.$setValidity('cedulaValidator', false);
+                            scope.ALUMNO = null;
+                            scope.BECA_SOLICITUD = null;
                         });
                     } else {
                         ctrl.$setValidity('cedulaValidator', false);
+                        scope.ALUMNO = null;
+                        scope.BECA_SOLICITUD = null;
                     }
 
                     // we need to return our ngModelValue, to be displayed to the user(value of the input)
