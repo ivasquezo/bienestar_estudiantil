@@ -129,7 +129,10 @@ namespace SistemaBienestarEstudiantil.WebServices
                            { 
                                x.GRUPO_ACTIVIDAD.CODIGOACTIVIDAD, 
                                x.GRUPO_ACTIVIDAD.CODIGOGRUPO, 
-                               x.GRUPO_ACTIVIDAD.ESTADO })
+                               x.GRUPO_ACTIVIDAD.ESTADO, 
+                               x.GRUPO.NIVEL, 
+                               x.GRUPO.PARALELO, 
+                               x.GRUPO.MODALIDAD })
                            .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
 
                 response = new Response(true, "", "", "", data);
@@ -366,6 +369,29 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        [WebMethod]
+        public void getAssistanceList()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                List<ASISTENCIA> assistanceList = db.ASISTENCIAs.ToList();
+
+                if (assistanceList != null && assistanceList.Count > 0)
+                    response = new Response(true, "", "", "", assistanceList);
+                else
+                    response = new Response(false, "error", "Error", "No existen datos de asistencia", assistanceList);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener la asistencia de los alumnos", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
        
         [WebMethod]
         public void removeActivityById(int activityId)
