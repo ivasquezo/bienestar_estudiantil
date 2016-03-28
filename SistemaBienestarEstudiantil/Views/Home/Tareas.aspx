@@ -246,12 +246,14 @@
                             <tr>
                                 <th>Cédula</th>
                                 <th>Nombre</th>
-                                <th></th>
+                                <th>Asistencia</th>
                             </tr>
-                            <tr ng-repeat="nivel in groupActivity">                                
-                                <td>{{ nivel.NIVEL }}</td>
-                                <td>{{ nivel.PARALELO }}</td>
-                                <td>{{ nivel.MODALIDAD }}</td>
+                            <tr ng-repeat="student in studentsData">                                
+                                <td>{{ student.ALUMNO.CEDULA }}</td>
+                                <td>{{ student.ALUMNO.NOMBRE }}</td>
+                                <td><input type="checkbox" ng-checked="student.ASISTENCIA1" 
+                                    ng-click="setAssistanceStudents(student.CODIGO)"></td>
+                            
                             </tr>
                         </table>
                     </div>

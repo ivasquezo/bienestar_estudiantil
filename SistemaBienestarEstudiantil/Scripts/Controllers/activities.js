@@ -274,6 +274,7 @@
 
             // Llena los niveles
             $scope.getGroupLevel(code);
+            $scope.assistance = [];
             
             ngDialog.open({
                 template: 'assistanceActivity.html',
@@ -289,19 +290,44 @@
         };
 
         $scope.chargeStudents = function (code) {
-            console.log("codi: ", $scope.activityAssistanceCopy.CODIGOACTIVIDAD);
+            $scope.studentsData = [];
+            $scope.assistance = [];
             $http.post('../../WebServices/Activities.asmx/getAssistanceList', {
                 activityId: $scope.activityAssistanceCopy.CODIGOACTIVIDAD,
                 levelId: code
             }).success(function (data, status, headers, config) {
                 console.log("Cargar estudiantes... ", data);
-
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                if (data.success)
+                    $scope.studentsData = data.response;                  
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al eliminar la actividad... ", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la actividad'}]);
             });
         };
+
+        $scope.setAssistanceStudents = function(code) { 
+            var existGroup = false;
+
+            if ($scope.assistance != null && $scope.assistance.length > 0) {
+                for (var i=0; i<$scope.assistance.length; i++) {
+                    if ($scope.assistance[i] == code)
+                        existGroup = true;
+                }
+            } 
+
+            if (existGroup) {
+                for (var i=0; i<$scope.assistance.length; i++) {
+                    if ($scope.assistance[i] == code)
+                        $scope.assistance.splice(i, code);
+                }
+            }                
+            else
+                $scope.assistance.push(code); 
+        };
+
+       
 
 
 
@@ -407,20 +433,12 @@
             if (!this.assistanceForm.$invalid) {
                 var newParentObject = this;
 
-                $http.post('../../WebServices/Activities.asmx/addNewActivity', {                
-                    activityName: $scope.activityCopy.NOMBRE,
-                    activityDate: $scope.activityCopy.FECHA,
-                    activityStatus: $scope.activityCopy.ESTADO,
-                    activityObservation: $scope.activityCopy.OBSERVACION,
-                    generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
-                    userId: $scope.activityCopy.CODIGOUSUARIO,
-                    groupLevelActivity: $scope.groupLevelActivity
+                $http.post('../../WebServices/Activities.asmx/saveAssistanceData', {                
+                    assistance: $scope.assistance
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
                     if (data.success) {
-                        $scope.addElementArray($scope.gridOptions.data, data.response, Date.parse($scope.activityCopy.FECHA), 
-                            $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.ESTADO);
-                        newParentObject.closeThisDialog();
+                        
                     }
 
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
