@@ -8,6 +8,7 @@ using System.Data.Objects.DataClasses;
 using System.Web.Script.Serialization;
 using SistemaBienestarEstudiantil.Models;
 using SistemaBienestarEstudiantil.Class;
+using System.IO;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -482,11 +483,15 @@ namespace SistemaBienestarEstudiantil.WebServices
                 bienestarEntities db = new bienestarEntities();
 
                 ACTIVIDAD activityDeleted = db.ACTIVIDADs.Single(a => a.CODIGO == activityId);
-                //ACTIVIDAD_GENERAL_ACTIVIDAD activityGeneralDeleted = db.ACTIVIDAD_GENERAL_ACTIVIDAD.Single(ag => ag.CODIGOACTIVIDAD == activityId);
-               
-                //db.ACTIVIDADs.DeleteObject(activityDeleted);
-                //db.ACTIVIDAD_GENERAL_ACTIVIDAD.DeleteObject(activityGeneralDeleted);
-                //db.SaveChanges();
+
+                deleteAssistanceActivity(activityId);
+
+                deleteGroupActivity(activityId);
+
+                deleteAttachedActivity(activityId);
+
+                db.ACTIVIDADs.DeleteObject(activityDeleted);
+                db.SaveChanges();
 
                 response = new Response(true, "info", "Eliminar", "Actividad eliminada correctamente", null);
             }
@@ -506,8 +511,151 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        private void deleteAssistanceActivity(int activityId)
+        {
+            bienestarEntities db = new bienestarEntities();
 
-        
+            List<ASISTENCIA> assistanceDeleted = db.ASISTENCIAs.Where(a => a.CODIGOACTIVIDAD == activityId).ToList();
+
+            foreach (ASISTENCIA assistance in assistanceDeleted)
+            {
+                db.ASISTENCIAs.DeleteObject(assistance);
+                db.SaveChanges();
+            }
+        }
+
+        private void deleteGroupActivity(int activityId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<GRUPO_ACTIVIDAD> groupDeleted = db.GRUPO_ACTIVIDAD.Where(ga => ga.CODIGOACTIVIDAD == activityId).ToList();
+
+            foreach (GRUPO_ACTIVIDAD group in groupDeleted)
+            {
+                db.GRUPO_ACTIVIDAD.DeleteObject(group);
+                db.SaveChanges();
+            }
+        }
+
+        private void deleteAttachedActivity(int activityId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<ACTIVIDAD_ADJUNTO> attachedDeleted = db.ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGOACTIVIDAD == activityId).ToList();
+
+            foreach (ACTIVIDAD_ADJUNTO attached in attachedDeleted)
+            {
+                db.ACTIVIDAD_ADJUNTO.DeleteObject(attached);
+                db.SaveChanges();
+            }
+        }
+
+        //[WebMethod]
+        //public void addUploadedFileDataBase()
+        //{
+        //    Response response = new Response(true, "", "", "", null);
+        //    bienestarEntities db = new bienestarEntities();
+
+        //    try {
+        //        HttpFileCollection hfc = HttpContext.Current.Request.Files;
+
+        //        if (hfc.Count > 0)
+        //        {
+        //            ACTIVIDAD_ADJUNTO activityAttached = new ACTIVIDAD_ADJUNTO();
+        //            HttpPostedFile hpf = hfc[0];
+        //            if (hpf.ContentLength > 0)
+        //            {
+        //                using (var memoryStream = new MemoryStream())
+        //                {
+        //                    hpf.InputStream.CopyTo(memoryStream);
+        //                    byte[] fileBytes = memoryStream.ToArray();
+
+        //                    activityAttached = new ACTIVIDAD_ADJUNTO();
+        //                    activityAttached.CODIGOACTIVIDAD = 7;
+        //                    activityAttached.ADJUNTO = fileBytes;
+        //                    activityAttached.NOMBRE = hfc[0].FileName;
+        //                    activityAttached.CONTENTTYPE = hfc[0].ContentType;
+        //                }
+        //            }
+
+        //            db.ACTIVIDAD_ADJUNTO.AddObject(activityAttached);
+        //            db.SaveChanges();
+        //        }
+            
+        //        response = new Response(true, "info", "Información", "El archivo se adjuntó correctamente", null);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
+        //        writeResponse(new JavaScriptSerializer().Serialize(response));
+        //    }
+
+        //    writeResponse(new JavaScriptSerializer().Serialize(response));
+        //}
+
+        [WebMethod]
+        public void addUploadedFileDataBase()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                HttpFileCollection hfc = HttpContext.Current.Request.Files;
+
+                if (hfc.Count > 0)
+                {
+                    ACTIVIDAD_ADJUNTO activityAttached = new ACTIVIDAD_ADJUNTO();
+                    HttpPostedFile hpf = hfc[0];
+                    if (hpf.ContentLength > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            hpf.InputStream.CopyTo(memoryStream);
+                            byte[] fileBytes = memoryStream.ToArray();
+
+                            activityAttached = new ACTIVIDAD_ADJUNTO();
+                            activityAttached.ADJUNTO = fileBytes;
+                            activityAttached.NOMBRE = hfc[0].FileName;
+                            activityAttached.CONTENTTYPE = hfc[0].ContentType;
+                        }
+                    }
+
+                    response = new Response(true, "", "", "", activityAttached);
+                }
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void saveActivityAttached(ACTIVIDAD_ADJUNTO activityAttached, int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try {
+                ACTIVIDAD_ADJUNTO activityCreate = activityAttached;
+                activityCreate.CODIGOACTIVIDAD = activityId;
+
+                db.ACTIVIDAD_ADJUNTO.AddObject(activityCreate);
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Información", "El archivo se adjuntó correctamente", null);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
 
         [WebMethod]
         public void getAllUsersByRol()
