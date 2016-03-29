@@ -11,7 +11,10 @@
         $scope.delay = 2;
         $scope.minDuration = 2;
 
-        $scope.TIPO = null;
+        $scope.seleccion = {
+            TIPO: null
+        };
+
         $scope.ALUMNO = null;
         $scope.BECA_SOLICITUD = null;
 
@@ -43,11 +46,11 @@
 
         $scope.uploadFileDataBase = function () {
             
-            if ($scope.formFiles.$valid && $scope.becaSolicitudForm.$valid) {
+            if (this.formFiles.$valid && this.becaSolicitudForm.$valid) {
 
                 $scope.BECA_SOLICITUD = {
                     CODIGOALUMNO: $scope.ALUMNO.CODIGO,
-                    CODIGOTIPO: $scope.becasolicitud.TIPO.CODIGO
+                    CODIGOTIPO: $scope.seleccion.TIPO.CODIGO
                 };
 
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/addBecaSolicitud', {
@@ -100,7 +103,11 @@
                     codesTypesDocuments += typesDocuments[i].CODIGO + ",";
                 };
             return codesTypesDocuments;
-        }
+        };
+
+        $scope.printText = function () {
+            console.log("TIPO", $scope.seleccion.TIPO);
+        };
 
     }]);
 

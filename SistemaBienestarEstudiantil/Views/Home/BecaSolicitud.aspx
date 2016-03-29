@@ -18,7 +18,7 @@
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
 	    	<center><img style="width:170px;" src="../../Content/logo-universidad-israel.png"></center>
-	    	<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
+	    	<input ng-model="ALUMNO.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
 				name="validIdentification" placeholder="Número de cédula" type="number"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
 	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
@@ -31,7 +31,7 @@
 	    	<hr/>
 			<div ng-if="BECA_SOLICITUD == null">
 				<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
-				<select required ng-model="becasolicitud.TIPO" id="becaTipo" name="becaTipo" class="form-control"
+				<select ng-change="printText()" required ng-model="seleccion.TIPO" id="becaTipo" name="becaTipo" class="form-control"
 		            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
 		        </select>
 				<span ng-messages="becaSolicitudForm.becaTipo.$error">
@@ -50,16 +50,16 @@
     	<form ng-if="BECA_SOLICITUD == null" id="formFiles" name="formFiles" enctype="multipart/form-data">
     		<div>
 
-	    		<div class="document-message-title" ng-show="becasolicitud.TIPO">
+	    		<div class="document-message-title" ng-if="seleccion.TIPO != null">
 		    		Ingrese los siguientes documentos para la solicitud de Becas de estudio y apoyo económico a estudiantes<br/>
 		    		<div style="font-size:12px;margin-top:5px;">
 		    			Es obligatorio entregar TAMBIÉN el documento físico en recepción o en el departamento de bienestar estudiantil
 		    		</div>
 		    	</div>
 
-				<input type="hidden" value="{{getCodeTypesDocuments(becasolicitud.TIPO.BECA_TIPO_DOCUMENTO)}}" name="codesTypesDocuments" />
+				<input type="hidden" value="{{getCodeTypesDocuments(seleccion.TIPO.BECA_TIPO_DOCUMENTO)}}" name="codesTypesDocuments" />
 				<table style="margin-top:10px;">
-					<tr ng-repeat="tipoDocumento in becasolicitud.TIPO.BECA_TIPO_DOCUMENTO">
+					<tr ng-repeat="tipoDocumento in seleccion.TIPO.BECA_TIPO_DOCUMENTO">
 						<td>
 							<div class="document-message">- {{tipoDocumento.NOMBRE}}</div>
 							<div>
