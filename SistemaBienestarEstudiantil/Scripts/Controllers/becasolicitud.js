@@ -58,20 +58,24 @@
                 }).success(function (data, status, headers, config) {
                     console.log("beca_solicitud", data);
                     $scope.BECA_SOLICITUD = data;
-                }).error(function (data, status, headers, config) {
-                    console.log("error al cargar los tipos...", data);
-                });
 
-                var formElement = document.getElementById('formFiles');
-                var formData = new FormData(formElement);
+                    var formElement = document.getElementById('formFiles');
+                    var formData = new FormData(formElement);
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase', formData, {
-                    withCredentials: true,
-                    headers: {'Content-Type': undefined },
-                    transformRequest: angular.identity
-                }).success(function (data, status, headers, config) {
-                    console.log(data);
-                    $scope.cargarCodigosAdjunto();
+                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase',
+                        formData,
+                        {
+                            withCredentials: true,
+                            headers: {'Content-Type': undefined
+                        },
+                        transformRequest: angular.identity
+                    }).success(function (data, status, headers, config) {
+                        console.log(data);
+                        $scope.cargarCodigosAdjunto();
+                    }).error(function (data, status, headers, config) {
+                        console.log("error al cargar los files...", data);
+                    });
+
                 }).error(function (data, status, headers, config) {
                     console.log("error al cargar los tipos...", data);
                 });
@@ -102,6 +106,7 @@
                 for (var i = 0; i < typesDocuments.length; i++) {
                     codesTypesDocuments += typesDocuments[i].CODIGO + ",";
                 };
+            console.log(codesTypesDocuments);
             return codesTypesDocuments;
         };
 
