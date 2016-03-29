@@ -30,7 +30,7 @@
                 <span class="ui-icon ui-icon-pencil"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.getAssistance(COL_FIELD)" title="Asistencia alumnos">
                 <span class="ui-icon ui-icon-person"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Adjuntar archivos">
+                <button type="button" ng-click="grid.appScope.Main.getAttachedActivity(COL_FIELD)" title="Adjuntar archivos">
                 <span class="ui-icon ui-icon-document"></span></button>
             </div>
         </script>
@@ -264,6 +264,47 @@
                         <div class="col-md-8">
                             <button type="submit" id="saveAssistance" name="saveAssistance" class="btn btn-success">Guardar</button>
                         </div>
+                    </div>
+                </form>
+            </fieldset>
+        </script>
+
+        <script type="text/ng-template" id="attachedActivity.html">
+            <fieldset>
+                <legend>Adjuntos</legend>
+                <form id="attachedForm" name="attachedForm" ng-submit="saveAttachedDB()">
+                    <ng-form name="innerForm">
+                        <input valid-file-input ng-model="fileName" type="file" name="fileName" id="fileName" accept="image/*, application/pdf"/>
+                        <span ng-show="innerForm.fileName.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+                        <span ng-show="innerForm.fileN9ame.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
+                        <span ng-show="innerForm.fileName.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
+                    </ng-form>
+
+                    <br/>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="saveAttached"></label>
+                        <div class="col-md-8">
+                            <button type="submit" id="saveAttached" name="saveAttached" class="btn btn-success">Guardar</button>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="form-group">
+                        <table style="width:100%; font-size:16px">
+                            <tr>
+                                <th>Adjunto</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th></th>
+                            </tr>
+                            <tr >                                
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><button type="button" ng-click="grid.appScope.Main.removeActivity(COL_FIELD)" title="Elimiar actividad">
+                <span class="ui-icon ui-icon-trash"></span></button></td>                            
+                            </tr>
+                        </table>
                     </div>
                 </form>
             </fieldset>

@@ -131,7 +131,7 @@
             });
         };
 
-        $scope.getGroupLevel = function (code) {
+        $scope.getGroupLevel = function (code, successFunction) {
             if (code > 0) {
                 $http.post('../../WebServices/Activities.asmx/getGroupLevelByActivityId', {
                     activityId: code
@@ -142,10 +142,12 @@
                     $scope.allLevelAssistance = [];
 
                     for (var i = 0; i < $scope.groupActivity.length; i++) {
-                        console.log("Estado: ", $scope.groupActivity[i].ESTADO);
                         if ($scope.groupActivity[i].ESTADO == true)
                             $scope.allLevelAssistance.push({value: $scope.groupActivity[i].CODIGOGRUPO, name:$scope.groupActivity[i].NIVEL + " " + $scope.groupActivity[i].PARALELO + " - " + $scope.groupActivity[i].MODALIDAD});
-                    }                        
+                    }
+
+                    if (typeof successFunction === "function")
+                        successFunction();
                 }).error(function (data, status, headers, config) {
                     console.log("Error al cargar niveles de actividad...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad'}]);
@@ -272,24 +274,30 @@
             $scope.activityAssistanceCopy = {
                 CODIGO: ''
             };
+            $scope.allLevelAssistance = [];
 
             $scope.activityAssistanceCopy.CODIGOACTIVIDAD = code;
 
             // Llena los niveles
-            $scope.getGroupLevel(code);
-            $scope.assistance = [];
-            $scope.studentsData = [];
-            
-            ngDialog.open({
-                template: 'assistanceActivity.html',
-                className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                closeByDocument: true,
-                closeByEscape: true,
-                scope: $scope,
-                controller: $controller('ngDialogController', {
-                    $scope: $scope,
-                    $http: $http
-                })
+            $scope.getGroupLevel(code, function(){
+                $scope.assistance = [];
+                $scope.studentsData = [];
+                
+                if ($scope.allLevelAssistance.length > 0) {
+                    ngDialog.open({
+                        template: 'assistanceActivity.html',
+                        className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                        closeByDocument: true,
+                        closeByEscape: true,
+                        scope: $scope,
+                        controller: $controller('ngDialogController', {
+                            $scope: $scope,
+                            $http: $http
+                        })
+                    });
+                }
+                else
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'No se han encontrado niveles registrados en la actividad'}]);
             });
         };
 
@@ -331,14 +339,20 @@
                 $scope.assistance.push(code); 
         };
 
-       
-
-
-
-
-
-
-
+        this.getAttachedActivity = function (code) {
+            
+            ngDialog.open({
+                template: 'attachedActivity.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
 
         this.removeActivity = function (code) {
             var parentObject = this;
@@ -366,8 +380,6 @@
                 }
             }
         };      
-        
-        
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
@@ -441,14 +453,45 @@
                     assistance: $scope.assistance
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
-                    if (data.success) {
-                        
-                    }
-
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    if (!data.success)
+                        $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al agregar el rol...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+
+        $scope.saveAttachedDB = function () {
+            if (!this.attachedForm.$invalid) {
+                var formElement = document.getElementById('attachedForm');
+                var formData = new FormData(formElement);
+
+                $http.post('../../WebServices/Activities.asmx/addUploadedFileDataBase', formData, {
+                    withCredentials: true,
+                    headers: {'Content-Type': undefined },
+                    transformRequest: angular.identity
+                }).success(function (data, status, headers, config) {
+                    console.log("Adjuntos", data);
+                    if (data.success) {
+                        $scope.activityAttached = data.response;
+                        $scope.activityId = 7;
+                        $http.post('../../WebServices/Activities.asmx/saveActivityAttached', {                
+                            activityAttached: $scope.activityAttached,
+                            activityId: $scope.activityId
+                        }).success(function (data, status, headers, config) {
+                            console.log("Agregar adjunto: ", data);
+                            $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                        }).error(function (data, status, headers, config) {
+                            console.log("Error al agregar adjunto...", data);
+                            $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
+                        });
+                    }
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("error al cargar los tipos...", data);
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
