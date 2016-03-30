@@ -136,17 +136,30 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Becas.asmx/countUserWithCedula', {
+                        scope.promise = $http.post('../../WebServices/Becas.asmx/getStudentSolicitud', {
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {
 
-                            if (data.cantidad == 0) {
+                            console.log("beca_solicitud", data);
+                            if (data.alumno != null) {
                                 ctrl.$setValidity('cedulaValidator', true);
                                 ctrl.$setValidity('cedulaChecking', true);
                                 ctrl.$setValidity('cedulaExist', true);
+
+                                scope.BECA_SOLICITUD = data.beca_solicitud;    
+                                if (data.beca_solicitud != null) {
+                                    scope.ALUMNO = data.beca_solicitud.ALUMNO;
+                                } else {
+                                    scope.ALUMNO = data.alumno;
+                                }
+
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);
                                 ctrl.$setValidity('cedulaValidator', true);
+
+                                scope.ALUMNO = null;
+                                scope.BECA_SOLICITUD = null;
+
                             }
 
                         }).error(function (data, status, headers, config) {
