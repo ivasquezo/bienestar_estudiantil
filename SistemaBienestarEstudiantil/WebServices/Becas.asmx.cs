@@ -38,7 +38,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getTipos()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponseObject(db.BECA_TIPO.ToList());
+            writeResponseObject(db.BE_BECA_TIPO.ToList());
         }
 
         [WebMethod]
@@ -53,7 +53,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             
             if (hfc.Count > 0)
             {
-                Models.BECA_ADJUNTO[] becaAdjunto = new Models.BECA_ADJUNTO[hfc.Count];
+                Models.BE_BECA_ADJUNTO[] becaAdjunto = new Models.BE_BECA_ADJUNTO[hfc.Count];
                 // CHECK THE FILE COUNT.
                 for (int i = 0; i < hfc.Count; i++)
                 {
@@ -66,11 +66,11 @@ namespace SistemaBienestarEstudiantil.WebServices
                             hpf.InputStream.CopyTo(memoryStream);
                             byte[] fileBytes = memoryStream.ToArray();
 
-                            becaAdjunto[i] = new Models.BECA_ADJUNTO();
+                            becaAdjunto[i] = new Models.BE_BECA_ADJUNTO();
                             becaAdjunto[i].CODIGOSOLICITUD = 1;
                             becaAdjunto[i].CONTENTTYPE = hfc[i].ContentType;
                             becaAdjunto[i].ADJUNTO = fileBytes;
-                            becaAdjunto[i].CODIGOTIPODOCUMENTO = Decimal.Parse(codesTypesDocuments[i]);
+                            becaAdjunto[i].CODIGOTIPODOCUMENTO = Int16.Parse(codesTypesDocuments[i]);
                             becaAdjunto[i].NOMBRE = hfc[i].FileName;
                         }
                     }
@@ -81,7 +81,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 {
                     if (becaAdjunto[i].ADJUNTO.Length > 0)
                     {
-                        db.BECA_ADJUNTO.AddObject(becaAdjunto[i]);
+                        db.BE_BECA_ADJUNTO.AddObject(becaAdjunto[i]);
                         inserted++;
                     }
                 }
@@ -99,7 +99,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
            Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.BECA_ADJUNTO ba = db.BECA_ADJUNTO.Where(a => a.CODIGO == codigoAdjunto).First();
+           Models.BE_BECA_ADJUNTO ba = db.BE_BECA_ADJUNTO.Where(a => a.CODIGO == codigoAdjunto).First();
 
             byte[] response = null;
 
@@ -117,7 +117,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getListAttach()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponseObject(db.BECA_ADJUNTO.Select(a => new { a.CODIGO, a.BECA_TIPO_DOCUMENTO }).ToList());
+            writeResponseObject(db.BE_BECA_ADJUNTO.Select(a => new { a.CODIGO, a.CODIGOTIPODOCUMENTO }).ToList());
         }
 
         [WebMethod]
@@ -125,10 +125,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.BECA_ADJUNTO ba = db.BECA_ADJUNTO.Where(a => a.CODIGO == attachCode).First();
+            Models.BE_BECA_ADJUNTO ba = db.BE_BECA_ADJUNTO.Where(a => a.CODIGO == attachCode).First();
             if (ba != null)
             {
-                db.BECA_ADJUNTO.DeleteObject(ba);
+                db.BE_BECA_ADJUNTO.DeleteObject(ba);
                 db.SaveChanges();
             }
             writeResponse("ok");
@@ -139,22 +139,22 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.ALUMNO alumno = db.ALUMNOes.Where(a => a.CEDULA == cedula).First();
+            Models.BE_ALUMNO alumno = db.BE_ALUMNOes.Where(a => a.CEDULA == cedula).First();
 
-            Models.BECA_SOLICITUD beca_solicitud = null;
-            var becas_solicitud = db.BECA_SOLICITUD.Where(bs => bs.CODIGOALUMNO == alumno.CODIGO);
+            Models.BE_BECA_SOLICITUD beca_solicitud = null;
+            var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGOALUMNO == alumno.CODIGO);
             if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
 
-            var beca_solicitud_test = db.BECA_SOLICITUD.First();
+            var beca_solicitud_test = db.BE_BECA_SOLICITUD.First();
 
             writeResponseObject(new { alumno, beca_solicitud, beca_solicitud_test });            
         }
 
         [WebMethod]
-        public void addBecaSolicitud(Models.BECA_SOLICITUD beca_solicitud)
+        public void addBecaSolicitud(Models.BE_BECA_SOLICITUD beca_solicitud)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            db.BECA_SOLICITUD.AddObject(beca_solicitud);
+            db.BE_BECA_SOLICITUD.AddObject(beca_solicitud);
             db.SaveChanges();
             writeResponseObject(beca_solicitud);
         }

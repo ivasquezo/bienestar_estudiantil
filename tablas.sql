@@ -1,0 +1,987 @@
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ACCESO]    Script Date: 29/03/2016 23:23:17 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ACCESO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBRE] [varchar](20) NOT NULL,
+ CONSTRAINT [PK_MODULO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ACTIVIDAD]    Script Date: 29/03/2016 23:24:07 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ACTIVIDAD](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBRE] [varchar](50) NOT NULL,
+	[FECHA] [datetime] NULL,
+	[ESTADO] [int] NOT NULL,
+	[OBSERVACION] [nvarchar](max) NULL,
+	[CODIGOACTIVIDADGENERAL] [numeric](18, 0) NOT NULL,
+	[CODIGOUSUARIO] [numeric](18, 0) NOT NULL,
+ CONSTRAINT [PK_ACTIVIDAD_1] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_ACTIVIDAD]  WITH CHECK ADD  CONSTRAINT [FK_ACTIVIDAD_ACTIVIDAD_GENERAL] FOREIGN KEY([CODIGOACTIVIDADGENERAL])
+REFERENCES [dbo].[BE_ACTIVIDAD_GENERAL] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ACTIVIDAD] CHECK CONSTRAINT [FK_ACTIVIDAD_ACTIVIDAD_GENERAL]
+GO
+
+ALTER TABLE [dbo].[BE_ACTIVIDAD]  WITH CHECK ADD  CONSTRAINT [FK_ACTIVIDAD_USUARIO] FOREIGN KEY([CODIGOUSUARIO])
+REFERENCES [dbo].[BE_USUARIO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ACTIVIDAD] CHECK CONSTRAINT [FK_ACTIVIDAD_USUARIO]
+GO
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ACTIVIDAD_ADJUNTO]    Script Date: 29/03/2016 23:25:13 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ACTIVIDAD_ADJUNTO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOACTIVIDAD] [numeric](18, 0) NOT NULL,
+	[ADJUNTO] [varbinary](max) NOT NULL,
+	[NOMBRE] [varchar](50) NOT NULL,
+	[CONTENTTYPE] [varchar](20) NOT NULL,
+	[DESCRIPCION] [varchar](250) NULL,
+ CONSTRAINT [PK_ACTIVIDAD_ADJUNTO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_ACTIVIDAD_ADJUNTO]  WITH CHECK ADD  CONSTRAINT [FK_ADJUNTO_ACTIVIDAD] FOREIGN KEY([CODIGOACTIVIDAD])
+REFERENCES [dbo].[BE_ACTIVIDAD] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ACTIVIDAD_ADJUNTO] CHECK CONSTRAINT [FK_ADJUNTO_ACTIVIDAD]
+GO
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ACTIVIDAD_GENERAL]    Script Date: 29/03/2016 23:26:17 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ACTIVIDAD_GENERAL](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBRE] [varchar](100) NOT NULL,
+ CONSTRAINT [PK_ACTIVIDAD_GENERAL] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ALUMNO]    Script Date: 29/03/2016 23:26:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ALUMNO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOGRUPO] [numeric](18, 0) NOT NULL,
+	[CEDULA] [numeric](10, 0) NOT NULL,
+	[NOMBRE] [varchar](50) NOT NULL,
+	[CORREO] [varchar](50) NULL,
+ CONSTRAINT [PK_ALUMNO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_ALUMNO]  WITH CHECK ADD  CONSTRAINT [FK_ALUMNO_GRUPO] FOREIGN KEY([CODIGOGRUPO])
+REFERENCES [dbo].[BE_GRUPO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ALUMNO] CHECK CONSTRAINT [FK_ALUMNO_GRUPO]
+GO
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ASISTENCIA]    Script Date: 29/03/2016 23:26:47 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_ASISTENCIA](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOGRUPO] [numeric](18, 0) NOT NULL,
+	[CODIGOALUMNO] [numeric](18, 0) NOT NULL,
+	[CODIGOACTIVIDAD] [numeric](18, 0) NOT NULL,
+	[ASISTENCIA] [bit] NOT NULL,
+ CONSTRAINT [PK_ASISTENCIA_1] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC,
+	[CODIGOGRUPO] ASC,
+	[CODIGOALUMNO] ASC,
+	[CODIGOACTIVIDAD] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA] ADD  CONSTRAINT [DF_ASISTENCIA_ASISTENCIA]  DEFAULT ((0)) FOR [ASISTENCIA]
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA]  WITH CHECK ADD  CONSTRAINT [FK_ASISTENCIA_ACTIVIDAD] FOREIGN KEY([CODIGOACTIVIDAD])
+REFERENCES [dbo].[BE_ACTIVIDAD] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA] CHECK CONSTRAINT [FK_ASISTENCIA_ACTIVIDAD]
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA]  WITH CHECK ADD  CONSTRAINT [FK_ASISTENCIA_ALUMNO] FOREIGN KEY([CODIGOALUMNO])
+REFERENCES [dbo].[BE_ALUMNO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA] CHECK CONSTRAINT [FK_ASISTENCIA_ALUMNO]
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA]  WITH CHECK ADD  CONSTRAINT [FK_ASISTENCIA_GRUPO] FOREIGN KEY([CODIGOGRUPO])
+REFERENCES [dbo].[BE_GRUPO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ASISTENCIA] CHECK CONSTRAINT [FK_ASISTENCIA_GRUPO]
+GO
+
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_BECA_ADJUNTO]    Script Date: 29/03/2016 23:27:03 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_BECA_ADJUNTO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOSOLICITUD] [numeric](18, 0) NOT NULL,
+	[CODIGOTIPODOCUMENTO] [numeric](18, 0) NOT NULL,
+	[NOMBRE] [nvarchar](50) NOT NULL,
+	[ADJUNTO] [varbinary](max) NULL,
+	[CONTENTTYPE] [varchar](50) NULL,
+	[DESCRIPCION] [varchar](250) NULL,
+ CONSTRAINT [PK_BECA_ADJUNTO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_BECA_ADJUNTO]  WITH CHECK ADD  CONSTRAINT [FK_BECA_ADJUNTO_BECA_SOLICITUD] FOREIGN KEY([CODIGOSOLICITUD])
+REFERENCES [dbo].[BE_BECA_SOLICITUD] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_BECA_ADJUNTO] CHECK CONSTRAINT [FK_BECA_ADJUNTO_BECA_SOLICITUD]
+GO
+
+ALTER TABLE [dbo].[BE_BECA_ADJUNTO]  WITH CHECK ADD  CONSTRAINT [FK_BECA_ADJUNTO_BECA_TIPO_DOCUMENTO] FOREIGN KEY([CODIGOTIPODOCUMENTO])
+REFERENCES [dbo].[BE_BECA_TIPO_DOCUMENTO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_BECA_ADJUNTO] CHECK CONSTRAINT [FK_BECA_ADJUNTO_BECA_TIPO_DOCUMENTO]
+GO
+
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_BECA_SOLICITUD]    Script Date: 29/03/2016 23:27:19 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_BECA_SOLICITUD](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOALUMNO] [numeric](18, 0) NOT NULL,
+	[CODIGOTIPO] [numeric](18, 0) NOT NULL,
+	[APROBADA] [bit] NOT NULL,
+	[OTORGADO] [decimal](18, 0) NOT NULL,
+	[OBSERVACION] [nvarchar](300) NULL,
+ CONSTRAINT [PK_BECA_SOLICITUD] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_BECA_SOLICITUD] ADD  CONSTRAINT [DF_BECA_SOLICITUD_APROBADA]  DEFAULT ((0)) FOR [APROBADA]
+GO
+
+ALTER TABLE [dbo].[BE_BECA_SOLICITUD]  WITH CHECK ADD  CONSTRAINT [FK_BECA_SOLICITUD_ALUMNO] FOREIGN KEY([CODIGOALUMNO])
+REFERENCES [dbo].[BE_ALUMNO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_BECA_SOLICITUD] CHECK CONSTRAINT [FK_BECA_SOLICITUD_ALUMNO]
+GO
+
+ALTER TABLE [dbo].[BE_BECA_SOLICITUD]  WITH CHECK ADD  CONSTRAINT [FK_BECA_SOLICITUD_BECA_TIPO] FOREIGN KEY([CODIGOTIPO])
+REFERENCES [dbo].[BE_BECA_TIPO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_BECA_SOLICITUD] CHECK CONSTRAINT [FK_BECA_SOLICITUD_BECA_TIPO]
+GO
+
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_BECA_TIPO]    Script Date: 29/03/2016 23:27:56 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_BECA_TIPO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBRE] [varchar](150) NOT NULL,
+ CONSTRAINT [PK_BECA_TIPO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_BECA_TIPO_DOCUMENTO]    Script Date: 29/03/2016 23:28:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_BECA_TIPO_DOCUMENTO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOTIPO] [numeric](18, 0) NOT NULL,
+	[NOMBRE] [varchar](150) NOT NULL,
+	[DESCRIPCION] [varchar](max) NOT NULL,
+ CONSTRAINT [PK_BECA_TIPO_DOCUMENTO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_BECA_TIPO_DOCUMENTO]  WITH CHECK ADD  CONSTRAINT [FK_BECA_TIPO_DOCUMENTO_BECA_TIPO] FOREIGN KEY([CODIGOTIPO])
+REFERENCES [dbo].[BE_BECA_TIPO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_BECA_TIPO_DOCUMENTO] CHECK CONSTRAINT [FK_BECA_TIPO_DOCUMENTO_BECA_TIPO]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_DATOS_SISTEMA]    Script Date: 29/03/2016 23:28:20 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_DATOS_SISTEMA](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBRE] [nvarchar](20) NOT NULL,
+	[VALOR] [nvarchar](50) NULL,
+	[ACTIVO] [bit] NOT NULL,
+ CONSTRAINT [PK_DATOS_SISTEMA_1] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_DATOS_SISTEMA] ADD  CONSTRAINT [DF_DATOS_SISTEMA_ACTIVO]  DEFAULT ((1)) FOR [ACTIVO]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ENCUESTA]    Script Date: 29/03/2016 23:28:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ENCUESTA](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[TITULO] [varchar](200) NOT NULL,
+	[DESCRIPCION] [varchar](max) NULL,
+ CONSTRAINT [PK_ENCUESTA] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ENCUESTA_PREGUNTA]    Script Date: 29/03/2016 23:29:14 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_ENCUESTA_PREGUNTA](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[CODIGOENCUESTA] [numeric](18, 0) NOT NULL,
+	[TITULO] [nvarchar](200) NOT NULL,
+	[TIPO] [int] NOT NULL,
+	[REQUERIDO] [bit] NOT NULL,
+ CONSTRAINT [PK_ENCUESTA_PREGUNTA] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_PREGUNTA] ADD  CONSTRAINT [DF_ENCUESTA_PREGUNTA_REQUERIDO]  DEFAULT ((0)) FOR [REQUERIDO]
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_PREGUNTA]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_PREGUNTA_ENCUESTA] FOREIGN KEY([CODIGOENCUESTA])
+REFERENCES [dbo].[BE_ENCUESTA] ([CODIGO])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_PREGUNTA] CHECK CONSTRAINT [FK_ENCUESTA_PREGUNTA_ENCUESTA]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ENCUESTA_RESPUESTA]    Script Date: 29/03/2016 23:29:28 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_ENCUESTA_RESPUESTA](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[TEXTO] [nvarchar](max) NOT NULL,
+	[CODIGOPREGUNTA] [numeric](18, 0) NOT NULL,
+ CONSTRAINT [PK_ENCUESTA_RESPUESTA] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA] FOREIGN KEY([CODIGOPREGUNTA])
+REFERENCES [dbo].[BE_ENCUESTA_PREGUNTA] ([CODIGO])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_ENCUESTA_PREGUNTA]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO]    Script Date: 29/03/2016 23:29:46 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO](
+	[CODIGOALUMNO] [numeric](18, 0) NOT NULL,
+	[CODIGOENCUESTA] [numeric](18, 0) NOT NULL,
+	[CODIGOPREGUNTA] [numeric](18, 0) NOT NULL,
+	[CODIGORESPUESTA] [numeric](18, 0) NOT NULL,
+	[FECHA] [datetime] NOT NULL,
+ CONSTRAINT [PK_ENCUESTA_RESPUESTA_ALUMNO_1] PRIMARY KEY CLUSTERED 
+(
+	[CODIGOALUMNO] ASC,
+	[CODIGOENCUESTA] ASC,
+	[CODIGOPREGUNTA] ASC,
+	[CODIGORESPUESTA] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO] FOREIGN KEY([CODIGOALUMNO])
+REFERENCES [dbo].[BE_ALUMNO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_ALUMNO_ALUMNO]
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA] FOREIGN KEY([CODIGOENCUESTA])
+REFERENCES [dbo].[BE_ENCUESTA] ([CODIGO])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA]
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA] FOREIGN KEY([CODIGORESPUESTA])
+REFERENCES [dbo].[BE_ENCUESTA_RESPUESTA] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_ALUMNO] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_ALUMNO_ENCUESTA_RESPUESTA]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO]    Script Date: 29/03/2016 23:31:02 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO](
+	[CODIGOALUMNO] [numeric](18, 0) NOT NULL,
+	[CODIGOENCUESTA] [numeric](18, 0) NOT NULL,
+	[CODIGOPREGUNTA] [numeric](18, 0) NOT NULL,
+	[TEXTO] [varchar](250) NULL,
+	[FECHA] [datetime] NULL,
+ CONSTRAINT [PK_ENCUESTA_RESPUESTA_TEXTO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGOALUMNO] ASC,
+	[CODIGOENCUESTA] ASC,
+	[CODIGOPREGUNTA] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO] FOREIGN KEY([CODIGOALUMNO])
+REFERENCES [dbo].[BE_ALUMNO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_TEXTO_ALUMNO]
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA] FOREIGN KEY([CODIGOENCUESTA])
+REFERENCES [dbo].[BE_ENCUESTA] ([CODIGO])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA]
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO]  WITH CHECK ADD  CONSTRAINT [FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA] FOREIGN KEY([CODIGOPREGUNTA])
+REFERENCES [dbo].[BE_ENCUESTA_PREGUNTA] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ENCUESTA_RESPUESTA_TEXTO] CHECK CONSTRAINT [FK_ENCUESTA_RESPUESTA_TEXTO_ENCUESTA_PREGUNTA]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_GRUPO]    Script Date: 29/03/2016 23:31:19 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_GRUPO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NIVEL] [varchar](20) NOT NULL,
+	[PARALELO] [varchar](1) NULL,
+	[MODALIDAD] [varchar](20) NULL,
+ CONSTRAINT [PK_GRUPO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_GRUPO_ACTIVIDAD]    Script Date: 29/03/2016 23:31:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_GRUPO_ACTIVIDAD](
+	[CODIGOGRUPO] [numeric](18, 0) NOT NULL,
+	[CODIGOACTIVIDAD] [numeric](18, 0) NOT NULL,
+	[ESTADO] [bit] NULL,
+ CONSTRAINT [PK_GRUPO_ACTIVIDAD] PRIMARY KEY CLUSTERED 
+(
+	[CODIGOGRUPO] ASC,
+	[CODIGOACTIVIDAD] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_GRUPO_ACTIVIDAD]  WITH CHECK ADD  CONSTRAINT [FK_GRUPO_ACTIVIDAD_ACTIVIDAD] FOREIGN KEY([CODIGOACTIVIDAD])
+REFERENCES [dbo].[BE_ACTIVIDAD] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_GRUPO_ACTIVIDAD] CHECK CONSTRAINT [FK_GRUPO_ACTIVIDAD_ACTIVIDAD]
+GO
+
+ALTER TABLE [dbo].[BE_GRUPO_ACTIVIDAD]  WITH CHECK ADD  CONSTRAINT [FK_GRUPO_ACTIVIDAD_GRUPO] FOREIGN KEY([CODIGOGRUPO])
+REFERENCES [dbo].[BE_GRUPO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_GRUPO_ACTIVIDAD] CHECK CONSTRAINT [FK_GRUPO_ACTIVIDAD_GRUPO]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ROL]    Script Date: 29/03/2016 23:32:08 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_ROL](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBRE] [varchar](30) NOT NULL,
+	[ACTIVO] [bit] NOT NULL,
+ CONSTRAINT [PK_ROL] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_ROL_ACCESO]    Script Date: 29/03/2016 23:32:32 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BE_ROL_ACCESO](
+	[CODIGOROL] [numeric](18, 0) NOT NULL,
+	[CODIGOACCESO] [numeric](18, 0) NOT NULL,
+	[VALIDO] [bit] NOT NULL,
+ CONSTRAINT [PK_ROL_MODULO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGOROL] ASC,
+	[CODIGOACCESO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[BE_ROL_ACCESO]  WITH CHECK ADD  CONSTRAINT [FK_ROL_MODULO_MODULO1] FOREIGN KEY([CODIGOACCESO])
+REFERENCES [dbo].[BE_ACCESO] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ROL_ACCESO] CHECK CONSTRAINT [FK_ROL_MODULO_MODULO1]
+GO
+
+ALTER TABLE [dbo].[BE_ROL_ACCESO]  WITH CHECK ADD  CONSTRAINT [FK_ROL_MODULO_ROL] FOREIGN KEY([CODIGOROL])
+REFERENCES [dbo].[BE_ROL] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_ROL_ACCESO] CHECK CONSTRAINT [FK_ROL_MODULO_ROL]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
+
+
+USE [bienestar2]
+GO
+
+/****** Object:  Table [dbo].[BE_USUARIO]    Script Date: 29/03/2016 23:33:00 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[BE_USUARIO](
+	[CODIGO] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[NOMBREUSUARIO] [varchar](20) NOT NULL,
+	[NOMBRECOMPLETO] [varchar](50) NOT NULL,
+	[CEDULA] [varchar](10) NOT NULL,
+	[CORREO] [varchar](40) NOT NULL,
+	[CONTRASENAANTERIOR] [varchar](10) NOT NULL,
+	[CONTRASENAACTUAL] [varchar](10) NOT NULL,
+	[ESTADO] [bit] NOT NULL,
+	[CODIGOROL] [numeric](18, 0) NOT NULL,
+ CONSTRAINT [PK_USUARIO] PRIMARY KEY CLUSTERED 
+(
+	[CODIGO] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[BE_USUARIO] ADD  CONSTRAINT [DF_USUARIO_ESTADO]  DEFAULT ((0)) FOR [ESTADO]
+GO
+
+ALTER TABLE [dbo].[BE_USUARIO]  WITH CHECK ADD  CONSTRAINT [FK_USUARIO_ROL] FOREIGN KEY([CODIGOROL])
+REFERENCES [dbo].[BE_ROL] ([CODIGO])
+GO
+
+ALTER TABLE [dbo].[BE_USUARIO] CHECK CONSTRAINT [FK_USUARIO_ROL]
+GO
+
+
+
+/*****************************
+********************************
+********************************
+********************************
+********************************
+********************************
+********************************/
