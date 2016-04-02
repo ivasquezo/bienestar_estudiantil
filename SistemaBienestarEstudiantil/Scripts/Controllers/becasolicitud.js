@@ -26,6 +26,7 @@
             $scope.promise = $http.get('../../WebServices/Becas.asmx/getTipos')
             .success(function (data, status, headers, config) {
                 $scope.TIPOS = data;
+                console.log("tipos cargados correctamente: ", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });
@@ -37,7 +38,7 @@
             $scope.promise = $http.get('../../WebServices/Becas.asmx/getListAttach')
             .success(function (data, status, headers, config) {
                 $scope.CODIGOSADJUNTOS = data;
-                console.log("adjuntos", data);
+                console.log("adjuntos cargados correctamente: ", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });

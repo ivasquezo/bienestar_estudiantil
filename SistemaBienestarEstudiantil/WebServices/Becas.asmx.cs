@@ -150,9 +150,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC);
             if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
 
-            var beca_solicitud_test = db.BE_BECA_SOLICITUD.First();
-
-            writeResponseObject(new { alumno, beca_solicitud, beca_solicitud_test });            
+            writeResponseObject(new { alumno, beca_solicitud });            
         }
 
         [WebMethod]

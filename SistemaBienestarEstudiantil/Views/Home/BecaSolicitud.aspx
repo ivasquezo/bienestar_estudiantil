@@ -18,15 +18,15 @@
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
 	    	<center><img style="width:170px;" src="../../Content/logo-universidad-israel.png"></center>
-	    	<input ng-model="ALUMNO.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
-				name="validIdentification" placeholder="Número de cédula" type="number"/>
+	    	<input ng-model="ALUMNO.DTPCEDULAC" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
+				name="validIdentification" placeholder="Número de cédula" type="text"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
 	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
 	            <span ng-message="cedulaExist" class="help-block ng-message" style="font-size: 18px;">Estudiante existe</span>
 	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
 	        </span>
 	        <span style="display:inline-block;font-size:18px;">
-	        	{{ALUMNO.NOMBRE}}
+	        	{{ALUMNO.DATOSPERSONALE.DTPAPELLIC}}{{ALUMNO.DATOSPERSONALE.DTPAPELLIC2}}
 	        </span>
 	    	<hr/>
 			<div ng-if="BECA_SOLICITUD == null">
@@ -59,7 +59,7 @@
 
 				<input type="hidden" value="{{getCodeTypesDocuments(seleccion.TIPO.BECA_TIPO_DOCUMENTO)}}" name="codesTypesDocuments" />
 				<table style="margin-top:10px;">
-					<tr ng-repeat="tipoDocumento in seleccion.TIPO.BECA_TIPO_DOCUMENTO">
+					<tr ng-repeat="tipoDocumento in seleccion.TIPO.BE_BECA_TIPO_DOCUMENTO">
 						<td>
 							<div class="document-message">- {{tipoDocumento.NOMBRE}}</div>
 							<div>
