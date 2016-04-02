@@ -32,7 +32,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getAllEncuestas()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponse(new JavaScriptSerializer().Serialize(db.ENCUESTAs.ToList()));
+            writeResponse(new JavaScriptSerializer().Serialize(db.BE_ENCUESTA.ToList()));
         }
 
         [WebMethod]
@@ -49,9 +49,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             .Select(x => x.Category);
              */
             int code = 1;
-            var data = db.ACCESOes.Join(db.ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
+            var data = db.BE_ACCESO.Join(db.BE_ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
                        (a, ra) => new { ACCESO = a, ROL_ACCESO = ra })
-                       .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
+                       .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.BE_ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
                        .Where(y => y.CODIGOROL == code).ToList();
 
             writeResponse(new JavaScriptSerializer().Serialize(data));
@@ -62,11 +62,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.DATOS_SISTEMA datoSistema = db.DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
+            Models.BE_DATOS_SISTEMA datoSistema = db.BE_DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
 
             int valor = datoSistema.VALOR != null ? Int32.Parse(datoSistema.VALOR) : 0;
 
-            var encuesta = db.ENCUESTAs.Single(e => e.CODIGO == valor);
+            var encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == valor);
             writeResponse(
                 new JavaScriptSerializer().Serialize(new Class.Response(encuesta != null ? true : false, "info", null, null, encuesta))
             );
@@ -77,7 +77,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.DATOS_SISTEMA datosSistema = db.DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
+            Models.BE_DATOS_SISTEMA datosSistema = db.BE_DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
 
             bool success = false;
 
@@ -95,19 +95,19 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod]
         public void saveEncuesta(Encuesta encuestaEdited)
         {
-            Models.ENCUESTA updatedEncuesta = convertToENCUESTA(encuestaEdited);
+            Models.BE_ENCUESTA updatedEncuesta = convertToENCUESTA(encuestaEdited);
 
             using (Models.bienestarEntities db = new Models.bienestarEntities())
             {
-                Models.ENCUESTA currentEncuesta = db.ENCUESTAs.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
+                Models.BE_ENCUESTA currentEncuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
 
-                currentEncuesta.ENCUESTA_PREGUNTA.ToList().ForEach(ep => db.ENCUESTA_PREGUNTA.DeleteObject(ep));
+                currentEncuesta.BE_ENCUESTA_PREGUNTA.ToList().ForEach(ep => db.BE_ENCUESTA_PREGUNTA.DeleteObject(ep));
                 db.SaveChanges();
 
-                foreach (Models.ENCUESTA_PREGUNTA ep in updatedEncuesta.ENCUESTA_PREGUNTA)
+                foreach (Models.BE_ENCUESTA_PREGUNTA ep in updatedEncuesta.BE_ENCUESTA_PREGUNTA)
                 {
                     ep.CODIGO = default(int);
-                    foreach (Models.ENCUESTA_RESPUESTA er in ep.ENCUESTA_RESPUESTA)
+                    foreach (Models.BE_ENCUESTA_RESPUESTA er in ep.BE_ENCUESTA_RESPUESTA)
                     {
                         er.CODIGO = default(int);
                     }
@@ -116,12 +116,12 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             using(Models.bienestarEntities db = new Models.bienestarEntities()){
 
-                Models.ENCUESTA currentEncuesta = db.ENCUESTAs.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
+                Models.BE_ENCUESTA currentEncuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
                 currentEncuesta.DESCRIPCION = updatedEncuesta.DESCRIPCION;
                 currentEncuesta.TITULO = updatedEncuesta.TITULO;
-                foreach (Models.ENCUESTA_PREGUNTA ep in updatedEncuesta.ENCUESTA_PREGUNTA.ToList())
+                foreach (Models.BE_ENCUESTA_PREGUNTA ep in updatedEncuesta.BE_ENCUESTA_PREGUNTA.ToList())
                 {
-                    currentEncuesta.ENCUESTA_PREGUNTA.Add(ep);
+                    currentEncuesta.BE_ENCUESTA_PREGUNTA.Add(ep);
                 }
                 db.SaveChanges();
                 writeResponse(new JavaScriptSerializer().Serialize(currentEncuesta));
@@ -132,8 +132,8 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void addNewEncuesta(Encuesta encuesta)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            Models.ENCUESTA newEncuesta = convertToENCUESTA(encuesta);
-            db.ENCUESTAs.AddObject(newEncuesta);
+            Models.BE_ENCUESTA newEncuesta = convertToENCUESTA(encuesta);
+            db.BE_ENCUESTA.AddObject(newEncuesta);
             db.SaveChanges();
             writeResponse(new JavaScriptSerializer().Serialize(newEncuesta));
         }
@@ -142,58 +142,58 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void removeEncuestaByCode(int code)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            Models.ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == code);
-            db.ENCUESTAs.DeleteObject(encuesta);
+            Models.BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == code);
+            db.BE_ENCUESTA.DeleteObject(encuesta);
             db.SaveChanges();
             writeResponse("ok");
         }
 
         /// convert Simple class Encuesta to object ENCUESTA entity
         /// all list in objects to entityCollection
-        private Models.ENCUESTA convertToENCUESTA(Encuesta encuesta)
+        private Models.BE_ENCUESTA convertToENCUESTA(Encuesta encuesta)
         {
-            Models.ENCUESTA encuestaEntity = new Models.ENCUESTA();
+            Models.BE_ENCUESTA encuestaEntity = new Models.BE_ENCUESTA();
 
             if (encuesta.CODIGO != 0) encuestaEntity.CODIGO = encuesta.CODIGO;
             encuestaEntity.TITULO = encuesta.TITULO;
             encuestaEntity.DESCRIPCION = encuesta.DESCRIPCION;
 
-            EntityCollection<Models.ENCUESTA_PREGUNTA> encPreEntColl = new EntityCollection<Models.ENCUESTA_PREGUNTA>();
+            EntityCollection<Models.BE_ENCUESTA_PREGUNTA> encPreEntColl = new EntityCollection<Models.BE_ENCUESTA_PREGUNTA>();
 
             foreach (ENCUESTA_PREGUNTA  ep in encuesta.ENCUESTA_PREGUNTA)
             {
-                Models.ENCUESTA_PREGUNTA epEntity = new Models.ENCUESTA_PREGUNTA();
+                Models.BE_ENCUESTA_PREGUNTA epEntity = new Models.BE_ENCUESTA_PREGUNTA();
                 if (ep.CODIGO != 0) epEntity.CODIGO = ep.CODIGO;
                 epEntity.TITULO = ep.TITULO;
                 epEntity.TIPO = ep.TIPO;
                 epEntity.REQUERIDO = ep.REQUERIDO;
-                
-                EntityCollection<Models.ENCUESTA_RESPUESTA> encResEntColl = new EntityCollection<Models.ENCUESTA_RESPUESTA>();
+
+                EntityCollection<Models.BE_ENCUESTA_RESPUESTA> encResEntColl = new EntityCollection<Models.BE_ENCUESTA_RESPUESTA>();
                 foreach (ENCUESTA_RESPUESTA er in ep.ENCUESTA_RESPUESTA)
                 {
-                    Models.ENCUESTA_RESPUESTA erEntity = new Models.ENCUESTA_RESPUESTA();
+                    Models.BE_ENCUESTA_RESPUESTA erEntity = new Models.BE_ENCUESTA_RESPUESTA();
                     if (er.CODIGO != 0) erEntity.CODIGO = er.CODIGO;
                     erEntity.TEXTO = er.TEXTO;
                     encResEntColl.Add(erEntity);
                 }
 
-                epEntity.ENCUESTA_RESPUESTA = encResEntColl;
+                epEntity.BE_ENCUESTA_RESPUESTA = encResEntColl;
                 encPreEntColl.Add(epEntity);
             }
 
-            encuestaEntity.ENCUESTA_PREGUNTA = encPreEntColl;
+            encuestaEntity.BE_ENCUESTA_PREGUNTA = encPreEntColl;
             return encuestaEntity;
         }
 
         /// metodo devuelve el alumno si no ha respondido encuesta
         [WebMethod]
-        public void getStudentByCedula(Decimal cedula, int codigoEncuesta)
+        public void getStudentByCedula(string cedula, int codigoEncuesta)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            ALUMNO alumno = db.ALUMNOes.Single(a => a.CEDULA == cedula);
+            GRADUADO alumno = db.GRADUADOS.Single(a => a.DTPCEDULAC == cedula);
 
-            int count = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOALUMNO == alumno.CODIGO && era.CODIGOENCUESTA == codigoEncuesta).Count();
-            count += db.ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOALUMNO == alumno.CODIGO && ert.CODIGOENCUESTA == codigoEncuesta).Count();
+            int count = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOGRADUADO == alumno.GRDCODIGOI && era.CODIGOENCUESTA == codigoEncuesta).Count();
+            count += db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOGRADUADO == alumno.GRDCODIGOI && ert.CODIGOENCUESTA == codigoEncuesta).Count();
 
             if (count == 0)
                 writeResponse(new JavaScriptSerializer().Serialize(alumno));
@@ -207,18 +207,18 @@ namespace SistemaBienestarEstudiantil.WebServices
         /// <param name="listResponseSelect"></param>
         /// <param name="listResponseText"></param>
         [WebMethod]
-        public void saveResponseStudent(List<ENCUESTA_RESPUESTA_ALUMNO> listResponseSelect, List<ENCUESTA_RESPUESTA_TEXTO> listResponseText)
+        public void saveResponseStudent(List<BE_ENCUESTA_RESPUESTA_ALUMNO> listResponseSelect, List<BE_ENCUESTA_RESPUESTA_TEXTO> listResponseText)
         {
 
             bienestarEntities db = new bienestarEntities();
-            foreach (ENCUESTA_RESPUESTA_ALUMNO era in listResponseSelect)
+            foreach (BE_ENCUESTA_RESPUESTA_ALUMNO era in listResponseSelect)
             {
-                db.ENCUESTA_RESPUESTA_ALUMNO.AddObject(era);
+                db.BE_ENCUESTA_RESPUESTA_ALUMNO.AddObject(era);
             }
 
-            foreach (ENCUESTA_RESPUESTA_TEXTO ert in listResponseText)
+            foreach (BE_ENCUESTA_RESPUESTA_TEXTO ert in listResponseText)
             {
-                db.ENCUESTA_RESPUESTA_TEXTO.AddObject(ert);
+                db.BE_ENCUESTA_RESPUESTA_TEXTO.AddObject(ert);
             }
 
             db.SaveChanges();
@@ -233,23 +233,23 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void surveysReport(int surveyCode)
         {
             bienestarEntities db = new bienestarEntities();
-            ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == surveyCode);
+            BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == surveyCode);
 
             List<ResultadoSeleccione> resultadoSeleccione = new List<ResultadoSeleccione>();
 
             // cada pregunta
-            foreach (Models.ENCUESTA_PREGUNTA enpre in encuesta.ENCUESTA_PREGUNTA)
+            foreach (Models.BE_ENCUESTA_PREGUNTA enpre in encuesta.BE_ENCUESTA_PREGUNTA)
             {
                 ResultadoSeleccione rs = new ResultadoSeleccione(enpre.TIPO, enpre.TITULO, new List<Respuesta>());
                 if (enpre.TIPO != 3)
                 {
                     // cada respuesta
-                    foreach (Models.ENCUESTA_RESPUESTA enres in enpre.ENCUESTA_RESPUESTA)
+                    foreach (Models.BE_ENCUESTA_RESPUESTA enres in enpre.BE_ENCUESTA_RESPUESTA)
                     {
-                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.ENCUESTA_RESPUESTA_ALUMNO.Count(), null));
+                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.BE_ENCUESTA_RESPUESTA_ALUMNO.Count(), null));
                     }
                 }
-                else foreach (Models.ENCUESTA_RESPUESTA_TEXTO ert in enpre.ENCUESTA_RESPUESTA_TEXTO)
+                else foreach (Models.BE_ENCUESTA_RESPUESTA_TEXTO ert in enpre.BE_ENCUESTA_RESPUESTA_TEXTO)
                 {
                     rs.respuestas.Add(new Respuesta(null, 0, ert.TEXTO));
                 }
@@ -258,9 +258,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             // estudiantes que hicieron la encuesta
-            List<Decimal> studentCodesSelect = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().ToList();
-            List<Decimal> studentCodesParagr = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().ToList();
-            foreach (Decimal studCode in studentCodesParagr)
+            List<int> studentCodesSelect = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().ToList();
+            List<int> studentCodesParagr = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().ToList();
+            foreach (int studCode in studentCodesParagr)
             {
                 if (!studentCodesSelect.Contains(studCode))
                 {
@@ -268,7 +268,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 }
             }
 
-            List<ALUMNO> listAlumnos = db.ALUMNOes.Where(a => studentCodesSelect.Contains(a.CODIGO)).ToList();
+            List<GRADUADO> listAlumnos = db.GRADUADOS.Where(a => studentCodesSelect.Contains(a.GRDCODIGOI)).ToList();
 
             writeResponse(
                 "{\"encuestados\": " + getSurveyAnsweredCount(surveyCode) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\","
@@ -293,10 +293,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         private int getSurveyAnsweredCount(int surveyCode)
         {
             bienestarEntities db = new bienestarEntities();
-            ENCUESTA encuesta = db.ENCUESTAs.Single(e => e.CODIGO == surveyCode);
-            
-            int stuResp = db.ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
-            int stuText = db.ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOALUMNO).Distinct().Count();
+            BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == surveyCode);
+
+            int stuResp = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().Count();
+            int stuText = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().Count();
             
             return stuResp > stuText ? stuResp : stuText;
         }
@@ -304,11 +304,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         private List<int> getAnsweredSurveyCodes() {
 
             bienestarEntities db = new bienestarEntities();
-            List<ENCUESTA> listEncuestas = db.ENCUESTAs.ToList();
+            List<BE_ENCUESTA> listEncuestas = db.BE_ENCUESTA.ToList();
 
             List<int> surveyCodes = new List<int>();
 
-            foreach (ENCUESTA e in listEncuestas)
+            foreach (BE_ENCUESTA e in listEncuestas)
             {
                 if (getSurveyAnsweredCount((int)e.CODIGO) > 0) {
                     surveyCodes.Add((int)e.CODIGO);

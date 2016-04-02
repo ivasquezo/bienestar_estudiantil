@@ -53,7 +53,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             string[] codesTypesDocuments = null;
 
             //decimal codigoSolicitud = Decimal.Parse(System.Web.HttpContext.Current.Request.Params.Get("codigoSolicitud"));
-            decimal codigoSolicitud = 1;
+            int codigoSolicitud = 1;
 
             if (hfc.Count > 0 && codesTypesDocuments != null && codesTypesDocuments.Length > 0)
             {
@@ -122,7 +122,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getListAttach()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponseObject(db.BE_BECA_ADJUNTO.Select(a => new { a.CODIGO, a.CODIGOTIPODOCUMENTO }).ToList());
+            writeResponseObject(db.BE_BECA_ADJUNTO.Select(a => new { a.CODIGO, a.DOCUMENTOSOLICITUD }).ToList());
         }
 
         [WebMethod]
@@ -140,14 +140,14 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getStudentSolicitud(decimal cedula)
+        public void getStudentSolicitud(string cedula)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.BE_ALUMNO alumno = db.BE_ALUMNOes.Where(a => a.CEDULA == cedula).First();
+            Models.GRADUADO alumno = db.GRADUADOS.Where(a => a.DTPCEDULAC == cedula).First();
 
             Models.BE_BECA_SOLICITUD beca_solicitud = null;
-            var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGOALUMNO == alumno.CODIGO);
+            var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC);
             if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
 
             var beca_solicitud_test = db.BE_BECA_SOLICITUD.First();

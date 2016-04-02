@@ -14,7 +14,7 @@ namespace SistemaBienestarEstudiantil.Controllers
     {
         public IFormsAuthenticationService FormsService { get; set; }
         public IMembershipService MembershipService { get; set; }
-        public static USUARIO usuario { get; set; }
+        public static BE_USUARIO usuario { get; set; }
 
         protected override void Initialize(RequestContext requestContext)
         {

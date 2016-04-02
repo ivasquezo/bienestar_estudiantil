@@ -30,7 +30,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getAllUser()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponse(new JavaScriptSerializer().Serialize(db.USUARIOs.ToList()));
+            writeResponse(new JavaScriptSerializer().Serialize(db.BE_USUARIO.ToList()));
         }
 
         [WebMethod]
@@ -38,7 +38,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Context.Response.Write(new JavaScriptSerializer().Serialize(db.USUARIOs.Where(u => u.ESTADO == true).ToList()));
+            Context.Response.Write(new JavaScriptSerializer().Serialize(db.BE_USUARIO.Where(u => u.ESTADO == true).ToList()));
 
             Context.Response.Flush();
             Context.Response.End();
@@ -49,7 +49,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == code);
+            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == code);
 
             writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
@@ -59,9 +59,9 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == id);
+            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
 
-            db.USUARIOs.DeleteObject(usuario);
+            db.BE_USUARIO.DeleteObject(usuario);
             db.SaveChanges();
 
             Context.Response.Write("ok");
@@ -74,7 +74,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == id);
+            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
 
             usuario.ESTADO = false;
 
@@ -84,11 +84,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveUserData(USUARIO user, Boolean resetPassword)
+        public void saveUserData(BE_USUARIO user, Boolean resetPassword)
         {
             bienestarEntities db = new bienestarEntities();
 
-            USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == user.CODIGO);
+            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == user.CODIGO);
 
             usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
             usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
@@ -109,12 +109,12 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void addNewUser(USUARIO newUser)
+        public void addNewUser(BE_USUARIO newUser)
         {
             bienestarEntities db = new bienestarEntities();
             newUser.CONTRASENAACTUAL = newUser.CEDULA;
             newUser.CONTRASENAANTERIOR = newUser.CEDULA;
-            db.USUARIOs.AddObject(newUser);
+            db.BE_USUARIO.AddObject(newUser);
             db.SaveChanges();
             writeResponse(new JavaScriptSerializer().Serialize(newUser));
         }
@@ -123,7 +123,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void countUserWithCedula(string cedula)
         {
             bienestarEntities db = new bienestarEntities();
-            int cantidad = db.USUARIOs.Where(u => cedula != null && u.CEDULA == cedula).Count();
+            int cantidad = db.BE_USUARIO.Where(u => cedula != null && u.CEDULA == cedula).Count();
             writeResponse("{\"cantidad\":" + cantidad + "}");
         }
     }
