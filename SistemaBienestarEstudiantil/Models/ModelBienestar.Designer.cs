@@ -15,7 +15,6 @@ using System.Data.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using System.Web.Script.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region Metadatos de relaciones en EDM
@@ -34,8 +33,10 @@ using System.Web.Script.Serialization;
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_BECA_SOLICITUD_HISTORIAL_BE_BECA_SOLICITUD", "BE_BECA_SOLICITUD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_BECA_SOLICITUD), "BE_BECA_SOLICITUD_HISTORIAL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_BECA_SOLICITUD_HISTORIAL), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_BECA_SOLICITUD_HISTORIAL_BE_USUARIO", "BE_USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_USUARIO), "BE_BECA_SOLICITUD_HISTORIAL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_BECA_SOLICITUD_HISTORIAL), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_BECA_TIPO_DOCUMENTO_BE_BECA_TIPO", "BE_BECA_TIPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_BECA_TIPO), "BE_BECA_TIPO_DOCUMENTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_BECA_TIPO_DOCUMENTO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA), "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA", "BE_ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_TEXTO_BE_ENCUESTA", "BE_ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA), "BE_ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_TEXTO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA), "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_TEXTO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), "BE_ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_TEXTO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
@@ -1295,7 +1296,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ACTIVIDAD_GENERAL> BE_ACTIVIDAD_GENERALReference
@@ -1334,7 +1334,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_USUARIO> BE_USUARIOReference
@@ -1606,7 +1605,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ACTIVIDAD> BE_ACTIVIDADReference
@@ -1928,7 +1926,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ACTIVIDAD> BE_ACTIVIDADReference
@@ -1967,7 +1964,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_GRUPO> BE_GRUPOReference
@@ -2006,7 +2002,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<MATRICULA> MATRICULAReference
@@ -2240,7 +2235,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -2259,7 +2253,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_BECA_SOLICITUD> BE_BECA_SOLICITUDReference
@@ -2483,7 +2476,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_BECA_TIPO> BE_BECA_TIPOReference
@@ -2522,7 +2514,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
@@ -2774,7 +2765,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_BECA_SOLICITUD> BE_BECA_SOLICITUDReference
@@ -2813,7 +2803,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_USUARIO> BE_USUARIOReference
@@ -3122,7 +3111,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_BECA_TIPO> BE_BECA_TIPOReference
@@ -3416,6 +3404,28 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA_PREGUNTA")]
+        public EntityCollection<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA_PREGUNTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA_PREGUNTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA", "BE_ENCUESTA_RESPUESTA_ALUMNO")]
         public EntityCollection<BE_ENCUESTA_RESPUESTA_ALUMNO> BE_ENCUESTA_RESPUESTA_ALUMNO
         {
@@ -3625,6 +3635,82 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA")]
+        public BE_ENCUESTA BE_ENCUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<BE_ENCUESTA> BE_ENCUESTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BE_ENCUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA")]
+        public BE_ENCUESTA_RESPUESTA BE_ENCUESTA_RESPUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_RESPUESTA_ALUMNO")]
         public EntityCollection<BE_ENCUESTA_RESPUESTA_ALUMNO> BE_ENCUESTA_RESPUESTA_ALUMNO
         {
@@ -3683,7 +3769,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="cODIGO">Valor inicial de la propiedad CODIGO.</param>
         /// <param name="tEXTO">Valor inicial de la propiedad TEXTO.</param>
         /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
-        public static BE_ENCUESTA_RESPUESTA CreateBE_ENCUESTA_RESPUESTA(global::System.Int32 cODIGO, global::System.String tEXTO, global::System.Decimal cODIGOPREGUNTA)
+        public static BE_ENCUESTA_RESPUESTA CreateBE_ENCUESTA_RESPUESTA(global::System.Int32 cODIGO, global::System.String tEXTO, global::System.Int32 cODIGOPREGUNTA)
         {
             BE_ENCUESTA_RESPUESTA bE_ENCUESTA_RESPUESTA = new BE_ENCUESTA_RESPUESTA();
             bE_ENCUESTA_RESPUESTA.CODIGO = cODIGO;
@@ -3752,7 +3838,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal CODIGOPREGUNTA
+        public global::System.Int32 CODIGOPREGUNTA
         {
             get
             {
@@ -3767,14 +3853,36 @@ namespace SistemaBienestarEstudiantil.Models
                 OnCODIGOPREGUNTAChanged();
             }
         }
-        private global::System.Decimal _CODIGOPREGUNTA;
-        partial void OnCODIGOPREGUNTAChanging(global::System.Decimal value);
+        private global::System.Int32 _CODIGOPREGUNTA;
+        partial void OnCODIGOPREGUNTAChanging(global::System.Int32 value);
         partial void OnCODIGOPREGUNTAChanged();
 
         #endregion
 
     
         #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_PREGUNTA")]
+        public EntityCollection<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_PREGUNTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_PREGUNTA", value);
+                }
+            }
+        }
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -3815,15 +3923,15 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// Crear un nuevo objeto BE_ENCUESTA_RESPUESTA_ALUMNO.
         /// </summary>
-        /// <param name="cODIGOALUMNO">Valor inicial de la propiedad CODIGOALUMNO.</param>
+        /// <param name="cODIGOGRADUADO">Valor inicial de la propiedad CODIGOGRADUADO.</param>
         /// <param name="cODIGOENCUESTA">Valor inicial de la propiedad CODIGOENCUESTA.</param>
         /// <param name="cODIGOPREGUNTA">Valor inicial de la propiedad CODIGOPREGUNTA.</param>
         /// <param name="cODIGORESPUESTA">Valor inicial de la propiedad CODIGORESPUESTA.</param>
         /// <param name="fECHA">Valor inicial de la propiedad FECHA.</param>
-        public static BE_ENCUESTA_RESPUESTA_ALUMNO CreateBE_ENCUESTA_RESPUESTA_ALUMNO(global::System.Int32 cODIGOALUMNO, global::System.Int32 cODIGOENCUESTA, global::System.Int32 cODIGOPREGUNTA, global::System.Int32 cODIGORESPUESTA, global::System.DateTime fECHA)
+        public static BE_ENCUESTA_RESPUESTA_ALUMNO CreateBE_ENCUESTA_RESPUESTA_ALUMNO(global::System.Int32 cODIGOGRADUADO, global::System.Int32 cODIGOENCUESTA, global::System.Int32 cODIGOPREGUNTA, global::System.Int32 cODIGORESPUESTA, global::System.DateTime fECHA)
         {
             BE_ENCUESTA_RESPUESTA_ALUMNO bE_ENCUESTA_RESPUESTA_ALUMNO = new BE_ENCUESTA_RESPUESTA_ALUMNO();
-            bE_ENCUESTA_RESPUESTA_ALUMNO.CODIGOALUMNO = cODIGOALUMNO;
+            bE_ENCUESTA_RESPUESTA_ALUMNO.CODIGOGRADUADO = cODIGOGRADUADO;
             bE_ENCUESTA_RESPUESTA_ALUMNO.CODIGOENCUESTA = cODIGOENCUESTA;
             bE_ENCUESTA_RESPUESTA_ALUMNO.CODIGOPREGUNTA = cODIGOPREGUNTA;
             bE_ENCUESTA_RESPUESTA_ALUMNO.CODIGORESPUESTA = cODIGORESPUESTA;
@@ -3840,27 +3948,27 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGOALUMNO
+        public global::System.Int32 CODIGOGRADUADO
         {
             get
             {
-                return _CODIGOALUMNO;
+                return _CODIGOGRADUADO;
             }
             set
             {
-                if (_CODIGOALUMNO != value)
+                if (_CODIGOGRADUADO != value)
                 {
-                    OnCODIGOALUMNOChanging(value);
-                    ReportPropertyChanging("CODIGOALUMNO");
-                    _CODIGOALUMNO = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("CODIGOALUMNO");
-                    OnCODIGOALUMNOChanged();
+                    OnCODIGOGRADUADOChanging(value);
+                    ReportPropertyChanging("CODIGOGRADUADO");
+                    _CODIGOGRADUADO = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("CODIGOGRADUADO");
+                    OnCODIGOGRADUADOChanged();
                 }
             }
         }
-        private global::System.Int32 _CODIGOALUMNO;
-        partial void OnCODIGOALUMNOChanging(global::System.Int32 value);
-        partial void OnCODIGOALUMNOChanged();
+        private global::System.Int32 _CODIGOGRADUADO;
+        partial void OnCODIGOGRADUADOChanging(global::System.Int32 value);
+        partial void OnCODIGOGRADUADOChanged();
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -3993,7 +4101,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ENCUESTA> BE_ENCUESTAReference
@@ -4032,7 +4139,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTAReference
@@ -4071,7 +4177,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTAReference
@@ -4110,7 +4215,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<GRADUADO> GRADUADOReference
@@ -4316,7 +4420,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ENCUESTA> BE_ENCUESTAReference
@@ -4355,7 +4458,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTAReference
@@ -4394,7 +4496,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<GRADUADO> GRADUADOReference
@@ -4590,7 +4691,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<MODALIDAD> MODALIDADReference
@@ -4629,7 +4729,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<NIVEL> NIVELReference
@@ -4782,7 +4881,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ACTIVIDAD> BE_ACTIVIDADReference
@@ -4821,7 +4919,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_GRUPO> BE_GRUPOReference
@@ -5133,7 +5230,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ACCESO> BE_ACCESOReference
@@ -5172,7 +5268,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ROL> BE_ROLReference
@@ -5524,7 +5619,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<BE_ROL> BE_ROLReference
@@ -5896,7 +5990,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ESCUELA> ESCUELAReference
@@ -6264,7 +6357,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<CARRERA> CARRERAReference
@@ -6303,7 +6395,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<MODALIDAD> MODALIDADReference
@@ -7129,7 +7220,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -7847,7 +7937,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<ESCUELA> ESCUELAReference
@@ -7886,7 +7975,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<EXTENSION> EXTENSIONReference
@@ -7925,7 +8013,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<FACULTAD> FACULTADReference
@@ -8239,7 +8326,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -8262,7 +8348,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -8303,7 +8388,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
@@ -8755,7 +8839,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -8774,7 +8857,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
@@ -9436,7 +9518,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<INSCRIPCION> INSCRIPCIONReference
