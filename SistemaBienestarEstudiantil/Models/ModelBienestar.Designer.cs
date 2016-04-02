@@ -36,8 +36,8 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA", "BE_ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA), "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA", "BE_ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_TEXTO_BE_ENCUESTA", "BE_ENCUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA), "BE_ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_TEXTO), true)]
-[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA), "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), "BE_ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_TEXTO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_PREGUNTA), "BE_ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_TEXTO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_GRADUADOS", "GRADUADO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRADUADO), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
@@ -3673,44 +3673,6 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA")]
-        public BE_ENCUESTA_RESPUESTA BE_ENCUESTA_RESPUESTA
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA").Value = value;
-            }
-        }
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTAReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_RESPUESTA", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_RESPUESTA_ALUMNO")]
         public EntityCollection<BE_ENCUESTA_RESPUESTA_ALUMNO> BE_ENCUESTA_RESPUESTA_ALUMNO
         {
@@ -3723,6 +3685,28 @@ namespace SistemaBienestarEstudiantil.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_ENCUESTA_RESPUESTA_ALUMNO>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_ALUMNO_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_RESPUESTA_ALUMNO", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_RESPUESTA")]
+        public EntityCollection<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTA
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_RESPUESTA");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_ENCUESTA_RESPUESTA>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_RESPUESTA", value);
                 }
             }
         }
@@ -3868,18 +3852,34 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_PREGUNTA")]
-        public EntityCollection<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTA
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA")]
+        public BE_ENCUESTA_PREGUNTA BE_ENCUESTA_PREGUNTA
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_PREGUNTA");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA").Value = value;
+            }
+        }
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTAReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_PREGUNTA_BE_ENCUESTA_RESPUESTA", "BE_ENCUESTA_PREGUNTA", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<BE_ENCUESTA_PREGUNTA>("BienestarModel.FK_BE_ENCUESTA_RESPUESTA_BE_ENCUESTA_PREGUNTA", "BE_ENCUESTA_PREGUNTA", value);
                 }
             }
         }
