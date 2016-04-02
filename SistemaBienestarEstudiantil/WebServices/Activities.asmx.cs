@@ -38,7 +38,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca las actividades
-                var data = db.ACTIVIDAD_GENERAL.Join(db.ACTIVIDADs, ag => ag.CODIGO, a => a.CODIGOACTIVIDADGENERAL,
+                var data = db.BE_ACTIVIDAD_GENERAL.Join(db.BE_ACTIVIDAD, ag => ag.CODIGO, a => a.CODIGOACTIVIDADGENERAL,
                     (ag, a) => new { ACTIVIDAD_GENERAL = ag, ACTIVIDAD = a })
                     .Select(x => new {
                         CODIGOACTIVIDAD = x.ACTIVIDAD_GENERAL.CODIGO,
@@ -78,7 +78,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca todas las actividades generales
-                response = new Response(true, "", "", "", db.ACTIVIDAD_GENERAL.ToList());
+                response = new Response(true, "", "", "", db.BE_ACTIVIDAD_GENERAL.ToList());
             }
             catch (Exception)
             {
@@ -101,7 +101,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca todos los niveles existentes
-                response = new Response(true, "", "", "", db.GRUPOes.ToList());
+                response = new Response(true, "", "", "", db.BE_GRUPO.ToList());
             }
             catch (Exception)
             {
@@ -124,7 +124,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca los niveles de la actividad seleccionada
-                var data = db.GRUPOes.Join(db.GRUPO_ACTIVIDAD, g => g.CODIGO, ga => ga.CODIGOGRUPO,
+                var data = db.BE_GRUPO.Join(db.BE_GRUPO_ACTIVIDAD, g => g.CODIGO, ga => ga.CODIGOGRUPO,
                            (g, ga) => new { GRUPO = g, GRUPO_ACTIVIDAD = ga })
                            .Select(x => new 
                            { 
@@ -132,7 +132,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                                x.GRUPO_ACTIVIDAD.CODIGOGRUPO, 
                                ESTADO = x.GRUPO_ACTIVIDAD.ESTADO, 
                                x.GRUPO.NIVEL, 
-                               x.GRUPO.PARALELO, 
+                               //x.GRUPO.PARALELO, MICHEL CAMBIO
                                x.GRUPO.MODALIDAD })
                            .Where(y => y.CODIGOACTIVIDAD == activityId).ToList();
 
@@ -159,7 +159,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Busca todos los docentes registrados
-                var data = db.USUARIOs.Join(db.ROLs, u => u.CODIGOROL, r => r.CODIGO,
+                var data = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO,
                     (u, r) => new { USUARIO = u, ROL = r })
                     .Select(x => new { ROL = x.ROL.NOMBRE, CODIGO = x.USUARIO.CODIGO, NOMBRECOMPLETO = x.USUARIO.NOMBRECOMPLETO })
                     .Where(y => y.ROL == "DOCENTE").ToList();
@@ -188,7 +188,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Obtiene la actividad que se va a actualizar
-                ACTIVIDAD activityUpdated = db.ACTIVIDADs.Single(a => a.CODIGO == activityId);
+                BE_ACTIVIDAD activityUpdated = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
 
                 Boolean actualizar = false;
 
@@ -198,7 +198,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 else
                 {
                     // Busca su el nombre existe
-                    List<ACTIVIDAD> activitiesExist = db.ACTIVIDADs.Where(a => a.NOMBRE == activityName.ToUpper()).ToList();
+                    List<BE_ACTIVIDAD> activitiesExist = db.BE_ACTIVIDAD.Where(a => a.NOMBRE == activityName.ToUpper()).ToList();
                     // Si el nombre de la actividad ya existe no lo guarda
                     if (activitiesExist != null && activitiesExist.Count > 0)
                     {
@@ -225,7 +225,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     for (int level = 0; level < groupLevelActivity.Length; level++)
                     {
                         // Verifica si el acceso ya existe
-                        GRUPO_ACTIVIDAD groupActivity = getStatusGroupActivity(activityId, groupLevelActivity[level]);
+                        BE_GRUPO_ACTIVIDAD groupActivity = getStatusGroupActivity(activityId, groupLevelActivity[level]);
                         // Si el acceso existe se lo actualiza, caso contrario se lo agrega
                         if (groupActivity != null)
                             updateGroupActivities(activityId, groupLevelActivity[level]);
@@ -256,14 +256,14 @@ namespace SistemaBienestarEstudiantil.WebServices
          * Verifica la existencia del nivel
          */
         [WebMethod]
-        private GRUPO_ACTIVIDAD getStatusGroupActivity(int activityId, int groupId)
+        private BE_GRUPO_ACTIVIDAD getStatusGroupActivity(int activityId, int groupId)
         {
             bienestarEntities db = new bienestarEntities();
-            GRUPO_ACTIVIDAD groupActivity = null;
+            BE_GRUPO_ACTIVIDAD groupActivity = null;
 
             try
             {
-                groupActivity = db.GRUPO_ACTIVIDAD.Single(ga => ga.CODIGOGRUPO == groupId && ga.CODIGOACTIVIDAD == activityId);
+                groupActivity = db.BE_GRUPO_ACTIVIDAD.Single(ga => ga.CODIGOGRUPO == groupId && ga.CODIGOACTIVIDAD == activityId);
             }
             catch (System.InvalidOperationException)
             {
@@ -281,7 +281,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            GRUPO_ACTIVIDAD groupActivity = db.GRUPO_ACTIVIDAD.Single(ga => ga.CODIGOACTIVIDAD == activityId && ga.CODIGOGRUPO == groupId);
+            BE_GRUPO_ACTIVIDAD groupActivity = db.BE_GRUPO_ACTIVIDAD.Single(ga => ga.CODIGOACTIVIDAD == activityId && ga.CODIGOGRUPO == groupId);
 
             if (groupActivity.ESTADO == true)
             {
@@ -301,11 +301,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            List<ASISTENCIA> assistanceList = db.ASISTENCIAs.Where(a => a.CODIGOGRUPO == groupId && a.CODIGOACTIVIDAD == activityId).ToList();
+            List<BE_ASISTENCIA> assistanceList = db.BE_ASISTENCIA.Where(a => a.CODIGOGRUPO == groupId && a.CODIGOACTIVIDAD == activityId).ToList();
 
-            foreach (ASISTENCIA assistance in assistanceList)
+            foreach (BE_ASISTENCIA assistance in assistanceList)
             {
-                db.ASISTENCIAs.DeleteObject(assistance);
+                db.BE_ASISTENCIA.DeleteObject(assistance);
                 db.SaveChanges();
             }
         }
@@ -314,21 +314,24 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            List<ALUMNO> students = db.ALUMNOes.Where(a => a.CODIGOGRUPO == groupId).ToList();
+            /*
+            List<BE_ALUMNO> students = db.BE_ALUMNOes.Where(a => a.CODIGOGRUPO == groupId).ToList();
 
-            foreach (ALUMNO student in students)
+            foreach (BE_ALUMNO student in students)
             {
-                ASISTENCIA newAssistance = new ASISTENCIA();
+                BE_ASISTENCIA newAssistance = new BE_ASISTENCIA();
 
                 newAssistance.CODIGOGRUPO = groupId;
                 newAssistance.CODIGOALUMNO = student.CODIGO;
                 newAssistance.CODIGOACTIVIDAD = activityId;
-                newAssistance.ASISTENCIA1 = false;
+                newAssistance.ASISTENCIA = false;
 
-                db.ASISTENCIAs.AddObject(newAssistance);
+                db.BE_ASISTENCIA.AddObject(newAssistance);
 
                 db.SaveChanges();
             }
+            MICHEL CAMBIO
+            */
         }
 
         /**
@@ -339,7 +342,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            GRUPO_ACTIVIDAD newGroupActivity = new GRUPO_ACTIVIDAD();
+            BE_GRUPO_ACTIVIDAD newGroupActivity = new BE_GRUPO_ACTIVIDAD();
 
             newGroupActivity.CODIGOACTIVIDAD = activityId;
             newGroupActivity.CODIGOGRUPO = groupId;
@@ -347,7 +350,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             createStudentsByGroup(activityId, groupId);
 
-            db.GRUPO_ACTIVIDAD.AddObject(newGroupActivity);
+            db.BE_GRUPO_ACTIVIDAD.AddObject(newGroupActivity);
 
             db.SaveChanges();
         }
@@ -365,9 +368,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 // Inicializa la actividad que se va a agregar
-                ACTIVIDAD newActivity = new ACTIVIDAD();
+                BE_ACTIVIDAD newActivity = new BE_ACTIVIDAD();
                 // Busca si el nombre existe
-                List<ACTIVIDAD> activitiesExist = db.ACTIVIDADs.Where(a => a.NOMBRE == activityName).ToList();
+                List<BE_ACTIVIDAD> activitiesExist = db.BE_ACTIVIDAD.Where(a => a.NOMBRE == activityName).ToList();
 
                 Boolean agregar = false;
 
@@ -393,7 +396,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     newActivity.CODIGOUSUARIO = userId;
 
                     // Agrega la actividad
-                    db.ACTIVIDADs.AddObject(newActivity);
+                    db.BE_ACTIVIDAD.AddObject(newActivity);
                     db.SaveChanges();
 
                     // Guarda los niveles seleccionados
@@ -420,7 +423,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                List<ASISTENCIA> assistanceList = db.ASISTENCIAs.Where(a => a.CODIGOACTIVIDAD == activityId && a.CODIGOGRUPO == levelId).ToList();
+                List<BE_ASISTENCIA> assistanceList = db.BE_ASISTENCIA.Where(a => a.CODIGOACTIVIDAD == activityId && a.CODIGOGRUPO == levelId).ToList();
 
                 if (assistanceList != null && assistanceList.Count > 0)
                     response = new Response(true, "", "", "", assistanceList);
@@ -447,12 +450,12 @@ namespace SistemaBienestarEstudiantil.WebServices
                 for (int assist = 0; assist < assistance.Length; assist++)
                 {
                     int code = assistance[assist];
-                    ASISTENCIA student = db.ASISTENCIAs.Single(a => a.CODIGO == code);
+                    BE_ASISTENCIA student = db.BE_ASISTENCIA.Single(a => a.CODIGO == code);
 
-                    if (student.ASISTENCIA1 == true)
-                        student.ASISTENCIA1 = false;
+                    if (student.ASISTENCIA == true)
+                        student.ASISTENCIA = false;
                     else
-                        student.ASISTENCIA1 = true;
+                        student.ASISTENCIA = true;
 
                     db.SaveChanges();
                 }
@@ -482,7 +485,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 bienestarEntities db = new bienestarEntities();
 
-                ACTIVIDAD activityDeleted = db.ACTIVIDADs.Single(a => a.CODIGO == activityId);
+                BE_ACTIVIDAD activityDeleted = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
 
                 deleteAssistanceActivity(activityId);
 
@@ -490,7 +493,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 deleteAttachedActivity(activityId);
 
-                db.ACTIVIDADs.DeleteObject(activityDeleted);
+                db.BE_ACTIVIDAD.DeleteObject(activityDeleted);
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Eliminar", "Actividad eliminada correctamente", null);
@@ -515,11 +518,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            List<ASISTENCIA> assistanceDeleted = db.ASISTENCIAs.Where(a => a.CODIGOACTIVIDAD == activityId).ToList();
+            List<BE_ASISTENCIA> assistanceDeleted = db.BE_ASISTENCIA.Where(a => a.CODIGOACTIVIDAD == activityId).ToList();
 
-            foreach (ASISTENCIA assistance in assistanceDeleted)
+            foreach (BE_ASISTENCIA assistance in assistanceDeleted)
             {
-                db.ASISTENCIAs.DeleteObject(assistance);
+                db.BE_ASISTENCIA.DeleteObject(assistance);
                 db.SaveChanges();
             }
         }
@@ -528,11 +531,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            List<GRUPO_ACTIVIDAD> groupDeleted = db.GRUPO_ACTIVIDAD.Where(ga => ga.CODIGOACTIVIDAD == activityId).ToList();
+            List<BE_GRUPO_ACTIVIDAD> groupDeleted = db.BE_GRUPO_ACTIVIDAD.Where(ga => ga.CODIGOACTIVIDAD == activityId).ToList();
 
-            foreach (GRUPO_ACTIVIDAD group in groupDeleted)
+            foreach (BE_GRUPO_ACTIVIDAD group in groupDeleted)
             {
-                db.GRUPO_ACTIVIDAD.DeleteObject(group);
+                db.BE_GRUPO_ACTIVIDAD.DeleteObject(group);
                 db.SaveChanges();
             }
         }
@@ -541,11 +544,11 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
 
-            List<ACTIVIDAD_ADJUNTO> attachedDeleted = db.ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGOACTIVIDAD == activityId).ToList();
+            List<BE_ACTIVIDAD_ADJUNTO> attachedDeleted = db.BE_ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGOACTIVIDAD == activityId).ToList();
 
-            foreach (ACTIVIDAD_ADJUNTO attached in attachedDeleted)
+            foreach (BE_ACTIVIDAD_ADJUNTO attached in attachedDeleted)
             {
-                db.ACTIVIDAD_ADJUNTO.DeleteObject(attached);
+                db.BE_ACTIVIDAD_ADJUNTO.DeleteObject(attached);
                 db.SaveChanges();
             }
         }
@@ -605,7 +608,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 if (hfc.Count > 0)
                 {
-                    ACTIVIDAD_ADJUNTO activityAttached = new ACTIVIDAD_ADJUNTO();
+                    BE_ACTIVIDAD_ADJUNTO activityAttached = new BE_ACTIVIDAD_ADJUNTO();
                     HttpPostedFile hpf = hfc[0];
                     if (hpf.ContentLength > 0)
                     {
@@ -614,7 +617,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                             hpf.InputStream.CopyTo(memoryStream);
                             byte[] fileBytes = memoryStream.ToArray();
 
-                            activityAttached = new ACTIVIDAD_ADJUNTO();
+                            activityAttached = new BE_ACTIVIDAD_ADJUNTO();
                             activityAttached.ADJUNTO = fileBytes;
                             activityAttached.NOMBRE = hfc[0].FileName;
                             activityAttached.CONTENTTYPE = hfc[0].ContentType;
@@ -634,16 +637,16 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveActivityAttached(ACTIVIDAD_ADJUNTO activityAttached, int activityId)
+        public void saveActivityAttached(BE_ACTIVIDAD_ADJUNTO activityAttached, int activityId)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 
             try {
-                ACTIVIDAD_ADJUNTO activityCreate = activityAttached;
+                BE_ACTIVIDAD_ADJUNTO activityCreate = activityAttached;
                 activityCreate.CODIGOACTIVIDAD = activityId;
 
-                db.ACTIVIDAD_ADJUNTO.AddObject(activityCreate);
+                db.BE_ACTIVIDAD_ADJUNTO.AddObject(activityCreate);
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Información", "El archivo se adjuntó correctamente", null);
@@ -666,8 +669,8 @@ namespace SistemaBienestarEstudiantil.WebServices
             bienestarEntities db = new bienestarEntities();
 
             // Trae los usuarios en base
-            List<USUARIO> users = db.USUARIOs.ToList();
-            List<USUARIO> usersByRol = new List<USUARIO>();
+            List<BE_USUARIO> users = db.BE_USUARIO.ToList();
+            List<BE_USUARIO> usersByRol = new List<BE_USUARIO>();
 
             // Si existen usuarios
             if (users != null && users.Count > 0)
@@ -697,7 +700,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             bienestarEntities db = new bienestarEntities();
 
             // Trae los niveles en base
-            List<GRUPO> groups = db.GRUPOes.ToList();
+            List<BE_GRUPO> groups = db.BE_GRUPO.ToList();
 
             // Si existen usuarios
             if (groups != null && groups.Count > 0)

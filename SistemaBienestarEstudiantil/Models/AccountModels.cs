@@ -79,7 +79,7 @@ namespace SistemaBienestarEstudiantil.Models
     {
         int MinPasswordLength { get; }
 
-        USUARIO ValidateUser(string userName, string password);
+        BE_USUARIO ValidateUser(string userName, string password);
 
         void ChangePassword(decimal codigoUsuario, string newPassword);
 
@@ -110,17 +110,17 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
 
-        public USUARIO ValidateUser(string userName, string password)
+        public BE_USUARIO ValidateUser(string userName, string password)
         {
             if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
 
             db = new Models.bienestarEntities();
-            USUARIO usuario = null;
+            BE_USUARIO usuario = null;
 
             try
             {
-                usuario = db.USUARIOs.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == password);
+                usuario = db.BE_USUARIO.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == password);
             }
             catch (InvalidOperationException e) // catch too Win32Exception (error en coneccion) System.Data.EntityException
             {
@@ -139,7 +139,7 @@ namespace SistemaBienestarEstudiantil.Models
             {
                 db = new bienestarEntities();
 
-                USUARIO usuario = db.USUARIOs.Single(u => u.CODIGO == codigoUsuario);
+                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == codigoUsuario);
                 usuario.CONTRASENAACTUAL = newPassword;
                 db.SaveChanges();
             }
