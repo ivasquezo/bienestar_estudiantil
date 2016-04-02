@@ -1,1 +1,26 @@
 http://www.welivesecurity.com/la-es/2015/12/16/detras-una-botnet-acciones-maliciosas/?utm_source=twitterfeed&utm_medium=twitter
+
+USE [bienestar]
+GO
+
+INSERT INTO [dbo].[BE_BECA_TIPO]
+           ([NOMBRE])
+     VALUES
+           (<NOMBRE, varchar(150),>)
+GO
+
+
+USE [bienestar]
+GO
+
+INSERT INTO [dbo].[BE_BECA_TIPO_DOCUMENTO]
+           ([CODIGOTIPO]
+           ,[NOMBRE]
+           ,[DESCRIPCION])
+     VALUES
+           (<CODIGOTIPO, numeric(18,0),>
+           ,<NOMBRE, varchar(150),>
+           ,<DESCRIPCION, varchar(max),>)
+GO
+
+
