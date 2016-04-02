@@ -7,10 +7,16 @@
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
-        $scope.backdrop = false;
+        $scope.backdrop = true;
         $scope.delay = 2;
         $scope.minDuration = 2;
 
+        $scope.seleccion = {
+            TIPO: null
+        };
+
+        $scope.ALUMNO = null;
+        $scope.BECA_SOLICITUD = null;
         $scope.TIPO = null;
 
         $('#messages').puigrowl();
@@ -41,19 +47,36 @@
 
         $scope.uploadFileDataBase = function () {
             
-            if ($scope.formFiles.$valid && $scope.becaSolicitudForm.$valid) {
+           if (this.formFiles.$valid && this.becaSolicitudForm.$valid) {
 
-                var formElement = document.getElementById('formFiles');
-                var formData = new FormData(formElement);
-                formData.append("code", 7);
+                $scope.BECA_SOLICITUD = {
+                    CODIGOALUMNO: $scope.ALUMNO.CODIGO,
+                    CODIGOTIPO: $scope.seleccion.TIPO.CODIGO
+                };
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase', formData, {
-                    withCredentials: true,
-                    headers: {'Content-Type': undefined },
-                    transformRequest: angular.identity
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/addBecaSolicitud', {
+                    beca_solicitud: $scope.BECA_SOLICITUD
                 }).success(function (data, status, headers, config) {
-                    console.log(data);
-                    $scope.cargarCodigosAdjunto();
+                    console.log("beca_solicitud", data);
+                    $scope.BECA_SOLICITUD = data;
+
+                    var formElement = document.getElementById('formFiles');
+                    var formData = new FormData(formElement);
+
+                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase',
+                        formData,
+                        {
+                            withCredentials: true,
+                            headers: {'Content-Type': undefined
+                        },
+                        transformRequest: angular.identity
+                    }).success(function (data, status, headers, config) {
+                        console.log(data);
+                        $scope.cargarCodigosAdjunto();
+                    }).error(function (data, status, headers, config) {
+                        console.log("error al cargar los files...", data);
+                    });
+
                 }).error(function (data, status, headers, config) {
                     console.log("error al cargar los tipos...", data);
                 });
@@ -84,6 +107,7 @@
                 for (var i = 0; i < typesDocuments.length; i++) {
                     codesTypesDocuments += typesDocuments[i].CODIGO + ",";
                 };
+            console.log(codesTypesDocuments);
             return codesTypesDocuments;
         }
 
@@ -112,17 +136,30 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Becas.asmx/countUserWithCedula', {
+                        scope.promise = $http.post('../../WebServices/Becas.asmx/getStudentSolicitud', {
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {
 
-                            if (data.cantidad == 0) {
+                            console.log("beca_solicitud", data);
+                            if (data.alumno != null) {
                                 ctrl.$setValidity('cedulaValidator', true);
                                 ctrl.$setValidity('cedulaChecking', true);
                                 ctrl.$setValidity('cedulaExist', true);
+
+                                scope.BECA_SOLICITUD = data.beca_solicitud;    
+                                if (data.beca_solicitud != null) {
+                                    scope.ALUMNO = data.beca_solicitud.ALUMNO;
+                                } else {
+                                    scope.ALUMNO = data.alumno;
+                                }
+
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);
                                 ctrl.$setValidity('cedulaValidator', true);
+
+                                scope.ALUMNO = null;
+                                scope.BECA_SOLICITUD = null;
+
                             }
 
                         }).error(function (data, status, headers, config) {

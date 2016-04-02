@@ -49,9 +49,13 @@ namespace SistemaBienestarEstudiantil.WebServices
             System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
 
             // get codes type document for insert
-            string [] codesTypesDocuments = System.Web.HttpContext.Current.Request.Params.Get("codesTypesDocuments").Split(',');
-            
-            if (hfc.Count > 0)
+            //string[] codesTypesDocuments = System.Web.HttpContext.Current.Request.Params.Get("codesTypesDocuments").Split(',');
+            string[] codesTypesDocuments = null;
+
+            //decimal codigoSolicitud = Decimal.Parse(System.Web.HttpContext.Current.Request.Params.Get("codigoSolicitud"));
+            decimal codigoSolicitud = 1;
+
+            if (hfc.Count > 0 && codesTypesDocuments != null && codesTypesDocuments.Length > 0)
             {
                 Models.BE_BECA_ADJUNTO[] becaAdjunto = new Models.BE_BECA_ADJUNTO[hfc.Count];
                 // CHECK THE FILE COUNT.
@@ -67,10 +71,9 @@ namespace SistemaBienestarEstudiantil.WebServices
                             byte[] fileBytes = memoryStream.ToArray();
 
                             becaAdjunto[i] = new Models.BE_BECA_ADJUNTO();
-                            becaAdjunto[i].CODIGOSOLICITUD = 1;
+                            becaAdjunto[i].CODIGOSOLICITUD = codigoSolicitud;
                             becaAdjunto[i].CONTENTTYPE = hfc[i].ContentType;
                             becaAdjunto[i].ADJUNTO = fileBytes;
-                            becaAdjunto[i].CODIGOTIPODOCUMENTO = Int16.Parse(codesTypesDocuments[i]);
                             becaAdjunto[i].NOMBRE = hfc[i].FileName;
                         }
                     }
@@ -90,7 +93,9 @@ namespace SistemaBienestarEstudiantil.WebServices
                     db.SaveChanges();
             }
 
-            writeResponse(System.Web.HttpContext.Current.Request.Params.Get("codesTypesDocuments"));
+            writeResponseObject(new {
+                System.Web.HttpContext.Current.Request.Params
+            });
         }
 
         [WebMethod]
