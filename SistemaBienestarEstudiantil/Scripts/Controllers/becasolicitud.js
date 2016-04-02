@@ -50,6 +50,7 @@
             
            if (this.formFiles.$valid && this.becaSolicitudForm.$valid) {
 
+                if ($scope.BECA_SOLICITUD == null) $scope.BECA_SOLICITUD = {};
                 $scope.BECA_SOLICITUD['CEDULA'] = $scope.ALUMNO.DTPCEDULAC;
                 $scope.BECA_SOLICITUD['CODIGOTIPO'] = $scope.seleccion.TIPO.CODIGO;
                 $scope.BECA_SOLICITUD['APROBADA'] = 0;
@@ -141,18 +142,16 @@
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {
 
-                            console.log("beca_solicitud", data);
+                            console.log("getStudentSolicitud correctamente: ", data);
+                            
                             if (data.alumno != null) {
                                 ctrl.$setValidity('cedulaValidator', true);
                                 ctrl.$setValidity('cedulaChecking', true);
                                 ctrl.$setValidity('cedulaExist', true);
 
                                 scope.BECA_SOLICITUD = data.beca_solicitud;    
-                                if (data.beca_solicitud != null) {
-                                    scope.ALUMNO = data.beca_solicitud.ALUMNO;
-                                } else {
-                                    scope.ALUMNO = data.alumno;
-                                }
+                                scope.ALUMNO = data.alumno;
+                                scope.seleccion.TIPO = data.beca_solicitud.BE_BECA_TIPO;
 
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);

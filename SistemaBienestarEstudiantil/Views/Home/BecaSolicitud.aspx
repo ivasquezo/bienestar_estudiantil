@@ -13,7 +13,7 @@
 
 	<div id="messages"></div>
 
-    <h2>Solicitud de Beca del estudiante 1722776950</h2>
+    <h2>Solicitud de Beca del estudiante 1722776950, 1712755535, 1719089482, 1500788250</h2>
     <div ng-controller="BecaSolicitudController as Main">
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
@@ -43,11 +43,11 @@
 					Beca:
 				</div>
 				<div class="document-message-title" style="display:inline-block;">
-					{{BECA_SOLICITUD.BECA_TIPO.NOMBRE}}
+					{{BECA_SOLICITUD.BE_BECA_TIPO.NOMBRE}}
 				</div>
 			</div>
     	</form>
-    	<form ng-if="BECA_SOLICITUD == null" id="formFiles" name="formFiles" enctype="multipart/form-data">
+    	<form ng-if="BECA_SOLICITUD == null || true" id="formFiles" name="formFiles" enctype="multipart/form-data">
     		<div>
 
 	    		<div class="document-message-title" ng-if="seleccion.TIPO != null">
@@ -57,7 +57,7 @@
 		    		</div>
 		    	</div>
 
-				<input type="hidden" value="{{getCodeTypesDocuments(seleccion.TIPO.BECA_TIPO_DOCUMENTO)}}" name="codesTypesDocuments" />
+				<input type="hidden" value="{{getCodeTypesDocuments(seleccion.TIPO.BE_BECA_TIPO_DOCUMENTO)}}" name="codesTypesDocuments" />
 
 				<table style="margin-top:10px;">
 					<tr>
@@ -113,7 +113,7 @@
 					ng-click="removeAttach(adjunto.CODIGO)">
 					<span class="ui-icon ui-icon-trash"></span>
 				</button>
-				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.BECA_TIPO_DOCUMENTO.NOMBRE}}</div>
+				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.BE_BECA_TIPO_DOCUMENTO.NOMBRE}}</div>
 				<div style="width:120px;height:120px;display:inline-block;" >
 					<img style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getImage?codigoAdjunto={{adjunto.CODIGO}}">
 				</div>
