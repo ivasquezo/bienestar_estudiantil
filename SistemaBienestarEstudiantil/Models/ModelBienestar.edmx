@@ -2637,9 +2637,9 @@
         <EntityTypeShape EntityType="BienestarModel.BE_ACTIVIDAD_ADJUNTO" Width="1.5" PointX="7.5" PointY="14.375" Height="2.3648893229166692" />
         <EntityTypeShape EntityType="BienestarModel.BE_ACTIVIDAD_GENERAL" Width="1.5" PointX="3" PointY="14.75" Height="1.5956835937499836" />
         <EntityTypeShape EntityType="BienestarModel.BE_ASISTENCIA" Width="1.5" PointX="10.5" PointY="10.25" Height="2.5571907552083246" />
-        <EntityTypeShape EntityType="BienestarModel.BE_BECA_ADJUNTO" Width="1.5" PointX="8.25" PointY="26.25" Height="2.557190755208353" />
-        <EntityTypeShape EntityType="BienestarModel.BE_BECA_SOLICITUD" Width="1.5" PointX="6" PointY="26.125" Height="2.7494921874999818" />
-        <EntityTypeShape EntityType="BienestarModel.BE_BECA_SOLICITUD_HISTORIAL" Width="1.5" PointX="8.25" PointY="10.25" Height="2.5571907552083246" />
+        <EntityTypeShape EntityType="BienestarModel.BE_BECA_ADJUNTO" Width="3.125" PointX="9.5" PointY="26.25" Height="2.557190755208353" />
+        <EntityTypeShape EntityType="BienestarModel.BE_BECA_SOLICITUD" Width="2.875" PointX="6" PointY="26.125" Height="2.7494921874999818" />
+        <EntityTypeShape EntityType="BienestarModel.BE_BECA_SOLICITUD_HISTORIAL" Width="2.125" PointX="8" PointY="10.25" Height="2.5571907552083246" />
         <EntityTypeShape EntityType="BienestarModel.BE_BECA_TIPO" Width="1.5" PointX="3.75" PointY="26.625" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="BienestarModel.BE_BECA_TIPO_DOCUMENTO" Width="1.5" PointX="6" PointY="44.5" Height="1.980286458333353" />
         <EntityTypeShape EntityType="BienestarModel.BE_DATOS_SISTEMA" Width="1.5" PointX="7.75" PointY="0.75" Height="1.7879850260416674" />
@@ -2675,6 +2675,8 @@
         <AssociationConnector Association="BienestarModel.FK_BE_ACTIVIDAD_ADJUNTO_BE_ACTIVIDAD" >
           <ConnectorPoint PointX="6" PointY="13.201396484374982" />
           <ConnectorPoint PointX="6" PointY="15.557444661458334" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="15.557444661458334" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="15.557444661458334" />
           <ConnectorPoint PointX="7.5" PointY="15.557444661458334" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_ACTIVIDAD_BE_ACTIVIDAD_GENERAL" >
@@ -2690,15 +2692,17 @@
           <ConnectorPoint PointX="6.75" PointY="13.201396484374982" />
           <ConnectorPoint PointX="7.125" PointY="13.576396484374982" />
           <ConnectorPoint PointX="7.125" PointY="13.182190755208325" />
-          <ConnectorPoint PointX="8.9166666666666661" PointY="13.182190755208325" />
-          <ConnectorPoint PointX="9.0833333333333339" PointY="13.182190755208325" />
+          <ConnectorPoint PointX="7.166666666666667" PointY="13.182190755208325" />
+          <ConnectorPoint PointX="7.333333333333333" PointY="13.182190755208325" />
           <ConnectorPoint PointX="10.125" PointY="13.182190755208325" />
           <ConnectorPoint PointX="10.5" PointY="12.807190755208325" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_GRUPO_ACTIVIDAD_BE_ACTIVIDAD" >
           <ConnectorPoint PointX="6.75" PointY="10.03125" />
-          <ConnectorPoint PointX="7.84375" PointY="10.03125" />
-          <ConnectorPoint PointX="7.84375" PointY="9.4802864583333388" />
+          <ConnectorPoint PointX="7.416666666666667" PointY="10.03125" />
+          <ConnectorPoint PointX="7.583333333333333" PointY="10.03125" />
+          <ConnectorPoint PointX="7.6875" PointY="10.03125" />
+          <ConnectorPoint PointX="7.6875" PointY="9.4802864583333388" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_ASISTENCIA_BE_GRUPO" >
           <ConnectorPoint PointX="6.75" PointY="2.9564925130208337" />
@@ -2711,8 +2715,8 @@
           <ConnectorPoint PointX="11.2812525" PointY="12.807190755208325" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_BECA_ADJUNTO_BE_BECA_SOLICITUD" >
-          <ConnectorPoint PointX="7.5" PointY="27.528595377604177" />
-          <ConnectorPoint PointX="8.25" PointY="27.528595377604177" />
+          <ConnectorPoint PointX="8.875" PointY="27.528595377604177" />
+          <ConnectorPoint PointX="9.5" PointY="27.528595377604177" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_BECA_SOLICITUD_BE_BECA_TIPO" >
           <ConnectorPoint PointX="5.25" PointY="27.518992513020834" />
@@ -2721,28 +2725,27 @@
           <ConnectorPoint PointX="6" PointY="27.518992513020834" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_BECA_SOLICITUD_DATOSPERSONALES" >
-          <ConnectorPoint PointX="5.25" PointY="25.31778996554489" />
-          <ConnectorPoint PointX="5.78125" PointY="25.84903996554489" />
-          <ConnectorPoint PointX="5.78125" PointY="26.790744256510422" />
-          <ConnectorPoint PointX="6" PointY="26.790744256510422" />
+          <ConnectorPoint PointX="5.25" PointY="24.847921549479167" />
+          <ConnectorPoint PointX="6.8697896666666667" PointY="24.847921549479167" />
+          <ConnectorPoint PointX="7.0364563333333328" PointY="24.847921549479167" />
+          <ConnectorPoint PointX="7.96875" PointY="24.847921549479167" />
+          <ConnectorPoint PointX="7.96875" PointY="26.125" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_BECA_SOLICITUD_HISTORIAL_BE_BECA_SOLICITUD" >
-          <ConnectorPoint PointX="7.5" PointY="26.795545688802093" />
-          <ConnectorPoint PointX="8" PointY="26.795545688802093" />
-          <ConnectorPoint PointX="8" PointY="16.989889322916667" />
-          <ConnectorPoint PointX="9.25" PointY="16.989889322916667" />
-          <ConnectorPoint PointX="9.25" PointY="13.432190755208325" />
-          <ConnectorPoint PointX="9" PointY="13.432190755208325" />
-          <ConnectorPoint PointX="9" PointY="12.807190755208325" />
+          <ConnectorPoint PointX="6.953123" PointY="26.125" />
+          <ConnectorPoint PointX="6.953123" PointY="23.980205078124982" />
+          <ConnectorPoint PointX="7.75" PointY="23.980205078124982" />
+          <ConnectorPoint PointX="7.75" PointY="16.989889322916667" />
+          <ConnectorPoint PointX="7.25" PointY="16.989889322916667" />
+          <ConnectorPoint PointX="7.25" PointY="12.199145066406246" />
+          <ConnectorPoint PointX="8" PointY="12.199145066406246" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_BECA_SOLICITUD_HISTORIAL_BE_USUARIO" >
           <ConnectorPoint PointX="3.75" PointY="9.875" />
           <ConnectorPoint PointX="3.75" PointY="9.7302864583333388" />
-          <ConnectorPoint PointX="7.760416666666667" PointY="9.7302864583333388" />
-          <ConnectorPoint PointX="7.927083333333333" PointY="9.7302864583333388" />
-          <ConnectorPoint PointX="8" PointY="9.7302864583333388" />
+          <ConnectorPoint PointX="7.5" PointY="9.7302864583333388" />
+          <ConnectorPoint PointX="7.5" PointY="11.528595377604162" />
           <ConnectorPoint PointX="8" PointY="11.528595377604162" />
-          <ConnectorPoint PointX="8.25" PointY="11.528595377604162" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_BE_BECA_TIPO_DOCUMENTO_BE_BECA_TIPO" >
           <ConnectorPoint PointX="4.5" PointY="28.412985026041667" />
@@ -2855,8 +2858,8 @@
           <ConnectorPoint PointX="15" PointY="2" />
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_GRADUADOS_DATOSPERSONALES" >
-          <ConnectorPoint PointX="5.22576923076923" PointY="25.374329427083353" />
-          <ConnectorPoint PointX="5.625" PointY="25.773560196314122" />
+          <ConnectorPoint PointX="5.25" PointY="25.374329427083353" />
+          <ConnectorPoint PointX="5.625" PointY="25.749329427083353" />
           <ConnectorPoint PointX="5.625" PointY="31.509348958333334" />
           <ConnectorPoint PointX="6" PointY="31.509348958333334" />
         </AssociationConnector>
@@ -2882,8 +2885,8 @@
         </AssociationConnector>
         <AssociationConnector Association="BienestarModel.FK_MATRICULA_INSCRIPCION" >
           <ConnectorPoint PointX="7.5" PointY="21.490102539062491" />
-          <ConnectorPoint PointX="7.916666666666667" PointY="21.490102539062491" />
-          <ConnectorPoint PointX="8.0833333333333339" PointY="21.490102539062491" />
+          <ConnectorPoint PointX="7.666666666666667" PointY="21.490102539062491" />
+          <ConnectorPoint PointX="7.833333333333333" PointY="21.490102539062491" />
           <ConnectorPoint PointX="8.25" PointY="21.490102539062491" />
         </AssociationConnector>
       </Diagram>

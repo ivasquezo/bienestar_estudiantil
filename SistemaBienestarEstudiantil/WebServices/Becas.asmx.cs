@@ -153,11 +153,28 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponseObject(new { alumno, beca_solicitud });            
         }
 
+        /**
+         * pendiente 0
+         * aprobada 1
+         * rechazada 2
+         */
         [WebMethod]
-        public void addBecaSolicitud(Models.BE_BECA_SOLICITUD beca_solicitud)
+        public void saveBecaSolicitud(Models.BE_BECA_SOLICITUD beca_solicitud)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            db.BE_BECA_SOLICITUD.AddObject(beca_solicitud);
+            Models.BE_BECA_SOLICITUD editBS = null;
+
+            if (beca_solicitud.CODIGO == 0)
+            {
+                db.BE_BECA_SOLICITUD.AddObject(beca_solicitud);
+            }
+            else
+            {
+                editBS = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGO == beca_solicitud.CODIGO).First();
+                editBS.CODIGOTIPO = beca_solicitud.CODIGOTIPO;
+                editBS.APROBADA = beca_solicitud.APROBADA;
+            }
+            
             db.SaveChanges();
             writeResponseObject(beca_solicitud);
         }

@@ -50,15 +50,15 @@
             
            if (this.formFiles.$valid && this.becaSolicitudForm.$valid) {
 
-                $scope.BECA_SOLICITUD = {
-                    CODIGOALUMNO: $scope.ALUMNO.CODIGO,
-                    CODIGOTIPO: $scope.seleccion.TIPO.CODIGO
-                };
+                $scope.BECA_SOLICITUD['CEDULA'] = $scope.ALUMNO.DTPCEDULAC;
+                $scope.BECA_SOLICITUD['CODIGOTIPO'] = $scope.seleccion.TIPO.CODIGO;
+                $scope.BECA_SOLICITUD['APROBADA'] = 0;
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/addBecaSolicitud', {
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBecaSolicitud', {
                     beca_solicitud: $scope.BECA_SOLICITUD
                 }).success(function (data, status, headers, config) {
-                    console.log("beca_solicitud", data);
+                    
+                    console.log("beca_solicitud added: ", data);
                     $scope.BECA_SOLICITUD = data;
 
                     var formElement = document.getElementById('formFiles');
