@@ -62,6 +62,8 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 this.removeRolAccesByRolId(rolId);
 
+                this.changeUserRol(rolId);
+
                 db.BE_ROL.DeleteObject(rolDeleted);
 
                 db.SaveChanges();
@@ -93,6 +95,24 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 foreach (BE_ROL_ACCESO rolAccess in rolAccessDeleted)
                     db.BE_ROL_ACCESO.DeleteObject(rolAccess);
+
+                db.SaveChanges();
+            }
+        }
+
+        [WebMethod]
+        private void changeUserRol(int rolId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<BE_USUARIO> userChanged = db.BE_USUARIO.Where(u => u.CODIGOROL == rolId).ToList();
+
+            BE_ROL rolGuess = db.BE_ROL.Single(r => r.NOMBRE == "INVITADO");
+
+            if (userChanged != null && userChanged.Count > 0)
+            {
+                foreach (BE_USUARIO user in userChanged)
+                    user.CODIGOROL = rolGuess.CODIGO;
 
                 db.SaveChanges();
             }
