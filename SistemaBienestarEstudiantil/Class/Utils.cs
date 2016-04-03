@@ -94,10 +94,10 @@ namespace SistemaBienestarEstudiantil.Class
         {
             // consulting data, credentials from database
             Models.bienestarEntities db = new Models.bienestarEntities();
-            string mailCredentials = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "mailCredentials").Select(d => d.VALOR).First();
+            string mailCredentials = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "userMailCredentials").Select(d => d.VALOR).First();
             string passwordCredentials = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "passwordCredentials").Select(d => d.VALOR).First();
-            string server = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "server").Select(d => d.VALOR).First();
-            int port = Int32.Parse(db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "port").Select(d => d.VALOR).First());
+            string server = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "smtpServer").Select(d => d.VALOR).First();
+            int port = Int32.Parse(db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "smtpPort").Select(d => d.VALOR).First());
 
             SmtpClient smtpClient = new SmtpClient(server, port);
 
