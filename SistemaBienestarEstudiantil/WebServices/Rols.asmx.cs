@@ -26,9 +26,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.End();
         }
 
-        /**
-         * Obtener todos los roles existentes
-         */
         [WebMethod]
         public void getAllRols()
         {
@@ -37,9 +34,8 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                // Busca todos los roles
                 List<BE_ROL> rols = db.BE_ROL.ToList();
-                // Verifica si la busqueda retorno valores
+                
                 if (rols != null && rols.Count > 0)
                     response = new Response(true, "", "", "", rols);
                 else

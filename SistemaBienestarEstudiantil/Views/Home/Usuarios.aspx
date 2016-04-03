@@ -19,7 +19,7 @@
     <div ng-controller="UsuariosController as Main">
         <div cg-busy="{promise:promise, message:message, backdrop:backdrop, delay:delay, minDuration:minDuration}"></div>
 
-        <button ng-click="addNewUserDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+        <button ng-click="addNewUserDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar usuario">
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>
         </button>
 
@@ -29,8 +29,8 @@
 
         <script type="text/ng-template" id="actionsUsers.html">
               <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)"><span class="ui-icon ui-icon-trash"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)"><span class="ui-icon ui-icon-pencil"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)" title="Eliminar usuario"><span class="ui-icon ui-icon-trash"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)" title="Editar usuario"><span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>
 
@@ -159,13 +159,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="cedulausuario">Cédula:</label>  
+                        <label class="col-md-4 control-label" for="cedulausuario">C&eacute;dula:</label>  
                         <div class="col-md-4">
                             <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="C&eacute;dula" class="form-control input-md">
                             <br/><span class="help-block">N&uacute;mero de identificaci&oacute;n</span>
                             <span ng-messages="newUserForm.cedulausuario.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese una identificaci&oacute;n</span>
-                                <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un n&uacute;mero de c&eacute;dula válido</span>
+                                <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un n&uacute;mero de c&eacute;dula v&aacute;lido</span>
                                 <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este n&uacute;mero de c&eacute;dula</span>
                                 <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
                             </span>

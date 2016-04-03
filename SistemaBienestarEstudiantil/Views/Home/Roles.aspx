@@ -18,17 +18,18 @@
     <div id="messages"></div>
 
     <div ng-controller="RolsController as Main">
-        <button type="button" ng-click="addNewRolDialog()">Nuevo Rol</button><br /><br />
+        <div cg-busy="{promise:promise, message:message, backdrop:backdrop, delay:delay, minDuration:minDuration}"></div>
+
+        <button ng-click="addNewRolDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+            <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>
+        </button>
 
         <div ui-grid="gridOptions"></div>
 
         <script type="text/ng-template" id="actionsRols.html">
               <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)" 
-                    ng-hide="grid.appScope.Main.getRolStatus(COL_FIELD)" title="Eliminar rol">
-                    <span class="ui-icon ui-icon-trash"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)" title="Editar rol">
-                    <span class="ui-icon ui-icon-pencil"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)" ng-hide="grid.appScope.Main.getRolStatus(COL_FIELD)" title="Eliminar rol"><span class="ui-icon ui-icon-trash"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)" title="Editar rol"><span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>
 

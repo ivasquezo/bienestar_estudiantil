@@ -49,14 +49,14 @@
         this.removeUser = function (code) {
             var parentObject = this;
 
-            $http.post('../../WebServices/Users.asmx/inactiveUserById', {
-                id: code
-            }).success(function (data, status, headers, config) {
-                console.log("removeUser", data);
-                parentObject.removeElementArray($scope.gridOptions.data, code);
-            }).error(function (data, status, headers, config) {
-                console.log("error al cargar los usuarios...");
-            });
+//            $http.post('../../WebServices/Users.asmx/inactiveUserById', {
+//                id: code
+//            }).success(function (data, status, headers, config) {
+//                console.log("removeUser", data);
+//                parentObject.removeElementArray($scope.gridOptions.data, code);
+//            }).error(function (data, status, headers, config) {
+//                console.log("error al cargar los usuarios...");
+//            });
 
         };
 

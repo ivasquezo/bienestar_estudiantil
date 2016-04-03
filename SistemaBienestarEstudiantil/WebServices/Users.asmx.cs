@@ -13,7 +13,7 @@ namespace SistemaBienestarEstudiantil.WebServices
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
-    // Para permitir que se llame a este servicio Web desde un script, usando ASP.NET AJAX, quite la marca de comentario de la línea siguiente. 
+    // Para permitir que se llame a este servicio Web desde un script, usando ASP.NET AJAX, quite la marca de comentario de la linea siguiente. 
     [System.Web.Script.Services.ScriptService]
     public class Users : System.Web.Services.WebService
     {
@@ -159,41 +159,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-        [WebMethod]
-        public void getAllActivedUser()
-        {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-
-            Context.Response.Write(new JavaScriptSerializer().Serialize(db.BE_USUARIO.Where(u => u.ESTADO == true).ToList()));
-
-            Context.Response.Flush();
-            Context.Response.End();
-        }
-
-        [WebMethod]
-        public void getUserByCode(int code)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == code);
-
-            writeResponse(new JavaScriptSerializer().Serialize(usuario));
-        }
-
-        [WebMethod]
-        public void inactiveUserById(int id)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
-
-            usuario.ESTADO = false;
-
-            db.SaveChanges();
-
-            writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
     }
 }

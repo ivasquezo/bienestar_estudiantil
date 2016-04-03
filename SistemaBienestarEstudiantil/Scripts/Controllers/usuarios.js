@@ -193,6 +193,7 @@
             var parentObject = this;
 
             $scope.userCopy_copy = angular.copy($scope.userCopy);
+            $scope.userCopy_copy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
             $scope.userCopy_copy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
 
             delete $scope.userCopy_copy['BE_ACTIVIDAD'];
@@ -225,6 +226,7 @@
             var parentObject = this;
 
             if (!this.newUserForm.$invalid) {
+                $scope.userCopy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
                 $scope.userCopy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
 
                 $scope.promise = $http.post('../../WebServices/Users.asmx/addNewUser', {

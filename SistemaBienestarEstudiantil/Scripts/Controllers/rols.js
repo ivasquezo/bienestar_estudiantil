@@ -5,36 +5,38 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
+        // for procesing message
+        $scope.promise = null;
+        $scope.message = 'Procesando...';
+        $scope.backdrop = false;
+        $scope.delay = 2;
+        $scope.minDuration = 2;
+
 		$scope.rolCopy = {
             CODIGO: ''
         };
 		
-        // Cargar todos los roles
         $scope.chargeRols = function () {
-            // Llama al servicio que obtiene todos los roles
             $http.post('../../WebServices/Rols.asmx/getAllRols', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar roles... ", data);
-                // Si los datos se obtuvieron sin problemas
                 if (data.success)
                     $scope.gridOptions.data = data.response;
                 else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar los roles... ", data);
-                // Si hubo error al obtener los roles
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener roles'}]);
             });
         };
 		
-        // Diseno de los datos de la tabla
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: true,
             columnDefs: [
-              {name:'Código', field: 'CODIGO', width: 120},
+              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
               {name:'Nombre', field: 'NOMBRE'},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80, enableFiltering: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80, enableFiltering: false}
             ]
         };
 
