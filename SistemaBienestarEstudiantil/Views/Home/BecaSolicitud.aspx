@@ -26,7 +26,7 @@
 	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Buscando en la base de datos...</span>
 	        </span>
 	        <span style="display:inline-block;font-size:18px;">
-	        	{{ALUMNO.DATOSPERSONALE.DTPNOMBREC}}{{ALUMNO.DATOSPERSONALE.DTPAPELLIC}}{{ALUMNO.DATOSPERSONALE.DTPAPELLIC2}}
+	        	{{ALUMNO.DTPNOMBREC}}{{ALUMNO.DTPAPELLIC}}{{ALUMNO.DTPAPELLIC2}}
 	        </span>
 	    	<hr/>
 			<div ng-if="BECA_SOLICITUD == null">
