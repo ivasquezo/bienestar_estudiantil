@@ -115,7 +115,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 newUser.CONTRASENAACTUAL = newUser.CEDULA;
                 newUser.CONTRASENAANTERIOR = newUser.CEDULA;
+
                 db.BE_USUARIO.AddObject(newUser);
+
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Agregar", "El usuario agregado correctamente", newUser);
@@ -147,13 +149,11 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             catch (InvalidOperationException)
             {
-                // Error al eliminar el rol
-                response = new Response(false, "error", "Error", "Error al obtener datos para eliminar", null);
+                response = new Response(false, "error", "Error", "Error al obtener los datos para eliminar el usuario", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
             catch (Exception)
             {
-                // Error al eliminar el rol
                 response = new Response(false, "error", "Error", "Error al eliminar el usuario", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }

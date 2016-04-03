@@ -27,10 +27,10 @@
         <div ui-grid="gridOptions"></div>
 
         <script type="text/ng-template" id="actionsRols.html">
-              <div class="ui-grid-cell-contents">
+            <div class="ui-grid-cell-contents">
                 <button type="button" ng-click="grid.appScope.Main.removeRol(COL_FIELD)" ng-hide="grid.appScope.Main.getRolStatus(COL_FIELD)" title="Eliminar rol"><span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editRol(COL_FIELD)" title="Editar rol"><span class="ui-icon ui-icon-pencil"></span></button>
-              </div>
+            </div>
         </script>
 
         <script type="text/ng-template" id="editRol.html">
@@ -40,25 +40,26 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Nombre del rol</label>  
                         <div class="col-md-4">
-                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;" 
-                                ng-disabled="rolCopy.ACTIVO">
+                            <input valid-rol-name required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;" ng-disabled="rolCopy.ACTIVO">
                             <br/><span class="help-block">Nombre del rol</span>  
                             <span ng-messages="rolForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
+                                <span ng-message="rolNameExist" class="help-block ng-message">Existe un rol con este nombre</span>
+                                <span ng-message="rolNameValidator" class="help-block ng-message">Debe ingresar un nombre de rol v&aacute;lido</span>
+                                <span ng-message="rolNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" >Módulos</label>
+                        <label class="col-md-4 control-label" >Permisos</label>
                         <table style="width:100%; font-size:16px">
                             <tr>
                                 <th></th>
                                 <th>Nombre</th> 
                             </tr>
                             <tr ng-repeat="access in allAccess">
-                                <td><input type="checkbox" ng-checked="existAccess(access.CODIGO)" 
-                                    ng-click="setAccessRol(access.CODIGO)"></td>
+                                <td><input type="checkbox" ng-checked="existAccess(access.CODIGO)" ng-click="setAccessRol(access.CODIGO)"></td>
                                 <td>{{ access.NOMBRE }}</td>
                             </tr>
                         </table>
@@ -82,15 +83,19 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Nombre de rol</label>  
                         <div class="col-md-4">
-                            <input required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;">
+                            <input valid-rol-name required ng-model="rolCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Nombre rol" class="form-control input-md" style="text-transform:uppercase;">
+                            <br/><span class="help-block">Nombre del rol</span>
                             <span ng-messages="newRolForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese un nombre de rol</span>
+                                <span ng-message="rolNameExist" class="help-block ng-message">Existe un rol con este nombre</span>
+                                <span ng-message="rolNameValidator" class="help-block ng-message">Debe ingresar un nombre de rol v&aacute;lido</span>
+                                <span ng-message="rolNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" >Módulos</label>
+                        <label class="col-md-4 control-label" >Permisos</label>
                         <table style="width:100%; font-size:16px">
                             <tr>
                                 <th></th>

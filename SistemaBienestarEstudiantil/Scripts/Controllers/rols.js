@@ -25,7 +25,7 @@
                 else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
-                console.log("Error al cargar los roles... ", data);
+                console.log("Error al cargar roles... ", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener roles'}]);
             });
         };
@@ -40,10 +40,8 @@
             ]
         };
 
-        // Llama al metodo cargar roles
         $scope.chargeRols();
 
-        // Obtiene el estado del rol
         this.getRolStatus = function (code) {
             $scope.rolStatus = $scope.getElementArray($scope.gridOptions.data, code);
 
@@ -53,28 +51,23 @@
                 return false;
         };
 
-        // Eliminar un rol
         this.removeRol = function (code) {
             var parentObject = this;
             
-            // Llama al servicio que elimina un rol por su codigo
             $http.post('../../WebServices/Rols.asmx/removeRolById', {
                 rolId: code
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar rol... ", data);
-                // Si se elimina correctamente el rol
                 if (data.success)
                     parentObject.removeElementArray($scope.gridOptions.data, code);
 
                 $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al eliminar el rol... ", data);
-                // Si hubo error al obtener los roles
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar el rol'}]);
             });
         };
 
-        // Elimina el rol de la vista
 		this.removeElementArray = function(arrayRol, rolCode) {
             for (var i=0; i<arrayRol.length; i++) {
                 if (arrayRol[i].CODIGO == rolCode) {
@@ -83,19 +76,17 @@
             }
         };
 		
-        // Editar un rol
         this.editRol = function (code) {
-            // Obtiene el rol que se va a editar
             $scope.rolEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
             
             $scope.rolCopy.CODIGO = $scope.rolEdit.CODIGO;
             $scope.rolCopy.NOMBRE = $scope.rolEdit.NOMBRE;
             $scope.rolCopy.ACTIVO = $scope.rolEdit.ACTIVO;
+
 			$scope.getAccessByRol(code);
             $scope.accessRols = [];
             $scope.rolsAccess = [];
 
-            // Abre el pop up para editar el rol
             ngDialog.open({
                 template: 'editRol.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -109,7 +100,6 @@
             });
         };
 
-        // Obtiene los datos de un rol
 		$scope.getElementArray = function(arrayRol, rolCode) {
             for (var i=0; i<arrayRol.length; i++) {
                 if (arrayRol[i].CODIGO == rolCode) {
@@ -142,7 +132,6 @@
             });
         };
 
-        // Actualiza el rol en la parte visual
 		$scope.updateElementArray = function(arrayRol, rolId, rolName) {
             for (var i=0; i<arrayRol.length; i++) {
                 if (arrayRol[i].CODIGO == rolId) {
@@ -189,52 +178,93 @@
         };      
     }]);
 
-    // Pop up para actualizar y agregar rol
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
-        // Al editar un rol
         $scope.saveEditedRol = function () {
             var parentObject = this;
 
-            $http.post('../../WebServices/Rols.asmx/saveRolData', {
-                rolId: $scope.rolCopy.CODIGO,
-                rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
-                accessRols: $scope.accessRols
-            }).success(function (data, status, headers, config) {
-                console.log("Editar rol: ", data);
-                // Si los datos se editaron correctamente
-                if (data.success) {
-                    $scope.updateElementArray($scope.gridOptions.data, $scope.rolCopy.CODIGO, $scope.rolCopy.NOMBRE);
-                    // Se cierra el pop up
-                    parentObject.closeThisDialog();
-                } 
+            if (!this.rolForm.$invalid) {
+                $http.post('../../WebServices/Rols.asmx/saveRolData', {
+                    rolId: $scope.rolCopy.CODIGO,
+                    rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
+                    accessRols: $scope.accessRols
+                }).success(function (data, status, headers, config) {
+                    console.log("Editar rol: ", data);
+                    if (data.success) {
+                        $scope.updateElementArray($scope.gridOptions.data, $scope.rolCopy.CODIGO, $scope.rolCopy.NOMBRE);
+                        parentObject.closeThisDialog();
+                    } 
 
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al editar el rol...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el rol'}]);
-            });
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al editar el rol...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el rol'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+            }
         };
 
-        // Al agregar un rol
         $scope.addNewRolDB = function () {
             var newParentObject = this;
 
-            $http.post('../../WebServices/Rols.asmx/addNewRol', {                
-                rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
-                accessRols: $scope.accessRols
-            }).success(function (data, status, headers, config) {
-                console.log("Agregar rol: ", data);
-                if (data.success) {
-                    $scope.addElementArray($scope.gridOptions.data, data.response);
-                    // Se cierra el pop up
-                    newParentObject.closeThisDialog();
+            if (!this.newRolForm.$invalid) {
+                $http.post('../../WebServices/Rols.asmx/addNewRol', {                
+                    rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
+                    accessRols: $scope.accessRols
+                }).success(function (data, status, headers, config) {
+                    console.log("Agregar rol: ", data);
+                    if (data.success) {
+                        $scope.addElementArray($scope.gridOptions.data, data.response);
+                        newParentObject.closeThisDialog();
+                    }
+
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al agregar el rol...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+    }]);
+
+    app.directive('validRolName', ['$http', function($http) {
+        return {
+            require: 'ngModel',
+
+            link: function(scope, element, attr, ctrl) {
+                function customValidator(ngModelValue) {
+                    if (ngModelValue != null && ngModelValue != scope.rolCopy) {
+                        ctrl.$setValidity('rolNameChecking', false);
+
+                        scope.promise = $http.post('../../WebServices/Rols.asmx/countRolWithName', {
+                            rolName: ngModelValue
+                        }).success(function (data, status, headers, config) {
+                            if (data.cantidad == 0) {
+                                ctrl.$setValidity('rolNameExist', true);
+                                ctrl.$setValidity('rolNameValidator', true);
+                                ctrl.$setValidity('rolNameChecking', true);
+                               
+                            } else {                            
+                                ctrl.$setValidity('rolNameExist', false);
+                                ctrl.$setValidity('rolNameValidator', true);
+                            }
+                        }).error(function (data, status, headers, config) {
+                            console.log("error al traer usuario", data);
+                            ctrl.$setValidity('rolNameValidator', false);
+                        });
+                    } else {
+                        ctrl.$setValidity('rolNameExist', true);
+                        ctrl.$setValidity('rolNameValidator', true);
+                        ctrl.$setValidity('rolNameChecking', true);
+                        
+                    }
+                    return ngModelValue;
                 }
 
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al agregar el rol...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
-            });
+                ctrl.$parsers.push(customValidator);
+            }
         };
     }]);
 })();

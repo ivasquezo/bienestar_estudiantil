@@ -135,6 +135,7 @@
             };
 
             $scope.userSavedCedula = null;
+            $scope.userSavedName = null;
 
             ngDialog.open({
                 template: 'newUser.html',
