@@ -99,6 +99,15 @@
     		</div>
 		</form>
 
+		<div ng-if="BECA_SOLICITUD != null && BECA_SOLICITUD.OBSERVACION != null">
+			<div class="document-message-title">
+				Observaciones:
+			</div>
+			<div style="padding:5px;margin-top:10px;border:1px solid red;color:#AD0000;font-weight:bold;text-transform: uppercase;font-size: 14px;background-color: rgba(167, 3, 3, 0.09);">
+				{{BECA_SOLICITUD.OBSERVACION}}
+			</div>
+		</div>
+
 		<div ng-if="BECA_SOLICITUD != null">
 			<div class="document-message-title">
 				Documentos ingresados:
