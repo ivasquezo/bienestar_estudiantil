@@ -6,6 +6,7 @@ using System.Web.Services;
 using System.Web.Script.Serialization;
 using System.IO;
 using System.Web.Script.Services;
+using System.Net.Mail;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -146,7 +147,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.GRADUADO alumno = db.GRADUADOS.Where(a => a.DTPCEDULAC == cedula).First();
+            /*
+             * restringir estudiantes que pueden pedir la beca
+             */
+            Models.DATOSPERSONALE alumno = db.DATOSPERSONALES.Where(a => a.DTPCEDULAC == cedula).First();
 
             Models.BE_BECA_SOLICITUD beca_solicitud = null;
             var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC);
@@ -190,8 +194,34 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             
             db.SaveChanges();
+
+            if (editBS == null)
+            {
+                sendMail(beca_solicitud.CEDULA);
+            }
+
             writeResponseObject(editBS == null ? beca_solicitud : editBS);
         }
 
+        private void sendMail(string cedula)
+        {
+            //SmtpClient smtpClient = new SmtpClient("mail.google.com", 25);
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+
+            smtpClient.Credentials = new System.Net.NetworkCredential("micheljqh@gmail.com", "jorgeluis581216");
+            //smtpClient.UseDefaultCredentials = true;
+            //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.EnableSsl = true;
+            MailMessage mail = new MailMessage();
+
+            mail.Subject = "Aviso de solicitud de beca";
+            mail.Body = "Nuevo ingreso de Solicitud de beca del estudiante con cédula: " + cedula;
+
+            //Setting From , To and CC
+            mail.From = new MailAddress("micheljqh@gmail.com", "Michel");
+            mail.To.Add(new MailAddress("stephy_vas@hotmail.com", "Inesita"));
+
+            smtpClient.Send(mail);
+        }
     }
 }
