@@ -15,6 +15,7 @@
             TIPO: null
         };
 
+        $scope.descripcion = null;
         $scope.ALUMNO = null;
         $scope.BECA_SOLICITUD = null;
         $scope.TIPO = null;
@@ -34,17 +35,16 @@
 
         $scope.cargarTipos();
 
-        $scope.cargarCodigosAdjunto = function () {
-            $scope.promise = $http.get('../../WebServices/Becas.asmx/getListAttach')
-            .success(function (data, status, headers, config) {
-                $scope.CODIGOSADJUNTOS = data;
+        $scope.cargarBecaSolicitud = function (code) {
+            $scope.promise = $http.post('../../WebServices/Becas.asmx/getBecaSolicitud', {
+                CODIGO: code
+            }).success(function (data, status, headers, config) {
+                $scope.BECA_SOLICITUD = data;
                 console.log("adjuntos cargados correctamente: ", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });
         };
-
-        $scope.cargarCodigosAdjunto();
 
         $scope.uploadFileDataBase = function () {
             
@@ -55,8 +55,19 @@
                 $scope.BECA_SOLICITUD['CODIGOTIPO'] = $scope.seleccion.TIPO.CODIGO;
                 $scope.BECA_SOLICITUD['APROBADA'] = 0;
 
+                // CREO UNA COPIA DEL OBJECTO
+                $scope.beca_solicitud_copy = angular.copy($scope.BECA_SOLICITUD);
+
+                // ELIMINO LISTAS INNECESARIAS PARA EVITAR ERROR DE CASTING
+                delete $scope.beca_solicitud_copy['BE_BECA_ADJUNTO'];
+                delete $scope.beca_solicitud_copy['BE_BECA_TIPO'];
+                delete $scope.beca_solicitud_copy['BE_BECA_SOLICITUD_HISTORIAL'];
+                delete $scope.beca_solicitud_copy['DATOSPERSONALE'];
+
+                console.log("beca_solicitud_copy:", $scope.beca_solicitud_copy);
+
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBecaSolicitud', {
-                    beca_solicitud: $scope.BECA_SOLICITUD
+                    beca_solicitud: $scope.beca_solicitud_copy
                 }).success(function (data, status, headers, config) {
                     
                     console.log("beca_solicitud added: ", data);
@@ -65,42 +76,69 @@
                     var formElement = document.getElementById('formFiles');
                     var formData = new FormData(formElement);
 
-                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase',
-                        formData,
-                        {
-                            withCredentials: true,
-                            headers: {'Content-Type': undefined
-                        },
+                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase?codigoSolicitud=' + $scope.BECA_SOLICITUD.CODIGO, formData,
+                    {
+                        withCredentials: true,
+                        headers: {'Content-Type': undefined},
                         transformRequest: angular.identity
                     }).success(function (data, status, headers, config) {
-                        console.log(data);
-                        $scope.cargarCodigosAdjunto();
+                        
+                        console.log("files uploaded successfull", data);
+                        $scope.BECA_SOLICITUD = data.beca_solicitud;
+                        var dS = document.getElementById("documentoSolicitud");
+                        if (dS != null) dS.value = "";
+                        document.getElementById("otrosDocumentosSolicitud").value = "";
+                        document.getElementById("descripcion").value = "";
+                        $scope.descripcion = "";
+
                     }).error(function (data, status, headers, config) {
                         console.log("error al cargar los files...", data);
                     });
 
                 }).error(function (data, status, headers, config) {
-                    console.log("error al cargar los tipos...", data);
+                    console.log("error al saveBecaSolicitud", data);
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Complete los campos erróneos'}]);
             }
         }
 
-        $scope.removeAttach = function (attachCode) {
+        $scope.removeAttach = function (attachCode, becaCodigo) {
 
             $scope.promise = $http.post('../../WebServices/Becas.asmx/removeAttach', {
                 attachCode: attachCode
             }).success(function (data, status, headers, config) {
-                console.log(data);
-                $scope.cargarCodigosAdjunto();
+                console.log("removeAttach:", data);
+                $scope.cargarBecaSolicitud(becaCodigo);
             }).error(function (data, status, headers, config) {
-                console.log("error al eliminarAdjunto...", data);
+                console.log("error al removeAttach...", data);
             });
         }
 
         $scope.printConsole = function () {
             console.log($scope);
+        };
+
+        $scope.isPDF = function (contentType) {
+            return contentType.toUpperCase() == "APPLICATION/PDF";
+        };
+
+        $scope.hasDocumentoSolicitud = function (beca) {
+            var objects = [1];
+            if (beca != null && beca.BE_BECA_ADJUNTO != null && beca.BE_BECA_ADJUNTO.length > 0) {
+                for (var i = 0; i < beca.BE_BECA_ADJUNTO.length; i++) {
+                    if (beca.BE_BECA_ADJUNTO[i].DOCUMENTOSOLICITUD) {
+                        objects.splice(0, 1);
+                        return objects;
+                    }
+                };
+            }
+            return objects;
+        };
+
+        $scope.hasFile = function (idFileElement) {
+            var ods = document.getElementById(idFileElement);
+            return ods.value != "";
         }
 
         $scope.getCodeTypesDocuments = function (typesDocuments) {
@@ -151,7 +189,7 @@
 
                                 scope.BECA_SOLICITUD = data.beca_solicitud;    
                                 scope.ALUMNO = data.alumno;
-                                scope.seleccion.TIPO = data.beca_solicitud.BE_BECA_TIPO;
+                                if (data.beca_solicitud != null) scope.seleccion.TIPO = data.beca_solicitud.BE_BECA_TIPO;
 
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);
@@ -159,6 +197,7 @@
 
                                 scope.ALUMNO = null;
                                 scope.BECA_SOLICITUD = null;
+                                scope.seleccion.TIPO = null;
 
                             }
 
@@ -168,6 +207,9 @@
                         });
                     } else {
                         ctrl.$setValidity('cedulaValidator', false);
+                        scope.ALUMNO = null;
+                        scope.BECA_SOLICITUD = null;
+                        scope.seleccion.TIPO = null;
                     }
 
                     // we need to return our ngModelValue, to be displayed to the user(value of the input)
@@ -194,7 +236,8 @@
             // create linking function and pass in our NgModelController as a 4th argument
             link: function(scope, element, attr, ctrl) {
 
-                ctrl.$setValidity('validFile', element.val() != '');
+                // valido que seleccione un archivo y que sea requerido
+                ctrl.$setValidity('validFile', element.val() != '' || !element.get(0).required);
                 //change event is fired when file is selected
                 element.bind('change',function(){
                     
@@ -206,9 +249,12 @@
                         ctrl.$setValidity('validFileType',
                             element.get(0).files[0].type.toUpperCase().indexOf('APPLICATION/PDF') != -1 || 
                             element.get(0).files[0].type.toUpperCase().indexOf('IMAGE') != -1);
-                        
+
                     } else {
-                        ctrl.$setValidity('validFile', false);
+
+                        // valido que seleccione un archivo y que sea requerido
+                        if (element.get(0).required) ctrl.$setValidity('validFile', false);
+                        else  ctrl.$setValidity('validFile', true);
                         ctrl.$setValidity('validFileSize', true);
                         ctrl.$setValidity('validFileEmpty', true);
                         ctrl.$setValidity('validFileType', true);
