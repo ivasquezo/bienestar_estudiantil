@@ -1,23 +1,20 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<SistemaBienestarEstudiantil.Models.LogOnModel>" %>
 
 <asp:Content ID="loginTitle" ContentPlaceHolderID="TitleContent" runat="server">
+    Iniciar sesi&oacute;n
 </asp:Content>
 
 <asp:Content ID="loginContent" ContentPlaceHolderID="MainContent" runat="server">
     <% if (@Session["userName"] == null) { %>
-    <h2>Iniciar sesión</h2>
+    <h2>Iniciar sesi&oacute;n</h2>
 
-    <p>Especifique su nombre de usuario y contraseña.</p>
+    <p>Especifique su nombre de usuario y contrase&ntilde;a.</p>
 
-    <% using (Html.BeginForm())
-       { %>
-
-    <%: Html.ValidationSummary(true, "No se ha iniciado la sesión. Corrija los errores e inténtelo de nuevo.")%>
-    
+    <% using (Html.BeginForm()) { %>
+    <%: Html.ValidationSummary(true, "No se ha iniciado la sesi\u00F3n. Corrija los errores e int\u00E9ntelo de nuevo.")%>
     <div>
         <fieldset>
-            <legend>Información de cuenta</legend>
-
+            <legend>Informaci&oacute;n de cuenta</legend>
             <div class="editor-label">
                 <%: Html.LabelFor(m => m.UserName)%>
             </div>
@@ -33,17 +30,15 @@
                 <%: Html.ValidationMessageFor(m => m.Password)%>
             </div>
             <p>
-                <input type="submit" value="Iniciar sesión" />
+                <input type="submit" value="Iniciar sesi&oacute;n" />
             </p>
         </fieldset>
     </div>
     <% } } else { %>
-
     <div>
         <fieldset>
-            <legend>Información de cuenta</legend>
-
-            <p>Ya se encuentra iniciada sesión con la cuenta <b><% =@Session["userName"] %></b></p> 
+            <legend>Informaci&oacute;n de cuenta</legend>
+            <p>Ya se encuentra iniciada sesi&oacute;n con la cuenta <b><% =@Session["userName"] %></b></p>
         </fieldset>
     </div>
     <% } %>

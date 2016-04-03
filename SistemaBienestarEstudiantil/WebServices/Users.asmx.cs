@@ -6,12 +6,10 @@ using System.Web.Services;
 using System.Data.SqlClient;
 using System.Web.Script.Serialization;
 using SistemaBienestarEstudiantil.Models;
+using SistemaBienestarEstudiantil.Class;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
-    /// <summary>
-    /// Descripción breve de Users
-    /// </summary>
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
@@ -29,8 +27,82 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod]
         public void getAllUser()
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-            writeResponse(new JavaScriptSerializer().Serialize(db.BE_USUARIO.ToList()));
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                List<BE_USUARIO> users = db.BE_USUARIO.ToList();
+
+                if (users != null && users.Count > 0)
+                    response = new Response(true, "", "", "", users);
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado usuarios registrados", null);
+            }
+            catch (Exception e)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los usuarios", e);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void countUserWithUserName(String userName)
+        {
+            bienestarEntities db = new bienestarEntities();
+            int cantidad = db.BE_USUARIO.Where(u => userName != null && u.NOMBREUSUARIO == userName).Count();
+            writeResponse("{\"cantidad\":" + cantidad + "}");
+        }
+
+        [WebMethod]
+        public void countUserWithCedula(string cedula)
+        {
+            bienestarEntities db = new bienestarEntities();
+            int cantidad = db.BE_USUARIO.Where(u => cedula != null && u.CEDULA == cedula).Count();
+            writeResponse("{\"cantidad\":" + cantidad + "}");
+        }
+
+        [WebMethod]
+        public void saveUserData(BE_USUARIO user, Boolean resetPassword)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == user.CODIGO);
+
+                usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
+                usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
+                usuario.CEDULA = user.CEDULA;
+                usuario.CORREO = user.CORREO;
+                usuario.ESTADO = user.ESTADO;
+                usuario.CODIGOROL = user.CODIGOROL;
+
+                if (resetPassword)
+                {
+                    usuario.CONTRASENAACTUAL = user.CEDULA;
+                    usuario.CONTRASENAANTERIOR = user.CEDULA;
+                }
+
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Actualizar", "Usuario actualizado correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos para actualizar el usuario", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al actualizar el usuario", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
         [WebMethod]
@@ -83,30 +155,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
 
-        [WebMethod]
-        public void saveUserData(BE_USUARIO user, Boolean resetPassword)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == user.CODIGO);
-
-            usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
-            usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
-            usuario.CEDULA = user.CEDULA;
-            usuario.CORREO = user.CORREO;
-            usuario.ESTADO = user.ESTADO;
-            usuario.CODIGOROL = user.CODIGOROL;
-
-            if (resetPassword)
-            {
-                usuario.CONTRASENAACTUAL = user.CEDULA;
-                usuario.CONTRASENAANTERIOR = user.CEDULA;
-            }
-
-            db.SaveChanges();
-
-            writeResponse(new JavaScriptSerializer().Serialize(usuario));
-        }
+        
 
         [WebMethod]
         public void addNewUser(BE_USUARIO newUser)
@@ -119,12 +168,8 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(newUser));
         }
 
-        [WebMethod]
-        public void countUserWithCedula(string cedula)
-        {
-            bienestarEntities db = new bienestarEntities();
-            int cantidad = db.BE_USUARIO.Where(u => cedula != null && u.CEDULA == cedula).Count();
-            writeResponse("{\"cantidad\":" + cantidad + "}");
-        }
+        
+
+        
     }
 }

@@ -4,6 +4,9 @@
 
     app.controller('UsuariosController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
 
+        $('#messages').puigrowl();
+        $('#messages').puigrowl('option', {life: 5000});
+
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
@@ -11,8 +14,65 @@
         $scope.delay = 2;
         $scope.minDuration = 2;
 
-        $('#messages').puigrowl();
-        $('#messages').puigrowl('option', {life: 5000});
+        $scope.cargarNombreEstado = function(statusId) {
+            if (statusId == 0) {
+                return "Inactivo";
+            } else if (statusId == 1) {
+                return "Activo";
+            }
+        };
+
+        $scope.cargarEstadoUsuario = function(usuarios){
+            for (var i = 0; i < usuarios.length; i++)
+                usuarios[i].NOMBREESTADO = $scope.cargarNombreEstado(usuarios[i].ESTADO);
+        };
+
+        $scope.cargarUsuarios = function () {
+            $scope.promise = $http.post('../../WebServices/Users.asmx/getAllUser', {
+            }).success(function (data, status, headers, config) {
+                console.log("Usuarios cargados: ", data);
+                if (data.success) {
+                    $scope.cargarEstadoUsuario(data.response);
+                    $scope.gridOptions.data = data.response;
+                }
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error cargar usuarios...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los usuarios'}]);
+            });
+        };
+
+        $scope.cargarRoles = function () {
+            $scope.promise = $http.post('../../WebServices/Rols.asmx/getAllRols', {
+            }).success(function (data, status, headers, config) {
+                console.log("Roles cargados: ", data);
+                if (data.success)
+                    $scope.Rols = data.response;
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error cargar roles...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los roles'}]);
+            });
+        };
+
+        $scope.gridOptions = {
+            enableSorting: true,
+            enableFiltering: true,
+            columnDefs: [
+              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
+              {name:'Nombre', field: 'NOMBRECOMPLETO'},
+              {name:'Usuario', field: 'NOMBREUSUARIO', width: 200},
+              {name:'C\u00E9dula', field: 'CEDULA', width: 100},
+              {name:'Correo', field: 'CORREO'},
+              {name:'Estado', field: 'NOMBREESTADO', width: 80},
+              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsUsers.html', enableFiltering: false}
+            ]
+        };
+
+        $scope.cargarUsuarios();
+        $scope.cargarRoles();
 
         $scope.userCopy = {
             CEDULA: ''
@@ -34,6 +94,25 @@
             return n;
         };
 
+        this.editUser = function (code) {
+            $scope.userCopy = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
+
+            $scope.userSavedCedula = $scope.userCopy.CEDULA;
+            $scope.userSavedName = $scope.userCopy.NOMBREUSUARIO;
+
+            ngDialog.open({
+                template: 'editUser.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
         $scope.arrayObjectIndexOf = function (arrayList, searchTerm, property) {
             for(var i = 0, len = arrayList.length; i < len; i++) {
                 if (arrayList[i][property] === searchTerm) return i;
@@ -41,40 +120,25 @@
             return -1;
         }
 
-        $scope.cargarUsuarios = function () {
-            $scope.promise = $http.post('../../WebServices/Users.asmx/getAllUser', {
-            }).success(function (data, status, headers, config) {
-                $scope.gridOptions.data = data;
-            }).error(function (data, status, headers, config) {
-                console.log("error al cargar los usuarios...", data);
+        $scope.addNewUserDialog = function() {
+            $scope.userCopy = {
+                ESTADO: true
+            };
+
+            $scope.userSavedCedula = null;
+
+            ngDialog.open({
+                template: 'newUser.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
             });
         };
-
-        $scope.cargarRoles = function () {
-            $scope.promise = $http.post('../../WebServices/Rols.asmx/getAllRols', {
-            }).success(function (data, status, headers, config) {
-                $scope.Rols = data.response;
-            }).error(function (data, status, headers, config) {
-                console.log("error al cargar los roles...", data);
-            });
-        };
-
-        $scope.gridOptions = {
-            enableSorting: true,
-            enableFiltering: true,
-            columnDefs: [
-              {name:'Código', field: 'CODIGO'},
-              {name:'Nombre', field: 'NOMBRECOMPLETO'},
-              {name:'Usuario', field: 'NOMBREUSUARIO'},
-              {name:'Cédula', field: 'CEDULA'},
-              {name:'Correo', field: 'CORREO'},
-              {name:'Estado', field: 'ESTADO', cellTemplate: "<div style='margin-top:2px;'>{{row.entity.ESTADO == true ? 'Activo' : 'Inactivo'}}</div>"},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsUsers.html', width: 80, enableFiltering: false}
-            ]
-        };
-
-        $scope.cargarUsuarios();
-        $scope.cargarRoles();
 
         this.removeUser = function (code) {
             var parentObject = this;
@@ -90,24 +154,7 @@
 
         };
 
-        this.editUser = function (code) {
-
-            $scope.userCopy = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
-
-            $scope.userSavedCedula = $scope.userCopy.CEDULA;
-
-            ngDialog.open({
-                template: 'editUser.html',
-                className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                closeByDocument: true,
-                closeByEscape: true,
-                scope: $scope,
-                controller: $controller('ngDialogController', {
-                    $scope: $scope,
-                    $http: $http
-                })
-            });
-        };
+        
 
         this.removeElementArray = function(arrayUser, userCode) {
             for (var i=0; i<arrayUser.length; i++) {
@@ -130,50 +177,32 @@
             return null;
         }
 
-        $scope.addNewUserDialog = function() {
-            $scope.userCopy = {
-                ESTADO: true
-            };
-
-            $scope.userSavedCedula = null;
-
-            ngDialog.open({
-                template: 'newUser.html',
-                className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                closeByDocument: true,
-                closeByEscape: true,
-                scope: $scope,
-                controller: $controller('ngDialogController', {
-                    $scope: $scope,
-                    $http: $http
-                })
-            });
-        };
+        
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
-
         $scope.password = {
             reset: false
         };
 
         $scope.saveEditedUser = function () {
-
             if (!this.userForm.$invalid) {
                 $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
-                
                     user: $scope.userCopy,
                     resetPassword: $scope.password.reset
-
                 }).success(function (data, status, headers, config) {
-                    var index = $scope.arrayObjectIndexOf($scope.gridOptions.data, data.CODIGO, "CODIGO");
-                    $scope.gridOptions.data[index] = data;
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Datos del usuario guardados correctamente.'}]);
-                }).error(function (data, status, headers, config) {
-                    console.log("error al editar el usuario...", data);
-                });
+                    console.log("Editar usuario: ", data);
+                    if (data.success) {
+                        var index = $scope.arrayObjectIndexOf($scope.gridOptions.data, data.response.CODIGO, "CODIGO");
+                        $scope.gridOptions.data[index] = data.response;
+                        parentObject.closeThisDialog();
+                    } 
 
-                this.closeThisDialog();
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error editar usuario...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario'}]);
+                });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
             }
@@ -265,4 +294,43 @@
         };
     }]);
 
+    app.directive('validUserName', ['$http', function($http) {
+        return {
+            require: 'ngModel',
+
+            link: function(scope, element, attr, ctrl) {
+                function customValidator(ngModelValue) {
+                    if (ngModelValue != null && ngModelValue != scope.userSavedName) {
+
+                        ctrl.$setValidity('userNameChecking', false);
+
+                        scope.promise = $http.post('../../WebServices/Users.asmx/countUserWithUserName', {
+                            userName: ngModelValue
+                        }).success(function (data, status, headers, config) {
+                            if (data.cantidad == 0) {
+                                 ctrl.$setValidity('userNameExist', true);
+                                ctrl.$setValidity('userNameValidator', true);
+                                ctrl.$setValidity('userNameChecking', true);
+                               
+                            } else {                            
+                                ctrl.$setValidity('userNameExist', false);
+                                ctrl.$setValidity('userNameValidator', true);
+                            }
+                        }).error(function (data, status, headers, config) {
+                            console.log("error al traer usuario", data);
+                            ctrl.$setValidity('userNameValidator', false);
+                        });
+                    } else {
+                        ctrl.$setValidity('userNameExist', true);
+                        ctrl.$setValidity('userNameValidator', true);
+                        ctrl.$setValidity('userNameChecking', true);
+                        
+                    }
+                    return ngModelValue;
+                }
+
+                ctrl.$parsers.push(customValidator);
+            }
+        };
+    }]);
 })();

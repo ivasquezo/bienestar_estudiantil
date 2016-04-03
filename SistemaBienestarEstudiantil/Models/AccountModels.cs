@@ -21,7 +21,7 @@ namespace SistemaBienestarEstudiantil.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Contraseña")]
+        [DisplayName("Contrase\u00F1a")]
         public string Password { get; set; }
     }
 
@@ -29,22 +29,29 @@ namespace SistemaBienestarEstudiantil.Models
     {
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Contraseña actual")]
+        [DisplayName("Contrase\u00F1a actual")]
         public string OldPassword { get; set; }
 
         [Required]
         [ValidatePasswordLength]
         [DataType(DataType.Password)]
-        [DisplayName("Nueva contraseña")]
+        [DisplayName("Nueva contrase\u00F1a")]
         public string NewPassword { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [DisplayName("Confirmar la nueva contraseña")]
+        [DisplayName("Confirmar la nueva contrase\u00F1a")]
         public string ConfirmPassword { get; set; }
     }
 
-    [PropertiesMustMatch("Password", "ConfirmPassword", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
+    [PropertiesMustMatch("Password", "ConfirmPassword", ErrorMessage = "La contrase\u00F1a y la contrase\u00F1a de confirmaci\u00F3n no coinciden.")]
+
+
+
+
+
+
+
     public class RegisterModel
     {
         [Required]
@@ -81,19 +88,20 @@ namespace SistemaBienestarEstudiantil.Models
 
         BE_USUARIO ValidateUser(string userName, string password);
 
-        void ChangePassword(decimal codigoUsuario, string newPassword);
+        void ChangePassword(int userId, string newPassword);
+
+        List<BE_ROL_ACCESO> GetAccessRol(int rolId);
 
         MembershipCreateStatus CreateUser(string userName, string password, string email);
-        
+
     }
 
     public class AccountMembershipService : IMembershipService
     {
         private readonly MembershipProvider _provider;
-        private Models.bienestarEntities db;
+        private bienestarEntities db;
 
-        public AccountMembershipService()
-            : this(null)
+        public AccountMembershipService() : this(null)
         {
         }
 
@@ -112,8 +120,8 @@ namespace SistemaBienestarEstudiantil.Models
 
         public BE_USUARIO ValidateUser(string userName, string password)
         {
-            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
-            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
+            if (String.IsNullOrEmpty(userName)) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "userName"); }
+            if (String.IsNullOrEmpty(password)) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "password"); }
 
             db = new Models.bienestarEntities();
             BE_USUARIO usuario = null;
@@ -130,16 +138,16 @@ namespace SistemaBienestarEstudiantil.Models
             return usuario;
         }
 
-        public void ChangePassword(decimal codigoUsuario, string newPassword)
+        public void ChangePassword(int userId, string newPassword)
         {
-            if (codigoUsuario == null) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "codigoUsuario");
-            if (String.IsNullOrEmpty(newPassword)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "newPassword");
+            if (String.IsNullOrEmpty(userId.ToString())) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "userId"); }
+            if (String.IsNullOrEmpty(newPassword)) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "newPassword"); }
 
             try
             {
                 db = new bienestarEntities();
 
-                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == codigoUsuario);
+                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == userId);
                 usuario.CONTRASENAACTUAL = newPassword;
                 db.SaveChanges();
             }
@@ -149,11 +157,34 @@ namespace SistemaBienestarEstudiantil.Models
             }
         }
 
+        public List<BE_ROL_ACCESO> GetAccessRol(int rolId)
+        {
+            if (String.IsNullOrEmpty(rolId.ToString())) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "rolId"); }
+
+            List<BE_ROL_ACCESO> accessRol = null;
+
+            try
+            {
+                db = new bienestarEntities();
+
+                accessRol = db.BE_ROL_ACCESO.Where(u => u.CODIGOROL == rolId && u.VALIDO == true).ToList();
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.Write(e);
+            }
+
+            return accessRol;
+        }
+
+
+
+
         public MembershipCreateStatus CreateUser(string userName, string password, string email)
         {
-            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "userName");
-            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "password");
-            if (String.IsNullOrEmpty(email)) throw new ArgumentException("El valor no puede ser NULL ni estar vacío.", "email");
+            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "userName");
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "password");
+            if (String.IsNullOrEmpty(email)) throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "email");
 
             MembershipCreateStatus status;
             _provider.CreateUser(userName, password, email, null, null, true, null, out status);

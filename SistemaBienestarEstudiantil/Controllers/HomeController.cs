@@ -19,6 +19,7 @@ namespace SistemaBienestarEstudiantil.Controllers
         protected override void Initialize(RequestContext requestContext)
         {
             if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
+
             if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
 
             base.Initialize(requestContext);
@@ -39,33 +40,37 @@ namespace SistemaBienestarEstudiantil.Controllers
                 if (usuario != null)
                 {
                     Session["userName"] = usuario.NOMBREUSUARIO;
-                    Session["usuarioValidado"] = false;
+                    Session["userValidated"] = false;
                     Session["firstPasswordAccess"] = false;
+                    Session["userRol"] = usuario.CODIGOROL;
 
                     FormsService.SignIn(model.UserName);
-                    if (!String.IsNullOrEmpty(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
+
+                    if (!String.IsNullOrEmpty(returnUrl)) { return Redirect(returnUrl); }
+
                     else
                     {
                         if (Utils.ValidateFirstPassword(usuario.CONTRASENAACTUAL, usuario.CONTRASENAANTERIOR))
                         {
-                            Session["usuarioValidado"] = false;
+                            Session["userValidated"] = false;
                             Session["firstPasswordAccess"] = true;
+
                             return RedirectToAction("ChangePassword", "Home");
                         }
                         else
                         {
-                            Session["usuarioValidado"] = true;
+                            Session["userValidated"] = true;
                             Session["firstPasswordAccess"] = false;
-                            return RedirectToAction("Tareas", "Home");
+
+                            SetAccessRol();
+
+                            return RedirectToAction(pageRedirect(), "Home");
                         }
-                        
+
                     }
                 }
                 else
-                    ModelState.AddModelError("", "El nombre de usuario o la contraseña especificados son incorrectos.");
+                    ModelState.AddModelError("", "El nombre de usuario o la contrase\u00F1a especificados son incorrectos.");
             }
 
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
@@ -88,12 +93,18 @@ namespace SistemaBienestarEstudiantil.Controllers
                 if (Utils.ValidateConfirmPassword(usuario.CONTRASENAACTUAL, model.OldPassword, model.NewPassword, model.ConfirmPassword))
                 {
                     MembershipService.ChangePassword(usuario.CODIGO, model.NewPassword);
-                    Session["usuarioValidado"] = true;
+                    Session["userValidated"] = true;
                     Session["firstPasswordAccess"] = false;
-                    return RedirectToAction("Tareas", "Home");
+
+                    SetAccessRol();
+
+                    return RedirectToAction(pageRedirect(), "Home");
                 }
                 else
-                    ModelState.AddModelError("", "La contraseña actual es incorrecta o la nueva contraseña no es válida..");
+                {
+                    ModelState.AddModelError("", "La contrase\u00F1a actual es incorrecta o la nueva contrase\u00F1a no es v\u00E1lida..");
+                    Session["userName"] = null;
+                }
             }
 
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
@@ -101,63 +112,83 @@ namespace SistemaBienestarEstudiantil.Controllers
             return View(model);
         }
 
+        private void SetAccessRol()
+        {
+            List<BE_ROL_ACCESO> accessRol = MembershipService.GetAccessRol(Int32.Parse(Session["userRol"].ToString()));
+
+            Session["editarUsuario"] = false;
+            Session["editarRol"] = false;
+            Session["editarTarea"] = false;
+            Session["editarEncuesta"] = false;
+            Session["editarBeca"] = false;
+
+            foreach (BE_ROL_ACCESO access in accessRol)
+            {
+                if (access.CODIGOACCESO == 1) { Session["editarUsuario"] = true; }
+
+                if (access.CODIGOACCESO == 2) { Session["editarRol"] = true; }
+
+                if (access.CODIGOACCESO == 3) { Session["editarTarea"] = true; }
+
+                if (access.CODIGOACCESO == 4) { Session["editarEncuesta"] = true; }
+
+                if (access.CODIGOACCESO == 5) { Session["editarBeca"] = true; }
+            }
+        }
+
+        private String pageRedirect()
+        {
+            if (Convert.ToBoolean(Session["editarTarea"])) { return "Tareas"; }
+
+            else if (Convert.ToBoolean(Session["editarBeca"])) { return "Becas"; }
+
+            else if (Convert.ToBoolean(Session["editarEncuesta"])) { return "Encuestas"; }
+
+            else if (Convert.ToBoolean(Session["editarUsuario"])) { return "Usuarios"; }
+
+            else if (Convert.ToBoolean(Session["editarRol"])) { return "Roles"; }
+
+            return null;
+        }
+
         public ActionResult Usuarios()
         {
-            if (!Class.Utils.validateAccess())
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            if (!Utils.ValidateAccessUsuario()) { return RedirectToAction("Index", "Home"); }
+
             return View();
         }
 
         public ActionResult Roles()
         {
-            if (!Class.Utils.validateAccess())
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return View();
-        }
+            if (!Utils.ValidateAccessRol()) { return RedirectToAction("Index", "Home"); }
 
-        public ActionResult Datos()
-        {
-            if (!Class.Utils.validateAccess())
-            {
-                return RedirectToAction("Index", "Home");
-            }
             return View();
         }
 
         public ActionResult Tareas()
         {
-            if (!Utils.validateAccess())
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            if (!Utils.ValidateAccessTarea()) { return RedirectToAction("Index", "Home"); }
+
             return View();
         }
 
         public ActionResult Encuestas()
         {
-            if (!Utils.validateAccess())
-            {
-                return RedirectToAction("Index", "Home"); 
-            }
-            return View();
-            
-        }
+            if (!Utils.ValidateAccessEncuesta()) { return RedirectToAction("Index", "Home"); }
 
-        public ActionResult Encuesta()
-        {
             return View();
+
         }
 
         public ActionResult Becas()
         {
-            if (!Utils.validateAccess())
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            if (!Utils.ValidateAccessBeca()) { return RedirectToAction("Index", "Home"); }
+
+            return View();
+        }
+
+        public ActionResult Encuesta()
+        {
             return View();
         }
 
@@ -178,8 +209,5 @@ namespace SistemaBienestarEstudiantil.Controllers
             Session.Abandon();
             return RedirectToAction("Index", "Home");
         }
-
-        
-
     }
 }
