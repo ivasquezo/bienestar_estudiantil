@@ -34,17 +34,16 @@
 
         $scope.cargarTipos();
 
-        $scope.cargarCodigosAdjunto = function () {
-            $scope.promise = $http.get('../../WebServices/Becas.asmx/getListAttach')
-            .success(function (data, status, headers, config) {
-                $scope.CODIGOSADJUNTOS = data;
+        $scope.cargarBecaSolicitud = function (code) {
+            $scope.promise = $http.post('../../WebServices/Becas.asmx/getBecaSolicitud', {
+                CODIGO: code
+            }).success(function (data, status, headers, config) {
+                $scope.BECA_SOLICITUD = data;
                 console.log("adjuntos cargados correctamente: ", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los tipos...", data);
             });
         };
-
-        $scope.cargarCodigosAdjunto();
 
         $scope.uploadFileDataBase = function () {
             
@@ -82,6 +81,9 @@
                         
                         console.log("files uploaded successfull", data);
                         $scope.BECA_SOLICITUD = data.beca_solicitud;
+                        document.getElementById("documentoSolicitud").value = "";
+                        document.getElementById("otrosDocumentosSolicitud").value = "";
+                        $scope.descripcion = null;
 
                     }).error(function (data, status, headers, config) {
                         console.log("error al cargar los files...", data);
@@ -95,21 +97,38 @@
             }
         }
 
-        $scope.removeAttach = function (attachCode) {
+        $scope.removeAttach = function (attachCode, becaCodigo) {
 
             $scope.promise = $http.post('../../WebServices/Becas.asmx/removeAttach', {
                 attachCode: attachCode
             }).success(function (data, status, headers, config) {
-                console.log(data);
-                $scope.cargarCodigosAdjunto();
+                console.log("removeAttach:", data);
+                $scope.cargarBecaSolicitud(becaCodigo);
             }).error(function (data, status, headers, config) {
-                console.log("error al eliminarAdjunto...", data);
+                console.log("error al removeAttach...", data);
             });
         }
 
         $scope.printConsole = function () {
             console.log($scope);
-        }
+        };
+
+        $scope.isPDF = function (contentType) {
+            return contentType.toUpperCase() == "APPLICATION/PDF";
+        };
+
+        $scope.hasDocumentoSolicitud = function (beca) {
+            var objects = [1];
+            if (beca != null && beca.BE_BECA_ADJUNTO != null && beca.BE_BECA_ADJUNTO.length > 0) {
+                for (var i = 0; i < beca.BE_BECA_ADJUNTO.length; i++) {
+                    if (beca.BE_BECA_ADJUNTO[i].DOCUMENTOSOLICITUD) {
+                        objects.splice(0, 1);
+                        return objects;
+                    }
+                };
+                return objects;
+            } else return objects;
+        };
 
         $scope.getCodeTypesDocuments = function (typesDocuments) {
             var codesTypesDocuments = "";
@@ -177,6 +196,9 @@
                         });
                     } else {
                         ctrl.$setValidity('cedulaValidator', false);
+                        scope.ALUMNO = null;
+                        scope.BECA_SOLICITUD = null;
+                        scope.seleccion.TIPO = null;
                     }
 
                     // we need to return our ngModelValue, to be displayed to the user(value of the input)

@@ -72,8 +72,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                             becaAdjunto[i].CONTENTTYPE = hfc[i].ContentType;
                             becaAdjunto[i].ADJUNTO = fileBytes;
                             becaAdjunto[i].NOMBRE = hfc[i].FileName;
-                            becaAdjunto[i].DESCRIPCION = hfc.AllKeys[i] == "documentosSolicitud" ? "Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario" : descripcion;
-                            becaAdjunto[i].DOCUMENTOSOLICITUD = hfc.AllKeys[i] == "documentosSolicitud";
+                            becaAdjunto[i].DESCRIPCION = hfc.AllKeys[i] == "documentoSolicitud" ? "Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario" : descripcion;
+                            becaAdjunto[i].DOCUMENTOSOLICITUD = hfc.AllKeys[i] == "documentoSolicitud";
                         }
                     }
                 }
@@ -102,11 +102,11 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         [WebMethod]
         [ScriptMethod(UseHttpGet = true)]
-        public void getImage(int codigoAdjunto)
+        public void getAttach(int code)
         {
-           Models.bienestarEntities db = new Models.bienestarEntities();
+            Models.bienestarEntities db = new Models.bienestarEntities();
 
-           Models.BE_BECA_ADJUNTO ba = db.BE_BECA_ADJUNTO.Where(a => a.CODIGO == codigoAdjunto).First();
+            Models.BE_BECA_ADJUNTO ba = db.BE_BECA_ADJUNTO.Where(a => a.CODIGO == code).First();
 
             byte[] response = null;
 
@@ -152,7 +152,19 @@ namespace SistemaBienestarEstudiantil.WebServices
             var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC);
             if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
 
-            writeResponseObject(new { alumno, beca_solicitud });            
+            writeResponseObject(new { alumno, beca_solicitud });
+        }
+
+        [WebMethod]
+        public void getBecaSolicitud(int CODIGO)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            
+            Models.BE_BECA_SOLICITUD beca_solicitud = null;
+            var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGO == CODIGO);
+            if (becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
+
+            writeResponseObject(beca_solicitud);
         }
 
         /**

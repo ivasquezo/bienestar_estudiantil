@@ -23,7 +23,7 @@
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
 	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
 	            <span ng-message="cedulaExist" class="help-block ng-message" style="font-size: 18px;">Estudiante existe</span>
-	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
+	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Buscando en la base de datos...</span>
 	        </span>
 	        <span style="display:inline-block;font-size:18px;">
 	        	{{ALUMNO.DATOSPERSONALE.DTPNOMBREC}}{{ALUMNO.DATOSPERSONALE.DTPAPELLIC}}{{ALUMNO.DATOSPERSONALE.DTPAPELLIC2}}
@@ -47,7 +47,7 @@
 				</div>
 			</div>
     	</form>
-    	<form ng-if="BECA_SOLICITUD == null || true" id="formFiles" name="formFiles" enctype="multipart/form-data">
+    	<form id="formFiles" name="formFiles" enctype="multipart/form-data">
     		<div>
 
 	    		<div class="document-message-title" ng-if="seleccion.TIPO != null">
@@ -58,17 +58,15 @@
 		    	</div>
 
 				<table style="margin-top:10px;">
-					<tr>
+					<tr ng-repeat="object in hasDocumentoSolicitud(BECA_SOLICITUD)">
 						<td>
 							<div class="document-message">- Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario</div>
 							<div>
-							<ng-form name="innerForm">
-								<input valid-file-input ng-model="documentosSolicitud[tipoDocumento.CODIGO]" type="file" name="documentosSolicitud" id="documentosSolicitud" accept="image/*, application/pdf"/>
-								<span ng-show="innerForm.documentosSolicitud.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
-					            <span ng-show="innerForm.documentosSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
-					            <span ng-show="innerForm.documentosSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
-					            <span ng-show="innerForm.documentosSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
-							</ng-form>
+								<input valid-file-input ng-model="documentoSolicitud" type="file" name="documentoSolicitud" id="documentoSolicitud" accept="image/*, application/pdf"/>
+								<span ng-show="formFiles.documentoSolicitud.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
+					            <span ng-show="formFiles.documentoSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
 							</div>
 						</td>
 					</tr>
@@ -85,13 +83,11 @@
 					<tr ng-if="seleccion.TIPO != null">
 						<td>
 							<div>
-							<input name="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="false" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
-							<ng-form name="innerForm">
-								<input ng-model="otrosDocumentosSolicitud[tipoDocumento.CODIGO]" type="file" name="otrosDocumentosSolicitud" id="otrosDocumentosSolicitud" accept="image/*, application/pdf"/>
-					            <span ng-show="innerForm.otrosDocumentosSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
-					            <span ng-show="innerForm.otrosDocumentosSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
-					            <span ng-show="innerForm.otrosDocumentosSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
-							</ng-form>
+								<input name="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="otrosDocumentosSolicitud != null && otrosDocumentosSolicitud != undefined && otrosDocumentosSolicitud != ''" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
+								<input ng-model="otrosDocumentosSolicitud" type="file" name="otrosDocumentosSolicitud" id="otrosDocumentosSolicitud" accept="image/*, application/pdf"/>
+					            <span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+					            <span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
+					            <span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
 							</div>
 						</td>
 					</tr>
@@ -106,14 +102,16 @@
 			<div class="document-message-title">
 				Documentos ingresados:
 			</div>
+			<hr/>
 			<div ng-repeat="adjunto in BECA_SOLICITUD.BE_BECA_ADJUNTO" style="width:100%;display:inline-block; padding: 5px;vertical-align:top;">
 				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;display:inline-block;vertical-align:top;"
-					ng-click="removeAttach(adjunto.CODIGO)">
+					ng-click="removeAttach(adjunto.CODIGO, adjunto.CODIGOSOLICITUD)">
 					<span class="ui-icon ui-icon-trash"></span>
 				</button>
 				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.DESCRIPCION}}</div>
 				<div style="width:120px;height:120px;display:inline-block;" >
-					<img style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getImage?codigoAdjunto={{adjunto.CODIGO}}">
+					<img ng-if="!isPDF(adjunto.CONTENTTYPE)" style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}">
+					<a ng-if="isPDF(adjunto.CONTENTTYPE)" href="../../WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}" target="_blank">{{adjunto.NOMBRE}}</a>
 				</div>
 			</div>
 		</div>
