@@ -54,6 +54,12 @@
                 $scope.BECA_SOLICITUD['CEDULA'] = $scope.ALUMNO.DTPCEDULAC;
                 $scope.BECA_SOLICITUD['CODIGOTIPO'] = $scope.seleccion.TIPO.CODIGO;
                 $scope.BECA_SOLICITUD['APROBADA'] = 0;
+                $scope.BECA_SOLICITUD['BE_BECA_ADJUNTO'] = null;
+                $scope.BECA_SOLICITUD['BE_BECA_TIPO'] = null;
+                $scope.BECA_SOLICITUD['BE_BECA_SOLICITUD_HISTORIAL'] = null;
+                $scope.BECA_SOLICITUD['DATOSPERSONALE'] = null;
+
+                console.log($scope.BECA_SOLICITUD);
 
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBecaSolicitud', {
                     beca_solicitud: $scope.BECA_SOLICITUD
@@ -65,7 +71,7 @@
                     var formElement = document.getElementById('formFiles');
                     var formData = new FormData(formElement);
 
-                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase',
+                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase?codigoSolicitud=' + $scope.BECA_SOLICITUD.CODIGO,
                         formData,
                         {
                             withCredentials: true,
@@ -73,14 +79,16 @@
                         },
                         transformRequest: angular.identity
                     }).success(function (data, status, headers, config) {
-                        console.log(data);
-                        $scope.cargarCodigosAdjunto();
+                        
+                        console.log("files uploaded successfull", data);
+                        $scope.BECA_SOLICITUD = data.beca_solicitud;
+
                     }).error(function (data, status, headers, config) {
                         console.log("error al cargar los files...", data);
                     });
 
                 }).error(function (data, status, headers, config) {
-                    console.log("error al cargar los tipos...", data);
+                    console.log("error al saveBecaSolicitud", data);
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Complete los campos erróneos'}]);
@@ -151,7 +159,7 @@
 
                                 scope.BECA_SOLICITUD = data.beca_solicitud;    
                                 scope.ALUMNO = data.alumno;
-                                scope.seleccion.TIPO = data.beca_solicitud.BE_BECA_TIPO;
+                                if (data.beca_solicitud != null) scope.seleccion.TIPO = data.beca_solicitud.BE_BECA_TIPO;
 
                             } else {                            
                                 ctrl.$setValidity('cedulaExist', false);
@@ -159,6 +167,7 @@
 
                                 scope.ALUMNO = null;
                                 scope.BECA_SOLICITUD = null;
+                                scope.seleccion.TIPO = null;
 
                             }
 

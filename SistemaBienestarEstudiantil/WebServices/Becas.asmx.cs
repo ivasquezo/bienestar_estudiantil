@@ -48,14 +48,11 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
 
-            // get codes type document for insert
-            //string[] codesTypesDocuments = System.Web.HttpContext.Current.Request.Params.Get("codesTypesDocuments").Split(',');
-            string[] codesTypesDocuments = null;
+            int codigoSolicitud = Int32.Parse(System.Web.HttpContext.Current.Request.Params.Get("codigoSolicitud"));
 
-            //decimal codigoSolicitud = Decimal.Parse(System.Web.HttpContext.Current.Request.Params.Get("codigoSolicitud"));
-            int codigoSolicitud = 1;
+            string descripcion = System.Web.HttpContext.Current.Request.Params.Get("descripcion");
 
-            if (hfc.Count > 0 && codesTypesDocuments != null && codesTypesDocuments.Length > 0)
+            if (hfc.Count > 0 && codigoSolicitud != 0)
             {
                 Models.BE_BECA_ADJUNTO[] becaAdjunto = new Models.BE_BECA_ADJUNTO[hfc.Count];
                 // CHECK THE FILE COUNT.
@@ -75,6 +72,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                             becaAdjunto[i].CONTENTTYPE = hfc[i].ContentType;
                             becaAdjunto[i].ADJUNTO = fileBytes;
                             becaAdjunto[i].NOMBRE = hfc[i].FileName;
+                            becaAdjunto[i].DESCRIPCION = hfc.AllKeys[i] == "documentosSolicitud" ? "Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario" : descripcion;
+                            becaAdjunto[i].DOCUMENTOSOLICITUD = hfc.AllKeys[i] == "documentosSolicitud";
                         }
                     }
                 }
@@ -82,7 +81,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 int inserted = 0;
                 for (int i = 0; i < becaAdjunto.Length; i++)
                 {
-                    if (becaAdjunto[i].ADJUNTO.Length > 0)
+                    if (becaAdjunto[i] != null && becaAdjunto[i].ADJUNTO != null && becaAdjunto[i].ADJUNTO.Length > 0)
                     {
                         db.BE_BECA_ADJUNTO.AddObject(becaAdjunto[i]);
                         inserted++;
@@ -93,7 +92,10 @@ namespace SistemaBienestarEstudiantil.WebServices
                     db.SaveChanges();
             }
 
+            var beca_solicitud = db.BE_BECA_SOLICITUD.Single(bs => bs.CODIGO == codigoSolicitud);
+
             writeResponseObject(new {
+                beca_solicitud, 
                 System.Web.HttpContext.Current.Request.Params
             });
         }

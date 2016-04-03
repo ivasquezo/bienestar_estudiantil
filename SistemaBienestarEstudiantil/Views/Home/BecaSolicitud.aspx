@@ -39,10 +39,10 @@
 				</span>
 			</div>
 			<div ng-if="BECA_SOLICITUD != null">
-				<div class="document-message-title" style="display:inline-block;color: black;">
+				<div class="document-message-title" style="display:inline-block;color: black;vertical-align: middle;">
 					Beca:
 				</div>
-				<div class="document-message-title" style="display:inline-block;">
+				<div class="document-message-title" style="display:inline-block;font-size:24px;vertical-align: middle;">
 					{{BECA_SOLICITUD.BE_BECA_TIPO.NOMBRE}}
 				</div>
 			</div>
@@ -56,8 +56,6 @@
 		    			Es obligatorio entregar TAMBIÉN el documento físico en recepción o en el departamento de bienestar estudiantil
 		    		</div>
 		    	</div>
-
-				<input type="hidden" value="{{getCodeTypesDocuments(seleccion.TIPO.BE_BECA_TIPO_DOCUMENTO)}}" name="codesTypesDocuments" />
 
 				<table style="margin-top:10px;">
 					<tr>
@@ -87,7 +85,7 @@
 					<tr ng-if="seleccion.TIPO != null">
 						<td>
 							<div>
-							<input ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="false" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
+							<input name="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="false" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
 							<ng-form name="innerForm">
 								<input ng-model="otrosDocumentosSolicitud[tipoDocumento.CODIGO]" type="file" name="otrosDocumentosSolicitud" id="otrosDocumentosSolicitud" accept="image/*, application/pdf"/>
 					            <span ng-show="innerForm.otrosDocumentosSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
@@ -108,19 +106,19 @@
 			<div class="document-message-title">
 				Documentos ingresados:
 			</div>
-			<div ng-repeat="adjunto in CODIGOSADJUNTOS" style="width:100%;display:inline-block; padding: 5px;vertical-align:top;">
+			<div ng-repeat="adjunto in BECA_SOLICITUD.BE_BECA_ADJUNTO" style="width:100%;display:inline-block; padding: 5px;vertical-align:top;">
 				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;display:inline-block;vertical-align:top;"
 					ng-click="removeAttach(adjunto.CODIGO)">
 					<span class="ui-icon ui-icon-trash"></span>
 				</button>
-				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.BE_BECA_TIPO_DOCUMENTO.NOMBRE}}</div>
+				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.DESCRIPCION}}</div>
 				<div style="width:120px;height:120px;display:inline-block;" >
 					<img style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getImage?codigoAdjunto={{adjunto.CODIGO}}">
 				</div>
 			</div>
 		</div>
 
-		<br/><button ng-click="printConsole()">print</button>
+		<br/><button ng-click="printConsole()">print scope</button>
     </div>
 
 </asp:Content>
