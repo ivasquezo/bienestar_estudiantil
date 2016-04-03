@@ -94,6 +94,15 @@
             return n;
         };
 
+        $scope.getElementArray = function(arrayUser, userCode) {
+            for (var i=0; i<arrayUser.length; i++) {
+                if (arrayUser[i].CODIGO == userCode) {
+                    return arrayUser[i];
+                }
+            }
+            return null;
+        }
+
         this.editUser = function (code) {
             $scope.userCopy = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
 
@@ -140,21 +149,31 @@
             });
         };
 
+         $scope.addElementArray = function(arrayUser, newUser) {
+            arrayUser.push(newUser);
+
+            for (var i = 0; i < arrayUser.length; i++)
+                arrayUser[i].NOMBREESTADO = $scope.cargarNombreEstado(newUser.ESTADO)
+        };
+
         this.removeUser = function (code) {
             var parentObject = this;
             
             $scope.promise = $http.post('../../WebServices/Users.asmx/removeUserById', {
                 id: code
             }).success(function (data, status, headers, config) {
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Borrar', detail: 'Usuario eliminado...'}]);
-                parentObject.removeElementArray($scope.gridOptions.data, code);
+                console.log("Eliminar usuario... ", data);
+
+                if (data.success)
+                    parentObject.removeElementArray($scope.gridOptions.data, code);
+
+                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
-                console.log("error al eliminar usuarios...");
+                console.log("Error al eliminar usuario... ", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar usuario'}]);
             });
 
         };
-
-        
 
         this.removeElementArray = function(arrayUser, userCode) {
             for (var i=0; i<arrayUser.length; i++) {
@@ -163,21 +182,6 @@
                 }
             }
         };
-
-        $scope.addElementArray = function(arrayUser, newUser) {
-            arrayUser.push(newUser);
-        };
-
-        $scope.getElementArray = function(arrayUser, userCode) {
-            for (var i=0; i<arrayUser.length; i++) {
-                if (arrayUser[i].CODIGO == userCode) {
-                    return arrayUser[i];
-                }
-            }
-            return null;
-        }
-
-        
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
@@ -186,15 +190,24 @@
         };
 
         $scope.saveEditedUser = function () {
+            var parentObject = this;
+
+            $scope.userCopy_copy = angular.copy($scope.userCopy);
+            $scope.userCopy_copy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
+
+            delete $scope.userCopy_copy['BE_ACTIVIDAD'];
+            delete $scope.userCopy_copy['BE_BECA_SOLICITUD_HISTORIAL'];
+
             if (!this.userForm.$invalid) {
                 $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
-                    user: $scope.userCopy,
+                    user: $scope.userCopy_copy,
                     resetPassword: $scope.password.reset
                 }).success(function (data, status, headers, config) {
                     console.log("Editar usuario: ", data);
                     if (data.success) {
                         var index = $scope.arrayObjectIndexOf($scope.gridOptions.data, data.response.CODIGO, "CODIGO");
                         $scope.gridOptions.data[index] = data.response;
+                        $scope.gridOptions.data[index].NOMBREESTADO = $scope.cargarNombreEstado(data.response.ESTADO);
                         parentObject.closeThisDialog();
                     } 
 
@@ -209,22 +222,25 @@
         };
 
         $scope.addNewUserDB = function () {
+            var parentObject = this;
 
             if (!this.newUserForm.$invalid) {
+                $scope.userCopy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
 
                 $scope.promise = $http.post('../../WebServices/Users.asmx/addNewUser', {
-                    
                     newUser: $scope.userCopy
-
                 }).success(function (data, status, headers, config) {
-                    console.log("addNewUser: ", data);
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nuevo', detail: 'Usuario añadido correctamente.'}]);
-                    $scope.addElementArray($scope.gridOptions.data, data);
-                }).error(function (data, status, headers, config) {
-                    console.log("error al añadir un nuevo usuario...", data);
-                });
+                    console.log("Agregar usuario: ", data);
+                    if (data.success) {
+                        $scope.addElementArray($scope.gridOptions.data, data.response);
+                        parentObject.closeThisDialog();
+                    }
 
-                this.closeThisDialog();
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error agregar usuario...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el usuario'}]);
+                });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
             }

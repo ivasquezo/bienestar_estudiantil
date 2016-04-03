@@ -89,7 +89,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 db.SaveChanges();
 
-                response = new Response(true, "info", "Actualizar", "Usuario actualizado correctamente", null);
+                response = new Response(true, "info", "Actualizar", "Usuario actualizado correctamente", usuario);
             }
             catch (InvalidOperationException)
             {
@@ -99,6 +99,62 @@ namespace SistemaBienestarEstudiantil.WebServices
             catch (Exception)
             {
                 response = new Response(false, "error", "Error", "Error al actualizar el usuario", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void addNewUser(BE_USUARIO newUser)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                newUser.CONTRASENAACTUAL = newUser.CEDULA;
+                newUser.CONTRASENAANTERIOR = newUser.CEDULA;
+                db.BE_USUARIO.AddObject(newUser);
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Agregar", "El usuario agregado correctamente", newUser);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al agregar el usuario", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void removeUserById(int id)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
+
+                db.BE_USUARIO.DeleteObject(usuario);
+
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Eliminar", "Usuario eliminado correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                // Error al eliminar el rol
+                response = new Response(false, "error", "Error", "Error al obtener datos para eliminar", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                // Error al eliminar el rol
+                response = new Response(false, "error", "Error", "Error al eliminar el usuario", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
 
@@ -127,21 +183,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void removeUserById(int id)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
-
-            db.BE_USUARIO.DeleteObject(usuario);
-            db.SaveChanges();
-
-            Context.Response.Write("ok");
-            Context.Response.Flush();
-            Context.Response.End();
-        }
-
-        [WebMethod]
         public void inactiveUserById(int id)
         {
             bienestarEntities db = new bienestarEntities();
@@ -154,22 +195,5 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(usuario));
         }
-
-        
-
-        [WebMethod]
-        public void addNewUser(BE_USUARIO newUser)
-        {
-            bienestarEntities db = new bienestarEntities();
-            newUser.CONTRASENAACTUAL = newUser.CEDULA;
-            newUser.CONTRASENAANTERIOR = newUser.CEDULA;
-            db.BE_USUARIO.AddObject(newUser);
-            db.SaveChanges();
-            writeResponse(new JavaScriptSerializer().Serialize(newUser));
-        }
-
-        
-
-        
     }
 }
