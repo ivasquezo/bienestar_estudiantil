@@ -190,7 +190,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             
             db.SaveChanges();
-            writeResponseObject(beca_solicitud);
+            writeResponseObject(editBS == null ? beca_solicitud : editBS);
         }
 
     }

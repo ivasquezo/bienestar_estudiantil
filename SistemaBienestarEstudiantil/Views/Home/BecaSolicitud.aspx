@@ -13,7 +13,7 @@
 
 	<div id="messages"></div>
 
-    <h2>Solicitud de Beca del estudiante 1722776950, 1712755535, 1719089482, 1500788250</h2>
+    <h2>Solicitud de Beca del estudiante</h2>
     <div ng-controller="BecaSolicitudController as Main">
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
@@ -62,7 +62,7 @@
 						<td>
 							<div class="document-message">- Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario</div>
 							<div>
-								<input valid-file-input ng-model="documentoSolicitud" type="file" name="documentoSolicitud" id="documentoSolicitud" accept="image/*, application/pdf"/>
+								<input required valid-file-input ng-model="documentoSolicitud" type="file" name="documentoSolicitud" id="documentoSolicitud" accept="image/*, application/pdf"/>
 								<span ng-show="formFiles.documentoSolicitud.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
 					            <span ng-show="formFiles.documentoSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
 					            <span ng-show="formFiles.documentoSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
@@ -83,8 +83,9 @@
 					<tr ng-if="seleccion.TIPO != null">
 						<td>
 							<div>
-								<input name="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="otrosDocumentosSolicitud != null && otrosDocumentosSolicitud != undefined && otrosDocumentosSolicitud != ''" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
-								<input ng-model="otrosDocumentosSolicitud" type="file" name="otrosDocumentosSolicitud" id="otrosDocumentosSolicitud" accept="image/*, application/pdf"/>
+								<input name="descripcion" id="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="hasFile('otrosDocumentosSolicitud')" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
+								<input valid-file-input ng-model="otrosDocumentosSolicitud" type="file" name="otrosDocumentosSolicitud" id="otrosDocumentosSolicitud" accept="image/*, application/pdf"/>
+								<span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
 					            <span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
 					            <span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
 					            <span ng-show="formFiles.otrosDocumentosSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
@@ -93,7 +94,7 @@
 					</tr>
 				</table>
 				
-				<input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload"/>
+				<br/><input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload"/>
 
     		</div>
 		</form>
@@ -115,8 +116,6 @@
 				</div>
 			</div>
 		</div>
-
-		<br/><button ng-click="printConsole()">print scope</button>
     </div>
 
 </asp:Content>
