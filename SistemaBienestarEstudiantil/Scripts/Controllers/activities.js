@@ -211,6 +211,12 @@
             $scope.getAllModalities();
             $scope.getAllLevels();
 
+            $scope.selectedFaculties = [];
+            $scope.selectedSchools = [];
+            $scope.selectedCareers = [];
+            $scope.selectedModalities = [];
+            $scope.selectedLevels = [];
+
             ngDialog.open({
                 template: 'getLevel.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -296,6 +302,26 @@
                 console.log("Error al cargar niveles...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles'}]);
             });
+        };
+
+        $scope.setSelectedFaculties = function(id) {            
+            $scope.selectedFaculties.push(id);            
+        };
+
+        $scope.setSelectedSchools = function(id) {            
+            $scope.selectedSchools.push(id);            
+        };
+
+        $scope.setSelectedCareers = function(id) {            
+            $scope.selectedCareers.push(id);            
+        };
+
+        $scope.setSelectedModalities = function(id) {            
+            $scope.selectedModalities.push(id);            
+        };
+
+        $scope.setSelectedLevels = function(id) {            
+            $scope.selectedLevels.push(id);            
         };
 
 
@@ -540,6 +566,25 @@
                 }).error(function (data, status, headers, config) {
                     console.log("Error al agregar el rol...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar la actividad'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+
+        $scope.groupActivityForm = function () {
+            if (!this.groupActivityForm.$invalid) {
+                var newParentObject = this;
+
+                $http.post('../../WebServices/Activities.asmx/saveAssistanceData', {                
+                    assistance: $scope.assistance
+                }).success(function (data, status, headers, config) {
+                    console.log("Agregar actividad: ", data);
+                    if (!data.success)
+                        $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al agregar el rol...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
