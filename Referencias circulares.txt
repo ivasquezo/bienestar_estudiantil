@@ -142,3 +142,24 @@ class USUARIO
 	[ScriptIgnore]
 	public EntityCollection<ACTIVIDAD> ACTIVIDADs
 	public EntityReference<ROL> ROLReference
+
+class FACULTAD_EXTENSION
+
+public ESCUELA ESCUELA
+public EntityReference<ESCUELA> ESCUELAReference
+public EXTENSION EXTENSION
+public EntityReference<EXTENSION> EXTENSIONReference
+public FACULTAD FACULTAD
+public EntityReference<FACULTAD> FACULTADReference
+
+
+class ESCUELA
+
+public EntityCollection<CARRERA> CARRERAs
+public EntityCollection<FACULTAD_EXTENSION> FACULTAD_EXTENSION
+
+
+class CARRERA
+
+public EntityReference<ESCUELA> ESCUELAReference
+public EntityCollection<CARRERA_MODAL> CARRERA_MODAL
