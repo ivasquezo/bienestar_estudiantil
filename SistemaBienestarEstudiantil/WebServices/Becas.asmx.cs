@@ -53,7 +53,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                var becas = db.BE_BECA_SOLICITUD.Select(be => new { be.CODIGO, be.APROBADA, be.CEDULA, BECA = be.BE_BECA_TIPO.NOMBRE, NOMBRE = be.DATOSPERSONALE.DTPNOMBREC + be.DATOSPERSONALE.DTPAPELLIC + be.DATOSPERSONALE.DTPAPELLIC }).ToList();
+                var becas = db.BE_BECA_SOLICITUD.Select(be => new { be.CODIGO, be.APROBADA, be.CEDULA, BECA = be.BE_BECA_TIPO.NOMBRE, NOMBRE = be.DATOSPERSONALE.DTPNOMBREC + be.DATOSPERSONALE.DTPAPELLIC + be.DATOSPERSONALE.DTPAPELLIC2 }).ToList();
 
                 if (becas != null && becas.Count > 0)
                     response = new Response(true, "", "", "", becas);
@@ -224,8 +224,9 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             if (editBS == null)
             {
+                string becaMailNotification = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "becaMailNotification").Select(d => d.VALOR).First();
                 string body = "Se le notifica que ha sido ingresada una nueva solicitud de beca para el estudiante con cédula " + beca_solicitud.CEDULA;
-                Class.Utils.sendMail("micheljqh@yahoo.es", "Nueva solicitud de beca ingresada", body);
+                Class.Utils.sendMail(becaMailNotification, "Nueva solicitud de beca ingresada", body);
             }
 
             writeResponseObject(editBS == null ? beca_solicitud : editBS);

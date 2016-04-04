@@ -151,6 +151,7 @@
 
                 $scope.separateQuestionResponse(data);
                 $scope.encuestaReport = data;
+                console.log("showReport: ", data);
 
             }).error(function (data, status, headers, config) {
                 console.log("error in report ...", data);

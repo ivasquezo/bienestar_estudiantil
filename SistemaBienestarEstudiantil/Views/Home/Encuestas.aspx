@@ -148,8 +148,8 @@ Encuestas
 			<div ng-show="view == 'list'" style="margin-top:10px;">
 				<table>
 					<tr ng-repeat="estudiante in encuestaReport.estudiantes" class="student-list">
-						<td class="id">{{estudiante.CEDULA}}</td>
-						<td class="name">{{estudiante.NOMBRE}}</td>
+						<td class="id">{{estudiante.DATOSPERSONALE.DTPCEDULAC}}</td>
+						<td class="name">{{estudiante.DATOSPERSONALE.DTPNOMBREC}}{{estudiante.DATOSPERSONALE.DTPAPELLIC}}{{estudiante.DATOSPERSONALE.DTPAPELLIC2}}</td>
 					</tr>
 				</table>
 				<div ng-show="encuestaReport.estudiantes.length == 0">
