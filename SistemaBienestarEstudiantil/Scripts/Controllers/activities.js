@@ -23,6 +23,23 @@
             };
         };
 
+        $scope.cargarEstadoActividades = function(actividades){
+            for (var i = 0; i < actividades.length; i++)
+                actividades[i].NOMBREESTADO = $scope.cargarNombreEstado(actividades[i].ESTADO);
+        };
+
+        $scope.cargarNombreEstado = function(statusId) {
+            if (statusId == 0) {
+                return "Inactivo";
+            } else if (statusId == 1) {
+                return "En proceso";
+            } else if (statusId == 2) {
+                return "Procesado";
+            } else if (statusId == 3) {
+                return "Finalizado";
+            }
+        };
+
         $scope.chargeGeneralActivities = function () {
             $http.post('../../WebServices/Activities.asmx/getAllGeneralActivities', {
             }).success(function (data, status, headers, config) {
@@ -39,21 +56,35 @@
             });
         };
 
-        $scope.cargarNombreEstado = function(statusId) {
-            if (statusId == 0) {
-                return "Inactivo";
-            } else if (statusId == 1) {
-                return "En proceso";
-            } else if (statusId == 2) {
-                return "Procesado";
-            } else if (statusId == 3) {
-                return "Finalizado";
-            }
+        $scope.getGeneralActivities = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivity'
+            ).success(function (data, status, headers, config) {
+                console.log("Actividades generales existentes... ", data);
+                $scope.allGeneralActivities = [];
+
+                for (var i = 0; i < data.response.length; i++)
+                    $scope.allGeneralActivities.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRE});
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar las actividades generales...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes'}]);
+            });
         };
 
-        $scope.cargarEstadoActividades = function(actividades){
-            for (var i = 0; i < actividades.length; i++)
-                actividades[i].NOMBREESTADO = $scope.cargarNombreEstado(actividades[i].ESTADO);
+        $scope.getAllResponsables = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllResponsables'
+            ).success(function (data, status, headers, config) {
+                console.log("Docentes... ", data);
+                if (data.success) {
+                    $scope.allResponsables = [];
+
+                    for (var i = 0; i < data.response.length; i++)
+                        $scope.allResponsables.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRECOMPLETO});
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar los docentes...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes'}]);
+            });
         };
 
         $scope.gridOptions = {
@@ -63,13 +94,25 @@
               {name:'C\u00F3digo', field: 'CODIGO', width: 80},
               {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
               {name:'Actividad', field: 'NOMBRE'},
-              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\''},
-              {name:'Estado', field: 'NOMBREESTADO'},
-              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 160, enableFiltering: false}
+              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false},
+              {name:'Estado', field: 'NOMBREESTADO', width: 90},
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false}
             ]
         };
 
         $scope.chargeGeneralActivities();
+        $scope.getGeneralActivities();
+        $scope.getAllResponsables();
+
+         $scope.toDate = function(dateTime) {
+            var mEpoch = parseInt(dateTime); 
+            var dDate = new Date();
+
+            if(mEpoch<10000000000) mEpoch *= 1000;
+        
+            dDate.setTime(mEpoch)
+            return dDate;
+        }
 
         this.editActivity = function (code) {
             $scope.activityEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
@@ -84,15 +127,6 @@
             $scope.activityCopy.CODIGOUSUARIO = $scope.activityEdit.CODIGOUSUARIO;
             $scope.activityCopy.NOMBREESTADO = $scope.cargarNombreEstado($scope.activityEdit.ESTADO);
             
-            // Llena el combo de las actividades            
-            $scope.getGeneralActivities();
-            // Llena los niveles
-            $scope.getGroupLevel($scope.activityEdit.CODIGO);
-            $scope.groupActivity = [];
-            $scope.groupLevelActivity = [];
-            // Llena los responsables
-            $scope.getAllResponsables();
-
             ngDialog.open({
                 template: 'editActivity.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -114,29 +148,64 @@
             return null;
         }
 
-        $scope.toDate = function(dateTime) {
-            var mEpoch = parseInt(dateTime); 
-            var dDate = new Date();
+        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId) {
+            var nameActivity = '';
 
-            if(mEpoch<10000000000) mEpoch *= 1000;
-        
-            dDate.setTime(mEpoch)
-            return dDate;
-        }
+            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                if ($scope.allGeneralActivities[i].value == generalActivityId)
+                    nameActivity = $scope.allGeneralActivities[i].name;
 
-        $scope.getGeneralActivities = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivity'
-            ).success(function (data, status, headers, config) {
-                console.log("Actividades generales existentes... ", data);
-                $scope.allGeneralActivities = [];
+            for (var i=0; i<arrayActivity.length; i++) {
+                if (arrayActivity[i].CODIGO == activityId) {                    
+                    arrayActivity[i].CODIGOACTIVIDAD = generalActivityId;
+                    arrayActivity[i].NOMBREACTIVIDAD = nameActivity;
+                    arrayActivity[i].NOMBRE = activityName;
+                    arrayActivity[i].FECHA = activityDate;
+                    arrayActivity[i].ESTADO = activityStatus;
+                    arrayActivity[i].NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
+                    arrayActivity[i].OBSERVACION = observation;  
+                    arrayActivity[i].CODIGOUSUARIO = responsableId;
+                }
+            }
+        };
 
-                for (var i = 0; i < data.response.length; i++)
-                    $scope.allGeneralActivities.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRE});
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar las actividades generales...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes'}]);
+        $scope.addNewActivityDialog = function() {
+            $scope.activityCopy = {
+                OBSERVACION: ''
+            };
+
+            ngDialog.open({
+                template: 'newActivity.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
             });
         };
+
+        $scope.addElementArray = function(arrayActivity, newActivity, activityDate, generalActivityId, activityStatus) {
+            var nameActivity = '';
+
+            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                if ($scope.allGeneralActivities[i].value == generalActivityId)
+                    nameActivity = $scope.allGeneralActivities[i].name;
+            newActivity.FECHA = activityDate;
+            newActivity.CODIGOACTIVIDAD = generalActivityId;
+            newActivity.NOMBREACTIVIDAD = nameActivity;
+            newActivity.NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
+
+            arrayActivity.push(newActivity);
+        }; 
+
+
+
+
+
+        
 
         $scope.getGroupLevel = function (code, successFunction) {
             if (code > 0) {
@@ -201,78 +270,7 @@
                 $scope.groupLevelActivity.push(code); 
         };
 
-        $scope.getAllResponsables = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllResponsables'
-            ).success(function (data, status, headers, config) {
-                console.log("Docentes... ", data);
-                if (data.success) {
-                    $scope.allResponsables = [];
-
-                    for (var i = 0; i < data.response.length; i++)
-                        $scope.allResponsables.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRECOMPLETO});
-                } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar los docentes...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes'}]);
-            });
-        };
         
-        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId) {
-            var nameActivity = '';
-
-            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
-                if ($scope.allGeneralActivities[i].value == generalActivityId)
-                    nameActivity = $scope.allGeneralActivities[i].name;
-
-            for (var i=0; i<arrayActivity.length; i++) {
-                if (arrayActivity[i].CODIGO == activityId) {                    
-                    arrayActivity[i].CODIGOACTIVIDAD = generalActivityId;
-                    arrayActivity[i].NOMBREACTIVIDAD = nameActivity;
-                    arrayActivity[i].NOMBRE = activityName;
-                    arrayActivity[i].FECHA = activityDate;
-                    arrayActivity[i].ESTADO = activityStatus;
-                    arrayActivity[i].NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
-                    arrayActivity[i].OBSERVACION = observation;  
-                    arrayActivity[i].CODIGOUSUARIO = responsableId;
-                }
-            }
-        };
-
-        $scope.addNewActivityDialog = function() {
-            $scope.activityCopy = {
-                OBSERVACION: ''
-            };
-
-            $scope.getGeneralActivities();
-            $scope.getAllResponsables();
-
-            ngDialog.open({
-                template: 'newActivity.html',
-                className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                closeByDocument: true,
-                closeByEscape: true,
-                scope: $scope,
-                controller: $controller('ngDialogController', {
-                    $scope: $scope,
-                    $http: $http
-                })
-            });
-        };
-
-        $scope.addElementArray = function(arrayActivity, newActivity, activityDate, generalActivityId, activityStatus) {
-            var nameActivity = '';
-
-            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
-                if ($scope.allGeneralActivities[i].value == generalActivityId)
-                    nameActivity = $scope.allGeneralActivities[i].name;
-            newActivity.FECHA = activityDate;
-            newActivity.CODIGOACTIVIDAD = generalActivityId;
-            newActivity.NOMBREACTIVIDAD = nameActivity;
-            newActivity.NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
-
-            arrayActivity.push(newActivity);
-        }; 
 
         this.getAssistance = function (code) {
             $scope.activityAssistanceCopy = {

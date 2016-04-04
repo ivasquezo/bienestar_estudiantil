@@ -62,50 +62,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void addNewActivity(String activityName, DateTime activityDate, int activityStatus,
-            String activityObservation, int generalActivityId, int userId)
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                BE_ACTIVIDAD newActivity = new BE_ACTIVIDAD();
-
-                newActivity.NOMBRE = activityName;
-                newActivity.FECHA = activityDate;
-                newActivity.ESTADO = activityStatus;
-                if (activityObservation != null || activityObservation != "")
-                    newActivity.OBSERVACION = activityObservation;
-                else
-                    newActivity.OBSERVACION = null;
-                newActivity.CODIGOACTIVIDADGENERAL = generalActivityId;
-                newActivity.CODIGOUSUARIO = userId;
-
-                db.BE_ACTIVIDAD.AddObject(newActivity);
-
-                db.SaveChanges();
-
-                response = new Response(true, "info", "Agregar", "Actividad agregada correctamente", newActivity);
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al agregar la actividad", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-        [WebMethod]
-        public void countActivityWithName(String activityName)
-        {
-            bienestarEntities db = new bienestarEntities();
-            int cantidad = db.BE_ACTIVIDAD.Where(a => activityName != null && a.NOMBRE == activityName).Count();
-            writeResponse("{\"cantidad\":" + cantidad + "}");
-        }
-
-        [WebMethod]
         public void getAllGeneralActivity()
         {
             Response response = new Response(true, "", "", "", null);
@@ -150,6 +106,97 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
+
+        [WebMethod]
+        public void countActivityWithName(String activityName)
+        {
+            bienestarEntities db = new bienestarEntities();
+            int cantidad = db.BE_ACTIVIDAD.Where(a => activityName != null && a.NOMBRE == activityName).Count();
+            writeResponse("{\"cantidad\":" + cantidad + "}");
+        }
+
+        [WebMethod]
+        public void saveActivityData(int activityId, String activityName, DateTime activityDate, int activityStatus,
+            String activityObservation, int generalActivityId, int userId)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                BE_ACTIVIDAD activityUpdated = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
+
+                activityUpdated.NOMBRE = activityName.ToUpper();
+                activityUpdated.FECHA = activityDate;
+                activityUpdated.ESTADO = activityStatus;
+                if (activityObservation != null)
+                    activityUpdated.OBSERVACION = activityObservation.ToUpper();
+                else
+                    activityUpdated.OBSERVACION = null;
+                activityUpdated.CODIGOACTIVIDADGENERAL = generalActivityId;
+                activityUpdated.CODIGOUSUARIO = userId;
+
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Actualizar", "Actividad actualizada correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos para actualiar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al actualizar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void addNewActivity(String activityName, DateTime activityDate, int activityStatus,
+            String activityObservation, int generalActivityId, int userId)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                BE_ACTIVIDAD newActivity = new BE_ACTIVIDAD();
+
+                newActivity.NOMBRE = activityName;
+                newActivity.FECHA = activityDate;
+                newActivity.ESTADO = activityStatus;
+                if (activityObservation != null || activityObservation != "")
+                    newActivity.OBSERVACION = activityObservation;
+                else
+                    newActivity.OBSERVACION = null;
+                newActivity.CODIGOACTIVIDADGENERAL = generalActivityId;
+                newActivity.CODIGOUSUARIO = userId;
+
+                db.BE_ACTIVIDAD.AddObject(newActivity);
+
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Agregar", "Actividad agregada correctamente", newActivity);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al agregar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+
+
+        
+
+        
+
+        
 
 
 
@@ -227,83 +274,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         
 
-        /**
-         * Actualizar una actividad
-         */
-        [WebMethod]
-        public void saveActivityData(int activityId, String activityName, DateTime activityDate, int activityStatus,
-            String activityObservation, int generalActivityId, int userId, int[] groupLevelActivity)
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                // Obtiene la actividad que se va a actualizar
-                BE_ACTIVIDAD activityUpdated = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
-
-                Boolean actualizar = false;
-
-                // Validacion del nombre de la actividad que se va a actualizar
-                if (activityUpdated.NOMBRE == activityName.ToUpper())
-                    actualizar = true;
-                else
-                {
-                    // Busca su el nombre existe
-                    List<BE_ACTIVIDAD> activitiesExist = db.BE_ACTIVIDAD.Where(a => a.NOMBRE == activityName.ToUpper()).ToList();
-                    // Si el nombre de la actividad ya existe no lo guarda
-                    if (activitiesExist != null && activitiesExist.Count > 0)
-                    {
-                        response = new Response(false, "error", "Error", "El nombre de la actividad ya existe", null);
-                        actualizar = false;
-                    }
-                    else
-                        actualizar = true;
-                }
-
-                if (actualizar)
-                {
-                    activityUpdated.NOMBRE = activityName.ToUpper();
-                    activityUpdated.FECHA = activityDate;
-                    activityUpdated.ESTADO = activityStatus;
-                    if (activityObservation != null)
-                        activityUpdated.OBSERVACION = activityObservation.ToUpper();
-                    else
-                        activityUpdated.OBSERVACION = null;
-                    activityUpdated.CODIGOACTIVIDADGENERAL = generalActivityId;
-                    activityUpdated.CODIGOUSUARIO = userId;
-
-                    // Guarda los niveles seleccionados
-                    for (int level = 0; level < groupLevelActivity.Length; level++)
-                    {
-                        // Verifica si el acceso ya existe
-                        BE_GRUPO_ACTIVIDAD groupActivity = getStatusGroupActivity(activityId, groupLevelActivity[level]);
-                        // Si el acceso existe se lo actualiza, caso contrario se lo agrega
-                        if (groupActivity != null)
-                            updateGroupActivities(activityId, groupLevelActivity[level]);
-                        else
-                            createGroupActivities(activityId, groupLevelActivity[level]);
-                    }
-
-                    db.SaveChanges();
-
-                    response = new Response(true, "info", "Actualizar", "Actividad actualizada correctamente", null);
-                }
-            }
-            catch (InvalidOperationException)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener la actividad para actualizarla", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al actualizar la actividad", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
+        
         /**
          * Verifica la existencia del nivel
          */

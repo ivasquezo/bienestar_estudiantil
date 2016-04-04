@@ -32,7 +32,7 @@
                 <span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad">
                 <span class="ui-icon ui-icon-pencil"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.getAttachedActivity(COL_FIELD)" title="Niveles invitados">
+                <button type="button" ng-click="grid.appScope.Main.getLevel(COL_FIELD)" title="Niveles invitados">
                 <span class="ui-icon ui-icon-script"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.getAssistance(COL_FIELD)" title="Asistencia alumnos">
                 <span class="ui-icon ui-icon-person"></span></button>
@@ -59,10 +59,13 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Actividad</label>  
                         <div class="col-md-4">
-                            <input required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
+                            <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
                             <br/><span class="help-block">Nombre de la actividad</span>
                             <span ng-messages="activityForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
+                                <span ng-message="activityNameExist" class="help-block ng-message">Existe una actividad con este nombre</span>
+                                <span ng-message="activityNameValidator" class="help-block ng-message">Debe ingresar un nombre de actividad v&aacute;lido</span>
+                                <span ng-message="activityNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
                             </span>
                         </div>
                     </div>
@@ -72,7 +75,7 @@
                         <div class="col-md-4">                            
                             <select ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
                             </select>
-                            <br/><span class="help-block">Responsable de ejecutar la actividad</span> 
+                            <br/><span class="help-block">Responsable de ejecutar la actividad</span>
                         </div>
                     </div>
 
@@ -80,7 +83,7 @@
                         <label class="col-md-4 control-label" for="fecha">Fecha</label>  
                         <div class="col-md-4">
                             <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="Fecha" class="form-control input-md">
-                            <br/><span class="help-block">Fecha de ejecución de la actividad</span>  
+                            <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span>  
                         </div>
                     </div>
 
@@ -94,34 +97,13 @@
                     </div>
                     
                     <div class="form-group">
-                        <table style="width:100%; font-size:16px">
-                            <tr>
-                                <th></th>
-                                <th>Nivel</th>
-                                <th>Paralelo</th>
-                                <th>Modalidad</th>
-                            </tr>
-                            <tr ng-repeat="nivel in allGroupLevel">
-                                <td><input type="checkbox" ng-checked="existGroupLevel(nivel.CODIGO)" 
-                                    ng-click="setGroupLevel(nivel.CODIGO)"></td>
-                                <td>{{ nivel.NIVEL }}</td>
-                                <td>{{ nivel.PARALELO }}</td>
-                                <td>{{ nivel.MODALIDAD }}</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <br/>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="observacion">Observación</label>  
+                        <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
                         <div class="col-md-4">
-                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observación" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;"></textarea>
-                            <br/><span class="help-block">Observación sobre la actividad</span>
+                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;"></textarea>
+                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad</span>
                         </div>
                     </div>
 
-                    <br/>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveActivity"></label>
                         <div class="col-md-8">
@@ -151,7 +133,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombre">Actividad</label>  
                         <div class="col-md-4">
-                            <input required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
+                            <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
                             <br/><span class="help-block">Nombre de la actividad</span>  
                             <span ng-messages="newActivityForm.nombre.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese el nombre de la actividad</span>
