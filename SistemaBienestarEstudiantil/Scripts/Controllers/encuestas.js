@@ -89,7 +89,7 @@
             $scope.encuesta = {
                 TITULO: null,
                 DESCRIPCION: null,
-                ENCUESTA_PREGUNTA: []
+                BE_ENCUESTA_PREGUNTA: []
             };
 
             $scope.addHandlerEncuesta($scope.encuesta);
@@ -162,7 +162,6 @@
                 surveyCode: code
             }).success(function (data, status, headers, config) {
                 console.log("setDefaultSurvey:",data);
-                row.selected = true;
             }).error(function (data, status, headers, config) {
                 console.log("error in setDefaultSurvey...", data);
             });
@@ -170,9 +169,9 @@
 
         $scope.verifyQuestion = function(question){
             if (question.TIPO == 3) {
-                question.ENCUESTA_RESPUESTA = [];
+                question.BE_ENCUESTA_RESPUESTA = [];
             } else {
-                if (question.ENCUESTA_RESPUESTA.length == 0)
+                if (question.BE_ENCUESTA_RESPUESTA.length == 0)
                     question.addResponse();
             }
         }
@@ -186,7 +185,7 @@
                     TITULO: null,
                     TIPO:2,
                     REQUERIDO: true,
-                    ENCUESTA_RESPUESTA: [],
+                    BE_ENCUESTA_RESPUESTA: [],
                     addResponse: function(){
 
                         var response = {
@@ -194,18 +193,18 @@
                             TEXTO: null
                         };
 
-                        this.ENCUESTA_RESPUESTA.push(response);
+                        this.BE_ENCUESTA_RESPUESTA.push(response);
                     },
                     removeResponse: function(id){
 
                         var index = null;
-                        for (var i = 0; i < this.ENCUESTA_RESPUESTA.length; i++) {
-                            if (this.ENCUESTA_RESPUESTA[i].id == id) {
+                        for (var i = 0; i < this.BE_ENCUESTA_RESPUESTA.length; i++) {
+                            if (this.BE_ENCUESTA_RESPUESTA[i].id == id) {
                                 index = i;
                                 break;
                             }
                         };
-                        if (index != null) this.ENCUESTA_RESPUESTA.splice(index,1);
+                        if (index != null) this.BE_ENCUESTA_RESPUESTA.splice(index,1);
                     },
                     addAnswered: function(response){
 
@@ -228,51 +227,52 @@
                 };
 
                 question.addResponse();
-                this.ENCUESTA_PREGUNTA.push(question);
+                this.BE_ENCUESTA_PREGUNTA.push(question);
             };
             encuesta.removeQuestion = function(id){
                 
                 var index = null;
-                for (var i = 0; i < this.ENCUESTA_PREGUNTA.length; i++) {
-                    if (this.ENCUESTA_PREGUNTA[i].id == id) {
+                for (var i = 0; i < this.BE_ENCUESTA_PREGUNTA.length; i++) {
+                    if (this.BE_ENCUESTA_PREGUNTA[i].id == id) {
                         index = i;
                         break;
                     }
                 };
-                if (index != null) this.ENCUESTA_PREGUNTA.splice(index,1);
+                if (index != null) this.BE_ENCUESTA_PREGUNTA.splice(index,1);
             };
 
-            for (var i = 0; i < encuesta.ENCUESTA_PREGUNTA.length; i++) {
-                encuesta.ENCUESTA_PREGUNTA[i].addResponse = function(){
+            for (var i = 0; i < encuesta.BE_ENCUESTA_PREGUNTA.length; i++) {
+                encuesta.BE_ENCUESTA_PREGUNTA[i].addResponse = function(){
 
                     var response = {
                         id: $scope.generateId(),
                         TEXTO: null
                     };
 
-                    this.ENCUESTA_RESPUESTA.push(response);
+                    this.BE_ENCUESTA_RESPUESTA.push(response);
                 };
-                encuesta.ENCUESTA_PREGUNTA[i].removeResponse = function(id){
+                encuesta.BE_ENCUESTA_PREGUNTA[i].removeResponse = function(id){
 
                     var index = null;
-                    for (var i = 0; i < this.ENCUESTA_RESPUESTA.length; i++) {
-                        if (this.ENCUESTA_RESPUESTA[i].id == id) {
+                    for (var i = 0; i < this.BE_ENCUESTA_RESPUESTA.length; i++) {
+                        if (this.BE_ENCUESTA_RESPUESTA[i].id == id) {
                             index = i;
                             break;
                         }
                     };
-                    if (index != null) this.ENCUESTA_RESPUESTA.splice(index,1);
+                    if (index != null) this.BE_ENCUESTA_RESPUESTA.splice(index,1);
                 };
 
-                encuesta.ENCUESTA_PREGUNTA[i].id = $scope.generateId();
-                for (var j = 0; j < encuesta.ENCUESTA_PREGUNTA[i].ENCUESTA_RESPUESTA.length; j++) {
-                    encuesta.ENCUESTA_PREGUNTA[i].ENCUESTA_RESPUESTA[j].id = $scope.generateId();
+                encuesta.BE_ENCUESTA_PREGUNTA[i].id = $scope.generateId();
+                for (var j = 0; j < encuesta.BE_ENCUESTA_PREGUNTA[i].BE_ENCUESTA_RESPUESTA.length; j++) {
+                    encuesta.BE_ENCUESTA_PREGUNTA[i].BE_ENCUESTA_RESPUESTA[j].id = $scope.generateId();
                 }
             }
         }; // end addHandlerEncuesta
 
         $scope.addNewEncuesta = function(){
 
+            console.log($scope.encuesta);
             $http.post('../../WebServices/Encuestas.asmx/addNewEncuesta', {
                 encuesta: $scope.encuesta
             }).success(function (data, status, headers, config) {

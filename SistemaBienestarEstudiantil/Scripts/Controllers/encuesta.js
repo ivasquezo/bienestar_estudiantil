@@ -6,7 +6,7 @@
 
         $scope.validName = false;
         $scope.student = {
-            CEDULA: ""
+            DTPCEDULAC: ""
         };
         
         // procesing message
@@ -20,10 +20,10 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
-        $scope.$watch('student.CEDULA', function() {
+        $scope.$watch('student.DTPCEDULAC', function() {
             
-            if ($scope.student != null && $scope.student.CEDULA != undefined && $scope.student.CEDULA.toString().length > 10)
-                $scope.student.CEDULA = Number($scope.student.CEDULA.toString().substring(0, 10));
+            if ($scope.student != null && $scope.student.DTPCEDULAC != undefined && $scope.student.DTPCEDULAC.toString().length > 10)
+                $scope.student.DTPCEDULAC = Number($scope.student.DTPCEDULAC.toString().substring(0, 10));
         });
 
         // function for generate aleatory number for id in encuestas object, for manipulate
@@ -41,10 +41,10 @@
                     $scope.defaultSurvey = data.response;
                     
                     // if multiple selection, add handler reponse for validations
-                    for (var i = 0; i < $scope.defaultSurvey.ENCUESTA_PREGUNTA.length; i++) {
-                        if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO == 1){
+                    for (var i = 0; i < $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA.length; i++) {
+                        if ($scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].TIPO == 1){
 
-                            $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].addAnswered = function(response){
+                            $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].addAnswered = function(response){
 
                                 if (response.checked) {
                                     this.answereds.push(response.CODIGO);
@@ -53,7 +53,7 @@
                                 };
                             };
                             
-                            $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].removeAnswered = function(id){
+                            $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].removeAnswered = function(id){
                                 var index = null;
                                 for (var i = 0; i < this.answereds.length; i++) {
                                     if (this.answereds[i] == id) {
@@ -64,7 +64,7 @@
                                 if (index != null) this.answereds.splice(index,1);
                             };
 
-                            $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].answereds = [];
+                            $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].answereds = [];
                         }
                     };
                 } else
@@ -96,44 +96,44 @@
                 var surveySelectResult = [];
                 var surveyTextResult = [];
 
-                for (var i = 0; i < $scope.defaultSurvey.ENCUESTA_PREGUNTA.length; i++) {
-                    if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO == 1) {
+                for (var i = 0; i < $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA.length; i++) {
+                    if ($scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].TIPO == 1) {
 
-                        for (var j = 0; j < $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].answereds.length; j++) {
+                        for (var j = 0; j < $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].answereds.length; j++) {
 
                             var question = {
                                 FECHA: new Date(),
                                 CODIGOENCUESTA: $scope.defaultSurvey.CODIGO,
-                                CODIGOALUMNO: $scope.student.CODIGO,
-                                CODIGOPREGUNTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].CODIGO,
-                                CODIGORESPUESTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].answereds[j]
+                                CODIGOGRADUADO: $scope.student.GRDCODIGOI,
+                                CODIGOPREGUNTA: $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].CODIGO,
+                                CODIGORESPUESTA: $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].answereds[j]
                             };
                             surveySelectResult.push(question);
                         };
                         
-                    } else if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].TIPO == 2) {
+                    } else if ($scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].TIPO == 2) {
 
-                        if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE != undefined && $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE != null) {
+                        if ($scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].VALUE != undefined && $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].VALUE != null) {
 
                             var question = {
                                 FECHA: new Date(),
                                 CODIGOENCUESTA: $scope.defaultSurvey.CODIGO,
-                                CODIGOALUMNO: $scope.student.CODIGO,
-                                CODIGOPREGUNTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].CODIGO,
-                                CODIGORESPUESTA: parseInt($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE)
+                                CODIGOGRADUADO: $scope.student.GRDCODIGOI,
+                                CODIGOPREGUNTA: $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].CODIGO,
+                                CODIGORESPUESTA: parseInt($scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].VALUE)
                             };
                             surveySelectResult.push(question);
                         }
 
                     } else {
 
-                        if ($scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE != undefined && $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE != null) {
+                        if ($scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].VALUE != undefined && $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].VALUE != null) {
                             var question = {
                                 FECHA: new Date(),
                                 CODIGOENCUESTA: $scope.defaultSurvey.CODIGO,
-                                CODIGOALUMNO: $scope.student.CODIGO,
-                                CODIGOPREGUNTA: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].CODIGO,
-                                TEXTO: $scope.defaultSurvey.ENCUESTA_PREGUNTA[i].VALUE
+                                CODIGOGRADUADO: $scope.student.GRDCODIGOI,
+                                CODIGOPREGUNTA: $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].CODIGO,
+                                TEXTO: $scope.defaultSurvey.BE_ENCUESTA_PREGUNTA[i].VALUE
                             };
                             surveyTextResult.push(question);
                         }
@@ -188,7 +188,8 @@
                             codigoEncuesta: scope.defaultSurvey.CODIGO
                         }).success(function (data, status, headers, config) {
 
-                            if (data.CEDULA == ngModelValue) {
+                            console.log("student: ", data);
+                            if (data.DTPCEDULAC == ngModelValue) {
                                 ctrl.$setValidity('cedulaValidator', true);
                                 ctrl.$setValidity('cedulaChecking', true);
                                 ctrl.$setValidity('cedulaSurveyDone', true);

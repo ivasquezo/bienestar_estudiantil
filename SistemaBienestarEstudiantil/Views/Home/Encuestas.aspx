@@ -48,7 +48,7 @@ Encuestas
 			    	<textarea id="encuestaTitulo" ng-model="encuesta.TITULO" class="title" placeholder="Título de la encuesta" row="1" required ng-maxlength="150" maxlength="150"></textarea><br/><br/>
 			    	
 			    	<!-- questions -->
-			    	<div ng-repeat="question in encuesta.ENCUESTA_PREGUNTA">
+			    	<div ng-repeat="question in encuesta.BE_ENCUESTA_PREGUNTA">
 			    		<textarea ng-model="question.TITULO" class="question" placeholder="Nueva pregunta de la encuesta" row="3" required maxlength="200"></textarea>
 			    		<table border="0" style="margin-bottom:5px;"><tr>
 			    			<td><select ng-options="o.v as o.n for o in [{n:'Selección múltiple', v:1},{n:'Selección única', v:2}, {n:'Párrafo', v:3}]"
@@ -61,7 +61,7 @@ Encuestas
 						    	</button>
 						    </td>
 			    			<td>
-			    				<button ng-show="encuesta.ENCUESTA_PREGUNTA.length > 1" ng-click="encuesta.removeQuestion(question.id)" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+			    				<button ng-show="encuesta.BE_ENCUESTA_PREGUNTA.length > 1" ng-click="encuesta.removeQuestion(question.id)" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
 						    		<span class="ui-button-icon-primary ui-icon ui-icon-circle-minus"></span>
 						    		<span class="ui-button-text">Eliminar pregunta</span>
 						    	</button>
@@ -69,11 +69,11 @@ Encuestas
 			    			<td><input type="checkbox" ng-model="question.REQUERIDO" />* Obligatorio</button></td>
 			    		</tr></table>
 			    		<!-- responses -->
-			    		<div ng-show="question.TIPO != 3" ng-repeat="response in question.ENCUESTA_RESPUESTA" class="response">
+			    		<div ng-show="question.TIPO != 3" ng-repeat="response in question.BE_ENCUESTA_RESPUESTA" class="response">
 				    		<img ng-show="question.TIPO == 2" src="../../Content/radio-button-30.png" class="input-img"/>
 				    		<img ng-show="question.TIPO == 1" src="../../Content/checkbox-30.png" class="input-img"/>
 				    		<input type="text" ng-model="response.TEXTO" placeholder="Opción de respuesta" ng-required="question.TIPO != 3" />
-				    		<button ng-show="question.ENCUESTA_RESPUESTA.length > 1" ng-click="question.removeResponse(response.id)" 
+				    		<button ng-show="question.BE_ENCUESTA_RESPUESTA.length > 1" ng-click="question.removeResponse(response.id)" 
 				    			class="ui-button ui-widget ui-state-default"
 				    			role="button" title="Elminar opción de respuesta">
 					    		<span class="ui-icon ui-icon-circle-minus"></span>
