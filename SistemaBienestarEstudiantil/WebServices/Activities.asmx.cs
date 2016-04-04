@@ -190,6 +190,102 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        [WebMethod]
+        public void getAllFaculties()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                response = new Response(true, "", "", "", db.FACULTADs.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las facultades", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllSchools()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                response = new Response(true, "", "", "", db.ESCUELAs.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las escuelas", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllCareers()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                response = new Response(true, "", "", "", db.CARRERAs.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las carreras", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllModalities()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                response = new Response(true, "", "", "", db.MODALIDADs.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las modalidades", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void getAllLevels()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                response = new Response(true, "", "", "", db.NIVELs.ToList());
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los niveles", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+
 
 
         
@@ -636,31 +732,5 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
-        [WebMethod]
-        public void getAllLevels()
-        {
-            Response response = new Response(true, "", "", "", null);
-
-            // Conecta con las entidades
-            bienestarEntities db = new bienestarEntities();
-
-            // Trae los niveles en base
-            List<BE_GRUPO> groups = db.BE_GRUPO.ToList();
-
-            // Si existen usuarios
-            if (groups != null && groups.Count > 0)
-                response = new Response(true, "", "", "", groups);
-            else
-                response = new Response(false, "error", "Error", "No existen niveles registrados", groups);
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-
-
-
-
-        
     }
 }

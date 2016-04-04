@@ -60,6 +60,7 @@
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: true,
+            enableColumnMenus: false,
             columnDefs: [
               {name:'C\u00F3digo', field: 'CODIGO', width: 80},
               {name:'Nombre', field: 'NOMBRECOMPLETO'},
@@ -67,7 +68,7 @@
               {name:'C\u00E9dula', field: 'CEDULA', width: 100},
               {name:'Correo', field: 'CORREO'},
               {name:'Estado', field: 'NOMBREESTADO', width: 80},
-              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsUsers.html', enableFiltering: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsUsers.html', enableFiltering: false, enableSorting: false}
             ]
         };
 

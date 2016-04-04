@@ -90,13 +90,14 @@
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: true,
+            enableColumnMenus: false,
             columnDefs: [
               {name:'C\u00F3digo', field: 'CODIGO', width: 80},
               {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
               {name:'Actividad', field: 'NOMBRE'},
               {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false},
               {name:'Estado', field: 'NOMBREESTADO', width: 90},
-              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false, enableSorting: false}
             ]
         };
 
@@ -199,7 +200,106 @@
             newActivity.NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
 
             arrayActivity.push(newActivity);
-        }; 
+        };
+
+        this.getLevelActivity = function (code) {
+            $scope.view = 'career';
+            
+            $scope.getAllFaculty();
+            $scope.getAllSchools();
+            $scope.getAllCareers();
+            $scope.getAllModalities();
+            $scope.getAllLevels();
+
+            ngDialog.open({
+                template: 'getLevel.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
+        $scope.cambiarVista = function(viewValue) {
+            $scope.view = viewValue;
+        };
+
+        $scope.getAllFaculty = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllFaculties'
+            ).success(function (data, status, headers, config) {
+                console.log("Facultades... ", data);
+                if (data.success) {
+                    $scope.allFaculties = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar facultades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las facultades'}]);
+            });
+        };
+
+        $scope.getAllSchools = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllSchools'
+            ).success(function (data, status, headers, config) {
+                console.log("Escuelas... ", data);
+                if (data.success) {
+                    $scope.allSchools = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar escuelas...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las escuelas'}]);
+            });
+        };
+
+        $scope.getAllCareers = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllCareers'
+            ).success(function (data, status, headers, config) {
+                console.log("Carreras... ", data);
+                if (data.success) {
+                    $scope.allCareers = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar carreras...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras'}]);
+            });
+        };
+
+        $scope.getAllModalities = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllModalities'
+            ).success(function (data, status, headers, config) {
+                console.log("Modalidades... ", data);
+                if (data.success) {
+                    $scope.allModalities = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar modalidades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las modalidades'}]);
+            });
+        };
+
+        $scope.getAllLevels = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllLevels'
+            ).success(function (data, status, headers, config) {
+                console.log("Niveles... ", data);
+                if (data.success) {
+                    $scope.allLevels = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar niveles...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles'}]);
+            });
+        };
+
+
+
 
 
 

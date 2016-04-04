@@ -16,28 +16,12 @@
             CODIGO: ''
         };
 		
-        $scope.cargarNombreEstado = function(statusId) {
-            if (statusId == 0) {
-                return "Inactivo";
-            } else if (statusId == 1) {
-                return "Activo";
-            }
-        };
-
-        $scope.cargarEstadoRol = function(roles){
-            for (var i = 0; i < roles.length; i++)
-                roles[i].NOMBREESTADO = $scope.cargarNombreEstado(roles[i].ESTADO);
-        };
-
         $scope.chargeRols = function () {
             $http.post('../../WebServices/Rols.asmx/getAllRols', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar roles... ", data);
-                if (data.success) {
-                    $scope.cargarEstadoRol(data.response);
+                if (data.success)
                     $scope.gridOptions.data = data.response;
-                }
-                    
                 else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
@@ -49,11 +33,11 @@
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: true,
+            enableColumnMenus: false,
             columnDefs: [
               {name:'C\u00F3digo', field: 'CODIGO', width: 80},
               {name:'Nombre', field: 'NOMBRE'},
-              {name:'Estado', field: 'NOMBREESTADO', width: 80},
-              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80, enableFiltering: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80, enableFiltering: false, enableSorting: false}
             ]
         };
 
