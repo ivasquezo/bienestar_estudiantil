@@ -1,0 +1,140 @@
+﻿.activities table {
+    width: 100%;
+    font-size: 12px;
+}
+.activities td {
+    padding: 0px;
+    padding-left: 10px;
+}
+.activities th {
+    padding: 0px;
+    padding-left: 10px;
+}
+.activities .title {
+    font-size: 34px;
+    width: 100%;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid red;
+    resize: none;
+}
+.activities .question {
+    max-width: 100%;
+    width: 100%;
+    /*background-color: rgba(92, 135, 178, 0.08);*/
+    border-bottom: 2px solid red;
+    overflow:hidden;
+    outline: none;
+    resize:none;
+    font-size: 18px;
+    font-weight: bold;
+}
+.activities .response {
+    vertical-align: middle;
+    height: 35px;
+}
+.activities .button-remove {
+    height: 27px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+textarea.ng-valid,
+input[type="text"].ng-valid {
+    border: none;
+}
+.activities input[type="text"],
+.activities input[type="button"],
+.activities select {
+    border-radius: 4px;
+    height: 27px;
+}
+.activities input[type="text"] {
+    width: 90%;
+    height: 27px;
+    font-size: 15px;
+    padding: 2px;
+    vertical-align: middle;
+}
+.activities input[type="radio"],
+
+.activities .input-img {
+    vertical-align: middle;
+    width: 25px;
+}
+.activities .poll-display,
+.activities .poll-preview {
+    width: 100%;
+    margin: 10px; 
+    display: inline-block;
+    vertical-align: top;
+}
+.activities .poll-preview .content {
+    width: 60%;
+    margin: 0 auto; 
+}
+.activities .poll-preview .content .response{
+    margin: 10px;
+    font-size: 15px;
+    font-weight: normal;
+}
+.activities .poll-preview .content .question textarea.ng-valid{
+    border:1px solid #E0E0E2;
+    max-width: 100%;
+}
+.activities .poll-preview .content .question textarea {
+    height: 100px;
+}
+.activities textarea {
+    margin-bottom: 5px;
+    padding: 5px;
+}
+.activities .grid button {
+    /*height: 24px;*/
+}
+
+/* report */
+.activities .title-report {
+    font-size: 25px;
+    font-weight: bold;
+    color: #5C87B2;
+    padding-right: 10px;
+    display: inline-block;
+    padding: 5px;
+    line-height: 23px;
+    cursor: pointer;
+    border: 1px solid #5C87B2;
+    margin-left: -5px;
+}
+.activities .selected {
+    background-color: #5C87B2;
+    color: white;
+}
+.activities .preguntas {
+    font-size: 20px;
+    border-bottom: 1px solid gray;
+}
+.activities .preguntas,
+.activities .respuestas .opcion {
+    width: 350px;
+    padding: 5px;
+    margin: 5px;
+}
+.activities .respuestas {
+    font-size: 14px;
+    padding-left: 5px;
+}
+.activities .opcion {
+    font-style: italic;
+}
+.activities .respuestas .valor {
+    width: 100px;
+}
+.activities .student-list {
+}
+.activities .student-list td {
+    padding: 5px;
+    border: 1px solid #5C87B2;
+}
+.activities .student-list .name {
+    min-width: 250px;
+}

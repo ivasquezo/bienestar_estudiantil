@@ -10,6 +10,7 @@
         int RandomNumber = rand.Next(100000, 999999);
     %>
 
+    <link href="../../Content/activities.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/activities.js?nocache=<%=RandomNumber%>"></script>
 
@@ -32,7 +33,7 @@
                 <span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad">
                 <span class="ui-icon ui-icon-pencil"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.getLevel(COL_FIELD)" title="Niveles invitados">
+                <button type="button" ng-click="grid.appScope.Main.getLevelActivity(COL_FIELD)" title="Niveles invitados">
                 <span class="ui-icon ui-icon-script"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.getAssistance(COL_FIELD)" title="Asistencia alumnos">
                 <span class="ui-icon ui-icon-person"></span></button>
@@ -196,6 +197,82 @@
                     </div>
                 </form>
             </fieldset>
+        </script>
+
+        <script type="text/ng-template" id="getLevel.html">
+                <form name="activityForm" ng-submit="saveEditedActivity()" class="activities">
+                    <div style="font-size:16px;" ng-click="cambiarVista('faculty')" ng-class="view == 'faculty' ? 'selected' : '' " class="title-report">Facultas</div>
+                    <div style="font-size:16px;" ng-click="cambiarVista('school')" ng-class="view == 'school' ? 'selected' : '' " class="title-report">Escuela</div>
+                    <div style="font-size:16px;" ng-click="cambiarVista('career')" ng-class="view == 'career' ? 'selected' : '' " class="title-report">Carrera</div>
+                    <div style="font-size:16px;" ng-click="cambiarVista('modality')" ng-class="view == 'modality' ? 'selected' : '' " class="title-report">Modalidad</div>
+                    <div style="font-size:16px;" ng-click="cambiarVista('level')" ng-class="view == 'level' ? 'selected' : '' " class="title-report">Nivel</div>
+
+                    </br></br>
+
+                    <div ng-show="view == 'faculty'">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="faculty in allFaculties">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existAccess(access.CODIGO)" ng-click="setAccessRol(access.CODIGO)"></td>
+                                <td>{{ faculty.FCLNOMBREC }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div ng-show="view == 'school'">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="school in allSchools">
+                                <td style="width:50px"><input type="checkbox"></td>
+                                <td>{{ school.ESCNOMBREC }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div ng-show="view == 'career'">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="career in allCareers">
+                                <td style="width:50px"><input type="checkbox"></td>
+                                <td>{{ career.CRRDESCRIPC }}</td>
+                            </tr>
+                        </table>                 
+                    </div>
+
+                    <div ng-show="view == 'modality'">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="modality in allModalities">
+                                <td style="width:50px"><input type="checkbox"></td>
+                                <td>{{ modality.MDLDESCRIPC }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div ng-show="view == 'level'">
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="level in allLevels">
+                                <td style="width:50px"><input type="checkbox"></td>
+                                <td>{{ level.NVLDESCRIPC }}</td>
+                            </tr>
+                        </table>
+                    </div>
         </script>
 
         <script type="text/ng-template" id="assistanceActivity.html">
