@@ -46,10 +46,13 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
+              {name:'Código', field: 'CODIGO', width: 65},
               {name:'Beca', field: 'BECA'},
+              {name:'Otorgado', field: 'OTORGADO', width: 80},
+              {name:'Rubro', field: 'RUBRO', width: 150},
               {name:'Estado', field: 'ESTADO', width: 100},
               {name:'C\u00E9dula', field: 'CEDULA', width: 100},
-              {name:'Nombre', field: 'NOMBRE'}
+              {name:'Nombre', field: 'NOMBRE', width: 320}
             ]
         };
 
