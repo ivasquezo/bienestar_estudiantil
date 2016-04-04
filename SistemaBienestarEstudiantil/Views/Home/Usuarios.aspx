@@ -23,8 +23,6 @@
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>
         </button>
 
-        <br />
-
         <div ui-grid="gridOptions"></div>
 
         <script type="text/ng-template" id="actionsUsers.html">

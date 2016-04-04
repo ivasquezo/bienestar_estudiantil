@@ -268,7 +268,7 @@
                                 ctrl.$setValidity('rolNameValidator', true);
                             }
                         }).error(function (data, status, headers, config) {
-                            console.log("error al traer usuario", data);
+                            console.log("Error al traer rol", data);
                             ctrl.$setValidity('rolNameValidator', false);
                         });
                     } else {

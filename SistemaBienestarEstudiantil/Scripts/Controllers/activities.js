@@ -5,6 +5,13 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
+        // for procesing message
+        $scope.promise = null;
+        $scope.message = 'Procesando...';
+        $scope.backdrop = false;
+        $scope.delay = 2;
+        $scope.minDuration = 2;
+
         $scope.activityCopy = {
             CODIGO: ''
         };
@@ -53,12 +60,12 @@
             enableSorting: true,
             enableFiltering: true,
             columnDefs: [
-              {name:'Código', field: 'CODIGO'},
+              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
               {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
               {name:'Actividad', field: 'NOMBRE'},
               {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\''},
               {name:'Estado', field: 'NOMBREESTADO'},
-              {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 160, enableFiltering: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 160, enableFiltering: false}
             ]
         };
 
@@ -198,10 +205,13 @@
             $http.post('../../WebServices/Activities.asmx/getAllResponsables'
             ).success(function (data, status, headers, config) {
                 console.log("Docentes... ", data);
-                $scope.allResponsables = [];
+                if (data.success) {
+                    $scope.allResponsables = [];
 
-                for (var i = 0; i < data.response.length; i++)
-                    $scope.allResponsables.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRECOMPLETO});
+                    for (var i = 0; i < data.response.length; i++)
+                        $scope.allResponsables.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRECOMPLETO});
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar los docentes...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes'}]);
@@ -234,13 +244,7 @@
                 OBSERVACION: ''
             };
 
-            // Llena el combo de las actividades            
             $scope.getGeneralActivities();
-            // Llena los niveles
-            $scope.getGroupLevel(0);
-            $scope.groupActivity = [];
-            $scope.groupLevelActivity = [];
-            // Llena los responsables
             $scope.getAllResponsables();
 
             ngDialog.open({
@@ -420,13 +424,12 @@
                 var newParentObject = this;
 
                 $http.post('../../WebServices/Activities.asmx/addNewActivity', {                
-                    activityName: $scope.activityCopy.NOMBRE,
+                    activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
                     activityDate: $scope.activityCopy.FECHA,
                     activityStatus: $scope.activityCopy.ESTADO,
-                    activityObservation: $scope.activityCopy.OBSERVACION,
+                    activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
-                    userId: $scope.activityCopy.CODIGOUSUARIO,
-                    groupLevelActivity: $scope.groupLevelActivity
+                    userId: $scope.activityCopy.CODIGOUSUARIO
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
                     if (data.success) {
@@ -438,7 +441,7 @@
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al agregar el rol...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar la actividad'}]);
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
@@ -495,6 +498,46 @@
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+    }]);
+
+    app.directive('validActivityName', ['$http', function($http) {
+        return {
+            require: 'ngModel',
+
+            link: function(scope, element, attr, ctrl) {
+                function customValidator(ngModelValue) {
+                    if (ngModelValue != null && ngModelValue != scope.activityCopy.NOMBRE) {
+
+                        ctrl.$setValidity('activityNameChecking', false);
+
+                        scope.promise = $http.post('../../WebServices/Activities.asmx/countActivityWithName', {
+                            activityName: ngModelValue
+                        }).success(function (data, status, headers, config) {
+                            if (data.cantidad == 0) {
+                                 ctrl.$setValidity('activityNameExist', true);
+                                ctrl.$setValidity('activityNameValidator', true);
+                                ctrl.$setValidity('activityNameChecking', true);
+                               
+                            } else {                            
+                                ctrl.$setValidity('activityNameExist', false);
+                                ctrl.$setValidity('activityNameValidator', true);
+                            }
+                        }).error(function (data, status, headers, config) {
+                            console.log("Error al traer actividad", data);
+                            ctrl.$setValidity('activityNameValidator', false);
+                        });
+                    } else {
+                        ctrl.$setValidity('activityNameExist', true);
+                        ctrl.$setValidity('activityNameValidator', true);
+                        ctrl.$setValidity('activityNameChecking', true);
+                        
+                    }
+                    return ngModelValue;
+                }
+
+                ctrl.$parsers.push(customValidator);
             }
         };
     }]);
