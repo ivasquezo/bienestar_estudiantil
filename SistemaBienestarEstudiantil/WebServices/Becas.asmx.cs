@@ -197,31 +197,12 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             if (editBS == null)
             {
-                sendMail(beca_solicitud.CEDULA);
+                string body = "Se le notifica que ha sido ingresada una nueva solicitud de beca para el estudiante con cédula " + beca_solicitud.CEDULA;
+                Class.Utils.sendMail("micheljqh@yahoo.es", "Nueva solicitud de beca ingresada", body);
             }
 
             writeResponseObject(editBS == null ? beca_solicitud : editBS);
         }
 
-        private void sendMail(string cedula)
-        {
-            //SmtpClient smtpClient = new SmtpClient("mail.google.com", 25);
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-
-            smtpClient.Credentials = new System.Net.NetworkCredential("micheljqh@gmail.com", "jorgeluis581216");
-            //smtpClient.UseDefaultCredentials = true;
-            //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.EnableSsl = true;
-            MailMessage mail = new MailMessage();
-
-            mail.Subject = "Aviso de solicitud de beca";
-            mail.Body = "Nuevo ingreso de Solicitud de beca del estudiante con cédula: " + cedula;
-
-            //Setting From , To and CC
-            mail.From = new MailAddress("micheljqh@gmail.com", "Michel");
-            mail.To.Add(new MailAddress("stephy_vas@hotmail.com", "Inesita"));
-
-            smtpClient.Send(mail);
-        }
     }
 }
