@@ -28,9 +28,6 @@
                         data.response[i].ESTADO = "Aprobada";
                     else if (data.response[i].APROBADA == 3)
                         data.response[i].ESTADO = "Rechazada";
-
-                    data.response[i].NOMBRE = data.response[i].DATOSPERSONALE.DTPNOMBREC + data.response[i].DATOSPERSONALE.DTPAPELLIC + data.response[i].DATOSPERSONALE.DTPAPELLIC2
-
                 };
 
                 if (data.success) {
@@ -49,8 +46,8 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'TIPO', field: 'BE_BECA_TIPO.NOMBRE'},
-              {name:'Estado', field: 'ESTADO', width: 200},
+              {name:'Beca', field: 'BECA'},
+              {name:'Estado', field: 'ESTADO', width: 100},
               {name:'C\u00E9dula', field: 'CEDULA', width: 100},
               {name:'Nombre', field: 'NOMBRE'}
             ]

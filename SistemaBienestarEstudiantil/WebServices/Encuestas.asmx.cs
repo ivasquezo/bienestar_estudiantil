@@ -133,6 +133,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
             Models.BE_ENCUESTA newEncuesta = convertToENCUESTA(encuesta);
+            newEncuesta.FECHA = DateTime.Now;
             db.BE_ENCUESTA.AddObject(newEncuesta);
             db.SaveChanges();
             writeResponse(new JavaScriptSerializer().Serialize(newEncuesta));
@@ -160,7 +161,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             EntityCollection<Models.BE_ENCUESTA_PREGUNTA> encPreEntColl = new EntityCollection<Models.BE_ENCUESTA_PREGUNTA>();
 
-            foreach (ENCUESTA_PREGUNTA  ep in encuesta.ENCUESTA_PREGUNTA)
+            foreach (BE_ENCUESTA_PREGUNTA  ep in encuesta.BE_ENCUESTA_PREGUNTA)
             {
                 Models.BE_ENCUESTA_PREGUNTA epEntity = new Models.BE_ENCUESTA_PREGUNTA();
                 if (ep.CODIGO != 0) epEntity.CODIGO = ep.CODIGO;
@@ -169,7 +170,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 epEntity.REQUERIDO = ep.REQUERIDO;
 
                 EntityCollection<Models.BE_ENCUESTA_RESPUESTA> encResEntColl = new EntityCollection<Models.BE_ENCUESTA_RESPUESTA>();
-                foreach (ENCUESTA_RESPUESTA er in ep.ENCUESTA_RESPUESTA)
+                foreach (BE_ENCUESTA_RESPUESTA er in ep.BE_ENCUESTA_RESPUESTA)
                 {
                     Models.BE_ENCUESTA_RESPUESTA erEntity = new Models.BE_ENCUESTA_RESPUESTA();
                     if (er.CODIGO != 0) erEntity.CODIGO = er.CODIGO;
@@ -213,11 +214,13 @@ namespace SistemaBienestarEstudiantil.WebServices
             bienestarEntities db = new bienestarEntities();
             foreach (BE_ENCUESTA_RESPUESTA_ALUMNO era in listResponseSelect)
             {
+                //era.FECHA = DateTime.Now;
                 db.BE_ENCUESTA_RESPUESTA_ALUMNO.AddObject(era);
             }
 
             foreach (BE_ENCUESTA_RESPUESTA_TEXTO ert in listResponseText)
             {
+                //ert.FECHA = DateTime.Now;
                 db.BE_ENCUESTA_RESPUESTA_TEXTO.AddObject(ert);
             }
 
@@ -354,11 +357,11 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         public String DESCRIPCION { get; set; }
 
-        public List<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTA { get; set; }
+        public List<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTA { get; set; }
 
     }
 
-    public class ENCUESTA_PREGUNTA
+    public class BE_ENCUESTA_PREGUNTA
     {
         public int CODIGO { get; set; }
 
@@ -368,10 +371,10 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         public bool REQUERIDO { get; set; }
 
-        public List<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTA { get; set; }
+        public List<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTA { get; set; }
     }
 
-    public class ENCUESTA_RESPUESTA
+    public class BE_ENCUESTA_RESPUESTA
     {
         public int CODIGO { get; set; }
 

@@ -20,24 +20,24 @@
     	<hr/>
 		<form id="formEncuesta" name="formEncuesta" ng-submit="enviarForm()">
 		<div ng-show="defaultSurvey != null">
-			<input ng-model="student.CEDULA" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
-				name="validIdentification" placeholder="Número de cédula" type="number"/>
+			<input ng-model="student.DTPCEDULAC" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
+				name="validIdentification" placeholder="Número de cédula" type="text"/>
 			<span ng-messages="formEncuesta.validIdentification.$error" style="display: inline-block;">
 	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
 	            <span ng-message="cedulaSurveyDone" class="help-block ng-message" style="font-size: 18px;">Usted ya realizó la encuesta</span>
 	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Chequeando la base de datos...</span>
 	        </span>
 	        <span style="display:inline-block;font-size:18px;">
-	        	{{student.NOMBRE}}
+	        	{{student.DATOSPERSONALE.DTPNOMBREC}}{{student.DATOSPERSONALE.DTPAPELLIC}}{{student.DATOSPERSONALE.DTPAPELLIC2}}
 	        </span>
 	    	<hr/>
 		</div>
 		<div class="poll-preview">
 			<div class="content" ng-show="defaultSurvey != null">
 		    	<div class="title">{{defaultSurvey.TITULO}}</div>
-		    	<div ng-repeat="question in defaultSurvey.ENCUESTA_PREGUNTA" class="question">
+		    	<div ng-repeat="question in defaultSurvey.BE_ENCUESTA_PREGUNTA" class="question">
 		    		<div style="padding-top:5px;padding-bottom:5px;">{{question.TITULO}} {{question.REQUERIDO ? '*' : ''}}</div>
-			    	<div ng-show="question.TIPO != 3" ng-repeat="response in question.ENCUESTA_RESPUESTA" class="response">
+			    	<div ng-show="question.TIPO != 3" ng-repeat="response in question.BE_ENCUESTA_RESPUESTA" class="response">
 			    		<div ng-show="question.TIPO == 1">
 			    			<input ng-model="response.checked" type="checkbox" value="{{response.id}}"
 			    				ng-required="question.REQUERIDO && question.answereds.length == 0 && question.TIPO == 1"
