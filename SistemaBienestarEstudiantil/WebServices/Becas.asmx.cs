@@ -7,6 +7,8 @@ using System.Web.Script.Serialization;
 using System.IO;
 using System.Web.Script.Services;
 using System.Net.Mail;
+using SistemaBienestarEstudiantil.Class;
+using SistemaBienestarEstudiantil.Models;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -40,6 +42,31 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
             writeResponseObject(db.BE_BECA_TIPO.ToList());
+        }
+
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public void getBecas()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                var becas = db.BE_BECA_SOLICITUD.ToList();
+
+                if (becas != null && becas.Count > 0)
+                    response = new Response(true, "", "", "", becas);
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado usuarios registrados", null);
+            }
+            catch (Exception e)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los usuarios", e);
+                writeResponseObject(response);
+            }
+
+            writeResponseObject(response);
         }
 
         [WebMethod]
