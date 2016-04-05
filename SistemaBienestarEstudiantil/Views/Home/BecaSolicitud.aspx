@@ -22,7 +22,7 @@
 				name="validIdentification" placeholder="Número de cédula" type="text"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
 	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
-	            <span ng-message="cedulaExist" class="help-block ng-message" style="font-size: 18px;">Estudiante existe</span>
+	            <span ng-message="cedulaExist" class="help-block ng-message" style="font-size: 18px;">Estudiante no aplica para becas</span>
 	            <span ng-message="cedulaChecking" class="help-block ng-message" style="font-size: 18px;">Buscando en la base de datos...</span>
 	        </span>
 	        <span style="display:inline-block;font-size:18px;">

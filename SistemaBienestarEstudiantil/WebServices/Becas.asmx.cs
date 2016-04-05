@@ -177,13 +177,27 @@ namespace SistemaBienestarEstudiantil.WebServices
             /*
              * restringir estudiantes que pueden pedir la beca
              */
-            Models.DATOSPERSONALE alumno = db.DATOSPERSONALES.Where(a => a.DTPCEDULAC == cedula).First();
 
+            /* listar codigos periodos donde buscar */
+            List<int> periodos = db.PERIODOes.Where(p => p.TPECODIGOI == 1 && (p.PRDHABILMAT == "1" || p.PRDESTADOC == "1")).Select(p => p.PRDCODIGOI).ToList();
+
+            /* listar codigos matriculas donde buscar */
+            List<long> matriculas = db.MATRICULAs.Where(m => periodos.Contains(m.PRDCODIGOI) && m.NVLCODIGOI > 0).Select(m => m.INSCODIGOI).ToList();
+            
+            /* listar cedulas de inscripciones donde buscar */
+            List<DATOSPERSONALE> datosPersonalesInscripciones = db.INSCRIPCIONs.Where(i => matriculas.Contains(i.INSCODIGOI) && i.DTPCEDULAC == cedula).Select(m => m.DATOSPERSONALE).ToList();
+            
+            DATOSPERSONALE alumno = null;
+            if (datosPersonalesInscripciones.Count > 0)
+            {
+                alumno = datosPersonalesInscripciones.First();
+            }
+            
             Models.BE_BECA_SOLICITUD beca_solicitud = null;
             var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC);
             if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
 
-            writeResponseObject(new { alumno, beca_solicitud });
+            writeResponseObject(new { alumno, beca_solicitud, datosPersonalesInscripciones.Count });
         }
 
         [WebMethod]
@@ -225,7 +239,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             if (editBS == null)
             {
                 string becaMailNotification = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "becaMailNotification").Select(d => d.VALOR).First();
-                string body = "Se le notifica que ha sido ingresada una nueva solicitud de beca para el estudiante con cédula " + beca_solicitud.CEDULA;
+                string body = "Se le notifica que ha sido ingresada una nueva solicitud de beca para el estudiante " + beca_solicitud.DATOSPERSONALE.DTPNOMBREC + beca_solicitud.DATOSPERSONALE.DTPAPELLIC + " con CI: " + beca_solicitud.CEDULA;
                 Class.Utils.sendMail(becaMailNotification, "Nueva solicitud de beca ingresada", body);
             }
 
