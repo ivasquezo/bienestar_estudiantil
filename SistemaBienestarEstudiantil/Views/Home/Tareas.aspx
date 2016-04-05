@@ -210,7 +210,7 @@
                 <div style="font-size:16px;" ng-click="cambiarVista('level')" ng-class="view == 'level' ? 'selected' : '' " class="title-report">Nivel</div>
                 <div style="font-size:16px;" ng-click="cambiarVista('assigned')" ng-class="view == 'assigned' ? 'selected' : '' " class="title-report">Asignados</div>
 
-                </br></br>
+                <br/><br/>
 
                 <div ng-show="view == 'faculty'">
                     <table>

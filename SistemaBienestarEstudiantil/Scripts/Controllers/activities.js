@@ -205,17 +205,17 @@
         this.getLevelActivity = function (code) {
             $scope.view = 'career';
             
-            $scope.getAllFaculty();
-            $scope.getAllSchools();
-            $scope.getAllCareers();
-            $scope.getAllModalities();
-            $scope.getAllLevels();
-
             $scope.selectedFaculties = [];
             $scope.selectedSchools = [];
             $scope.selectedCareers = [];
             $scope.selectedModalities = [];
             $scope.selectedLevels = [];
+
+            $scope.getAllFaculty();
+            $scope.getAllSchools();
+            $scope.getAllCareers();
+            $scope.getAllModalities();
+            $scope.getAllLevels();
 
             ngDialog.open({
                 template: 'getLevel.html',
@@ -248,9 +248,10 @@
             });
         };
 
-        $scope.getAllSchools = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllSchools'
-            ).success(function (data, status, headers, config) {
+        $scope.getAllSchools = function () {
+            $http.post('../../WebServices/Activities.asmx/getAllSchools', {
+                faculties: $scope.selectedFaculties
+            }).success(function (data, status, headers, config) {
                 console.log("Escuelas... ", data);
                 if (data.success) {
                     $scope.allSchools = data.response;
@@ -263,8 +264,9 @@
         };
 
         $scope.getAllCareers = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllCareers'
-            ).success(function (data, status, headers, config) {
+            $http.post('../../WebServices/Activities.asmx/getAllCareers', {
+                schools: $scope.selectedSchools
+            }).success(function (data, status, headers, config) {
                 console.log("Carreras... ", data);
                 if (data.success) {
                     $scope.allCareers = data.response;
@@ -304,24 +306,49 @@
             });
         };
 
-        $scope.setSelectedFaculties = function(id) {            
-            $scope.selectedFaculties.push(id);            
+        $scope.setSelectedFaculties = function(id) {
+            if (viewValue == "school")
+                $scope.getAllSchools();
+                
+            if (viewValue == "career")
+                $scope.getAllCareers();
+            $scope.selectObjects($scope.selectedFaculties, id);
         };
 
-        $scope.setSelectedSchools = function(id) {            
-            $scope.selectedSchools.push(id);            
+        $scope.setSelectedSchools = function(id) {
+            $scope.selectObjects($scope.selectedSchools, id);           
         };
 
-        $scope.setSelectedCareers = function(id) {            
-            $scope.selectedCareers.push(id);            
+        $scope.setSelectedCareers = function(id) {
+            $scope.selectObjects($scope.selectedCareers, id);             
         };
 
-        $scope.setSelectedModalities = function(id) {            
-            $scope.selectedModalities.push(id);            
+        $scope.setSelectedModalities = function(id) {  
+            $scope.selectObjects($scope.selectedModalities, id);           
         };
 
-        $scope.setSelectedLevels = function(id) {            
-            $scope.selectedLevels.push(id);            
+        $scope.setSelectedLevels = function(id) {  
+            $scope.selectObjects($scope.selectedLevels, id);           
+        };
+
+        $scope.selectObjects = function(listSelected, id) {
+            var existe = false;
+            if (listSelected == null || listSelected.length == 0)
+                listSelected.push(id);
+            else {
+                for (var i = 1; i < listSelected.length; i++) {
+                    if (listSelected[i] == id)
+                        existe = true;
+                };
+
+                if (existe) {
+                    for (var i = 1; i < listSelected.length; i++)
+                        if (listSelected[i] == id)
+                            listSelected.splice(i, 1);
+                }
+                else
+                    listSelected.push(id);
+            }     
         };
 
 

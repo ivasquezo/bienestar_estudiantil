@@ -210,14 +210,20 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAllSchools()
+        public void getAllSchools(int[] faculties)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 
             try
             {
-                response = new Response(true, "", "", "", db.ESCUELAs.ToList());
+                if (faculties != null && faculties.Length > 0)
+                {
+                    List<ESCUELA> schools = db.ESCUELAs.Where(e => faculties.Contains(e.FCLCODIGOI)).ToList();
+                    response = new Response(true, "", "", "", schools);
+                }
+                else
+                    response = new Response(true, "", "", "", db.ESCUELAs.ToList());
             }
             catch (Exception)
             {
@@ -229,13 +235,19 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAllCareers()
+        public void getAllCareers(int[] schools)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 
             try
             {
+                if (schools != null && schools.Length > 0)
+                {
+                    List<CARRERA> careers = db.CARRERAs.Where(c => schools.Contains(c.ESCCODIGOI)).ToList();
+                    response = new Response(true, "", "", "", careers);
+                }
+                else
                 response = new Response(true, "", "", "", db.CARRERAs.ToList());
             }
             catch (Exception)
