@@ -53,6 +53,19 @@
             });
         };
         
+        $scope.cargarTipos = function () {
+            $scope.promise = $http.get('../../WebServices/Becas.asmx/getTipos')
+            .success(function (data, status, headers, config) {
+                
+                console.log("Tipos cargadas: ", data);
+                $scope.gridOptionsTipos.data = data;
+
+            }).error(function (data, status, headers, config) {
+                console.log("Error cargar becas...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las becas'}]);
+            });
+        };
+        
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: true,
@@ -69,19 +82,50 @@
             ]
         };
 
+        $scope.gridOptionsTipos = {
+            enableSorting: true,
+            enableFiltering: true,
+            enableColumnMenus: false,
+            columnDefs: [
+              {name:'Código', field: 'CODIGO', width: 65},
+              {name:'Tipo de beca', field: 'NOMBRE'},
+              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsTiposBecas.html', enableFiltering: false, enableSorting: false}
+            ]
+        };
+
         $scope.cargarBecas();
+        $scope.cargarTipos();
 
         this.removeBeca = function(code){
             var parentObject = this;
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/removeBeca', {
-                codeBeca: code
-            }).success(function (data, status, headers, config) {
-                parentObject.removeElementArray($scope.gridOptions.data, code);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Beca eliminada'}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error eliminar beca...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la beca'}]);
-            });
+            if (confirm("Desea eliminar esta beca?")) {
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/removeBeca', {
+                    codeBeca: code
+                }).success(function (data, status, headers, config) {
+                    parentObject.removeElementArray($scope.gridOptions.data, code);
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Beca eliminada'}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error eliminar beca...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la beca'}]);
+                });
+            }
+        };
+
+        this.removeTipoBeca = function(code){
+            var parentObject = this;
+            if (confirm("Desea eliminar este tipo de beca?")) {
+
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/removeTipoBeca', {
+                    codeTipoBeca: code
+                }).success(function (data, status, headers, config) {
+                    parentObject.removeElementArray($scope.gridOptionsTipos.data, code);
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Tipo de Beca eliminado'}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error eliminar beca...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar el tipo de beca'}]);
+                });
+
+            }
         };
 
         this.removeElementArray = function(arrayElement, code) {
@@ -101,7 +145,7 @@
             return null;
         }
 
-        this.editUser = function (code) {
+        this.editBeca = function (code) {
             
             $scope.solicitudbeca = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
 
@@ -117,6 +161,38 @@
                 })
             });
         };
+
+        this.editTipoBeca = function (code) {
+            
+            $scope.tipoBeca = angular.copy($scope.getElementArray($scope.gridOptionsTipos.data, code));
+
+            ngDialog.open({
+                template: 'editTipoBeca.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
+        $scope.addTipoBecaDialog = function () {
+            
+            ngDialog.open({
+                template: 'addTipoBeca.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });            
+        }
 
     }]);
 
