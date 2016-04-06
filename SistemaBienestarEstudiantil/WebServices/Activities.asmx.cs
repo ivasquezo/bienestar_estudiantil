@@ -191,6 +191,95 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        private int[] getCareerModalityIds(int[] modalities, int[] carees)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            if (modalities != null && modalities.Length > 0 && carees != null && carees.Length > 0)
+            {
+                var data = db.CARRERA_MODAL.Where(cm => modalities.Contains(cm.MDLCODIGOI) && carees.Contains(cm.CRRCODIGOI)).Select(m => new { m.CRRMODCODIGOI }).ToList();
+
+                int[] carMod = new int[data.Count];
+                int counter = 0;
+                foreach (var s in data)
+                    carMod[counter++] = int.Parse(s.CRRMODCODIGOI.ToString());
+
+                return carMod;
+            }
+            else if (carees != null && carees.Length > 0)
+            {
+                var data = db.CARRERA_MODAL.Where(cm => carees.Contains(cm.CRRCODIGOI)).Select(m => new { m.CRRMODCODIGOI }).ToList();
+
+                int[] carMod = new int[data.Count];
+                int counter = 0;
+                foreach (var s in data)
+                    carMod[counter++] = int.Parse(s.CRRMODCODIGOI.ToString());
+
+                return carMod;
+            }
+            else
+            {
+                var data = db.CARRERA_MODAL.Where(cm => modalities.Contains(cm.MDLCODIGOI)).Select(m => new { m.CRRMODCODIGOI }).ToList();
+
+                int[] carMod = new int[data.Count];
+                int counter = 0;
+                foreach (var s in data)
+                    carMod[counter++] = int.Parse(s.CRRMODCODIGOI.ToString());
+
+                return carMod;
+            }
+        }
+
+        [WebMethod]
+        public void saveAllGroups()
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            List<CARRERA> careerList = db.CARRERAs.ToList();
+            List<MODALIDAD> modalityList = db.MODALIDADs.ToList();
+            List<NIVEL> levelList = db.NIVELs.ToList();
+
+            int[] careerIds = new int[careerList.Count];
+            int[] modalityIds = new int[modalityList.Count];
+            int[] levelIds = new int[levelList.Count];
+
+            int index = 0;
+            foreach (CARRERA career in careerList)
+                careerIds[index++] = career.CRRCODIGOI;
+
+            index = 0;
+            foreach (MODALIDAD modality in modalityList)
+                modalityIds[index++] = modality.MDLCODIGOI;
+
+            index = 0;
+            foreach (NIVEL level in levelList)
+                levelIds[index++] = level.NVLCODIGOI;
+
+            int[] careerModalityIds = getCareerModalityIds(modalityIds, careerIds);
+
+            for (int i = 0; i < careerModalityIds.Length; i++) {
+                for (int j = 0; j < levelIds.Length; j++)
+                {
+                    int careerId = careerModalityIds[i];
+                    int modalId = levelIds[j];
+                    List<BE_GRUPO> groupExist = db.BE_GRUPO.Where(g => g.CODIGOMODALIDAD == careerId && g.CODIGONIVEL == modalId).ToList();
+
+                    if (groupExist.Count == 0)
+                    {
+                        BE_GRUPO newGroup = new BE_GRUPO();
+                        newGroup.CODIGONIVEL = levelIds[j];
+                        newGroup.CODIGOMODALIDAD =careerModalityIds[i];
+                        db.BE_GRUPO.AddObject(newGroup);
+
+                        db.SaveChanges();
+
+                        //writeResponse(new JavaScriptSerializer().Serialize(newGroup));
+                    }
+                }
+            }
+        }
+
+        [WebMethod]
         public void getAllFaculties()
         {
             Response response = new Response(true, "", "", "", null);
@@ -248,7 +337,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     response = new Response(true, "", "", "", careers);
                 }
                 else
-                response = new Response(true, "", "", "", db.CARRERAs.ToList());
+                    response = new Response(true, "", "", "", db.CARRERAs.ToList());
             }
             catch (Exception)
             {
@@ -279,14 +368,25 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAllLevels()
+        public void getAllLevels(int[] modalities, int[] carees)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 
             try
             {
-                response = new Response(true, "", "", "", db.NIVELs.ToList());
+                int[] careerModalityIds;
+                int[] matriculaIds;
+
+                if ((modalities != null && modalities.Length > 0) || (carees != null && carees.Length > 0))
+                {
+                    careerModalityIds = getCareerModalityIds(modalities, carees);
+                    matriculaIds = getMatricula(careerModalityIds);
+
+                    response = new Response(true, "", "", "", db.NIVELs.Where(l => matriculaIds.Contains(l.NVLCODIGOI)).ToList());
+                }
+                else
+                    response = new Response(true, "", "", "", db.NIVELs.Where(n => n.NVLVISTAWEB ==true).ToList());
             }
             catch (Exception)
             {
@@ -297,6 +397,97 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        
+
+        [WebMethod]
+        private int getPresentPeriod()
+        {
+            bienestarEntities db = new bienestarEntities();
+            PERIODO period = db.PERIODOes.Single(p => p.TPECODIGOI == 1 && p.PRDHABILMAT == "1");
+            return period.PRDCODIGOI;
+        }
+
+        [WebMethod]
+        private int[] getMatricula(int[] carMod)
+        {
+            bienestarEntities db = new bienestarEntities();
+            int period = getPresentPeriod();
+            var data = db.MATRICULAs.Where(m => m.PRDCODIGOI == period && carMod.Contains(m.CRRMODCODIGOI))
+                .Select(m => new { m.NVLCODIGOI }).ToList();
+
+            int[] mod = new int[data.Count];
+            int counter = 0;
+            foreach (var s in data)
+                mod[counter++] = int.Parse(s.NVLCODIGOI.ToString());
+
+            return mod;
+        }
+
+        [WebMethod]
+        public void saveGroupActivity(int[] careers, int[] modalities, int[] levels)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                int[] careerModalityIds = getCareerModalityIds(modalities, careers);
+                Boolean existe;
+
+                for (int i = 0; i < careerModalityIds.Length; i++)
+                {
+                    List<BE_GRUPO> newGroup = db.BE_GRUPO.Where(g => g.CODIGOMODALIDAD == careerModalityIds[i]).ToList();
+
+                    if (newGroup != null && newGroup.Count > 0) {
+                        foreach (BE_GRUPO group in newGroup)
+                        {
+                            for (int j = 0; j < levels.Length; j++)
+                                if (group.CODIGONIVEL == levels[j])
+                                    existe = true;
+
+                        }      
+                    }
+                              
+                }
+
+                if (careers != null && careers.Length > 0)
+                {
+                    for (int i = 0; i < careers.Length; i++)
+                    {
+                    }
+                }
+                else
+                    response = new Response(true, "info", "Actualizar", "Seleccione una o m\u00E1s carreras", null);
+
+                //BE_ACTIVIDAD activityUpdated = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
+
+                //activityUpdated.NOMBRE = activityName.ToUpper();
+                //activityUpdated.FECHA = activityDate;
+                //activityUpdated.ESTADO = activityStatus;
+                //if (activityObservation != null)
+                //    activityUpdated.OBSERVACION = activityObservation.ToUpper();
+                //else
+                //    activityUpdated.OBSERVACION = null;
+                //activityUpdated.CODIGOACTIVIDADGENERAL = generalActivityId;
+                //activityUpdated.CODIGOUSUARIO = userId;
+
+                //db.SaveChanges();
+
+                response = new Response(true, "info", "Actualizar", "Actividad actualizada correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos para actualiar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al actualizar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
 
 
 

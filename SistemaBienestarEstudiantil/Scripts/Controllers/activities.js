@@ -203,7 +203,7 @@
         };
 
         this.getLevelActivity = function (code) {
-            $scope.view = 'career';
+            $scope.view = 'faculty';
             
             $scope.selectedFaculties = [];
             $scope.selectedSchools = [];
@@ -211,11 +211,18 @@
             $scope.selectedModalities = [];
             $scope.selectedLevels = [];
 
+            $scope.selectedExistFaculties = [];
+            $scope.selectedExistSchools = [];
+            $scope.selectedExistCareers = [];
+            $scope.selectedExistLevels = [];
+
             $scope.getAllFaculty();
             $scope.getAllSchools();
             $scope.getAllCareers();
             $scope.getAllModalities();
             $scope.getAllLevels();
+
+            $scope.saveAllGroups();
 
             ngDialog.open({
                 template: 'getLevel.html',
@@ -231,7 +238,91 @@
         };
 
         $scope.cambiarVista = function(viewValue) {
+            if (viewValue == "faculty") 
+                $scope.getAllFaculty();
+
+            if (viewValue == "school") {
+                $scope.validateSchoolSelected();
+                $scope.selectedExistSchools = [];
+                $scope.getAllSchools();
+            }
+
+            if (viewValue == "career") {
+                $scope.validateSchoolSelected();
+                $scope.validateCareerSelected();
+                $scope.selectedExistCareers = [];
+                $scope.getAllCareers();
+            }
+
+            if (viewValue == "modality") {
+                $scope.getAllModalities();
+            }
+
+            if (viewValue == "level") {
+                $scope.validateLevelSelected();
+                $scope.selectedExistLevels = [];
+                $scope.getAllLevels();
+            }
+
             $scope.view = viewValue;
+        };
+
+        $scope.validateSchoolSelected = function () {
+            var exist = false;
+
+            for (var i = 0; i < $scope.selectedSchools.length; i++) {
+                for (var j = 0; j < $scope.selectedExistSchools.length; j++) {
+                    if ($scope.selectedSchools[i] == $scope.selectedExistSchools[j]) {
+                        exist = true;
+                    }
+                }
+                if (!exist) {
+                    $scope.selectedSchools.splice(i, 1);
+                }
+            };
+        }
+
+        $scope.validateCareerSelected = function () {
+            var exist = false;
+
+            for (var i = 0; i < $scope.selectedCareers.length; i++) {
+                for (var j = 0; j < $scope.selectedExistCareers.length; j++) {
+                    if ($scope.selectedCareers[i] == $scope.selectedExistCareers[j]) {
+                        exist = true;
+                    }
+                }
+                if (!exist) {
+                    $scope.selectedCareers.splice(i, 1);
+                }
+            };
+        }
+
+        $scope.validateLevelSelected = function () {
+            var exist = false;
+
+            for (var i = 0; i < $scope.selectedLevels.length; i++) {
+                for (var j = 0; j < $scope.selectedExistLevels.length; j++) {
+                    if ($scope.selectedLevels[i] == $scope.selectedExistLevels[j]) {
+                        exist = true;
+                    }
+                }
+                if (!exist) {
+                    $scope.selectedLevels.splice(i, 1);
+                }
+            };
+        };
+
+        $scope.saveAllGroups = function () {
+            $http.post('../../WebServices/Activities.asmx/saveAllGroups').success(function (data, status, headers, config) {
+                console.log("Editar actividad: ", data);
+                if (data.success) {
+                } 
+
+                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al editar la actividad...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
+            });
         };
 
         $scope.getAllFaculty = function () {     
@@ -293,8 +384,10 @@
         };
 
         $scope.getAllLevels = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllLevels'
-            ).success(function (data, status, headers, config) {
+            $http.post('../../WebServices/Activities.asmx/getAllLevels', {
+                modalities: $scope.selectedModalities,
+                carees: $scope.selectedCareers
+            }).success(function (data, status, headers, config) {
                 console.log("Niveles... ", data);
                 if (data.success) {
                     $scope.allLevels = data.response;
@@ -306,25 +399,77 @@
             });
         };
 
+         $scope.existFacultyData = function (code) {
+            if ($scope.selectedFaculties.length > 0) {
+                for (var i = 0; i < $scope.selectedFaculties.length; i++) {
+                    if ($scope.selectedFaculties[i] == code) return true; 
+                }
+            }
+            return false;
+        };
+
+        $scope.existSchoolData = function (code) {
+            if ($scope.selectedSchools.length > 0) {
+                for (var i = 0; i < $scope.selectedSchools.length; i++) {
+                    if ($scope.selectedSchools[i] == code) { 
+                        $scope.selectedExistSchools.push(code);
+                        return true; 
+                    }
+                }
+            }
+            return false;
+        };
+
+        $scope.existCareerData = function (code) {
+            if ($scope.selectedCareers.length > 0) {
+                for (var i = 0; i < $scope.selectedCareers.length; i++) {
+                    if ($scope.selectedCareers[i] == code) { 
+                        $scope.selectedExistCareers.push(code);
+                        return true; 
+                    }
+                }
+            }
+            return false;
+        };
+
+        $scope.existModalityData = function (code) {
+            if ($scope.selectedModalities.length > 0) {
+                for (var i = 0; i < $scope.selectedModalities.length; i++) {
+                    if ($scope.selectedModalities[i] == code) return true; 
+                }
+            }
+            return false;
+        };
+
+        $scope.existLevelData = function (code) {
+            if ($scope.selectedLevels.length > 0) {
+                for (var i = 0; i < $scope.selectedLevels.length; i++) {
+                    if ($scope.selectedLevels[i] == code) { 
+                        $scope.selectedExistLevels.push(code);
+                        return true; 
+                    }
+                }
+            }
+            return false;
+        };
+
         $scope.setSelectedFaculties = function(id) {
-            if (viewValue == "school")
-                $scope.getAllSchools();
-                
-            if (viewValue == "career")
-                $scope.getAllCareers();
             $scope.selectObjects($scope.selectedFaculties, id);
+            $scope.getAllSchools();
         };
 
         $scope.setSelectedSchools = function(id) {
-            $scope.selectObjects($scope.selectedSchools, id);           
+            $scope.selectObjects($scope.selectedSchools, id);    
+            $scope.getAllCareers();       
         };
 
         $scope.setSelectedCareers = function(id) {
-            $scope.selectObjects($scope.selectedCareers, id);             
+            $scope.selectObjects($scope.selectedCareers, id);
         };
 
         $scope.setSelectedModalities = function(id) {  
-            $scope.selectObjects($scope.selectedModalities, id);           
+            $scope.selectObjects($scope.selectedModalities, id);
+            $scope.getAllLevels();         
         };
 
         $scope.setSelectedLevels = function(id) {  
@@ -332,20 +477,17 @@
         };
 
         $scope.selectObjects = function(listSelected, id) {
-            var existe = false;
+            var index = null;
             if (listSelected == null || listSelected.length == 0)
                 listSelected.push(id);
             else {
-                for (var i = 1; i < listSelected.length; i++) {
+                for (var i = 0; i < listSelected.length; i++) {
                     if (listSelected[i] == id)
-                        existe = true;
+                        index = i;
                 };
 
-                if (existe) {
-                    for (var i = 1; i < listSelected.length; i++)
-                        if (listSelected[i] == id)
-                            listSelected.splice(i, 1);
-                }
+                if (index != null)
+                    listSelected.splice(index, 1);
                 else
                     listSelected.push(id);
             }     
@@ -599,7 +741,39 @@
             }
         };
 
-        $scope.groupActivityForm = function () {
+        $scope.saveGroupActivity = function () {
+            if (!this.groupActivityForm.$invalid) {
+                var parentObject = this;
+
+                $http.post('../../WebServices/Activities.asmx/saveGroupActivity', {
+                    activityId: $scope.activityCopy.CODIGO,
+                    activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
+                    activityDate: $scope.activityCopy.FECHA,
+                    activityStatus: $scope.activityCopy.ESTADO,
+                    activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
+                    generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
+                    userId: $scope.activityCopy.CODIGOUSUARIO,
+                    groupLevelActivity: $scope.groupLevelActivity
+                }).success(function (data, status, headers, config) {
+                    console.log("Editar actividad: ", data);
+                    if (data.success) {
+                        $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO, 
+                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), 
+                            $scope.activityCopy.ESTADO, $scope.activityCopy.OBSERVACION.toUpperCase(), $scope.activityCopy.CODIGOUSUARIO);
+                        parentObject.closeThisDialog();
+                    } 
+
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al editar la actividad...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+
+        $scope.saveGroupActivity = function () {
             if (!this.groupActivityForm.$invalid) {
                 var newParentObject = this;
 
