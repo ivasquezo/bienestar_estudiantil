@@ -13,6 +13,18 @@
 
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
+
+        $scope.RUBROS = [
+            { n: 'Pensión', v: 0 },
+            { n: 'Matrícula', v: 1 },
+            { n: 'Pensión y matrícula', v: 2 }
+        ];
+        
+        $scope.ESTADOS = [
+            { n: 'Pendiente', v: 0 },
+            { n: 'Procesando', v: 1 },
+            { n: 'Rechazada', v: 2 }
+        ];
         
         $scope.cargarBecas = function () {
             $scope.promise = $http.get('../../WebServices/Becas.asmx/getBecas')
@@ -52,11 +64,123 @@
               {name:'Rubro', field: 'RUBRO', width: 150},
               {name:'Estado', field: 'ESTADO', width: 100},
               {name:'C\u00E9dula', field: 'CEDULA', width: 100},
-              {name:'Nombre', field: 'NOMBRE', width: 320}
+              {name:'Nombre', field: 'NOMBRE', width: 320},
+              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
             ]
         };
 
         $scope.cargarBecas();
 
+        this.removeBeca = function(code){
+            var parentObject = this;
+            $scope.promise = $http.post('../../WebServices/Becas.asmx/removeBeca', {
+                codeBeca: code
+            }).success(function (data, status, headers, config) {
+                parentObject.removeElementArray($scope.gridOptions.data, code);
+                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Beca eliminada'}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error eliminar beca...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la beca'}]);
+            });
+        };
+
+        this.removeElementArray = function(arrayElement, code) {
+            for (var i=0; i<arrayElement.length; i++) {
+                if (arrayElement[i].CODIGO == code) {
+                    arrayElement.splice(i, 1);
+                }
+            }
+        };
+
+        $scope.getElementArray = function(arrayElement, code) {
+            for (var i=0; i<arrayElement.length; i++) {
+                if (arrayElement[i].CODIGO == code) {
+                    return arrayElement[i];
+                }
+            }
+            return null;
+        }
+
+        this.editUser = function (code) {
+            
+            $scope.solicitudbeca = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
+
+            ngDialog.open({
+                template: 'editBecas.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
     }]);
+
+
+    app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
+        
+        $scope.saveEditedUser = function () {
+            var parentObject = this;
+
+            $scope.userCopy_copy = angular.copy($scope.userCopy);
+            $scope.userCopy_copy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
+            $scope.userCopy_copy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
+
+            delete $scope.userCopy_copy['BE_ACTIVIDAD'];
+            delete $scope.userCopy_copy['BE_BECA_SOLICITUD_HISTORIAL'];
+
+            if (!this.userForm.$invalid) {
+                $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
+                    user: $scope.userCopy_copy,
+                    resetPassword: $scope.password.reset
+                }).success(function (data, status, headers, config) {
+                    console.log("Editar usuario: ", data);
+                    if (data.success) {
+                        var index = $scope.arrayObjectIndexOf($scope.gridOptions.data, data.response.CODIGO, "CODIGO");
+                        $scope.gridOptions.data[index] = data.response;
+                        $scope.gridOptions.data[index].NOMBREESTADO = $scope.cargarNombreEstado(data.response.ESTADO);
+                        parentObject.closeThisDialog();
+                    } 
+
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error editar usuario...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+
+        $scope.addNewUserDB = function () {
+            var parentObject = this;
+
+            if (!this.newUserForm.$invalid) {
+                $scope.userCopy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
+                $scope.userCopy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
+
+                $scope.promise = $http.post('../../WebServices/Users.asmx/addNewUser', {
+                    newUser: $scope.userCopy
+                }).success(function (data, status, headers, config) {
+                    console.log("Agregar usuario: ", data);
+                    if (data.success) {
+                        $scope.addElementArray($scope.gridOptions.data, data.response);
+                        parentObject.closeThisDialog();
+                    }
+
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error agregar usuario...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el usuario'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+    }]);
+
 })();

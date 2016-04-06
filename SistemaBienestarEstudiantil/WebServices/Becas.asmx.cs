@@ -170,6 +170,20 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        public void removeBeca(int codeBeca)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            Models.BE_BECA_SOLICITUD ba = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == codeBeca).First();
+            if (ba != null)
+            {
+                db.BE_BECA_SOLICITUD.DeleteObject(ba);
+                db.SaveChanges();
+            }
+            writeResponse("ok");
+        }
+
+        [WebMethod]
         public void getStudentSolicitud(string cedula)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();

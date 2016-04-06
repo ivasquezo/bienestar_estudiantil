@@ -1,20 +1,5 @@
 /****** Script for SelectTopNRows command from SSMS  ******/
-SELECT TOP 1000 [INSCODIGOI]
-      ,[TPECODIGOI]
-      ,[DTPCEDULAC]
-      ,[ESPCODIGOI]
-      ,[CLGCODIGOI]
-      ,[INSFECHAC]
-      ,[INSESTADOC]
-      ,[INSDOCUMEC]
-      ,[INSTRABAJAC]
-      ,[INSEMPNOMBRE]
-      ,[INSEMPCARGO]
-      ,[RFRCODIGOI]
-      ,[INSNOMBREINST]
-      ,[INSGRUPOESP]
-      ,[INSUSERAPP]
-      ,[INSPWDAPP]
+SELECT *
   FROM [bienestar2].[dbo].[INSCRIPCION]
   where [INSCODIGOI] in (
   SELECT [INSCODIGOI]
