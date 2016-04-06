@@ -200,68 +200,81 @@
         </script>
 
         <script type="text/ng-template" id="getLevel.html">
-            <form name="groupActivityForm" ng-submit="saveGroupActivity()" class="activities">
-                <button type="submit" id="saveActivity" name="saveActivity" class="btn btn-success">Asignar grupo</button><br/><br/>
-
-                <div style="font-size:16px;" ng-click="cambiarVista('faculty')" ng-class="view == 'faculty' ? 'selected' : '' " class="title-report">Facultas</div>
-                <div style="font-size:16px;" ng-click="cambiarVista('school')" ng-class="view == 'school' ? 'selected' : '' " class="title-report">Escuela</div>
-                <div style="font-size:16px;" ng-click="cambiarVista('career')" ng-class="view == 'career' ? 'selected' : '' " class="title-report">Carrera</div>
-                <div style="font-size:16px;" ng-click="cambiarVista('modality')" ng-class="view == 'modality' ? 'selected' : '' " class="title-report">Modalidad</div>
-                <div style="font-size:16px;" ng-click="cambiarVista('level')" ng-class="view == 'level' ? 'selected' : '' " class="title-report">Nivel</div>
-                <div style="font-size:16px;" ng-click="cambiarVista('assigned')" ng-class="view == 'assigned' ? 'selected' : '' " class="title-report">Asignados</div>
+            <form name="groupActivityForm" class="activities" ng-submit="saveLevel()">
+                <div style="font-size:16px;" ng-class="view == 'faculty' ? 'selected' : '' " class="title-report">Facultad</div>
+                <div style="font-size:16px;" ng-class="view == 'school' ? 'selected' : '' " class="title-report">Escuela</div>
+                <div style="font-size:16px;" ng-class="view == 'career' ? 'selected' : '' " class="title-report">Carrera</div>
+                <div style="font-size:16px;" ng-class="view == 'modality' ? 'selected' : '' " class="title-report">Modalidad</div>
+                <div style="font-size:16px;" ng-class="view == 'level' ? 'selected' : '' " class="title-report">Nivel</div>
 
                 <br/><br/>
 
                 <div ng-show="view == 'faculty'">
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Siguiente</button>
                     <table>
                         <tr>
                             <th></th>
                             <th>Nombre</th> 
                         </tr>
                         <tr ng-repeat="faculty in allFaculties">
-                            <td style="width:50px"><input type="checkbox" ng-click="setSelectedFaculties(faculty.FCLCODIGOI)"></td>
+                            <td style="width:50px"><input type="checkbox" ng-checked="existFacultyData(faculty.FCLCODIGOI)" ng-click="setSelectedFaculties(faculty.FCLCODIGOI)"></td>
                             <td>{{ faculty.FCLNOMBREC }}</td>
                         </tr>
                     </table>
                 </div>
 
                 <div ng-show="view == 'school'">
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Siguiente</button>
+
                     <table>
                         <tr>
                             <th></th>
                             <th>Nombre</th> 
                         </tr>
                         <tr ng-repeat="school in allSchools">
-                            <td style="width:50px"><input type="checkbox" ng-click="setSelectedSchools(school.ESCCODIGOI)"></td>
+                            <td style="width:50px"><input type="checkbox" ng-checked="existSchoolData(school.ESCCODIGOI)" ng-click="setSelectedSchools(school.ESCCODIGOI)"></td>
                             <td>{{ school.ESCNOMBREC }}</td>
                         </tr>
                     </table>
+                    <br/>
+
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('faculty')">Anterior</button>
                 </div>
 
                 <div ng-show="view == 'career'">
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Siguiente</button>
+
                     <table>
                         <tr>
                             <th></th>
                             <th>Nombre</th> 
                         </tr>
                         <tr ng-repeat="career in allCareers">
-                            <td style="width:50px"><input type="checkbox" ng-click="setSelectedCareers(career.CRRCODIGOI)"></td>
+                            <td style="width:50px"><input type="checkbox" ng-checked="existCareerData(career.CRRCODIGOI)" ng-click="setSelectedCareers(career.CRRCODIGOI)"></td>
                             <td>{{ career.CRRDESCRIPC }}</td>
                         </tr>
-                    </table>                 
+                    </table> 
+                    <br/> 
+
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Anterior</button> 
                 </div>
 
                 <div ng-show="view == 'modality'">
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('level')">Siguiente</button>
+
                     <table>
                         <tr>
                             <th></th>
                             <th>Nombre</th> 
                         </tr>
                         <tr ng-repeat="modality in allModalities">
-                            <td style="width:50px"><input type="checkbox" ng-click="setSelectedModalities(modality.MDLCODIGOI)"></td>
+                            <td style="width:50px"><input type="checkbox" ng-checked="existModalityData(modality.MDLCODIGOI)" ng-click="setSelectedModalities(modality.MDLCODIGOI)"></td>
                             <td>{{ modality.MDLDESCRIPC }}</td>
                         </tr>
                     </table>
+                    <br/>
+
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Anterior</button>
                 </div>
 
                 <div ng-show="view == 'level'">
@@ -271,25 +284,22 @@
                             <th>Nombre</th> 
                         </tr>
                         <tr ng-repeat="level in allLevels">
-                            <td style="width:50px"><input type="checkbox" ng-click="setSelectedLevels(level.NVLCODIGOI)"></td>
+                            <td style="width:50px"><input type="checkbox" ng-checked="existLevelData(level.NVLCODIGOI)" ng-click="setSelectedLevels(level.NVLCODIGOI)"></td>
                             <td>{{ level.NVLDESCRIPC }}</td>
                         </tr>
                     </table>
+                    <br/>
+
+                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Anterior</button>
                 </div>
 
-                <div ng-show="view == 'assigned'">
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Carrera</th> 
-                            <th>Modalidad</th> 
-                            <th>Nivel</th> 
-                        </tr>
-                        <tr ng-repeat="level in allLevels">
-                            <td style="width:50px"><input type="checkbox" ng-checked="existAccess(level.NVLCODIGOI)" ng-click="setSelectedLevels(level.NVLCODIGOI)"></td>
-                            <td>{{ level.NVLDESCRIPC }}</td>
-                        </tr>
-                    </table>
+                <br/>
+                
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="saveLevel"></label>
+                    <div class="col-md-8">
+                        <button type="submit" id="saveLevel" name="saveLevel" class="btn btn-success">Guardar</button>
+                    </div>
                 </div>
             </form>
         </script>
