@@ -257,15 +257,14 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             int[] careerModalityIds = getCareerModalityIds(modalityIds, careerIds);
 
-            {
-            for (int i = 0; i < careerModalityIds.Length; i++)
+            for (int i = 0; i < careerModalityIds.Length; i++) {
                 for (int j = 0; j < levelIds.Length; j++)
                 {
                     int careerId = careerModalityIds[i];
                     int modalId = levelIds[j];
                     List<BE_GRUPO> groupExist = db.BE_GRUPO.Where(g => g.CODIGOMODALIDAD == careerId && g.CODIGONIVEL == modalId).ToList();
 
-                    if (groupExist != null || groupExist.Count == 0)
+                    if (groupExist.Count == 0)
                     {
                         BE_GRUPO newGroup = new BE_GRUPO();
                         newGroup.CODIGONIVEL = levelIds[j];
@@ -274,7 +273,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                         db.SaveChanges();
 
-                        writeResponse(new JavaScriptSerializer().Serialize(newGroup));
+                        //writeResponse(new JavaScriptSerializer().Serialize(newGroup));
                     }
                 }
             }
