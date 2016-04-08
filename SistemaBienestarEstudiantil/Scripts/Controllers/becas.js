@@ -23,30 +23,33 @@
         $scope.ESTADOS = [
             { n: 'Pendiente', v: 0 },
             { n: 'Procesando', v: 1 },
+            { n: 'Aprobada', v: 1 },
             { n: 'Rechazada', v: 2 }
         ];
         
         $scope.cargarBecas = function () {
             $scope.promise = $http.get('../../WebServices/Becas.asmx/getBecas')
             .success(function (data, status, headers, config) {
+
                 console.log("Becas cargadas: ", data);
-
-                for (var i = 0; i < data.response.length; i++) {
-                    if (data.response[i].APROBADA == 0)
-                        data.response[i].ESTADO = "Pendiente";
-                    else if (data.response[i].APROBADA == 1)
-                        data.response[i].ESTADO = "Procesando";
-                    else if (data.response[i].APROBADA == 2)
-                        data.response[i].ESTADO = "Aprobada";
-                    else if (data.response[i].APROBADA == 3)
-                        data.response[i].ESTADO = "Rechazada";
-                };
-
                 if (data.success) {
+
+                    for (var i = 0; i < data.response.length; i++) {
+                        if (data.response[i].APROBADA == 0)
+                            data.response[i].ESTADO = "Pendiente";
+                        else if (data.response[i].APROBADA == 1)
+                            data.response[i].ESTADO = "Procesando";
+                        else if (data.response[i].APROBADA == 2)
+                            data.response[i].ESTADO = "Aprobada";
+                        else if (data.response[i].APROBADA == 3)
+                            data.response[i].ESTADO = "Rechazada";
+                    };
+
                     $scope.gridOptions.data = data.response;
                 }
                 else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+
             }).error(function (data, status, headers, config) {
                 console.log("Error cargar becas...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las becas'}]);
@@ -57,12 +60,12 @@
             $scope.promise = $http.get('../../WebServices/Becas.asmx/getTipos')
             .success(function (data, status, headers, config) {
                 
-                console.log("Tipos cargadas: ", data);
+                console.log("Tipos de becas cargadas: ", data);
                 $scope.gridOptionsTipos.data = data;
 
             }).error(function (data, status, headers, config) {
                 console.log("Error cargar becas...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las becas'}]);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los tipos de becas'}]);
             });
         };
         
@@ -121,7 +124,7 @@
                     parentObject.removeElementArray($scope.gridOptionsTipos.data, code);
                     $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Tipo de Beca eliminado'}]);
                 }).error(function (data, status, headers, config) {
-                    console.log("Error eliminar beca...", data);
+                    console.log("Error eliminar tipo beca...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar el tipo de beca'}]);
                 });
 
@@ -149,6 +152,8 @@
             
             $scope.solicitudbeca = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
 
+            console.log("codigo usuario: ", $scope.CODIGOUSUARIO);
+
             ngDialog.open({
                 template: 'editBecas.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -165,9 +170,14 @@
         this.editTipoBeca = function (code) {
             
             $scope.tipoBeca = angular.copy($scope.getElementArray($scope.gridOptionsTipos.data, code));
+            
+            // update ID for remove after
+            for (var i = 0; i < $scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO.length; i++) {
+                $scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO[i].ID = $scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO[i].CODIGO;
+            };
 
             ngDialog.open({
-                template: 'editTipoBeca.html',
+                template: 'addTipoBeca.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
                 closeByDocument: true,
                 closeByEscape: true,
@@ -181,6 +191,11 @@
 
         $scope.addTipoBecaDialog = function () {
             
+            $scope.tipoBeca = {
+                NOMBRE: null,
+                BE_BECA_TIPO_DOCUMENTO: []
+            };
+            
             ngDialog.open({
                 template: 'addTipoBeca.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -192,6 +207,62 @@
                     $http: $http
                 })
             });            
+        };
+
+        $scope.addDocumento = function () {
+            $scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO.push({
+                ID: $scope.generateId(),
+                NOMBRE:null
+            });
+        }
+
+        $scope.removeDocumento = function (id) {
+            for (var i = 0; i < $scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO.length; i++) {
+                if ($scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO[i].ID == id)
+                    $scope.tipoBeca.BE_BECA_TIPO_DOCUMENTO.splice(i, 1);
+            };
+        }
+
+        // function for generate aleatory number for id in encuestas object, for manipulate
+        $scope.generateId = function(){
+            return Math.floor(Math.random() * 999999) + 100000;
+        };
+
+        $scope.saveTipoBeca = function () {
+            if (!this.addtipoBecaForm.$invalid) {
+
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBecaTipo', {
+                    becaTipo: $scope.tipoBeca
+                }).success(function (data, status, headers, config) {
+                    console.log("saveBecaTipo: ", data);
+                    $('#messages').puigrowl('show', [{severity: "info", summary: "Guardar", detail: "Tipo beca guardado correctamente"}]);
+                    $scope.cargarTipos();
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al guardar el tipo de beca", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el tipo de beca'}]);
+                });
+
+            } else {
+                $('#messages').puigrowl('show', [{severity: "error", summary: "Guardar", detail: "Debe completar los datos que faltan"}]);
+            }
+        }
+
+        $scope.saveSolicitudBeca = function(){
+
+            if (!this.becaForm.$invalid) {
+
+                $scope.solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL.push({
+                    CODIGOUSUARIO: $scope.CODIGOUSUARIO,
+                    OTORGADO: $scope.solicitudbeca.OTORGADO,
+                    RUBRO: $scope.solicitudbeca.RUBRO
+                });
+
+                console.log($scope.solicitudbeca);
+
+
+            } else {
+                $('#messages').puigrowl('show', [{severity: "error", summary: "Guardar", detail: "Debe completar los datos que faltan"}]);
+            }
         }
 
     }]);

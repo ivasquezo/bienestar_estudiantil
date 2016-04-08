@@ -53,7 +53,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                var becas = db.BE_BECA_SOLICITUD.Select(be => new { be.CODIGO, be.APROBADA, be.CEDULA, BECA = be.BE_BECA_TIPO.NOMBRE, NOMBRE = be.DATOSPERSONALE.DTPNOMBREC + be.DATOSPERSONALE.DTPAPELLIC + be.DATOSPERSONALE.DTPAPELLIC2 }).ToList();
+                var becas = db.BE_BECA_SOLICITUD.Select(be => new { be.CODIGO, be.OBSERVACION, be.APROBADA, be.CEDULA, BECA = be.BE_BECA_TIPO.NOMBRE, NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), be.BE_BECA_SOLICITUD_HISTORIAL }).ToList();
 
                 if (becas != null && becas.Count > 0)
                     response = new Response(true, "", "", "", becas);
@@ -184,6 +184,20 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        public void removeTipoBeca(int codeTipoBeca)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            Models.BE_BECA_TIPO bt = db.BE_BECA_TIPO.Where(b => b.CODIGO == codeTipoBeca).First();
+            if (bt != null)
+            {
+                db.BE_BECA_TIPO.DeleteObject(bt);
+                db.SaveChanges();
+            }
+            writeResponse("ok");
+        }
+
+        [WebMethod]
         public void getStudentSolicitud(string cedula)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
@@ -258,6 +272,74 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             writeResponseObject(editBS == null ? beca_solicitud : editBS);
+        }
+
+        [WebMethod]
+        public void saveBecaTipo(BecaTipo becaTipo)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+
+            if (becaTipo.CODIGO == 0)
+            {
+                BE_BECA_TIPO becaTipoSave = convertToBECA_TIPO(becaTipo);
+                db.BE_BECA_TIPO.AddObject(becaTipoSave);
+                db.SaveChanges();
+                writeResponseObject(becaTipoSave);
+            }
+            else
+            {
+                using (Models.bienestarEntities dbTemp = new Models.bienestarEntities())
+                {
+                    Models.BE_BECA_TIPO currentBecaTipo = dbTemp.BE_BECA_TIPO.Single(bt => bt.CODIGO == becaTipo.CODIGO);
+
+                    currentBecaTipo.BE_BECA_TIPO_DOCUMENTO.ToList().ForEach(btd => dbTemp.BE_BECA_TIPO_DOCUMENTO.DeleteObject(btd));
+                    dbTemp.SaveChanges();
+                }
+                
+                BE_BECA_TIPO becaTipoSave = db.BE_BECA_TIPO.Where(b => b.CODIGO == becaTipo.CODIGO).Single();
+                becaTipoSave.NOMBRE = becaTipo.NOMBRE;
+                convertToBECA_TIPO(becaTipo).BE_BECA_TIPO_DOCUMENTO.ToList().ForEach(btd => becaTipoSave.BE_BECA_TIPO_DOCUMENTO.Add(btd));
+                db.SaveChanges();
+                writeResponseObject(becaTipoSave);
+            }            
+        }
+
+        // transforma el objecto BecaTipo en una entidad BE_BECA_TIPO
+        private BE_BECA_TIPO convertToBECA_TIPO(BecaTipo becaTipo)
+        {
+            BE_BECA_TIPO becaTipoResult = new BE_BECA_TIPO();
+
+            becaTipoResult.CODIGO = becaTipo.CODIGO;
+            becaTipoResult.NOMBRE = becaTipo.NOMBRE;
+            becaTipoResult.BE_BECA_TIPO_DOCUMENTO = new System.Data.Objects.DataClasses.EntityCollection<BE_BECA_TIPO_DOCUMENTO>();
+
+            foreach (BecaTipoDocumento btd in becaTipo.BE_BECA_TIPO_DOCUMENTO)
+            {
+                BE_BECA_TIPO_DOCUMENTO becaTipoDocumento = new BE_BECA_TIPO_DOCUMENTO();
+                becaTipoDocumento.CODIGO = default(int);
+                becaTipoDocumento.CODIGOTIPO = default(int);
+                becaTipoDocumento.NOMBRE = btd.NOMBRE;
+                becaTipoDocumento.DESCRIPCION = "";
+                becaTipoResult.BE_BECA_TIPO_DOCUMENTO.Add(becaTipoDocumento);
+            }
+
+            return becaTipoResult;
+        }
+
+        // beca tipo auxiliar
+        public class BecaTipo
+        {
+            public int CODIGO { set; get; }
+            public string NOMBRE { set; get; }
+            public List<BecaTipoDocumento> BE_BECA_TIPO_DOCUMENTO { set; get; }
+        }
+
+        // beca tipo documento auxiliar
+        public class BecaTipoDocumento
+        {
+            public int CODIGO { set; get; }
+            public int CODIGOTIPO { set; get; }
+            public string NOMBRE { set; get; }
         }
 
     }
