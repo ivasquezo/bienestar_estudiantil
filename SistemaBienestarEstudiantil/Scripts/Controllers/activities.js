@@ -23,11 +23,6 @@
             };
         };
 
-        $scope.cargarEstadoActividades = function(actividades){
-            for (var i = 0; i < actividades.length; i++)
-                actividades[i].NOMBREESTADO = $scope.cargarNombreEstado(actividades[i].ESTADO);
-        };
-
         $scope.cargarNombreEstado = function(statusId) {
             if (statusId == 0) {
                 return "Inactivo";
@@ -40,8 +35,13 @@
             }
         };
 
+        $scope.cargarEstadoActividades = function(actividades){
+            for (var i = 0; i < actividades.length; i++)
+                actividades[i].NOMBREESTADO = $scope.cargarNombreEstado(actividades[i].ESTADO);
+        };
+
         $scope.chargeGeneralActivities = function () {
-            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivities', {
+            $http.post('../../WebServices/Activities.asmx/getAllGeneralActivitiesWithActivity', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
@@ -54,6 +54,20 @@
                 console.log("Error al cargar las actividades... ", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades'}]);
             });
+        };
+
+        $scope.gridOptions = {
+            enableSorting: true,
+            enableFiltering: true,
+            enableColumnMenus: false,
+            columnDefs: [
+              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
+              {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
+              {name:'Actividad', field: 'NOMBRE'},
+              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false},
+              {name:'Estado', field: 'NOMBREESTADO', width: 90},
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false, enableSorting: false}
+            ]
         };
 
         $scope.getGeneralActivities = function () {     
@@ -87,25 +101,19 @@
             });
         };
 
-        $scope.gridOptions = {
-            enableSorting: true,
-            enableFiltering: true,
-            enableColumnMenus: false,
-            columnDefs: [
-              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
-              {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
-              {name:'Actividad', field: 'NOMBRE'},
-              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false},
-              {name:'Estado', field: 'NOMBREESTADO', width: 90},
-              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false, enableSorting: false}
-            ]
-        };
-
         $scope.chargeGeneralActivities();
         $scope.getGeneralActivities();
         $scope.getAllResponsables();
 
-         $scope.toDate = function(dateTime) {
+        $scope.getElementArray = function(arrayActividad, activityCode) {
+            for (var i=0; i<arrayActividad.length; i++) {
+                if (arrayActividad[i].CODIGO == activityCode) 
+                    return arrayActividad[i];
+            }
+            return null;
+        };
+
+        $scope.toDate = function(dateTime) {
             var mEpoch = parseInt(dateTime); 
             var dDate = new Date();
 
@@ -140,14 +148,6 @@
                 })
             });
         };
-
-        $scope.getElementArray = function(arrayActividad, activityCode) {
-            for (var i=0; i<arrayActividad.length; i++) {
-                if (arrayActividad[i].CODIGO == activityCode) 
-                    return arrayActividad[i];
-            }
-            return null;
-        }
 
         $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId) {
             var nameActivity = '';
@@ -204,6 +204,9 @@
 
         this.getLevelActivity = function (code) {
             $scope.view = 'faculty';
+            $scope.activityCopy.CODIGO = code;
+
+            $scope.saveAllGroups();
             
             $scope.selectedFaculties = [];
             $scope.selectedSchools = [];
@@ -216,13 +219,17 @@
             $scope.selectedExistCareers = [];
             $scope.selectedExistLevels = [];
 
+            $scope.originCareers = [];
+            $scope.originModalities = [];
+            $scope.originLevels = [];
+
+            $scope.getGroupsByActivity();
+
             $scope.getAllFaculty();
             $scope.getAllSchools();
             $scope.getAllCareers();
             $scope.getAllModalities();
             $scope.getAllLevels();
-
-            $scope.saveAllGroups();
 
             ngDialog.open({
                 template: 'getLevel.html',
@@ -236,6 +243,152 @@
                 })
             });
         };
+
+        $scope.saveAllGroups = function () {
+            $http.post('../../WebServices/Activities.asmx/saveAllGroups'
+            ).success(function (data, status, headers, config) {
+                console.log("Guardar grupos nuevos... ", data);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al guardar grupos nuevos...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al guardar los grupos'}]);
+            });
+        };
+
+        $scope.getGroupsByActivity = function () {
+            $http.post('../../WebServices/Activities.asmx/getGroupActivityByActivity', {
+                activityId: $scope.activityCopy.CODIGO
+            }).success(function (data, status, headers, config) {
+                console.log("Obtener grupos de actividad...", data);
+                var existe = false;
+                if (data.success)
+                    for (var i = 0; i < data.response.length; i++) {
+                        if ($scope.selectedCareers.length > 0) {
+                            existe = false;
+                            for (var j = 0; j < $scope.selectedCareers.length; j++) {
+                                if ($scope.selectedCareers[j] == data.response[i].CODIGOCARRERA)
+                                    existe = true;
+                            }
+                            if (!existe) {
+                                $scope.selectedCareers.push(data.response[i].CODIGOCARRERA);
+                                $scope.originCareers.push(data.response[i].CODIGOCARRERA);
+                            }
+                        } else {
+                            $scope.selectedCareers.push(data.response[i].CODIGOCARRERA);
+                            $scope.originCareers.push(data.response[i].CODIGOCARRERA);
+                        }
+
+                        
+                    }
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al obtener los grupos de la actividad...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los grupos de la actividad'}]);
+            });
+        };
+
+        $scope.getAllFaculty = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllFaculties'
+            ).success(function (data, status, headers, config) {
+                console.log("Facultades... ", data);
+                if (data.success)
+                    $scope.allFaculties = data.response;
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar facultades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las facultades'}]);
+            });
+        };
+
+        $scope.getAllSchools = function () {
+            $http.post('../../WebServices/Activities.asmx/getAllSchools', {
+                faculties: $scope.selectedFaculties
+            }).success(function (data, status, headers, config) {
+                console.log("Escuelas... ", data);
+                if (data.success)
+                    $scope.allSchools = data.response;
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar escuelas...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las escuelas'}]);
+            });
+        };
+
+        $scope.getAllCareers = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllCareers', {
+                schools: $scope.selectedSchools
+            }).success(function (data, status, headers, config) {
+                console.log("Carreras... ", data);
+                if (data.success)
+                    $scope.allCareers = data.response;
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar carreras...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras'}]);
+            });
+        };
+
+        $scope.getAllModalities = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllModalities'
+            ).success(function (data, status, headers, config) {
+                console.log("Modalidades... ", data);
+                if (data.success)
+                    $scope.allModalities = data.response;
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar modalidades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las modalidades'}]);
+            });
+        };
+
+        $scope.getAllLevels = function () {     
+            $http.post('../../WebServices/Activities.asmx/getAllLevels', {
+                modalities: $scope.selectedModalities,
+                carees: $scope.selectedCareers
+            }).success(function (data, status, headers, config) {
+                console.log("Niveles... ", data);
+                if (data.success) {
+                    $scope.allLevels = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar niveles...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles'}]);
+            });
+        };  
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        
+
+         
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
 
         $scope.cambiarVista = function(viewValue) {
             if (viewValue == "faculty") 
@@ -312,92 +465,12 @@
             };
         };
 
-        $scope.saveAllGroups = function () {
-            $http.post('../../WebServices/Activities.asmx/saveAllGroups').success(function (data, status, headers, config) {
-                console.log("Editar actividad: ", data);
-                if (data.success) {
-                } 
+        
+        
 
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al editar la actividad...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
-            });
-        };
+        
 
-        $scope.getAllFaculty = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllFaculties'
-            ).success(function (data, status, headers, config) {
-                console.log("Facultades... ", data);
-                if (data.success) {
-                    $scope.allFaculties = data.response;
-                } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar facultades...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las facultades'}]);
-            });
-        };
-
-        $scope.getAllSchools = function () {
-            $http.post('../../WebServices/Activities.asmx/getAllSchools', {
-                faculties: $scope.selectedFaculties
-            }).success(function (data, status, headers, config) {
-                console.log("Escuelas... ", data);
-                if (data.success) {
-                    $scope.allSchools = data.response;
-                } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar escuelas...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las escuelas'}]);
-            });
-        };
-
-        $scope.getAllCareers = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllCareers', {
-                schools: $scope.selectedSchools
-            }).success(function (data, status, headers, config) {
-                console.log("Carreras... ", data);
-                if (data.success) {
-                    $scope.allCareers = data.response;
-                } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar carreras...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras'}]);
-            });
-        };
-
-        $scope.getAllModalities = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllModalities'
-            ).success(function (data, status, headers, config) {
-                console.log("Modalidades... ", data);
-                if (data.success) {
-                    $scope.allModalities = data.response;
-                } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar modalidades...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las modalidades'}]);
-            });
-        };
-
-        $scope.getAllLevels = function () {     
-            $http.post('../../WebServices/Activities.asmx/getAllLevels', {
-                modalities: $scope.selectedModalities,
-                carees: $scope.selectedCareers
-            }).success(function (data, status, headers, config) {
-                console.log("Niveles... ", data);
-                if (data.success) {
-                    $scope.allLevels = data.response;
-                } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar niveles...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles'}]);
-            });
-        };
+        
 
          $scope.existFacultyData = function (code) {
             if ($scope.selectedFaculties.length > 0) {
@@ -464,7 +537,12 @@
         };
 
         $scope.setSelectedCareers = function(id) {
+            console.log("Ants:", $scope.selectedCareers);
+
             $scope.selectObjects($scope.selectedCareers, id);
+            console.log("Desp:", $scope.selectedCareers);
+            $scope.getAllModalities();
+            $scope.getAllLevels();
         };
 
         $scope.setSelectedModalities = function(id) {  
@@ -742,53 +820,41 @@
         };
 
         $scope.saveGroupActivity = function () {
-            if (!this.groupActivityForm.$invalid) {
+            if ($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0 && $scope.selectedLevels.length == 0) {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un módulo o un nivel'}]);
+            } else {
                 var parentObject = this;
 
+                console.log("carrera: ", $scope.selectedCareers);
+                console.log("modalidad: ", $scope.selectedModalities);
+                console.log("nivel: ", $scope.selectedLevels);
+                if (($scope.selectedCareers.length > 0 || $scope.selectedModalities.length > 0) && $scope.selectedLevels.length == 0) {
+                    for (var i = 0; i < $scope.allLevels.length; i++)
+                        $scope.selectedLevels.push($scope.allLevels[i].NVLCODIGOI)
+                }
+                else if (($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0) && $scope.selectedLevels.length > 0) {
+                    for (var i = 0; i < $scope.allCareers.length; i++)
+                        $scope.selectedCareers.push($scope.allCareers[i].CRRCODIGOI);
+                }
+
                 $http.post('../../WebServices/Activities.asmx/saveGroupActivity', {
+                    careersV: $scope.selectedCareers,
+                    modalitiesV: $scope.selectedModalities,
+                    levelsV: $scope.selectedLevels,
                     activityId: $scope.activityCopy.CODIGO,
-                    activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
-                    activityDate: $scope.activityCopy.FECHA,
-                    activityStatus: $scope.activityCopy.ESTADO,
-                    activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
-                    generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
-                    userId: $scope.activityCopy.CODIGOUSUARIO,
-                    groupLevelActivity: $scope.groupLevelActivity
+                    originCareersV: $scope.originCareers,
+                    originModalitiesV: $scope.originModalities,
+                    originLevelsV: $scope.originLevels
                 }).success(function (data, status, headers, config) {
-                    console.log("Editar actividad: ", data);
-                    if (data.success) {
-                        $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO, 
-                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), 
-                            $scope.activityCopy.ESTADO, $scope.activityCopy.OBSERVACION.toUpperCase(), $scope.activityCopy.CODIGOUSUARIO);
+                    console.log("Editar grupo actividad: ", data);
+                    if (data.success)
                         parentObject.closeThisDialog();
-                    } 
 
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
                 }).error(function (data, status, headers, config) {
-                    console.log("Error al editar la actividad...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
+                    console.log("Error al editar grupo actividad...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el grupo de la actividad'}]);
                 });
-            } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
-            }
-        };
-
-        $scope.saveGroupActivity = function () {
-            if (!this.groupActivityForm.$invalid) {
-                var newParentObject = this;
-
-                $http.post('../../WebServices/Activities.asmx/saveAssistanceData', {                
-                    assistance: $scope.assistance
-                }).success(function (data, status, headers, config) {
-                    console.log("Agregar actividad: ", data);
-                    if (!data.success)
-                        $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-                }).error(function (data, status, headers, config) {
-                    console.log("Error al agregar el rol...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
-                });
-            } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
             }
         };
 

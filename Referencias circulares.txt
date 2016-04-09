@@ -1,149 +1,162 @@
-class ACCESO
+BE_ACCESO
 	
-	[ScriptIgnore]
-	public EntityCollection<ROL_ACCESO> ROL_ACCESO
-
-class ACTIVIDAD
-
-	[ScriptIgnore]
-	public ACTIVIDAD_GENERAL ACTIVIDAD_GENERAL
-	public EntityReference<ACTIVIDAD_GENERAL> ACTIVIDAD_GENERALReference
-	public EntityReference<USUARIO> USUARIOReference
-	public EntityCollection<ASISTENCIA> ASISTENCIAs
-	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
-
-class ACTIVIDAD_ADJUNTO
-
-	[ScriptIgnore]
-	public ACTIVIDAD ACTIVIDAD
-
-	[ScriptIgnore]
-	public EntityReference<ACTIVIDAD> ACTIVIDADReference
+public EntityCollection<BE_ROL_ACCESO> BE_ROL_ACCESO
 
 
-class ACTIVIDAD_GENERAL
+BE_ACTIVIDAD
 
-	[ScriptIgnore]
-	public EntityCollection<ACTIVIDAD> ACTIVIDADs
-
-
-class ALUMNO
-
-	[ScriptIgnore]
-	public EntityCollection<ASISTENCIA> ASISTENCIAs
-	public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
-	public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
-	public EntityCollection<BECA_SOLICITUD> BECA_SOLICITUD
+public BE_ACTIVIDAD_GENERAL BE_ACTIVIDAD_GENERAL
+public EntityReference<BE_ACTIVIDAD_GENERAL> BE_ACTIVIDAD_GENERALReference
+public EntityReference<BE_USUARIO> BE_USUARIOReference
+public EntityCollection<BE_ASISTENCIA> BE_ASISTENCIA
+public EntityCollection<BE_GRUPO_ACTIVIDAD> BE_GRUPO_ACTIVIDAD
 
 
-class ASISTENCIA
+BE_ACTIVIDAD_ADJUNTO
 
-	[ScriptIgnore]
-	public EntityReference<ACTIVIDAD> ACTIVIDADReference
-	public EntityReference<ALUMNO> ALUMNOReference
-	public EntityReference<GRUPO> GRUPOReference
-
-class BECA_ADJUNTO
-
-	[ScriptIgnore]
-	public BECA_SOLICITUD BECA_SOLICITUD
-	public EntityReference<BECA_SOLICITUD> BECA_SOLICITUDReference
-	public EntityReference<BECA_TIPO_DOCUMENTO> BECA_TIPO_DOCUMENTOReference
-	[ScriptIgnoreAttribute]
-    public global::System.Byte[] ADJUNTO
+public EntityReference<BE_ACTIVIDAD> BE_ACTIVIDADReference
 
 
-class BECA_SOLICITUD
-
-	[ScriptIgnore]
-	public EntityReference<ALUMNO> ALUMNOReference
-	public EntityReference<BECA_TIPO> BECA_TIPOReference
-
-class BECA_TIPO
-
-	[ScriptIgnore]
-	public EntityCollection<BECA_SOLICITUD> BECA_SOLICITUD
+BE_ACTIVIDAD_GENERAL
 
 
-class BECA_TIPO_DOCUMENTO
+BE_ASISTENCIA
 
-	[ScriptIgnore]
-	public EntityCollection<BECA_ADJUNTO> BECA_ADJUNTO
-	public BECA_TIPO BECA_TIPO
-	public EntityReference<BECA_TIPO> BECA_TIPOReference
-
-class DATOS_SISTEMA
-
-class ENCUESTA
-
-class ENCUESTA_PREGUNTA
-
-	[ScriptIgnore]
-	public ENCUESTA ENCUESTA
-	public EntityReference<ENCUESTA> ENCUESTAReference
-	public EntityCollection<ENCUESTA_RESPUESTA_TEXTO> ENCUESTA_RESPUESTA_TEXTO
-
-class ENCUESTA_RESPUESTA
-
-	[ScriptIgnore]
-	public ENCUESTA_PREGUNTA ENCUESTA_PREGUNTA
-	public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
-	public EntityCollection<ENCUESTA_RESPUESTA_ALUMNO> ENCUESTA_RESPUESTA_ALUMNO
-
-class ENCUESTA_RESPUESTA_ALUMNO
-
-	[ScriptIgnore]
-	public ALUMNO ALUMNO
-	public EntityReference<ALUMNO> ALUMNOReference
-	public ENCUESTA ENCUESTA
-	public EntityReference<ENCUESTA> ENCUESTAReference
-	public ENCUESTA_RESPUESTA ENCUESTA_RESPUESTA
-	public EntityReference<ENCUESTA_RESPUESTA> ENCUESTA_RESPUESTAReference
-	
-
-class ENCUESTA_RESPUESTA_TEXTO
-
-	[ScriptIgnore]
-	public ALUMNO ALUMNO
-	public EntityReference<ALUMNO> ALUMNOReference
-	public ENCUESTA ENCUESTA
-	public EntityReference<ENCUESTA> ENCUESTAReference
-	public ENCUESTA_PREGUNTA ENCUESTA_PREGUNTA
-	public EntityReference<ENCUESTA_PREGUNTA> ENCUESTA_PREGUNTAReference
+public EntityReference<BE_ACTIVIDAD> BE_ACTIVIDADReference
+public EntityReference<BE_GRUPO> BE_GRUPOReference
+public EntityReference<MATRICULA> MATRICULAReference
 
 
-class GRUPO
+BE_BECA_ADJUNTO
 
-	[ScriptIgnore]
-	public EntityCollection<ALUMNO> ALUMNOes
-	public EntityCollection<ASISTENCIA> ASISTENCIAs
-	public EntityCollection<GRUPO_ACTIVIDAD> GRUPO_ACTIVIDAD
+public BE_BECA_SOLICITUD BE_BECA_SOLICITUD
+public EntityReference<BE_BECA_SOLICITUD> BE_BECA_SOLICITUDReference
 
 
-class GRUPO_ACTIVIDAD
+BE_BECA_SOLICITUD
 
-class ROL
-
-	[ScriptIgnore]
-	public EntityCollection<ROL_ACCESO> ROL_ACCESO
-	public EntityCollection<USUARIO> USUARIOs
+public EntityReference<BE_BECA_TIPO> BE_BECA_TIPOReference
+public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
 
 
-class ROL_ACCESO
+BE_BECA_SOLICITUD_HISTORIAL
 
-	[ScriptIgnore]
-	public EntityReference<ACCESO> ACCESOReference
-	public ROL ROL
-	public EntityReference<ROL> ROLReference
+public EntityReference<BE_BECA_SOLICITUD> BE_BECA_SOLICITUDReference
+public EntityReference<BE_USUARIO> BE_USUARIOReference
 
 
-class USUARIO
+BE_BECA_TIPO
 
-	[ScriptIgnore]
-	public EntityCollection<ACTIVIDAD> ACTIVIDADs
-	public EntityReference<ROL> ROLReference
+public EntityCollection<BE_BECA_SOLICITUD> BE_BECA_SOLICITUD
 
-class FACULTAD_EXTENSION
+
+BE_BECA_TIPO_DOCUMENTO
+
+public BE_BECA_TIPO BE_BECA_TIPO
+public EntityReference<BE_BECA_TIPO> BE_BECA_TIPOReference
+
+
+BE_ENCUESTA
+
+
+BE_ENCUESTA_PREGUNTA
+
+public BE_ENCUESTA BE_ENCUESTA
+public EntityReference<BE_ENCUESTA> BE_ENCUESTAReference
+public EntityCollection<BE_ENCUESTA_RESPUESTA_ALUMNO> BE_ENCUESTA_RESPUESTA_ALUMNO
+public EntityCollection<BE_ENCUESTA_RESPUESTA_TEXTO> BE_ENCUESTA_RESPUESTA_TEXTO
+
+
+BE_ENCUESTA_RESPUESTA
+
+public BE_ENCUESTA_PREGUNTA BE_ENCUESTA_PREGUNTA
+public EntityReference<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTAReference
+
+
+BE_ENCUESTA_RESPUESTA_ALUMNO
+
+public BE_ENCUESTA BE_ENCUESTA
+public EntityReference<BE_ENCUESTA> BE_ENCUESTAReference
+public BE_ENCUESTA_PREGUNTA BE_ENCUESTA_PREGUNTA
+public EntityReference<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTAReference
+public BE_ENCUESTA_RESPUESTA BE_ENCUESTA_RESPUESTA
+public EntityReference<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTAReference
+public GRADUADO GRADUADO
+public EntityReference<GRADUADO> GRADUADOReference
+
+
+BE_ENCUESTA_RESPUESTA_TEXTO
+
+public BE_ENCUESTA BE_ENCUESTA
+public EntityReference<BE_ENCUESTA> BE_ENCUESTAReference
+public BE_ENCUESTA_PREGUNTA BE_ENCUESTA_PREGUNTA
+public EntityReference<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTAReference
+public GRADUADO GRADUADO
+public EntityReference<GRADUADO> GRADUADOReference
+
+
+BE_GRUPO
+
+public EntityReference<CARRERA_MODAL> CARRERA_MODALReference
+public EntityReference<NIVEL> NIVELReference
+
+
+BE_GRUPO_ACTIVIDAD
+
+public EntityReference<BE_ACTIVIDAD> BE_ACTIVIDADReference
+public EntityReference<BE_GRUPO> BE_GRUPOReference
+
+
+BE_ROL
+
+public EntityCollection<BE_ROL_ACCESO> BE_ROL_ACCESO
+public EntityCollection<BE_USUARIO> BE_USUARIO
+
+
+BE_ROL_ACCESO
+
+public EntityReference<BE_ACCESO> BE_ACCESOReference
+public BE_ROL BE_ROL
+public EntityReference<BE_ROL> BE_ROLReference
+
+
+BE_USUARIO
+
+public EntityCollection<BE_ACTIVIDAD> BE_ACTIVIDAD
+public EntityReference<BE_ROL> BE_ROLReference
+
+
+CARRERA
+
+public EntityReference<ESCUELA> ESCUELAReference
+public EntityCollection<CARRERA_MODAL> CARRERA_MODAL
+
+
+CARRERA_MODAL
+
+public EntityReference<CARRERA> CARRERAReference
+public EntityReference<MODALIDAD> MODALIDADReference
+
+
+DATOSPERSONALE
+
+public EntityCollection<BE_BECA_SOLICITUD> BE_BECA_SOLICITUD
+public EntityCollection<GRADUADO> GRADUADOS
+
+
+ESCUELA
+
+public EntityCollection<CARRERA> CARRERAs
+public EntityCollection<FACULTAD_EXTENSION> FACULTAD_EXTENSION
+
+
+EXTENSION
+
+
+FACULTAD
+
+
+FACULTAD_EXTENSION
 
 public ESCUELA ESCUELA
 public EntityReference<ESCUELA> ESCUELAReference
@@ -153,13 +166,35 @@ public FACULTAD FACULTAD
 public EntityReference<FACULTAD> FACULTADReference
 
 
-class ESCUELA
+GRADUADO
 
-public EntityCollection<CARRERA> CARRERAs
-public EntityCollection<FACULTAD_EXTENSION> FACULTAD_EXTENSION
+public EntityCollection<BE_ENCUESTA_RESPUESTA_ALUMNO> BE_ENCUESTA_RESPUESTA_ALUMNO
+public EntityCollection<BE_ENCUESTA_RESPUESTA_TEXTO> BE_ENCUESTA_RESPUESTA_TEXTO
+public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
 
 
-class CARRERA
+INSCRIPCION
 
-public EntityReference<ESCUELA> ESCUELAReference
+public DATOSPERSONALE DATOSPERSONALE
+public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
+
+
+MATRICULA
+
+public EntityCollection<BE_ASISTENCIA> BE_ASISTENCIA
+public INSCRIPCION INSCRIPCION
+public EntityReference<INSCRIPCION> INSCRIPCIONReference
+
+
+MODALIDAD
+
+public EntityCollection<BE_GRUPO> BE_GRUPO
 public EntityCollection<CARRERA_MODAL> CARRERA_MODAL
+
+
+NIVEL
+
+public EntityCollection<BE_GRUPO> BE_GRUPO
+
+
+PERIODO
