@@ -91,18 +91,18 @@
                         <label class="col-md-4 control-label" for="OBSERVACIONBECA">Observación</label>  
                         <div class="col-md-4">
                             <textarea ng-model="solicitudbeca.OBSERVACION" id="OBSERVACIONBECA" name="OBSERVACIONBECA" class="form-control"
-                                style="margin-top:5px;padding:3px;height:80px;width:250px;font-size:10px;"></textarea>
+                                style="margin-top:5px;padding:3px;height:80px;width:250px;max-width:250px;font-size:10px;"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Documentos que debe ingresar</label>  
                         <div class="col-md-4">
-                            <div style="font-size:12px;width:250px;">
+                            <div style="font-size:11px;margin-bottom:5px;width:250px;line-height:normal;">
                             	* Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario
                             </div>
                             <div ng-repeat="documento in getTipoBecaByCodeSelected(solicitudbeca.TIPOCODIGO).BE_BECA_TIPO_DOCUMENTO"
-                            	style="font-size:12px;width:250px;">
+                            	style="font-size:11px;margin-bottom:5px;width:250px;line-height:normal;">
                             	* {{documento.NOMBRE}}
                             </div>
                             <div style="width:250px;">
@@ -114,9 +114,15 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Documentos ingresados</label>  
                         <div class="col-md-4">
+                        	<div ng-if="solicitudbeca.ADJUNTOS == null || solicitudbeca.ADJUNTOS == undefined"
+                            	style="font-size:12px;width:250px;color:red;">
+                            	Cargando documentos ingresados...
+                            </div>
                         	<div ng-repeat="adjunto in solicitudbeca.ADJUNTOS"
-                            	style="font-size:12px;width:250px;">
-                            	{{adjunto.DESCRIPCION}}
+                            	style="font-size:11px;width:250px;color:blue;line-height:normal;margin-bottom:5px;">
+                            	* <a href="../../WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}" target="_blank" title="Click para descargar documento">
+                            			{{adjunto.DESCRIPCION}}
+                            	</a>
                             </div>
                         </div>
                     </div>
