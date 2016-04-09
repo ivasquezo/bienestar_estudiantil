@@ -148,6 +148,18 @@
             return null;
         }
 
+        $scope.cargarAdjuntosSolicitudBecaEdit = function (code) {
+            $scope.promise = $http.post('../../WebServices/Becas.asmx/getAttachBeca', {
+                codeBeca: code
+            }).success(function (data, status, headers, config) {
+                console.log(data);
+                $scope.solicitudbeca.ADJUNTOS = data;
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar adjuntos de la solicitud de beca:", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al cargar adjuntos de la solicitud de beca'}]);
+            });
+        }
+
         $scope.getTipoBecaByCodeSelected = function (code) {
             for (var i = 0; i < $scope.gridOptionsTipos.data.length; i++) {
                 if (code == $scope.gridOptionsTipos.data[i].CODIGO) return $scope.gridOptionsTipos.data[i];
@@ -159,8 +171,8 @@
             
             $scope.solicitudbeca = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
 
-            console.log("codigo usuario: ", $scope.CODIGOUSUARIO);
-
+            $scope.cargarAdjuntosSolicitudBecaEdit(code);
+            
             ngDialog.open({
                 template: 'editBecas.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -258,19 +270,41 @@
 
             if (!this.becaForm.$invalid) {
 
-                $scope.solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL.push({
-                    CODIGOUSUARIO: $scope.CODIGOUSUARIO,
-                    OTORGADO: $scope.solicitudbeca.OTORGADO,
-                    RUBRO: $scope.solicitudbeca.RUBRO
-                });
+                $scope.solicitudbeca['CODIGOUSUARIO'] = $scope.CODIGOUSUARIO;
 
-                console.log($scope.solicitudbeca);
+                console.log("solicitudbeca to send:", $scope.removeUnnecesaryAttributes($scope.solicitudbeca));
+
+                $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBeca', {
+                    solicitudbeca: $scope.removeUnnecesaryAttributes($scope.solicitudbeca)
+                }).success(function (data, status, headers, config) {
+                    console.log("solicitudbeca: ", data);
+                    $('#messages').puigrowl('show', [{severity: "info", summary: "Guardar", detail: "Beca guardada correctamente"}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error al guardar la beca", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la beca'}]);
+                });
 
 
             } else {
                 $('#messages').puigrowl('show', [{severity: "error", summary: "Guardar", detail: "Debe completar los datos que faltan"}]);
             }
         }
+
+        $scope.removeUnnecesaryAttributes = function (solicitudbeca) {
+            var temporalSolicitudBeca = angular.copy(solicitudbeca);
+
+            console.log("temporalSolicitudBeca", temporalSolicitudBeca);
+            // remove unnecesary attributes
+            delete temporalSolicitudBeca['ADJUNTOS'];
+            delete temporalSolicitudBeca['BECA'];
+            delete temporalSolicitudBeca['BE_BECA_SOLICITUD_HISTORIAL'];
+            delete temporalSolicitudBeca['CEDULA'];
+            delete temporalSolicitudBeca['ESTADO'];
+            delete temporalSolicitudBeca['NOMBRE'];
+            delete temporalSolicitudBeca['TIPOCODIGO'];
+            
+            return temporalSolicitudBeca;            
+        };
 
     }]);
 

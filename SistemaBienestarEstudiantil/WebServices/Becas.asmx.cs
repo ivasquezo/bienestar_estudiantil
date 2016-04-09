@@ -60,7 +60,6 @@ namespace SistemaBienestarEstudiantil.WebServices
                     be.CEDULA,
                     BECA = be.BE_BECA_TIPO.NOMBRE,
                     TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
-                    ADJUNTOS = be.BE_BECA_ADJUNTO,
                     NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), be.BE_BECA_SOLICITUD_HISTORIAL
                 }).ToList();
 
@@ -76,6 +75,31 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             writeResponseObject(response);
+        }
+
+        /*
+         * beca edited by bienestar admin
+         */
+        [WebMethod]
+        public void saveBeca(EditedBeca solicitudbeca)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == solicitudbeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
+
+            if (historial == null)
+            {
+                historial = new BE_BECA_SOLICITUD_HISTORIAL();
+                historial.CODIGOSOLICITUD = solicitudbeca.CODIGO;
+                historial.CODIGOUSUARIO = solicitudbeca.CODIGOUSUARIO;
+                historial.FECHA = DateTime.Now;
+                historial.RUBRO = solicitudbeca.RUBRO;
+                historial.OTORGADO = solicitudbeca.OTORGADO;
+                db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(historial);
+                db.SaveChanges();
+            }
+                
+
+            writeResponseObject(historial);
         }
 
         [WebMethod]
@@ -165,6 +189,13 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        public void getAttachBeca(int codeBeca)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            writeResponseObject(db.BE_BECA_ADJUNTO.Where(a => a.CODIGOSOLICITUD == codeBeca).ToList());
+        }
+
+        [WebMethod]
         public void removeAttach(int attachCode)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
@@ -250,9 +281,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         /**
-         * pendiente 0
-         * aprobada 1
-         * rechazada 2
+         * beca solicitud added by the student
          */
         [WebMethod]
         public void saveBecaSolicitud(Models.BE_BECA_SOLICITUD beca_solicitud)
@@ -268,11 +297,12 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 editBS = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGO == beca_solicitud.CODIGO).First();
                 editBS.CODIGOTIPO = beca_solicitud.CODIGOTIPO;
-                editBS.APROBADA = beca_solicitud.APROBADA;
+                //editBS.APROBADA = beca_solicitud.APROBADA;
             }
             
             db.SaveChanges();
 
+            // send notification mail
             if (editBS == null)
             {
                 string becaMailNotification = db.BE_DATOS_SISTEMA.Where(d => d.NOMBRE == "becaMailNotification").Select(d => d.VALOR).First();
@@ -333,6 +363,20 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             return becaTipoResult;
+        }
+
+        /*
+         * clases auxiliares
+         */
+
+        public class EditedBeca
+        {
+            public int CODIGO { set; get; }
+            public int CODIGOUSUARIO { set; get; }
+            public int APROBADA { set; get; }
+            public int RUBRO { set; get; }
+            public int OTORGADO { set; get; }
+            public string OBSERVACION { set; get; }
         }
 
         // beca tipo auxiliar
