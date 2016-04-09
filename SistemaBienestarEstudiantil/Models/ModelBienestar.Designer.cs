@@ -44,10 +44,10 @@ using System.Web.Script.Serialization;
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_ALUMNO_GRADUADOS", "GRADUADO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRADUADO), "BE_ENCUESTA_RESPUESTA_ALUMNO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_ALUMNO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ENCUESTA_RESPUESTA_TEXTO_GRADUADOS", "GRADUADO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.GRADUADO), "BE_ENCUESTA_RESPUESTA_TEXTO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ENCUESTA_RESPUESTA_TEXTO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_GRUPO_ACTIVIDAD_BE_GRUPO", "BE_GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_GRUPO), "BE_GRUPO_ACTIVIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_GRUPO_ACTIVIDAD), true)]
-[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_GRUPO_MODALIDAD", "MODALIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.MODALIDAD), "BE_GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_GRUPO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_GRUPO_CARRERA_MODAL", "CARRERA_MODAL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.CARRERA_MODAL), "BE_GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_GRUPO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_GRUPO_NIVEL", "NIVEL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.NIVEL), "BE_GRUPO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_GRUPO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_ROL_ACCESO_BE_ROL", "BE_ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ROL), "BE_ROL_ACCESO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_ROL_ACCESO), true)]
-[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_USUARIO_BE_ROL", "BE_ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.BE_ROL), "BE_USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_USUARIO), true)]
+[assembly: EdmRelationshipAttribute("BienestarModel", "FK_BE_USUARIO_BE_ROL", "BE_ROL", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SistemaBienestarEstudiantil.Models.BE_ROL), "BE_USUARIO", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.BE_USUARIO), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_CARRERA_ESCUELA", "ESCUELA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.ESCUELA), "CARRERA", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.CARRERA), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_CARRERA_MODAL_CARRERA", "CARRERA", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.CARRERA), "CARRERA_MODAL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.CARRERA_MODAL), true)]
 [assembly: EdmRelationshipAttribute("BienestarModel", "FK_CARRERA_MODAL_MODALIDAD", "MODALIDAD", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(SistemaBienestarEstudiantil.Models.MODALIDAD), "CARRERA_MODAL", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SistemaBienestarEstudiantil.Models.CARRERA_MODAL), true)]
@@ -2169,8 +2169,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnoreAttribute]
-        [EdmScalarPropertyAttribute(EntityKeyProperty = false, IsNullable = true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.Byte[] ADJUNTO
         {
@@ -4717,16 +4716,16 @@ namespace SistemaBienestarEstudiantil.Models
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_GRUPO_MODALIDAD", "MODALIDAD")]
-        public MODALIDAD MODALIDAD
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_GRUPO_CARRERA_MODAL", "CARRERA_MODAL")]
+        public CARRERA_MODAL CARRERA_MODAL
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<MODALIDAD>("BienestarModel.FK_BE_GRUPO_MODALIDAD", "MODALIDAD").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<CARRERA_MODAL>("BienestarModel.FK_BE_GRUPO_CARRERA_MODAL", "CARRERA_MODAL").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<MODALIDAD>("BienestarModel.FK_BE_GRUPO_MODALIDAD", "MODALIDAD").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<CARRERA_MODAL>("BienestarModel.FK_BE_GRUPO_CARRERA_MODAL", "CARRERA_MODAL").Value = value;
             }
         }
         /// <summary>
@@ -4735,17 +4734,17 @@ namespace SistemaBienestarEstudiantil.Models
         [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<MODALIDAD> MODALIDADReference
+        public EntityReference<CARRERA_MODAL> CARRERA_MODALReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<MODALIDAD>("BienestarModel.FK_BE_GRUPO_MODALIDAD", "MODALIDAD");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<CARRERA_MODAL>("BienestarModel.FK_BE_GRUPO_CARRERA_MODAL", "CARRERA_MODAL");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<MODALIDAD>("BienestarModel.FK_BE_GRUPO_MODALIDAD", "MODALIDAD", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<CARRERA_MODAL>("BienestarModel.FK_BE_GRUPO_CARRERA_MODAL", "CARRERA_MODAL", value);
                 }
             }
         }
@@ -5360,8 +5359,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <param name="cONTRASENAANTERIOR">Valor inicial de la propiedad CONTRASENAANTERIOR.</param>
         /// <param name="cONTRASENAACTUAL">Valor inicial de la propiedad CONTRASENAACTUAL.</param>
         /// <param name="eSTADO">Valor inicial de la propiedad ESTADO.</param>
-        /// <param name="cODIGOROL">Valor inicial de la propiedad CODIGOROL.</param>
-        public static BE_USUARIO CreateBE_USUARIO(global::System.Int32 cODIGO, global::System.String nOMBREUSUARIO, global::System.String nOMBRECOMPLETO, global::System.String cEDULA, global::System.String cORREO, global::System.String cONTRASENAANTERIOR, global::System.String cONTRASENAACTUAL, global::System.Boolean eSTADO, global::System.Int32 cODIGOROL)
+        public static BE_USUARIO CreateBE_USUARIO(global::System.Int32 cODIGO, global::System.String nOMBREUSUARIO, global::System.String nOMBRECOMPLETO, global::System.String cEDULA, global::System.String cORREO, global::System.String cONTRASENAANTERIOR, global::System.String cONTRASENAACTUAL, global::System.Boolean eSTADO)
         {
             BE_USUARIO bE_USUARIO = new BE_USUARIO();
             bE_USUARIO.CODIGO = cODIGO;
@@ -5372,7 +5370,6 @@ namespace SistemaBienestarEstudiantil.Models
             bE_USUARIO.CONTRASENAANTERIOR = cONTRASENAANTERIOR;
             bE_USUARIO.CONTRASENAACTUAL = cONTRASENAACTUAL;
             bE_USUARIO.ESTADO = eSTADO;
-            bE_USUARIO.CODIGOROL = cODIGOROL;
             return bE_USUARIO;
         }
 
@@ -5578,9 +5575,9 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 CODIGOROL
+        public Nullable<global::System.Int32> CODIGOROL
         {
             get
             {
@@ -5595,8 +5592,8 @@ namespace SistemaBienestarEstudiantil.Models
                 OnCODIGOROLChanged();
             }
         }
-        private global::System.Int32 _CODIGOROL;
-        partial void OnCODIGOROLChanging(global::System.Int32 value);
+        private Nullable<global::System.Int32> _CODIGOROL;
+        partial void OnCODIGOROLChanging(Nullable<global::System.Int32> value);
         partial void OnCODIGOROLChanged();
 
         #endregion
@@ -6389,6 +6386,28 @@ namespace SistemaBienestarEstudiantil.Models
 
     
         #region Propiedades de navegación
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_GRUPO_CARRERA_MODAL", "BE_GRUPO")]
+        public EntityCollection<BE_GRUPO> BE_GRUPO
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BE_GRUPO>("BienestarModel.FK_BE_GRUPO_CARRERA_MODAL", "BE_GRUPO");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_GRUPO>("BienestarModel.FK_BE_GRUPO_CARRERA_MODAL", "BE_GRUPO", value);
+                }
+            }
+        }
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
@@ -7508,7 +7527,7 @@ namespace SistemaBienestarEstudiantil.Models
     
         /// <summary>
         /// No hay documentación de metadatos disponible.
-        /// </summary>        
+        /// </summary>
         [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8438,6 +8457,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
+        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
@@ -8456,7 +8476,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
         public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
@@ -9693,29 +9712,6 @@ namespace SistemaBienestarEstudiantil.Models
 
     
         #region Propiedades de navegación
-    
-        /// <summary>
-        /// No hay documentación de metadatos disponible.
-        /// </summary>
-        [ScriptIgnore]
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BienestarModel", "FK_BE_GRUPO_MODALIDAD", "BE_GRUPO")]
-        public EntityCollection<BE_GRUPO> BE_GRUPO
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<BE_GRUPO>("BienestarModel.FK_BE_GRUPO_MODALIDAD", "BE_GRUPO");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<BE_GRUPO>("BienestarModel.FK_BE_GRUPO_MODALIDAD", "BE_GRUPO", value);
-                }
-            }
-        }
     
         /// <summary>
         /// No hay documentación de metadatos disponible.

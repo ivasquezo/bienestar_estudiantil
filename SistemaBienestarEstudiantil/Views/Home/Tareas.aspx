@@ -9,8 +9,7 @@
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
-
-    <link href="../../Content/activities.css" rel="stylesheet" type="text/css" />
+    
     <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/activities.js?nocache=<%=RandomNumber%>"></script>
 
@@ -200,7 +199,7 @@
         </script>
 
         <script type="text/ng-template" id="getLevel.html">
-            <form name="groupActivityForm" class="activities" ng-submit="saveLevel()">
+            <form name="groupActivityForm">
                 <div style="font-size:16px;" ng-class="view == 'faculty' ? 'selected' : '' " class="title-report">Facultad</div>
                 <div style="font-size:16px;" ng-class="view == 'school' ? 'selected' : '' " class="title-report">Escuela</div>
                 <div style="font-size:16px;" ng-class="view == 'career' ? 'selected' : '' " class="title-report">Carrera</div>
@@ -210,7 +209,7 @@
                 <br/><br/>
 
                 <div ng-show="view == 'faculty'">
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Siguiente</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Siguiente</button>
                     <table>
                         <tr>
                             <th></th>
@@ -224,7 +223,7 @@
                 </div>
 
                 <div ng-show="view == 'school'">
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Siguiente</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Siguiente</button>
 
                     <table>
                         <tr>
@@ -238,11 +237,11 @@
                     </table>
                     <br/>
 
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('faculty')">Anterior</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('faculty')">Anterior</button>
                 </div>
 
                 <div ng-show="view == 'career'">
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Siguiente</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Siguiente</button>
 
                     <table>
                         <tr>
@@ -256,11 +255,11 @@
                     </table> 
                     <br/> 
 
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Anterior</button> 
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Anterior</button> 
                 </div>
 
                 <div ng-show="view == 'modality'">
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('level')">Siguiente</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('level')">Siguiente</button>
 
                     <table>
                         <tr>
@@ -274,7 +273,7 @@
                     </table>
                     <br/>
 
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Anterior</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Anterior</button>
                 </div>
 
                 <div ng-show="view == 'level'">
@@ -290,7 +289,7 @@
                     </table>
                     <br/>
 
-                    <button type="submit" class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Anterior</button>
+                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Anterior</button>
                 </div>
 
                 <br/>
@@ -298,7 +297,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="saveLevel"></label>
                     <div class="col-md-8">
-                        <button type="submit" id="saveLevel" name="saveLevel" class="btn btn-success">Guardar</button>
+                        <button type="submit" id="saveLevel" name="saveLevel" class="btn btn-success" ng-click="saveGroupActivity()">Guardar</button>
                     </div>
                 </div>
             </form>
