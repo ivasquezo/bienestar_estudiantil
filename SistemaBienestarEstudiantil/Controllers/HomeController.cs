@@ -43,6 +43,7 @@ namespace SistemaBienestarEstudiantil.Controllers
                     Session["userValidated"] = false;
                     Session["firstPasswordAccess"] = false;
                     Session["userRol"] = usuario.CODIGOROL;
+                    Session["userCode"] = usuario.CODIGO;
 
                     FormsService.SignIn(model.UserName);
 
