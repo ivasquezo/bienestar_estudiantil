@@ -390,35 +390,6 @@
             });
         };  
 
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-        
-
-         
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
         $scope.cambiarVista = function(viewValue) {
             if (viewValue == "faculty") 
                 $scope.getAllFaculty();
@@ -494,13 +465,6 @@
             };
         };
 
-        
-        
-
-        
-
-        
-
          $scope.existFacultyData = function (code) {
             if ($scope.selectedFaculties.length > 0) {
                 for (var i = 0; i < $scope.selectedFaculties.length; i++) {
@@ -566,10 +530,7 @@
         };
 
         $scope.setSelectedCareers = function(id) {
-            console.log("Ants:", $scope.selectedCareers);
-
             $scope.selectObjects($scope.selectedCareers, id);
-            console.log("Desp:", $scope.selectedCareers);
             $scope.getAllModalities();
             $scope.getAllLevels();
         };
