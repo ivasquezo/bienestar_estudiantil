@@ -260,12 +260,12 @@
             }).success(function (data, status, headers, config) {
                 console.log("Obtener grupos de actividad...", data);
                 var existe = false;
-                if (data.success)
+                if (data.success) {
                     for (var i = 0; i < data.response.length; i++) {
                         if ($scope.selectedCareers.length > 0) {
                             existe = false;
-                            for (var j = 0; j < $scope.selectedCareers.length; j++) {
-                                if ($scope.selectedCareers[j] == data.response[i].CODIGOCARRERA)
+                            for (var c = 0; c < $scope.selectedCareers.length; c++) {
+                                if ($scope.selectedCareers[c] == data.response[i].CODIGOCARRERA)
                                     existe = true;
                             }
                             if (!existe) {
@@ -277,8 +277,37 @@
                             $scope.originCareers.push(data.response[i].CODIGOCARRERA);
                         }
 
-                        
+                        if ($scope.selectedModalities.length > 0) {
+                            existe = false;
+                            for (var m = 0; m < $scope.selectedModalities.length; m++) {
+                                if ($scope.selectedModalities[m] == data.response[i].CODIGOMODALIDAD)
+                                    existe = true;
+                            }
+                            if (!existe) {
+                                $scope.selectedModalities.push(data.response[i].CODIGOMODALIDAD);
+                                $scope.originModalities.push(data.response[i].CODIGOMODALIDAD);
+                            }
+                        } else {
+                            $scope.selectedModalities.push(data.response[i].CODIGOMODALIDAD);
+                            $scope.originModalities.push(data.response[i].CODIGOMODALIDAD);
+                        }
+
+                        if ($scope.selectedLevels.length > 0) {
+                            existe = false;
+                            for (var l = 0; l < $scope.selectedLevels.length; l++) {
+                                if ($scope.selectedLevels[l] == data.response[i].CODIGONIVEL)
+                                    existe = true;
+                            }
+                            if (!existe) {
+                                $scope.selectedLevels.push(data.response[i].CODIGONIVEL);
+                                $scope.originLevels.push(data.response[i].CODIGONIVEL);
+                            }
+                        } else {
+                            $scope.selectedLevels.push(data.response[i].CODIGONIVEL);
+                            $scope.originLevels.push(data.response[i].CODIGONIVEL);
+                        }
                     }
+                }
                 else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
