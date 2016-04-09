@@ -53,7 +53,16 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                var becas = db.BE_BECA_SOLICITUD.Select(be => new { be.CODIGO, be.OBSERVACION, be.APROBADA, be.CEDULA, BECA = be.BE_BECA_TIPO.NOMBRE, NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), be.BE_BECA_SOLICITUD_HISTORIAL }).ToList();
+                var becas = db.BE_BECA_SOLICITUD.Select(be => new {
+                    be.CODIGO,
+                    be.OBSERVACION,
+                    be.APROBADA,
+                    be.CEDULA,
+                    BECA = be.BE_BECA_TIPO.NOMBRE,
+                    TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
+                    ADJUNTOS = be.BE_BECA_ADJUNTO,
+                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), be.BE_BECA_SOLICITUD_HISTORIAL
+                }).ToList();
 
                 if (becas != null && becas.Count > 0)
                     response = new Response(true, "", "", "", becas);

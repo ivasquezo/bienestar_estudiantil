@@ -47,21 +47,21 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
                         <div class="col-md-4">
-                            <div style="font-size:15px;width:250px;">{{solicitudbeca.NOMBRE}}</div>
+                            <div style="font-size:15px;width:250px;color:#508ECC;font-weight:bold;">{{solicitudbeca.NOMBRE}}</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="beca">Tipo de Beca</label>  
                         <div class="col-md-4">
-                            <div style="font-size:15px;width:250px;">{{solicitudbeca.BECA}}</div>
+                            <div style="font-size:15px;width:250px;color:#508ECC;font-weight:bold;">{{solicitudbeca.BECA}}</div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="OTORGADO">Otorgado</label>  
+                        <label class="col-md-4 control-label" for="OTORGADO">% Otorgado</label>  
                         <div class="col-md-4">
-                            <input required ng-model="solicitudbeca.OTORGADO" id="OTORGADO" name="OTORGADO" type="number" class="form-control input-md" style="height:20px;">
+                            <input ng-required="solicitudbeca.RUBRO != null" ng-model="solicitudbeca.OTORGADO" id="OTORGADO" name="OTORGADO" type="number" class="form-control input-md" style="height:20px;">
                             <span ng-messages="becaForm.OTORGADO.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese el porcentaje otorgado del rubro seleccionado</span>
                             </span>
@@ -71,7 +71,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="RUBRO">Rubro</label>  
                         <div class="col-md-4">
-                            <select required ng-model="solicitudbeca.RUBRO" id="RUBRO" name="RUBRO" class="form-control"
+                            <select ng-required="solicitudbeca.OTORGADO != null" ng-model="solicitudbeca.RUBRO" id="RUBRO" name="RUBRO" class="form-control"
                                 ng-options="o.v as o.n for o in RUBROS" style="height:20px; width:150px;margin-top:5px;"></select>
                             <span ng-messages="becaForm.RUBRO.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese el rubro otorgado</span>
@@ -91,7 +91,33 @@
                         <label class="col-md-4 control-label" for="OBSERVACIONBECA">Observación</label>  
                         <div class="col-md-4">
                             <textarea ng-model="solicitudbeca.OBSERVACION" id="OBSERVACIONBECA" name="OBSERVACIONBECA" class="form-control"
-                                style="margin-top:5px;padding:3px;height:80px;width:250px;"></textarea>
+                                style="margin-top:5px;padding:3px;height:80px;width:250px;font-size:10px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Documentos que debe ingresar</label>  
+                        <div class="col-md-4">
+                            <div style="font-size:12px;width:250px;">
+                            	* Solicitud personal dirigida al Coordinador del Departamento de Bienestar Universitario
+                            </div>
+                            <div ng-repeat="documento in getTipoBecaByCodeSelected(solicitudbeca.TIPOCODIGO).BE_BECA_TIPO_DOCUMENTO"
+                            	style="font-size:12px;width:250px;">
+                            	* {{documento.NOMBRE}}
+                            </div>
+                            <div style="width:250px;">
+                            	<hr/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Documentos ingresados</label>  
+                        <div class="col-md-4">
+                        	<div ng-repeat="adjunto in solicitudbeca.ADJUNTOS"
+                            	style="font-size:12px;width:250px;">
+                            	{{adjunto.DESCRIPCION}}
+                            </div>
                         </div>
                     </div>
 

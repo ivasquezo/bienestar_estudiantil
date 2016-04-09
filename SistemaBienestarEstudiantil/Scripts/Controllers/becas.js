@@ -148,6 +148,13 @@
             return null;
         }
 
+        $scope.getTipoBecaByCodeSelected = function (code) {
+            for (var i = 0; i < $scope.gridOptionsTipos.data.length; i++) {
+                if (code == $scope.gridOptionsTipos.data[i].CODIGO) return $scope.gridOptionsTipos.data[i];
+            };
+            return null;
+        }
+
         this.editBeca = function (code) {
             
             $scope.solicitudbeca = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
