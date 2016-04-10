@@ -79,27 +79,65 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         /*
          * beca edited by bienestar admin
+         * APROBADA:
+         * 0 pendiente
+         * 1 procesando
+         * 2 aprobada
+         * 3 rechazada
          */
         [WebMethod]
-        public void saveBeca(EditedBeca solicitudbeca)
+        public void saveBeca(EditedBeca editedBeca)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-            BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == solicitudbeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
-
-            if (historial == null)
+            using (Models.bienestarEntities db = new Models.bienestarEntities())
             {
-                historial = new BE_BECA_SOLICITUD_HISTORIAL();
-                historial.CODIGOSOLICITUD = solicitudbeca.CODIGO;
-                historial.CODIGOUSUARIO = solicitudbeca.CODIGOUSUARIO;
-                historial.FECHA = DateTime.Now;
-                historial.RUBRO = solicitudbeca.RUBRO;
-                historial.OTORGADO = solicitudbeca.OTORGADO;
-                db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(historial);
-                db.SaveChanges();
-            }
-                
+                BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == editedBeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
 
-            writeResponseObject(historial);
+                // add new historial
+                if (historial == null || (historial != null && 
+                   (historial.OTORGADO != editedBeca.OTORGADO ||
+                    historial.RUBRO != editedBeca.RUBRO)))
+                {
+                    BE_BECA_SOLICITUD_HISTORIAL newHistorial = new BE_BECA_SOLICITUD_HISTORIAL();
+                    newHistorial.CODIGOSOLICITUD = editedBeca.CODIGO;
+                    newHistorial.CODIGOUSUARIO = editedBeca.CODIGOUSUARIO;
+                    newHistorial.FECHA = DateTime.Now;
+                    newHistorial.RUBRO = editedBeca.RUBRO;
+                    newHistorial.OTORGADO = editedBeca.OTORGADO;
+                    db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(newHistorial);
+                    db.SaveChanges();
+                }
+            }
+
+            /*
+             * save changes for beca
+             */
+            using (Models.bienestarEntities db = new Models.bienestarEntities())
+            {
+                BE_BECA_SOLICITUD beca = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == editedBeca.CODIGO).FirstOrDefault();
+                if (beca != null && 
+                   (beca.OBSERVACION != editedBeca.OBSERVACION ||
+                    beca.APROBADA != editedBeca.APROBADA))
+                {
+                    beca.OBSERVACION = editedBeca.OBSERVACION;
+                    if (beca.APROBADA != editedBeca.APROBADA)
+                    {
+                        beca.APROBADA = editedBeca.APROBADA;
+                        if (beca.APROBADA == 2 || beca.APROBADA == 3)
+                        {
+                            editedBeca.ENVIARNOTIFICACION = true;
+                        }
+                    }
+                    db.SaveChanges();
+                }
+
+                if (beca != null && editedBeca.ENVIARNOTIFICACION)
+                {
+                    string to = "micheljqh@yahoo.es"; // beca.DATOSPERSONALE.DTPEMAILC;
+                    string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
+                    string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
+                    Class.Utils.sendMail(to, subject, body);
+                }
+            }
         }
 
         [WebMethod]
@@ -377,6 +415,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             public int RUBRO { set; get; }
             public int OTORGADO { set; get; }
             public string OBSERVACION { set; get; }
+            public bool ENVIARNOTIFICACION { set; get; }
         }
 
         // beca tipo auxiliar
