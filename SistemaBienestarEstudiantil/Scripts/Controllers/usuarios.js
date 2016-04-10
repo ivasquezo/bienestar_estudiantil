@@ -10,7 +10,7 @@
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
-        $scope.backdrop = false;
+        $scope.backdrop = true;
         $scope.delay = 2;
         $scope.minDuration = 2;
 

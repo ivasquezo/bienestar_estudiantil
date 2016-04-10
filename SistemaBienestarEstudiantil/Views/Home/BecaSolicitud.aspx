@@ -13,11 +13,13 @@
 
 	<div id="messages"></div>
 
-    <h2>Solicitud de Beca del estudiante</h2>
+    <h2 style="padding-bottom:0px;margin-bottom:0px;">Solicitud de Beca del estudiante</h2>
     <div ng-controller="BecaSolicitudController as Main">
+    	<div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
+    		<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+    	</div>
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
-	    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
-	    	<center><img style="width:170px;" src="../../Content/logo-universidad-israel.png"></center>
+	    	<center><img style="width:150px;" src="../../Content/logo-universidad-israel.png"></center>
 	    	<input ng-model="ALUMNO.DTPCEDULAC" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
 				name="validIdentification" placeholder="Número de cédula" type="text"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
@@ -47,7 +49,7 @@
 				</div>
 			</div>
     	</form>
-    	<form id="formFiles" name="formFiles" enctype="multipart/form-data">
+    	<form id="formFiles" name="formFiles" enctype="multipart/form-data" ng-if="ALUMNO != null">
     		<div>
 
 	    		<div class="document-message-title" ng-if="seleccion.TIPO != null">

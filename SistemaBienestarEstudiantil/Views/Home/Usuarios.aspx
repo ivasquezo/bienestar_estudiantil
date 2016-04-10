@@ -17,7 +17,9 @@
     <div id="messages"></div>
     
     <div ng-controller="UsuariosController as Main">
-        <div cg-busy="{promise:promise, message:message, backdrop:backdrop, delay:delay, minDuration:minDuration}"></div>
+        <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
+            <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+        </div>
 
         <button ng-click="addNewUserDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar usuario">
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>

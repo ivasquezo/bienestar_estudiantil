@@ -183,6 +183,9 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
+                        scope.BECA_SOLICITUD = null;
+                        scope.ALUMNO = null;
+
                         scope.promise = $http.post('../../WebServices/Becas.asmx/getStudentSolicitud', {
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {

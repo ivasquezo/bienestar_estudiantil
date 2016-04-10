@@ -16,10 +16,10 @@
     <h2>Becas</h2>
     <div ng-controller="BecasController as Main" ng-init='CODIGOUSUARIO=<%=@Session["userCode"]%>'>
 	    <div style="font-size:18px;font-weight: bold;">Administrar Solicitudes de <a href="/Home/BecaSolicitud" target="_blank">Becas</a></div>
-    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
-	    
+        <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
+            <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+        </div>
 	    <div ui-grid="gridOptions"></div>
-	    
 	    <br/><div style="font-size:18px;font-weight: bold;">Administrar Tipos de Becas y Documentos</div>
         <button ng-click="addTipoBecaDialog()" style="margin-bottom:5px;margin-top:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar tipo de beca">
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>

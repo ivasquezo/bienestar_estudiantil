@@ -16,7 +16,9 @@
     <script type="text/javascript" src="../../Scripts/Controllers/encuesta.js?nocache=<%=RandomNumber%>"></script>
 	<div id="messages"></div>
     <div ng-controller="EncuestaController as Main" class="encuestas">
-    	<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+    	<div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
+    		<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+    	</div>
     	<hr/>
 		<form id="formEncuesta" name="formEncuesta" ng-submit="enviarForm()">
 		<div ng-show="defaultSurvey != null">

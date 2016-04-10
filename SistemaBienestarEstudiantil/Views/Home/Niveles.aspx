@@ -18,6 +18,10 @@
     <div id="messages"></div>
 
     <div ng-controller="RolsController as Main">
+        <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
+            <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+        </div>
+
         <button type="button" ng-click="addNewRolDialog()">Nuevo Rol</button><br /><br />
 
         <div ui-grid="gridOptions"></div>

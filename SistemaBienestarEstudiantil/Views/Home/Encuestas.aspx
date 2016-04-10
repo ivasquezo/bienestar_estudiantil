@@ -17,8 +17,10 @@ Encuestas
 	<script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
     <div id="messages"></div>
     <div ng-controller="EncuestasController as Main" class="encuestas">
-	    <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
-    	<script type="text/ng-template" id="actionsEncuestas.html">
+	    <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
+    		<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+    	</div>
+		<script type="text/ng-template" id="actionsEncuestas.html">
 			<div class="ui-grid-cell-contents">
 				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.removeEncuesta(COL_FIELD)">
 					<span class="ui-icon ui-icon-trash"></span>
