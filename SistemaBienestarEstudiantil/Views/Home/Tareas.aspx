@@ -346,8 +346,7 @@
                         <span ng-show="attachedForm.attachedActivity.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero est&aacute; vac&iacute;o</span>
                         <span ng-show="attachedForm.attachedActivity.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
                     </div>
-
-                    <br/>
+                    
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveAttached"></label>
                         <div class="col-md-8">
@@ -355,21 +354,20 @@
                         </div>
                     </div>
 
-                    <br/>
+                    <br/><br/>
                     <div class="form-group">
                         <table style="width:100%; font-size:16px">
                             <tr>
+                                <th>Descripci&oacute;n</th>
                                 <th>Adjunto</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th></th>
+                                <th>Acci&oacute;n</th>
                             </tr>
-                            <tr >                                
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td><button type="button" ng-click="grid.appScope.Main.removeActivity(COL_FIELD)" title="Elimiar actividad">
-                <span class="ui-icon ui-icon-trash"></span></button></td>                            
+                            <tr ng-repeat="attach in allAttaches">                                
+                                <td>{{ attach.DESCRIPCION }}</td>
+                                <td><a href="../../WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
+                                        {{attach.NOMBRE}}
+                                </a></td>
+                                <td><button title="Eliminar" type="button" style="width:22px; padding-left:1px;display:inline-block;vertical-align:top;" ng-click="removeAttach(attach.CODIGO)"><span class="ui-icon ui-icon-trash"></span></button></td>
                             </tr>
                         </table>
                     </div>

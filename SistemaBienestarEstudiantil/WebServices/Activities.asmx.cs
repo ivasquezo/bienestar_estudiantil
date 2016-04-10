@@ -9,6 +9,7 @@ using System.Web.Script.Serialization;
 using SistemaBienestarEstudiantil.Models;
 using SistemaBienestarEstudiantil.Class;
 using System.IO;
+using System.Web.Script.Services;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -803,7 +804,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         }
                     }
 
-                    response = new Response(true, "info", "Informaci\u00F3n", "El archivo se adjunto correctamente", activityAttached);
+                    response = new Response(true, "info", "Informaci\u00F3n", "El archivo se adjunt\u00F3 correctamente", activityAttached);
                 }
             }
             catch (Exception)
@@ -815,6 +816,64 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        [WebMethod]
+        public void getAttachByActivity(int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                List<BE_ACTIVIDAD_ADJUNTO> attaches = db.BE_ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGOACTIVIDAD == activityId).ToList();
+
+                if (attaches != null && attaches.Count > 0)
+                    response = new Response(true, "", "", "", attaches);
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado adjuntos registrados", null);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos adjuntos", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        [ScriptMethod(UseHttpGet = true)]
+        public void getAttach(int code)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            BE_ACTIVIDAD_ADJUNTO attach = db.BE_ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGO == code).First();
+
+            byte[] response = null;
+
+            if (attach != null && attach.ADJUNTO != null)
+                response = attach.ADJUNTO;
+
+            Context.Response.ContentType = attach.CONTENTTYPE;
+            Context.Response.AddHeader("content-disposition", "attachment; filename=" + attach.NOMBRE);
+            Context.Response.BinaryWrite(response);
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod]
+        public void removeAttach(int attachCode)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            BE_ACTIVIDAD_ADJUNTO attachDeleted = db.BE_ACTIVIDAD_ADJUNTO.Where(a => a.CODIGO == attachCode).FirstOrDefault();
+
+            if (attachDeleted != null)
+            {
+                db.BE_ACTIVIDAD_ADJUNTO.DeleteObject(attachDeleted);
+                db.SaveChanges();
+            }
+            writeResponse("ok");
+        }
 
 
 

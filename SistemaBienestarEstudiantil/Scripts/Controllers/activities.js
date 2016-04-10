@@ -644,6 +644,9 @@
 
         this.getAttachedActivity = function (code) {
             $scope.activityCopy.CODIGO = code;
+            $scope.allAttaches = [];
+
+            $scope.getAllActivitiesAttach();
 
             ngDialog.open({
                 template: 'attachedActivity.html',
@@ -657,6 +660,34 @@
                 })
             });
         };
+
+        $scope.getAllActivitiesAttach = function (code, successFunction) {
+            $http.post('../../WebServices/Activities.asmx/getAttachByActivity', {
+                activityId: $scope.activityCopy.CODIGO
+            }).success(function (data, status, headers, config) {
+                console.log("Adjuntos de la actividad... ", data);
+                if (data.success)
+                    $scope.allAttaches = data.response;
+                else {
+                    $scope.allAttaches = [];
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar ajuntos de actividad...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los archivos adjuntos de la actividad'}]);
+            });
+        };
+
+        $scope.removeAttach = function (attachCode) {
+            $scope.promise = $http.post('../../WebServices/Activities.asmx/removeAttach', {
+                attachCode: attachCode
+            }).success(function (data, status, headers, config) {
+                console.log("Eliminar adjunto...", data);
+                $scope.getAllActivitiesAttach();
+            }).error(function (data, status, headers, config) {
+                console.log("Error eliminar adjunto...", data);
+            });
+        }
 
 
 
@@ -825,8 +856,11 @@
                     transformRequest: angular.identity
                 }).success(function (data, status, headers, config) {
                     console.log("Adjuntos", data);
-                    if (!data.success)
-                    
+                    if (data.success) {
+                        $scope.getAllActivitiesAttach();
+                        document.getElementById("observacion").value = "";
+                        document.getElementById("attachedActivity").value = "";
+                    }
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
                 }).error(function (data, status, headers, config) {
                     console.log("error al cargar los tipos...", data);
