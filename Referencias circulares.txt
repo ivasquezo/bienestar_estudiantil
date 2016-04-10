@@ -41,6 +41,7 @@ public EntityReference<DATOSPERSONALE> DATOSPERSONALEReference
 
 BE_BECA_SOLICITUD_HISTORIAL
 
+public BE_BECA_SOLICITUD BE_BECA_SOLICITUD
 public EntityReference<BE_BECA_SOLICITUD> BE_BECA_SOLICITUDReference
 public EntityReference<BE_USUARIO> BE_USUARIOReference
 
@@ -123,6 +124,7 @@ public EntityReference<BE_ROL> BE_ROLReference
 BE_USUARIO
 
 public EntityCollection<BE_ACTIVIDAD> BE_ACTIVIDAD
+public EntityCollection<BE_BECA_SOLICITUD_HISTORIAL> BE_BECA_SOLICITUD_HISTORIAL
 public EntityReference<BE_ROL> BE_ROLReference
 
 
@@ -188,7 +190,6 @@ public EntityReference<INSCRIPCION> INSCRIPCIONReference
 
 MODALIDAD
 
-public EntityCollection<BE_GRUPO> BE_GRUPO
 public EntityCollection<CARRERA_MODAL> CARRERA_MODAL
 
 
