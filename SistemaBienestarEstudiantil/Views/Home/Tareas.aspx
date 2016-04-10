@@ -20,7 +20,7 @@
     <div ng-controller="ActivitiesController as Main">
         <div cg-busy="{promise:promise, message:message, backdrop:backdrop, delay:delay, minDuration:minDuration}"></div>
 
-        <button ng-click="addNewActivityDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar Actividad">
+        <button ng-click="addNewActivityDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar actividad">
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>
         </button>
 
@@ -308,25 +308,16 @@
                 <legend>Asistencia</legend>
                 <form name="assistanceForm" ng-submit="saveAssistanceDB()">
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="levelBox">Nivel</label>
-                        <div class="col-md-4">                            
-                            <select ng-model="activityAssistanceCopy.CODIGO" id="levelBox" name="levelBox" class="form-control" ng-options="o.value as o.name for o in allLevelAssistance" ng-change="chargeStudents(activityAssistanceCopy.CODIGO)">
-                            </select>
-                            <br/><span class="help-block">Nivel para tomar asistencia</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <table style="width:100%; font-size:16px">
                             <tr>
-                                <th>Cédula</th>
+                                <th>C&eacute;dula</th>
                                 <th>Nombre</th>
-                                <th>Asistencia</th>
+                                <th><input type="checkbox" ng-checked="checkedAll" ng-click="setAllStudents()"></th>
                             </tr>
-                            <tr ng-repeat="student in studentsData">                                
-                                <td>{{ student.ALUMNO.CEDULA }}</td>
-                                <td>{{ student.ALUMNO.NOMBRE }}</td>
-                                <td><input type="checkbox" ng-checked="student.ASISTENCIA1" 
+                            <tr ng-repeat="student in allLevelAssistance">                                
+                                <td>{{ student.CEDULA }}</td>
+                                <td>{{ student.NOMBRE }}</td>
+                                <td><input type="checkbox" ng-checked="student.ASISTENCIA" 
                                     ng-click="setAssistanceStudents(student.CODIGO)"></td>
                             
                             </tr>

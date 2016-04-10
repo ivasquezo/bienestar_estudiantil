@@ -229,7 +229,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
         private int[] getCareerModalityIds(int[] modalities, int[] carees)
         {
             bienestarEntities db = new bienestarEntities();
@@ -293,7 +292,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
-        [WebMethod]
         private int[] getLevelByCareerModality(int carMod)
         {
             bienestarEntities db = new bienestarEntities();
@@ -421,7 +419,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
         private int getPresentPeriod()
         {
             bienestarEntities db = new bienestarEntities();
@@ -429,7 +426,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             return period.PRDCODIGOI;
         }
 
-        [WebMethod]
         private int[] getMatricula(int[] carMod)
         {
             bienestarEntities db = new bienestarEntities();
@@ -503,14 +499,13 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
-        private void saveGroupActivity(int careerId, int levelId, int activityId)
+        private void saveGroupActivity(int careerModalityId, int levelId, int activityId)
         {
             bienestarEntities db = new bienestarEntities();
 
             try
             {
-                BE_GRUPO group = db.BE_GRUPO.Single(g => g.CODIGOMODALIDAD == careerId && g.CODIGONIVEL == levelId);
+                BE_GRUPO group = db.BE_GRUPO.Single(g => g.CODIGOMODALIDAD == careerModalityId && g.CODIGONIVEL == levelId);
 
                 List<BE_GRUPO_ACTIVIDAD> groupActivity = db.BE_GRUPO_ACTIVIDAD.Where(ga => ga.CODIGOGRUPO == group.CODIGO && ga.CODIGOACTIVIDAD == activityId).ToList();
 
@@ -525,10 +520,52 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                     db.SaveChanges();
                 }
+
+                saveAssistance(group.CODIGO, activityId, careerModalityId, levelId);
             }
             catch (InvalidOperationException)
             {
                 Console.WriteLine("No se encontraron datos");
+            }
+        }
+
+        private void saveAssistance(int groupId, int activityId, int careerModalityId, int levelId)
+        {
+            bienestarEntities db = new bienestarEntities();
+            int period = getPresentPeriod();
+            var data = db.MATRICULAs.Join(db.INSCRIPCIONs, m => m.INSCODIGOI, i => i.INSCODIGOI, (m, i) => new { m, i })
+                .Join(db.DATOSPERSONALES, mi => mi.i.DTPCEDULAC, d => d.DTPCEDULAC, (mi, d) => new { mi, d })
+                .Select(s => new {
+                    ALUMNO = s.mi.m.MTRNUMEROI,
+                    PERIODO = s.mi.m.PRDCODIGOI,
+                    CODIGOCARRERAMODULO = s.mi.m.CRRMODCODIGOI,
+                    NIVEL = s.mi.m.NVLCODIGOI,
+                    CEDULA = s.d.DTPCEDULAC,
+                    NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2
+                })
+                .Where(w => w.PERIODO == period && w.CODIGOCARRERAMODULO == careerModalityId && w.NIVEL == levelId).ToList();
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                long studentId = data[i].ALUMNO;
+                try
+                {
+                    BE_ASISTENCIA assistance = db.BE_ASISTENCIA.Single(a => a.CODIGOGRUPO == groupId && a.CODIGOACTIVIDAD == activityId && a.CODIGOALUMNO == studentId);
+                }
+                catch (InvalidOperationException)
+                {
+                    Console.WriteLine("No se encontraron datos");
+                }
+
+                BE_ASISTENCIA newAssitance = new BE_ASISTENCIA();
+                newAssitance.CODIGOACTIVIDAD = activityId;
+                newAssitance.CODIGOGRUPO = groupId;
+                newAssitance.CODIGOALUMNO = studentId;
+                newAssitance.ASISTENCIA = false;
+
+                db.BE_ASISTENCIA.AddObject(newAssitance);
+
+                db.SaveChanges();
             }
         }
 
@@ -580,12 +617,22 @@ namespace SistemaBienestarEstudiantil.WebServices
                     List<int> group = db.BE_GRUPO.Where(g => g.CODIGOMODALIDAD == careerId).Select(s => s.CODIGO).ToList();
 
                     List<BE_GRUPO_ACTIVIDAD> groupActivity = db.BE_GRUPO_ACTIVIDAD.Where(ga => group.Contains(ga.CODIGOGRUPO) && ga.CODIGOACTIVIDAD == activityId).ToList();
+                    List<BE_ASISTENCIA> assistance = db.BE_ASISTENCIA.Where(a => group.Contains(a.CODIGOGRUPO) && a.CODIGOACTIVIDAD == activityId).ToList();
 
                     if (groupActivity != null && groupActivity.Count > 0)
                     {
                         foreach (BE_GRUPO_ACTIVIDAD groupActivityDeleted in groupActivity)
                         {
                             db.BE_GRUPO_ACTIVIDAD.DeleteObject(groupActivityDeleted);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    if (assistance != null && assistance.Count > 0)
+                    {
+                        foreach (BE_ASISTENCIA assistanceDeleted in assistance)
+                        {
+                            db.BE_ASISTENCIA.DeleteObject(assistanceDeleted);
                             db.SaveChanges();
                         }
                     }
@@ -650,8 +697,76 @@ namespace SistemaBienestarEstudiantil.WebServices
             return arrayDeleted;
         }
 
+        [WebMethod]
+        public void getStudentsAssistance(int activityId)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
+            try
+            {
+                var data = db.BE_ASISTENCIA.Join(db.MATRICULAs, a => a.CODIGOALUMNO, m => m.MTRNUMEROI, (a, m) => new { a, m })
+                    .Join(db.INSCRIPCIONs, am => am.m.INSCODIGOI, i => i.INSCODIGOI, (am, i) => new { am, i })
+                    .Join(db.DATOSPERSONALES, ami => ami.i.DTPCEDULAC, d => d.DTPCEDULAC, (ami, d) => new { ami, d })
+                    .Select(s => new {
+                        CODIGO = s.ami.am.a.CODIGO,
+                        ACTIVIDAD = s.ami.am.a.CODIGOACTIVIDAD,
+                        CEDULA = s.d.DTPCEDULAC,
+                        NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2,
+                        ASISTENCIA = s.ami.am.a.ASISTENCIA
+                    })
+                    .Where(w => w.ACTIVIDAD == activityId).ToList();
 
+                if (data != null && data.Count > 0)
+                    response = new Response(true, "", "", "", data);
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado datos de asistencia", null);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos de asistencia", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void saveAssistanceData(int[] assistance)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                for (int assist = 0; assist < assistance.Length; assist++)
+                {
+                    int code = assistance[assist];
+                    BE_ASISTENCIA student = db.BE_ASISTENCIA.Single(a => a.CODIGO == code);
+
+                    if (student.ASISTENCIA == true)
+                        student.ASISTENCIA = false;
+                    else
+                        student.ASISTENCIA = true;
+
+                    db.SaveChanges();
+                }
+
+                response = new Response(true, "info", "Actualizar", "Asistencia registrada correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los datos de asistencia para actualizarla", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al actualizar los datos de asistencia", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
 
 
 
@@ -849,42 +964,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
-        public void saveAssistanceData(int[] assistance)
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                for (int assist = 0; assist < assistance.Length; assist++)
-                {
-                    int code = assistance[assist];
-                    BE_ASISTENCIA student = db.BE_ASISTENCIA.Single(a => a.CODIGO == code);
-
-                    if (student.ASISTENCIA == true)
-                        student.ASISTENCIA = false;
-                    else
-                        student.ASISTENCIA = true;
-
-                    db.SaveChanges();
-                }
-
-                response = new Response(true, "info", "Actualizar", "Asistencia registrada correctamente", null);
-            }
-            catch (InvalidOperationException)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener los datos de asistencia para actualizarla", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al actualizar los datos de asistencia", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
+        
 
         [WebMethod]
         public void removeActivityById(int activityId)

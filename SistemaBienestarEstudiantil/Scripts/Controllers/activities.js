@@ -561,6 +561,87 @@
             }     
         };
 
+        this.getAssistance = function (code) {
+            $scope.allLevelAssistance = [];
+            $scope.assistance = [];
+            $scope.checkedAll = false;
+
+            $scope.getAllStudents(code, function(){
+                if ($scope.allLevelAssistance.length > 0) {
+                    var countAssistance = 0;
+
+                    for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                        if ($scope.allLevelAssistance[i].ASISTENCIA)
+                            countAssistance ++;
+                    };
+
+                    if ($scope.allLevelAssistance.length == countAssistance)
+                        $scope.checkedAll = true;
+
+                    ngDialog.open({
+                        template: 'assistanceActivity.html',
+                        className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                        closeByDocument: true,
+                        closeByEscape: true,
+                        scope: $scope,
+                        controller: $controller('ngDialogController', {
+                            $scope: $scope,
+                            $http: $http
+                        })
+                    });
+                }
+                else
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'No se han encontrado niveles registrados en la actividad'}]);
+            });
+
+
+        };
+
+        $scope.getAllStudents = function (code, successFunction) {
+            $http.post('../../WebServices/Activities.asmx/getStudentsAssistance', {
+                activityId: code
+            }).success(function (data, status, headers, config) {
+                console.log("Estudiantes de la actividad... ", data);
+                if (data.success) {
+                    $scope.allLevelAssistance = data.response;
+                } 
+
+                if (typeof successFunction === "function")
+                    successFunction();
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar niveles de actividad...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad'}]);
+            });
+        };
+
+        $scope.setAssistanceStudents = function(code) {
+            $scope.selectObjects($scope.assistance, code);
+
+            if ($scope.allLevelAssistance.length == $scope.assistance.length)
+                $scope.checkedAll = true;
+            else
+                $scope.checkedAll = false;
+        };
+
+        $scope.setAllStudents = function() {
+            if ($scope.checkedAll) {
+                for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                    $scope.assistance.push($scope.allLevelAssistance[i].CODIGO);
+                    $scope.allLevelAssistance[i].ASISTENCIA = false;
+                }
+                $scope.checkedAll = false;
+            }
+            else {
+                for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                    if (!$scope.allLevelAssistance[i].ASISTENCIA) {
+                        $scope.assistance.push($scope.allLevelAssistance[i].CODIGO);
+                        $scope.allLevelAssistance[i].ASISTENCIA = true;
+                    }
+                }
+                $scope.checkedAll = true;
+            }
+        };
+
 
 
 
@@ -570,38 +651,10 @@
 
         
 
-        $scope.getGroupLevel = function (code, successFunction) {
-            if (code > 0) {
-                $http.post('../../WebServices/Activities.asmx/getGroupLevelByActivityId', {
-                    activityId: code
-                }).success(function (data, status, headers, config) {
-                    console.log("Niveles de la actividad... ", data);
-                    $scope.groupActivity = data.response;
 
-                    $scope.allLevelAssistance = [];
 
-                    for (var i = 0; i < $scope.groupActivity.length; i++) {
-                        if ($scope.groupActivity[i].ESTADO == true)
-                            $scope.allLevelAssistance.push({value: $scope.groupActivity[i].CODIGOGRUPO, name:$scope.groupActivity[i].NIVEL + " " + $scope.groupActivity[i].PARALELO + " - " + $scope.groupActivity[i].MODALIDAD});
-                    }
 
-                    if (typeof successFunction === "function")
-                        successFunction();
-                }).error(function (data, status, headers, config) {
-                    console.log("Error al cargar niveles de actividad...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad'}]);
-                });
-            }
-
-            $http.post('../../WebServices/Activities.asmx/getAllGroupLevels'
-            ).success(function (data, status, headers, config) {
-                console.log("Niveles existentes... ", data);
-                $scope.allGroupLevel = data.response;
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar los niveles...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles existentes'}]);
-            });
-        };
+        
 
         $scope.existGroupLevel = function (code) {
             if ($scope.groupActivity.length > 0) {
@@ -635,36 +688,7 @@
 
         
 
-        this.getAssistance = function (code) {
-            $scope.activityAssistanceCopy = {
-                CODIGO: ''
-            };
-            $scope.allLevelAssistance = [];
-
-            $scope.activityAssistanceCopy.CODIGOACTIVIDAD = code;
-
-            // Llena los niveles
-            $scope.getGroupLevel(code, function(){
-                $scope.assistance = [];
-                $scope.studentsData = [];
-                
-                if ($scope.allLevelAssistance.length > 0) {
-                    ngDialog.open({
-                        template: 'assistanceActivity.html',
-                        className: 'ngdialog-theme-flat ngdialog-theme-custom',
-                        closeByDocument: true,
-                        closeByEscape: true,
-                        scope: $scope,
-                        controller: $controller('ngDialogController', {
-                            $scope: $scope,
-                            $http: $http
-                        })
-                    });
-                }
-                else
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'No se han encontrado niveles registrados en la actividad'}]);
-            });
-        };
+        
 
         $scope.chargeStudents = function (code) {
             $scope.studentsData = [];
@@ -684,25 +708,7 @@
             });
         };
 
-        $scope.setAssistanceStudents = function(code) { 
-            var existGroup = false;
-
-            if ($scope.assistance != null && $scope.assistance.length > 0) {
-                for (var i=0; i<$scope.assistance.length; i++) {
-                    if ($scope.assistance[i] == code)
-                        existGroup = true;
-                }
-            } 
-
-            if (existGroup) {
-                for (var i=0; i<$scope.assistance.length; i++) {
-                    if ($scope.assistance[i] == code)
-                        $scope.assistance.splice(i, code);
-                }
-            }                
-            else
-                $scope.assistance.push(code); 
-        };
+        
 
         this.getAttachedActivity = function (code) {
             
@@ -815,9 +821,6 @@
             } else {
                 var parentObject = this;
 
-                console.log("carrera: ", $scope.selectedCareers);
-                console.log("modalidad: ", $scope.selectedModalities);
-                console.log("nivel: ", $scope.selectedLevels);
                 if (($scope.selectedCareers.length > 0 || $scope.selectedModalities.length > 0) && $scope.selectedLevels.length == 0) {
                     for (var i = 0; i < $scope.allLevels.length; i++)
                         $scope.selectedLevels.push($scope.allLevels[i].NVLCODIGOI)
@@ -850,17 +853,19 @@
 
         $scope.saveAssistanceDB = function () {
             if (!this.assistanceForm.$invalid) {
-                var newParentObject = this;
+                var parentObject = this;
 
                 $http.post('../../WebServices/Activities.asmx/saveAssistanceData', {                
                     assistance: $scope.assistance
                 }).success(function (data, status, headers, config) {
-                    console.log("Agregar actividad: ", data);
-                    if (!data.success)
+                    console.log("Actualizar asistencia: ", data);
+                    if (data.success)
+                        parentObject.closeThisDialog();
+                    else
                         $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
                 }).error(function (data, status, headers, config) {
-                    console.log("Error al agregar el rol...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
+                    console.log("Error al actualizar asistencia...", data);
+                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar asistencia'}]);
                 });
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
