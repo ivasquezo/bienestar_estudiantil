@@ -308,18 +308,17 @@
                 <legend>Asistencia</legend>
                 <form name="assistanceForm" ng-submit="saveAssistanceDB()">
                     <div class="form-group">
-                        <table style="width:100%; font-size:16px">
+                        <table style="width:100%; font-size:12px">
                             <tr>
-                                <th>C&eacute;dula</th>
+                                <th style="padding:2px; text-align:center"><input type="checkbox" ng-checked="checkedAll" ng-click="setAllStudents()"></th>
                                 <th>Nombre</th>
-                                <th><input type="checkbox" ng-checked="checkedAll" ng-click="setAllStudents()"></th>
+                                <th>C&eacute;dula</th>
                             </tr>
-                            <tr ng-repeat="student in allLevelAssistance">                                
-                                <td>{{ student.CEDULA }}</td>
-                                <td>{{ student.NOMBRE }}</td>
-                                <td><input type="checkbox" ng-checked="student.ASISTENCIA" 
-                                    ng-click="setAssistanceStudents(student.CODIGO)"></td>
-                            
+                            <tr ng-repeat="student in allLevelAssistance">
+                                <td style="padding:2px; text-align: center"><input type="checkbox" ng-checked="student.ASISTENCIA" 
+                                    ng-click="setAssistanceStudents(student.CODIGO)"></td>                               
+                                <td style="padding:2px; padding-left:5px">{{ student.NOMBRE }}</td>
+                                <td style="padding:2px">{{ student.CEDULA }}</td>
                             </tr>
                         </table>
                     </div>
@@ -339,18 +338,20 @@
             <fieldset>
                 <legend>Adjuntos</legend>
                 <form id="attachedForm" name="attachedForm" ng-submit="saveAttachedDB()">
-                    <ng-form name="innerForm">
-                        <input valid-file-input ng-model="fileName" type="file" name="fileName" id="fileName" accept="image/*, application/pdf"/>
-                        <span ng-show="innerForm.fileName.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
-                        <span ng-show="innerForm.fileN9ame.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
-                        <span ng-show="innerForm.fileName.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
-                    </ng-form>
+                    <div>
+                        <textarea required name="observacion" id="observacion" ng-model="descripcion" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="240" style="text-transform:uppercase; width:450px"></textarea><br/>
+                        <input valid-file-input ng-model="attachedActivity" type="file" name="attachedActivity" id="attachedActivity" accept="image/*, application/pdf"/>
+                        <span ng-show="attachedForm.attachedActivity.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
+                        <span ng-show="attachedForm.attachedActivity.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+                        <span ng-show="attachedForm.attachedActivity.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero est&aacute; vac&iacute;o</span>
+                        <span ng-show="attachedForm.attachedActivity.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
+                    </div>
 
                     <br/>
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveAttached"></label>
                         <div class="col-md-8">
-                            <button type="submit" id="saveAttached" name="saveAttached" class="btn btn-success">Guardar</button>
+                            <button type="submit" id="saveAttached" name="saveAttached" class="btn btn-success">A&ntilde;adir</button>
                         </div>
                     </div>
 

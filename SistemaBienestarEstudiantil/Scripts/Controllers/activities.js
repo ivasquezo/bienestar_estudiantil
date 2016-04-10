@@ -591,7 +591,7 @@
                     });
                 }
                 else
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'No se han encontrado niveles registrados en la actividad'}]);
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Informaci&oacute;n', detail: 'No se han encontrado niveles registrados en la actividad'}]);
             });
 
 
@@ -642,76 +642,9 @@
             }
         };
 
-
-
-
-
-
-
-
-        
-
-
-
-
-        
-
-        $scope.existGroupLevel = function (code) {
-            if ($scope.groupActivity.length > 0) {
-                for (var i = 0; i < $scope.groupActivity.length; i++) {
-                    if($scope.groupActivity[i].CODIGOGRUPO == code && $scope.groupActivity[i].ESTADO == true) 
-                        return true;
-                };
-            }
-            return false;
-        };
-
-        $scope.setGroupLevel = function(code) { 
-            var existGroup = false;
-
-            if ($scope.groupLevelActivity != null && $scope.groupLevelActivity.length > 0) {
-                for (var i=0; i<$scope.groupLevelActivity.length; i++) {
-                    if ($scope.groupLevelActivity[i] == code)
-                        existGroup = true;
-                }
-            } 
-
-            if (existGroup) {
-                for (var i=0; i<$scope.groupLevelActivity.length; i++) {
-                    if ($scope.groupLevelActivity[i] == code)
-                        $scope.groupLevelActivity.splice(i, code);
-                }
-            }                
-            else
-                $scope.groupLevelActivity.push(code); 
-        };
-
-        
-
-        
-
-        $scope.chargeStudents = function (code) {
-            $scope.studentsData = [];
-            $scope.assistance = [];
-            $http.post('../../WebServices/Activities.asmx/getAssistanceList', {
-                activityId: $scope.activityAssistanceCopy.CODIGOACTIVIDAD,
-                levelId: code
-            }).success(function (data, status, headers, config) {
-                console.log("Cargar estudiantes... ", data);
-                if (data.success)
-                    $scope.studentsData = data.response;                  
-                else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al eliminar la actividad... ", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la actividad'}]);
-            });
-        };
-
-        
-
         this.getAttachedActivity = function (code) {
-            
+            $scope.activityCopy.CODIGO = code;
+
             ngDialog.open({
                 template: 'attachedActivity.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -724,6 +657,14 @@
                 })
             });
         };
+
+
+
+
+
+
+
+
 
         this.removeActivity = function (code) {
             var parentObject = this;
@@ -817,7 +758,7 @@
 
         $scope.saveGroupActivity = function () {
             if ($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0 && $scope.selectedLevels.length == 0) {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un módulo o un nivel'}]);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un m&oacute;dulo o un nivel'}]);
             } else {
                 var parentObject = this;
 
@@ -877,26 +818,15 @@
                 var formElement = document.getElementById('attachedForm');
                 var formData = new FormData(formElement);
 
-                $http.post('../../WebServices/Activities.asmx/addUploadedFileDataBase', formData, {
+                $http.post('../../WebServices/Activities.asmx/addUploadedFileDataBase?codigoActividad='+$scope.activityCopy.CODIGO,
+                    formData, {
                     withCredentials: true,
                     headers: {'Content-Type': undefined },
                     transformRequest: angular.identity
                 }).success(function (data, status, headers, config) {
                     console.log("Adjuntos", data);
-                    if (data.success) {
-                        $scope.activityAttached = data.response;
-                        $scope.activityId = 7;
-                        $http.post('../../WebServices/Activities.asmx/saveActivityAttached', {                
-                            activityAttached: $scope.activityAttached,
-                            activityId: $scope.activityId
-                        }).success(function (data, status, headers, config) {
-                            console.log("Agregar adjunto: ", data);
-                            $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-                        }).error(function (data, status, headers, config) {
-                            console.log("Error al agregar adjunto...", data);
-                            $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el rol'}]);
-                        });
-                    }
+                    if (!data.success)
+                    
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
                 }).error(function (data, status, headers, config) {
                     console.log("error al cargar los tipos...", data);
@@ -943,6 +873,39 @@
                 }
 
                 ctrl.$parsers.push(customValidator);
+            }
+        };
+    }]);
+
+    app.directive('validFileInput', ['$http', function($http) {
+        return {
+            restrict: 'A',
+
+            require: 'ngModel',
+
+            link: function(scope, element, attr, ctrl) {
+                ctrl.$setValidity('validFile', element.val() != '' || !element.get(0).required);
+                element.bind('change',function(){
+                    if (element.get(0).files.length > 0) {
+                        ctrl.$setValidity('validFile', true);
+                        ctrl.$setValidity('validFileSize', element.get(0).files[0].size < 2000000);
+                        ctrl.$setValidity('validFileEmpty', element.get(0).files[0].size != 0);
+                        ctrl.$setValidity('validFileType',
+                            element.get(0).files[0].type.toUpperCase().indexOf('APPLICATION/PDF') != -1 || 
+                            element.get(0).files[0].type.toUpperCase().indexOf('IMAGE') != -1);
+
+                    } else {
+                        if (element.get(0).required) ctrl.$setValidity('validFile', false);
+                        else  ctrl.$setValidity('validFile', true);
+                        ctrl.$setValidity('validFileSize', true);
+                        ctrl.$setValidity('validFileEmpty', true);
+                        ctrl.$setValidity('validFileType', true);
+                    }
+                    scope.$apply(function(){
+                        ctrl.$setViewValue(element.val());
+                        ctrl.$render();
+                    });
+                });
             }
         };
     }]);

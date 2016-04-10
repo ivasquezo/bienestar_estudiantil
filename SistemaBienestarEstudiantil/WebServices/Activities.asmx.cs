@@ -768,10 +768,52 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        [WebMethod]
+        public void addUploadedFileDataBase()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+            int codigoActividad = Int32.Parse(System.Web.HttpContext.Current.Request.Params.Get("codigoActividad"));
+            string observacion = System.Web.HttpContext.Current.Request.Params.Get("observacion");
 
+            try
+            {
+                HttpFileCollection hfc = HttpContext.Current.Request.Files;
 
+                if (hfc.Count > 0 && codigoActividad > 0)
+                {
+                    BE_ACTIVIDAD_ADJUNTO activityAttached = new BE_ACTIVIDAD_ADJUNTO();
+                    HttpPostedFile hpf = hfc[0];
+                    if (hpf.ContentLength > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            hpf.InputStream.CopyTo(memoryStream);
+                            byte[] fileBytes = memoryStream.ToArray();
 
+                            activityAttached = new BE_ACTIVIDAD_ADJUNTO();
+                            activityAttached.CODIGOACTIVIDAD = codigoActividad;
+                            activityAttached.ADJUNTO = fileBytes;
+                            activityAttached.NOMBRE = hfc[0].FileName;
+                            activityAttached.CONTENTTYPE = hfc[0].ContentType;
+                            activityAttached.DESCRIPCION = observacion.ToUpper();
 
+                            db.BE_ACTIVIDAD_ADJUNTO.AddObject(activityAttached);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    response = new Response(true, "info", "Informaci\u00F3n", "El archivo se adjunto correctamente", activityAttached);
+                }
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
 
 
 
@@ -796,8 +838,6 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             db.SaveChanges();
         }
-
-
 
         [WebMethod]
         public void getAllGroupLevels()
@@ -850,9 +890,6 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
-
-
 
         /**
          * Verifica la existencia del nivel
@@ -936,10 +973,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             */
         }
 
-
-
-
-
         [WebMethod]
         public void getAssistanceList(int activityId, int levelId)
         {
@@ -963,8 +996,6 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
-        
 
         [WebMethod]
         public void removeActivityById(int activityId)
@@ -1043,113 +1074,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
-        //[WebMethod]
-        //public void addUploadedFileDataBase()
-        //{
-        //    Response response = new Response(true, "", "", "", null);
-        //    bienestarEntities db = new bienestarEntities();
+        
 
-        //    try {
-        //        HttpFileCollection hfc = HttpContext.Current.Request.Files;
-
-        //        if (hfc.Count > 0)
-        //        {
-        //            ACTIVIDAD_ADJUNTO activityAttached = new ACTIVIDAD_ADJUNTO();
-        //            HttpPostedFile hpf = hfc[0];
-        //            if (hpf.ContentLength > 0)
-        //            {
-        //                using (var memoryStream = new MemoryStream())
-        //                {
-        //                    hpf.InputStream.CopyTo(memoryStream);
-        //                    byte[] fileBytes = memoryStream.ToArray();
-
-        //                    activityAttached = new ACTIVIDAD_ADJUNTO();
-        //                    activityAttached.CODIGOACTIVIDAD = 7;
-        //                    activityAttached.ADJUNTO = fileBytes;
-        //                    activityAttached.NOMBRE = hfc[0].FileName;
-        //                    activityAttached.CONTENTTYPE = hfc[0].ContentType;
-        //                }
-        //            }
-
-        //            db.ACTIVIDAD_ADJUNTO.AddObject(activityAttached);
-        //            db.SaveChanges();
-        //        }
-
-        //        response = new Response(true, "info", "Información", "El archivo se adjuntó correctamente", null);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
-        //        writeResponse(new JavaScriptSerializer().Serialize(response));
-        //    }
-
-        //    writeResponse(new JavaScriptSerializer().Serialize(response));
-        //}
-
-        [WebMethod]
-        public void addUploadedFileDataBase()
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                HttpFileCollection hfc = HttpContext.Current.Request.Files;
-
-                if (hfc.Count > 0)
-                {
-                    BE_ACTIVIDAD_ADJUNTO activityAttached = new BE_ACTIVIDAD_ADJUNTO();
-                    HttpPostedFile hpf = hfc[0];
-                    if (hpf.ContentLength > 0)
-                    {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            hpf.InputStream.CopyTo(memoryStream);
-                            byte[] fileBytes = memoryStream.ToArray();
-
-                            activityAttached = new BE_ACTIVIDAD_ADJUNTO();
-                            activityAttached.ADJUNTO = fileBytes;
-                            activityAttached.NOMBRE = hfc[0].FileName;
-                            activityAttached.CONTENTTYPE = hfc[0].ContentType;
-                        }
-                    }
-
-                    response = new Response(true, "", "", "", activityAttached);
-                }
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-        [WebMethod]
-        public void saveActivityAttached(BE_ACTIVIDAD_ADJUNTO activityAttached, int activityId)
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                BE_ACTIVIDAD_ADJUNTO activityCreate = activityAttached;
-                activityCreate.CODIGOACTIVIDAD = activityId;
-
-                db.BE_ACTIVIDAD_ADJUNTO.AddObject(activityCreate);
-                db.SaveChanges();
-
-                response = new Response(true, "info", "Información", "El archivo se adjuntó correctamente", null);
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al adjuntar el archivo", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
+        
 
         [WebMethod]
         public void getAllUsersByRol()
