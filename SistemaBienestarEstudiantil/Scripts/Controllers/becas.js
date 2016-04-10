@@ -23,9 +23,13 @@
         $scope.ESTADOS = [
             { n: 'Pendiente', v: 0 },
             { n: 'Procesando', v: 1 },
-            { n: 'Aprobada', v: 1 },
-            { n: 'Rechazada', v: 2 }
+            { n: 'Aprobada', v: 2 },
+            { n: 'Rechazada', v: 3 }
         ];
+
+        $scope.convertDate = function(invalidDate) {
+            return invalidDate.substring(6, invalidDate.length-2);
+        };
         
         $scope.cargarBecas = function () {
             $scope.promise = $http.get('../../WebServices/Becas.asmx/getBecas')
@@ -43,6 +47,25 @@
                             data.response[i].ESTADO = "Aprobada";
                         else if (data.response[i].APROBADA == 3)
                             data.response[i].ESTADO = "Rechazada";
+
+                        // TODO
+                        if (data.response[i].BE_BECA_SOLICITUD_HISTORIAL.length > 0) {
+                            var size = data.response[i].BE_BECA_SOLICITUD_HISTORIAL.length;
+                            var lastHistorial = data.response[i].BE_BECA_SOLICITUD_HISTORIAL[size - 1];
+                            if (lastHistorial.RUBRO == 0) {
+                                data.response[i].RUBRO = 0
+                                data.response[i].RUBRONOMBRE = "Pensión"
+                            } else if (lastHistorial.RUBRO == 1) {
+                                data.response[i].RUBRO = 1
+                                data.response[i].RUBRONOMBRE = "Matrícula"
+                            } else if (lastHistorial.RUBRO == 2) {
+                                data.response[i].RUBRO = 2
+                                data.response[i].RUBRONOMBRE = "Pensión y matrícula"
+                            }
+
+                            data.response[i].OTORGADO = lastHistorial.OTORGADO;
+                        }
+
                     };
 
                     $scope.gridOptions.data = data.response;
@@ -77,11 +100,11 @@
               {name:'Código', field: 'CODIGO', width: 65},
               {name:'Beca', field: 'BECA'},
               {name:'Otorgado', field: 'OTORGADO', width: 80},
-              {name:'Rubro', field: 'RUBRO', width: 150},
+              {name:'Rubro', field: 'RUBRONOMBRE', width: 150},
               {name:'Estado', field: 'ESTADO', width: 100},
               {name:'C\u00E9dula', field: 'CEDULA', width: 100},
               {name:'Nombre', field: 'NOMBRE', width: 320},
-              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', width: 120, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
             ]
         };
 
@@ -208,6 +231,23 @@
             });
         };
 
+        this.viewHistoryChanges = function (code) {
+            
+            $scope.solicitudbeca = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
+            
+            ngDialog.open({
+                template: 'viewHistoryChanges.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
         $scope.addTipoBecaDialog = function () {
             
             $scope.tipoBeca = {
@@ -272,12 +312,11 @@
 
                 $scope.solicitudbeca['CODIGOUSUARIO'] = $scope.CODIGOUSUARIO;
 
-                console.log("solicitudbeca to send:", $scope.removeUnnecesaryAttributes($scope.solicitudbeca));
-
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBeca', {
-                    solicitudbeca: $scope.removeUnnecesaryAttributes($scope.solicitudbeca)
+                    editedBeca: $scope.removeUnnecesaryAttributes($scope.solicitudbeca)
                 }).success(function (data, status, headers, config) {
-                    console.log("solicitudbeca: ", data);
+                    console.log("solicitudbeca edited: ", data);
+                    $scope.cargarBecas();
                     $('#messages').puigrowl('show', [{severity: "info", summary: "Guardar", detail: "Beca guardada correctamente"}]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al guardar la beca", data);
@@ -293,7 +332,6 @@
         $scope.removeUnnecesaryAttributes = function (solicitudbeca) {
             var temporalSolicitudBeca = angular.copy(solicitudbeca);
 
-            console.log("temporalSolicitudBeca", temporalSolicitudBeca);
             // remove unnecesary attributes
             delete temporalSolicitudBeca['ADJUNTOS'];
             delete temporalSolicitudBeca['BECA'];
@@ -308,67 +346,8 @@
 
     }]);
 
-
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
         
-        $scope.saveEditedUser = function () {
-            var parentObject = this;
-
-            $scope.userCopy_copy = angular.copy($scope.userCopy);
-            $scope.userCopy_copy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
-            $scope.userCopy_copy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
-
-            delete $scope.userCopy_copy['BE_ACTIVIDAD'];
-            delete $scope.userCopy_copy['BE_BECA_SOLICITUD_HISTORIAL'];
-
-            if (!this.userForm.$invalid) {
-                $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
-                    user: $scope.userCopy_copy,
-                    resetPassword: $scope.password.reset
-                }).success(function (data, status, headers, config) {
-                    console.log("Editar usuario: ", data);
-                    if (data.success) {
-                        var index = $scope.arrayObjectIndexOf($scope.gridOptions.data, data.response.CODIGO, "CODIGO");
-                        $scope.gridOptions.data[index] = data.response;
-                        $scope.gridOptions.data[index].NOMBREESTADO = $scope.cargarNombreEstado(data.response.ESTADO);
-                        parentObject.closeThisDialog();
-                    } 
-
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-                }).error(function (data, status, headers, config) {
-                    console.log("Error editar usuario...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el usuario'}]);
-                });
-            } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
-            }
-        };
-
-        $scope.addNewUserDB = function () {
-            var parentObject = this;
-
-            if (!this.newUserForm.$invalid) {
-                $scope.userCopy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
-                $scope.userCopy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
-
-                $scope.promise = $http.post('../../WebServices/Users.asmx/addNewUser', {
-                    newUser: $scope.userCopy
-                }).success(function (data, status, headers, config) {
-                    console.log("Agregar usuario: ", data);
-                    if (data.success) {
-                        $scope.addElementArray($scope.gridOptions.data, data.response);
-                        parentObject.closeThisDialog();
-                    }
-
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-                }).error(function (data, status, headers, config) {
-                    console.log("Error agregar usuario...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar el usuario'}]);
-                });
-            } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
-            }
-        };
     }]);
 
 })();

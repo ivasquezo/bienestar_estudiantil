@@ -30,6 +30,7 @@
               <div class="ui-grid-cell-contents">
                 <button type="button" ng-click="grid.appScope.Main.removeBeca(COL_FIELD)" title="Eliminar solicitud de beca"><span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editBeca(COL_FIELD)" title="Editar solicitud de beca"><span class="ui-icon ui-icon-pencil"></span></button>
+                <button type="button" ng-click="grid.appScope.Main.viewHistoryChanges(COL_FIELD)" title="Ver historial de cambios"><span class="ui-icon ui-icon-note"></span></button>
               </div>
         </script>
 
@@ -61,7 +62,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="OTORGADO">% Otorgado</label>  
                         <div class="col-md-4">
-                            <input ng-required="solicitudbeca.RUBRO != null" ng-model="solicitudbeca.OTORGADO" id="OTORGADO" name="OTORGADO" type="number" class="form-control input-md" style="height:20px;">
+                            <input ng-required="solicitudbeca.RUBRO != null" ng-model="solicitudbeca.OTORGADO" id="OTORGADO" name="OTORGADO" type="number" class="form-control input-md" max="100" min="0" style="height:20px;font-size:16px;padding-left:3px;">%
                             <span ng-messages="becaForm.OTORGADO.$error">
                                 <span ng-message="required" class="help-block ng-message">Ingrese el porcentaje otorgado del rubro seleccionado</span>
                             </span>
@@ -88,7 +89,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="OBSERVACIONBECA">Observación</label>  
+                        <label class="col-md-4 control-label" for="OBSERVACIONBECA">
+                        	Observación
+                        	<input type="checkbox" ng-model="solicitudbeca.ENVIARNOTIFICACION" style="height:18px;width:18px;vertical-align:middle;" />
+                        	<div style="font-size:12px;color:red;line-height:normal;">Seleccionar para enviar al correo del estudiante</div>
+                        </label>  
                         <div class="col-md-4">
                             <textarea ng-model="solicitudbeca.OBSERVACION" id="OBSERVACIONBECA" name="OBSERVACIONBECA" class="form-control"
                                 style="margin-top:5px;padding:3px;height:80px;width:250px;max-width:250px;font-size:10px;"></textarea>
@@ -186,6 +191,32 @@
                 </form>
             </fieldset>
         </script>
+
+        <script type="text/ng-template" id="viewHistoryChanges.html">
+            <fieldset>
+                <legend>Historial de cambios</legend>
+                <div class="form-group">
+                    <table>
+                    	<tr>
+                    		<td>USUARIO</td>
+                    		<td>FECHA</td>
+                    		<td>RUBRO</td>
+                    		<td>OTORGADO</td>
+                    	</tr>
+                    	<tr ng-if="solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL.length == 0">
+                    		<td colspan="4">No tiene historial de cambios</td>
+                    	</tr>
+                    	<tr ng-repeat="historial in solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL" style="color:#508ECC;font-size:15px;">
+                    		<td>{{historial.BE_USUARIO.NOMBREUSUARIO}}</td>
+                    		<td>{{convertDate(historial.FECHA) | date:"MM/dd/yyyy ' ' h:mma"}}</td>
+                    		<td>{{RUBROS[historial.RUBRO].n}}</td>
+                    		<td style="text-align:center;">{{historial.OTORGADO}}%</td>
+                    	</tr>
+                    </table>
+                </div>
+            </fieldset>
+        </script>
+
     </div>
 
 </asp:Content>
