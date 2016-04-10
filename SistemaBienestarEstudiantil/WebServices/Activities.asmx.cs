@@ -875,62 +875,17 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse("ok");
         }
 
-
-
-
-
-
-
-
-
-       
-        
-
-      
-
-        
-        
-
-        
-
-      
-
-        [WebMethod]
-        public void removeActivityById(int activityId)
+        private void deleteAttachedActivity(int activityId)
         {
-            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
 
-            try
+            List<BE_ACTIVIDAD_ADJUNTO> attachedDeleted = db.BE_ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGOACTIVIDAD == activityId).ToList();
+
+            foreach (BE_ACTIVIDAD_ADJUNTO attached in attachedDeleted)
             {
-                bienestarEntities db = new bienestarEntities();
-
-                BE_ACTIVIDAD activityDeleted = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
-
-                deleteAssistanceActivity(activityId);
-
-                deleteGroupActivity(activityId);
-
-                deleteAttachedActivity(activityId);
-
-                db.BE_ACTIVIDAD.DeleteObject(activityDeleted);
+                db.BE_ACTIVIDAD_ADJUNTO.DeleteObject(attached);
                 db.SaveChanges();
-
-                response = new Response(true, "info", "Eliminar", "Actividad eliminada correctamente", null);
             }
-            catch (InvalidOperationException)
-            {
-                // Error al eliminar el rol
-                response = new Response(false, "error", "Error", "Error al obtener la actividad para eliminar", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                // Error al eliminar el rol
-                response = new Response(false, "error", "Error", "Error al eliminar la actividad", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
         private void deleteAssistanceActivity(int activityId)
@@ -959,50 +914,40 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
-        private void deleteAttachedActivity(int activityId)
-        {
-            bienestarEntities db = new bienestarEntities();
-
-            List<BE_ACTIVIDAD_ADJUNTO> attachedDeleted = db.BE_ACTIVIDAD_ADJUNTO.Where(aa => aa.CODIGOACTIVIDAD == activityId).ToList();
-
-            foreach (BE_ACTIVIDAD_ADJUNTO attached in attachedDeleted)
-            {
-                db.BE_ACTIVIDAD_ADJUNTO.DeleteObject(attached);
-                db.SaveChanges();
-            }
-        }
-
-        
-
-        
-
         [WebMethod]
-        public void getAllUsersByRol()
+        public void removeActivityById(int activityId)
         {
             Response response = new Response(true, "", "", "", null);
 
-            // Conecta con las entidades
-            bienestarEntities db = new bienestarEntities();
-
-            // Trae los usuarios en base
-            List<BE_USUARIO> users = db.BE_USUARIO.ToList();
-            List<BE_USUARIO> usersByRol = new List<BE_USUARIO>();
-
-            // Si existen usuarios
-            if (users != null && users.Count > 0)
+            try
             {
-                // Verificar la existencia de roles en cada usuario
-                //foreach (USUARIO user in users)
-                //    if (user.USUARIO_ROL != null && user.USUARIO_ROL.Count > 0)
-                //        foreach (ROL rol in user.USUARIO_ROL)
-                //            if (rol.NOMBRE == "DOCENTE")
-                //                usersByRol.Add(user);
-            }
+                bienestarEntities db = new bienestarEntities();
 
-            if (usersByRol != null && usersByRol.Count > 0)
-                response = new Response(true, "", "", "", usersByRol);
-            else
-                response = new Response(false, "error", "Error", "Usuarios y asignarles el rol de Docente", null);
+                BE_ACTIVIDAD activityDeleted = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
+
+                deleteAttachedActivity(activityId);
+
+                deleteAssistanceActivity(activityId);
+
+                deleteGroupActivity(activityId);
+
+                db.BE_ACTIVIDAD.DeleteObject(activityDeleted);
+                db.SaveChanges();
+
+                response = new Response(true, "info", "Eliminar", "Actividad eliminada correctamente", null);
+            }
+            catch (InvalidOperationException)
+            {
+                // Error al eliminar el rol
+                response = new Response(false, "error", "Error", "Error al obtener datos para eliminar", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            catch (Exception)
+            {
+                // Error al eliminar el rol
+                response = new Response(false, "error", "Error", "Error al eliminar la actividad", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }

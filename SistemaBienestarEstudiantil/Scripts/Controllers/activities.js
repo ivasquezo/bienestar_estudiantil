@@ -689,14 +689,6 @@
             });
         }
 
-
-
-
-
-
-
-
-
         this.removeActivity = function (code) {
             var parentObject = this;
             
@@ -704,14 +696,12 @@
                 activityId: code
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar actividad... ", data);
-                
                 if (data.success)
                     parentObject.removeElementArray($scope.gridOptions.data, code);
 
                 $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al eliminar la actividad... ", data);
-                // Si hubo error al eliminar la actividad
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la actividad'}]);
             });
         };
