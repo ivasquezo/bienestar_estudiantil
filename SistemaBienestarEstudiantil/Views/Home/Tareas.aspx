@@ -357,7 +357,7 @@
 
                         <br/><br/>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-if="allAttaches.length > 0">
                         <table style="width:100%; font-size:16px">
                             <tr>
                                 <th>Descripci&oacute;n</th>
