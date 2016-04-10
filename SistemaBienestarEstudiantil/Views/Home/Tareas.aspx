@@ -338,23 +338,25 @@
             <fieldset>
                 <legend>Adjuntos</legend>
                 <form id="attachedForm" name="attachedForm" ng-submit="saveAttachedDB()">
-                    <div>
-                        <textarea required name="observacion" id="observacion" ng-model="descripcion" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="240" style="text-transform:uppercase; width:450px"></textarea><br/>
-                        <input valid-file-input ng-model="attachedActivity" type="file" name="attachedActivity" id="attachedActivity" accept="image/*, application/pdf"/>
-                        <span ng-show="attachedForm.attachedActivity.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
-                        <span ng-show="attachedForm.attachedActivity.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
-                        <span ng-show="attachedForm.attachedActivity.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero est&aacute; vac&iacute;o</span>
-                        <span ng-show="attachedForm.attachedActivity.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="saveAttached"></label>
-                        <div class="col-md-8">
-                            <button type="submit" id="saveAttached" name="saveAttached" class="btn btn-success">A&ntilde;adir</button>
+                    <div ng-if="allAttaches.length < 10">
+                        <div>
+                            <textarea required name="observacion" id="observacion" ng-model="descripcion" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="240" style="text-transform:uppercase; width:450px"></textarea><br/>
+                            <input valid-file-input required ng-model="attachedActivity" type="file" name="attachedActivity" id="attachedActivity" accept="image/*, application/pdf"/>
+                            <span ng-show="attachedForm.attachedActivity.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
+                            <span ng-show="attachedForm.attachedActivity.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+                            <span ng-show="attachedForm.attachedActivity.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero est&aacute; vac&iacute;o</span>
+                            <span ng-show="attachedForm.attachedActivity.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
                         </div>
-                    </div>
+                    
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="saveAttached"></label>
+                            <div class="col-md-8">
+                                <button type="submit" id="saveAttached" name="saveAttached" class="btn btn-success">A&ntilde;adir</button>
+                            </div>
+                        </div>
 
-                    <br/><br/>
+                        <br/><br/>
+                    </div>
                     <div class="form-group">
                         <table style="width:100%; font-size:16px">
                             <tr>
@@ -367,7 +369,7 @@
                                 <td><a href="../../WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
                                         {{attach.NOMBRE}}
                                 </a></td>
-                                <td><button title="Eliminar" type="button" style="width:22px; padding-left:1px;display:inline-block;vertical-align:top;" ng-click="removeAttach(attach.CODIGO)"><span class="ui-icon ui-icon-trash"></span></button></td>
+                                <td style="text-align:center"><button title="Eliminar" type="button" ng-click="removeAttach(attach.CODIGO)"><span class="ui-icon ui-icon-trash"></span></button></td>
                             </tr>
                         </table>
                     </div>
