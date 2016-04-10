@@ -8,11 +8,22 @@
     <% if (@Session["userName"] == null) { %>
     <h2>Iniciar sesi&oacute;n</h2>
 
-    <p>Especifique su nombre de usuario y contrase&ntilde;a.</p>
-
     <% using (Html.BeginForm()) { %>
     <%: Html.ValidationSummary(true, "No se ha iniciado la sesi\u00F3n. Corrija los errores e int\u00E9ntelo de nuevo.")%>
-    <div>
+    <div style="min-width:100%">
+        <div style="float:left;">
+            Especifique su nombre de usuario y contrase&ntilde;a.
+        </div>
+        <div style="float:right;width:150px;background:#5C87B2;text-align: center;padding:6px;">
+            <a href="/Home/BecaSolicitud" target="_blank" style="text-decoration: initial;font-weight:bold;">
+                <div style="color:white;">
+                    Solicitud de becas
+                </div>
+            </a>
+        </div>
+    </div>
+    <br/>
+    <div style="position:relative;min-width:100%;">
         <fieldset>
             <legend>Informaci&oacute;n de cuenta</legend>
             <div class="editor-label">

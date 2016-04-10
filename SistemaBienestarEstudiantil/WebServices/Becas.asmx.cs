@@ -296,12 +296,12 @@ namespace SistemaBienestarEstudiantil.WebServices
             DATOSPERSONALE alumno = null;
             if (datosPersonalesInscripciones.Count > 0)
             {
-                alumno = datosPersonalesInscripciones.First();
+                alumno = datosPersonalesInscripciones.FirstOrDefault();
             }
             
             Models.BE_BECA_SOLICITUD beca_solicitud = null;
-            var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC);
-            if (alumno != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
+            var becas_solicitud = alumno != null ? db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC) : null;
+            if (becas_solicitud != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.FirstOrDefault();
 
             writeResponseObject(new { alumno, beca_solicitud, datosPersonalesInscripciones.Count });
         }
