@@ -200,99 +200,99 @@
 
         <script type="text/ng-template" id="getLevel.html">
             <form name="groupActivityForm">
-                <div style="font-size:16px;" ng-class="view == 'faculty' ? 'selected' : '' " class="title-report">Facultad</div>
-                <div style="font-size:16px;" ng-class="view == 'school' ? 'selected' : '' " class="title-report">Escuela</div>
-                <div style="font-size:16px;" ng-class="view == 'career' ? 'selected' : '' " class="title-report">Carrera</div>
-                <div style="font-size:16px;" ng-class="view == 'modality' ? 'selected' : '' " class="title-report">Modalidad</div>
-                <div style="font-size:16px;" ng-class="view == 'level' ? 'selected' : '' " class="title-report">Nivel</div>
-
-                <br/><br/>
-
                 <div ng-show="view == 'faculty'">
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Siguiente</button>
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Nombre</th> 
-                        </tr>
-                        <tr ng-repeat="faculty in allFaculties">
-                            <td style="width:50px"><input type="checkbox" ng-checked="existFacultyData(faculty.FCLCODIGOI)" ng-click="setSelectedFaculties(faculty.FCLCODIGOI)"></td>
-                            <td>{{ faculty.FCLNOMBREC }}</td>
-                        </tr>
-                    </table>
+                    <fieldset>
+                        <legend>Facultades</legend>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Siguiente</button>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="faculty in allFaculties">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existFacultyData(faculty.FCLCODIGOI)" ng-click="setSelectedFaculties(faculty.FCLCODIGOI)"></td>
+                                <td style="width:100%">{{ faculty.FCLNOMBREC }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
                 </div>
 
                 <div ng-show="view == 'school'">
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Siguiente</button>
-
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Nombre</th> 
-                        </tr>
-                        <tr ng-repeat="school in allSchools">
-                            <td style="width:50px"><input type="checkbox" ng-checked="existSchoolData(school.ESCCODIGOI)" ng-click="setSelectedSchools(school.ESCCODIGOI)"></td>
-                            <td>{{ school.ESCNOMBREC }}</td>
-                        </tr>
-                    </table>
-                    <br/>
-
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('faculty')">Anterior</button>
+                    <fieldset>
+                        <legend>Escuelas</legend>
+                        <div style="display:inline">
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Siguiente</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('faculty')">Anterior</button>
+                        </div>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="school in allSchools">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existSchoolData(school.ESCCODIGOI)" ng-click="setSelectedSchools(school.ESCCODIGOI)"></td>
+                                <td style="width:100%">{{ school.ESCNOMBREC }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
                 </div>
 
                 <div ng-show="view == 'career'">
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Siguiente</button>
-
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Nombre</th> 
-                        </tr>
-                        <tr ng-repeat="career in allCareers">
-                            <td style="width:50px"><input type="checkbox" ng-checked="existCareerData(career.CRRCODIGOI)" ng-click="setSelectedCareers(career.CRRCODIGOI)"></td>
-                            <td>{{ career.CRRDESCRIPC }}</td>
-                        </tr>
-                    </table> 
-                    <br/> 
-
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Anterior</button> 
+                    <fieldset>
+                        <legend>Carreras</legend>
+                        <div style="display:inline">
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Siguiente</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('school')">Anterior</button>
+                        </div>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="career in allCareers">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existCareerData(career.CRRCODIGOI)" ng-click="setSelectedCareers(career.CRRCODIGOI)"></td>
+                                <td style="width:100%">{{ career.CRRDESCRIPC }}</td>
+                            </tr>
+                        </table> 
+                    </fieldset>
                 </div>
 
                 <div ng-show="view == 'modality'">
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('level')">Siguiente</button>
-
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Nombre</th> 
-                        </tr>
-                        <tr ng-repeat="modality in allModalities">
-                            <td style="width:50px"><input type="checkbox" ng-checked="existModalityData(modality.MDLCODIGOI)" ng-click="setSelectedModalities(modality.MDLCODIGOI)"></td>
-                            <td>{{ modality.MDLDESCRIPC }}</td>
-                        </tr>
-                    </table>
-                    <br/>
-
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Anterior</button>
+                    <fieldset>
+                        <legend>Modalidades</legend>
+                        <div style="display:inline">
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('level')">Siguiente</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Anterior</button>
+                        </div>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="modality in allModalities">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existModalityData(modality.MDLCODIGOI)" ng-click="setSelectedModalities(modality.MDLCODIGOI)"></td>
+                                <td style="width:100%">{{ modality.MDLDESCRIPC }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
                 </div>
 
                 <div ng-show="view == 'level'">
-                    <table>
-                        <tr>
-                            <th></th>
-                            <th>Nombre</th> 
-                        </tr>
-                        <tr ng-repeat="level in allLevels">
-                            <td style="width:50px"><input type="checkbox" ng-checked="existLevelData(level.NVLCODIGOI)" ng-click="setSelectedLevels(level.NVLCODIGOI)"></td>
-                            <td>{{ level.NVLDESCRIPC }}</td>
-                        </tr>
-                    </table>
-                    <br/>
-
-                    <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Anterior</button>
+                    <fieldset>
+                        <legend>Niveles</legend>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Anterior</button>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="level in allLevels">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existLevelData(level.NVLCODIGOI)" ng-click="setSelectedLevels(level.NVLCODIGOI)"></td>
+                                <td style="width:100%">{{ level.NVLDESCRIPC }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
                 </div>
-
-                <br/>
                 
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="saveLevel"></label>
