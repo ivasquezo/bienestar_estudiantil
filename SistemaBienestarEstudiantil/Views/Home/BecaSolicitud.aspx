@@ -80,7 +80,7 @@
 							<div class="document-message">- {{tipoDocumento.NOMBRE}}</div>
 						</td>
 					</tr>
-					<tr ng-if="seleccion.TIPO != null">
+					<tr ng-if="seleccion.TIPO != null && BECA_SOLICITUD.APROBADA == 0 && BECA_SOLICITUD.BE_BECA_ADJUNTO.length < 6">
 						<td>
 							<div>
 								<input name="descripcion" id="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="hasFile('otrosDocumentosSolicitud')" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
@@ -94,7 +94,7 @@
 					</tr>
 				</table>
 				
-				<br/><input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload"/>
+				<br/><input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload" ng-if="BECA_SOLICITUD.APROBADA == 0"/>
 
     		</div>
 		</form>
@@ -106,6 +106,12 @@
 			<div style="padding:5px;margin-top:10px;border:1px solid red;color:#AD0000;font-weight:bold;text-transform: uppercase;font-size: 14px;background-color: rgba(167, 3, 3, 0.09);">
 				{{BECA_SOLICITUD.OBSERVACION}}
 			</div>
+			<div class="document-message-title">
+				Estado:
+			</div>
+			<div style="padding:5px;margin-top:10px;border:1px solid #A77C1D;color:#7D4F07;font-weight:bold;text-transform:uppercase;font-size:14px;background-color:rgba(199, 131, 6, 0.09);">
+				{{ESTADOS[BECA_SOLICITUD.APROBADA].n}}
+			</div>
 		</div>
 
 		<div ng-if="BECA_SOLICITUD != null">
@@ -115,7 +121,7 @@
 			<hr/>
 			<div ng-repeat="adjunto in BECA_SOLICITUD.BE_BECA_ADJUNTO" style="width:100%;display:inline-block; padding: 5px;vertical-align:top;">
 				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;display:inline-block;vertical-align:top;"
-					ng-click="removeAttach(adjunto.CODIGO, adjunto.CODIGOSOLICITUD)">
+					ng-click="removeAttach(adjunto.CODIGO, adjunto.CODIGOSOLICITUD)" ng-if="BECA_SOLICITUD.APROBADA == 0">
 					<span class="ui-icon ui-icon-trash"></span>
 				</button>
 				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.DESCRIPCION}}</div>

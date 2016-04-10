@@ -14,6 +14,13 @@
         $scope.seleccion = {
             TIPO: null
         };
+                
+        $scope.ESTADOS = [
+            { n: 'Pendiente', v: 0 },
+            { n: 'Procesando', v: 1 },
+            { n: 'Aprobada', v: 2 },
+            { n: 'Rechazada', v: 3 }
+        ];
 
         $scope.descripcion = null;
         $scope.ALUMNO = null;

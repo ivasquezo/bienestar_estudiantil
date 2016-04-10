@@ -39,33 +39,16 @@
                 if (data.success) {
 
                     for (var i = 0; i < data.response.length; i++) {
-                        if (data.response[i].APROBADA == 0)
-                            data.response[i].ESTADO = "Pendiente";
-                        else if (data.response[i].APROBADA == 1)
-                            data.response[i].ESTADO = "Procesando";
-                        else if (data.response[i].APROBADA == 2)
-                            data.response[i].ESTADO = "Aprobada";
-                        else if (data.response[i].APROBADA == 3)
-                            data.response[i].ESTADO = "Rechazada";
+                        
+                        data.response[i].ESTADO = $scope.ESTADOS[data.response[i].APROBADA].n;
 
-                        // TODO
                         if (data.response[i].BE_BECA_SOLICITUD_HISTORIAL.length > 0) {
                             var size = data.response[i].BE_BECA_SOLICITUD_HISTORIAL.length;
                             var lastHistorial = data.response[i].BE_BECA_SOLICITUD_HISTORIAL[size - 1];
-                            if (lastHistorial.RUBRO == 0) {
-                                data.response[i].RUBRO = 0
-                                data.response[i].RUBRONOMBRE = "Pensión"
-                            } else if (lastHistorial.RUBRO == 1) {
-                                data.response[i].RUBRO = 1
-                                data.response[i].RUBRONOMBRE = "Matrícula"
-                            } else if (lastHistorial.RUBRO == 2) {
-                                data.response[i].RUBRO = 2
-                                data.response[i].RUBRONOMBRE = "Pensión y matrícula"
-                            }
-
+                            data.response[i].RUBRO = lastHistorial.RUBRO;
+                            data.response[i].RUBRONOMBRE = $scope.RUBROS[lastHistorial.RUBRO].n;
                             data.response[i].OTORGADO = lastHistorial.OTORGADO;
                         }
-
                     };
 
                     $scope.gridOptions.data = data.response;
