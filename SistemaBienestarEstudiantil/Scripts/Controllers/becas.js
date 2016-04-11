@@ -248,7 +248,8 @@
                     $scope: $scope,
                     $http: $http
                 })
-            });            
+            });
+
         };
 
         $scope.addDocumento = function () {
@@ -330,7 +331,9 @@
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
-        
+            var overlay = document.getElementsByClassName("ngdialog-overlay")[0];
+            console.log(overlay);
+            if (overlay != undefined) overlay.parentNode.removeChild(overlay);
     }]);
 
 })();
