@@ -74,8 +74,8 @@
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="responsableBox">Responsable
-                            <input type="checkbox" ng-checked="sendMailResponsable" ng-click="setSendMail()" style="height:18px;width:18px;vertical-align:middle;">
-                            <div style="font-size:12px;color:red;line-height:normal;">Seleccionar para enviar al correo del responsable</div>
+                            <input type="checkbox" ng-checked="sendMail" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
+                            <div style="font-size:12px; color:red; line-height:normal;">Seleccionar para enviar al correo del responsable</div>
                         </label>
                         <div class="col-md-4">                            
                             <select ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
@@ -151,8 +151,8 @@
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="responsableBox">Responsable
-                            <input type="checkbox" ng-checked="sendMailResponsable" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
-                            <div style="font-size:12px;color:red;line-height:normal;">Seleccionar para enviar al correo del responsable</div>
+                            <input type="checkbox" ng-checked="sendMail" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
+                            <div style="font-size:12px; color:red; line-height:normal;">Seleccionar para enviar al correo del responsable</div>
                         </label>
                         <div class="col-md-4">                            
                             <select required ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
@@ -312,6 +312,8 @@
         </script>
 
         <script type="text/ng-template" id="assistanceActivity.html">
+            <div style="font-size:12px; color:red; line-height:normal; display:inline;">Enviar notificaci&oacute;n a los alumnos</div>
+            <button class="btn btn-success" style="margin-bottom:5px" ng-click="notifyActivityStudents()">Enviar</button>
             <fieldset>
                 <legend>Asistencia</legend>
                 <form name="assistanceForm" ng-submit="saveAssistanceDB()">

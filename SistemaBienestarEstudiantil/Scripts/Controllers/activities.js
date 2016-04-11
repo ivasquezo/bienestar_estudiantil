@@ -135,7 +135,7 @@
             $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
             $scope.activityCopy.CODIGOUSUARIO = $scope.activityEdit.CODIGOUSUARIO;
             $scope.activityCopy.NOMBREESTADO = $scope.cargarNombreEstado($scope.activityEdit.ESTADO);
-            $scope.sendMailResponsable = false;
+            $scope.sendMail = false;
 
             ngDialog.open({
                 template: 'editActivity.html',
@@ -175,7 +175,7 @@
             $scope.activityCopy = {
                 OBSERVACION: ''
             };
-            $scope.sendMailResponsable = false;
+            $scope.sendMail = false;
 
             ngDialog.open({
                 template: 'newActivity.html',
@@ -567,6 +567,7 @@
             $scope.allLevelAssistance = [];
             $scope.assistance = [];
             $scope.checkedAll = false;
+            $scope.activityId = code;
 
             $scope.getAllStudents(code, function(){
                 if ($scope.allLevelAssistance.length > 0) {
@@ -595,9 +596,26 @@
                 else
                     $('#messages').puigrowl('show', [{severity: 'info', summary: 'Informaci&oacute;n', detail: 'No se han encontrado niveles registrados en la actividad'}]);
             });
-
-
         };
+
+        $scope.notifyActivityStudents = function() {
+            $scope.studentsMails = [];
+
+            for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                $scope.studentsMails.push($scope.allLevelAssistance[i].CORREO);
+            };
+
+            $scope.promise = $http.post('../../WebServices/Activities.asmx/sendStudentsNotification', {
+                studentsMails: $scope.studentsMails,
+                activityId: $scope.activityId
+            }).success(function (data, status, headers, config) {
+                console.log("Enviar notificacion estudiantes... ", data);
+                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al enviar notificacion estudiantes...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener enviar la notificación a los estudiantes'}]);
+            });
+        }
 
         $scope.getAllStudents = function (code, successFunction) {
             $scope.promise = $http.post('../../WebServices/Activities.asmx/getStudentsAssistance', {
@@ -717,10 +735,10 @@
         }; 
 
         $scope.setSendMail = function() {
-            if ($scope.sendMailResponsable)
-                $scope.sendMailResponsable = false;
+            if ($scope.sendMail)
+                $scope.sendMail = false;
             else
-                $scope.sendMailResponsable = true;
+                $scope.sendMail = true;
         }; 
     }]);
 
@@ -738,7 +756,7 @@
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
                     userId: $scope.activityCopy.CODIGOUSUARIO,
                     groupLevelActivity: $scope.groupLevelActivity,
-                    sendMail: $scope.sendMailResponsable
+                    sendMail: $scope.sendMail
                 }).success(function (data, status, headers, config) {
                     console.log("Editar actividad: ", data);
                     if (data.success) {
@@ -769,7 +787,7 @@
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
                     userId: $scope.activityCopy.CODIGOUSUARIO,
-                    sendMail: $scope.sendMailResponsable
+                    sendMail: $scope.sendMail
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
                     if (data.success) {
