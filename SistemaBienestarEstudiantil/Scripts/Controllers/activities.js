@@ -135,7 +135,8 @@
             $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
             $scope.activityCopy.CODIGOUSUARIO = $scope.activityEdit.CODIGOUSUARIO;
             $scope.activityCopy.NOMBREESTADO = $scope.cargarNombreEstado($scope.activityEdit.ESTADO);
-            
+            $scope.sendMail = false;
+
             ngDialog.open({
                 template: 'editActivity.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -174,6 +175,7 @@
             $scope.activityCopy = {
                 OBSERVACION: ''
             };
+            $scope.sendMail = false;
 
             ngDialog.open({
                 template: 'newActivity.html',
@@ -565,6 +567,7 @@
             $scope.allLevelAssistance = [];
             $scope.assistance = [];
             $scope.checkedAll = false;
+            $scope.activityId = code;
 
             $scope.getAllStudents(code, function(){
                 if ($scope.allLevelAssistance.length > 0) {
@@ -593,9 +596,26 @@
                 else
                     $('#messages').puigrowl('show', [{severity: 'info', summary: 'Informaci&oacute;n', detail: 'No se han encontrado niveles registrados en la actividad'}]);
             });
-
-
         };
+
+        $scope.notifyActivityStudents = function() {
+            $scope.studentsMails = [];
+
+            for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                $scope.studentsMails.push($scope.allLevelAssistance[i].CORREO);
+            };
+
+            $scope.promise = $http.post('../../WebServices/Activities.asmx/sendStudentsNotification', {
+                studentsMails: $scope.studentsMails,
+                activityId: $scope.activityId
+            }).success(function (data, status, headers, config) {
+                console.log("Enviar notificacion estudiantes... ", data);
+                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al enviar notificacion estudiantes...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener enviar la notificación a los estudiantes'}]);
+            });
+        }
 
         $scope.getAllStudents = function (code, successFunction) {
             $scope.promise = $http.post('../../WebServices/Activities.asmx/getStudentsAssistance', {
@@ -712,7 +732,14 @@
                     arrayActivity.splice(i, 1);
                 }
             }
-        };      
+        }; 
+
+        $scope.setSendMail = function() {
+            if ($scope.sendMail)
+                $scope.sendMail = false;
+            else
+                $scope.sendMail = true;
+        }; 
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
@@ -728,7 +755,8 @@
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
                     userId: $scope.activityCopy.CODIGOUSUARIO,
-                    groupLevelActivity: $scope.groupLevelActivity
+                    groupLevelActivity: $scope.groupLevelActivity,
+                    sendMail: $scope.sendMail
                 }).success(function (data, status, headers, config) {
                     console.log("Editar actividad: ", data);
                     if (data.success) {
@@ -758,7 +786,8 @@
                     activityStatus: $scope.activityCopy.ESTADO,
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
-                    userId: $scope.activityCopy.CODIGOUSUARIO
+                    userId: $scope.activityCopy.CODIGOUSUARIO,
+                    sendMail: $scope.sendMail
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
                     if (data.success) {

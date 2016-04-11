@@ -113,7 +113,7 @@ namespace SistemaBienestarEstudiantil.Class
             smtpClient.Send(mail);
         }
 
-        static bool IsValidEmail(string email)
+        static public bool IsValidEmail(string email)
         {
             try
             {
