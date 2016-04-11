@@ -135,7 +135,8 @@
             $scope.activityCopy.OBSERVACION = $scope.activityEdit.OBSERVACION;
             $scope.activityCopy.CODIGOUSUARIO = $scope.activityEdit.CODIGOUSUARIO;
             $scope.activityCopy.NOMBREESTADO = $scope.cargarNombreEstado($scope.activityEdit.ESTADO);
-            
+            $scope.sendMailResponsable = false;
+
             ngDialog.open({
                 template: 'editActivity.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -174,6 +175,7 @@
             $scope.activityCopy = {
                 OBSERVACION: ''
             };
+            $scope.sendMailResponsable = false;
 
             ngDialog.open({
                 template: 'newActivity.html',
@@ -712,7 +714,14 @@
                     arrayActivity.splice(i, 1);
                 }
             }
-        };      
+        }; 
+
+        $scope.setSendMail = function() {
+            if ($scope.sendMailResponsable)
+                $scope.sendMailResponsable = false;
+            else
+                $scope.sendMailResponsable = true;
+        }; 
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
@@ -728,7 +737,8 @@
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
                     userId: $scope.activityCopy.CODIGOUSUARIO,
-                    groupLevelActivity: $scope.groupLevelActivity
+                    groupLevelActivity: $scope.groupLevelActivity,
+                    sendMail: $scope.sendMailResponsable
                 }).success(function (data, status, headers, config) {
                     console.log("Editar actividad: ", data);
                     if (data.success) {
@@ -758,7 +768,8 @@
                     activityStatus: $scope.activityCopy.ESTADO,
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
-                    userId: $scope.activityCopy.CODIGOUSUARIO
+                    userId: $scope.activityCopy.CODIGOUSUARIO,
+                    sendMail: $scope.sendMailResponsable
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
                     if (data.success) {

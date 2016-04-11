@@ -124,7 +124,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         [WebMethod]
         public void saveActivityData(int activityId, String activityName, DateTime activityDate, int activityStatus,
-            String activityObservation, int generalActivityId, int userId)
+            String activityObservation, int generalActivityId, int userId, Boolean sendMail)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
@@ -146,6 +146,15 @@ namespace SistemaBienestarEstudiantil.WebServices
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Actualizar", "Actividad actualizada correctamente", null);
+
+                if (sendMail)
+                {
+                    BE_USUARIO responsable = db.BE_USUARIO.Single(u => u.CODIGO == userId);
+                    string to = responsable.CORREO;
+                    string subject = "Creaci\u00F3n de actividad";
+                    string body = "Estimado/a " + responsable.NOMBRECOMPLETO + ": \nHa sido creada la actividad " + activityName.ToUpper() + " bajo su responsabilidad, para la fecha " + activityDate.ToString("dd/MM/yyyy") + ". \nPor favor ingrese con su usuario ''" + responsable.NOMBREUSUARIO + "'' para revisar los detalles";
+                    Class.Utils.sendMail(to, subject, body);
+                }
             }
             catch (InvalidOperationException)
             {
@@ -163,7 +172,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         [WebMethod]
         public void addNewActivity(String activityName, DateTime activityDate, int activityStatus,
-            String activityObservation, int generalActivityId, int userId)
+            String activityObservation, int generalActivityId, int userId, Boolean sendMail)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
@@ -187,6 +196,15 @@ namespace SistemaBienestarEstudiantil.WebServices
                 db.SaveChanges();
 
                 response = new Response(true, "info", "Agregar", "Actividad agregada correctamente", newActivity);
+
+                if (sendMail)
+                {
+                    BE_USUARIO responsable = db.BE_USUARIO.Single(u => u.CODIGO == userId);
+                    string to = responsable.CORREO;
+                    string subject = "Creaci\u00F3n de actividad";
+                    string body = "Estimado/a " + responsable.NOMBRECOMPLETO + ": \nHa sido creada la actividad " + activityName.ToUpper() + " bajo su responsabilidad, para la fecha " + activityDate.ToString("dd/MM/yyyy") + ". \nPor favor ingrese con su usuario ''" + responsable.NOMBREUSUARIO + "'' para revisar los detalles";
+                    Class.Utils.sendMail(to, subject, body);
+                }
             }
             catch (Exception)
             {
@@ -457,7 +475,8 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveGroupActivity(int[] careersV, int[] modalitiesV, int[] levelsV, int activityId, int[] originCareersV, int[] originModalitiesV, int[] originLevelsV)
+        public void saveGroupActivity(int[] careersV, int[] modalitiesV, int[] levelsV, int activityId, int[] originCareersV, 
+            int[] originModalitiesV, int[] originLevelsV, Boolean sendMail)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
@@ -486,7 +505,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 for (int i = 0; i < careerModalityIds.Length; i++)
                 {
                     for (int j = 0; j < levels.Length; j++)
-                        saveGroupActivity(careerModalityIds[i], levels[j], activityId);                        
+                        saveGroupActivity(careerModalityIds[i], levels[j], activityId, sendMail);                        
                 }
 
                 response = new Response(true, "info", "Agregar", "Grupos agregado correctamente", null);
@@ -500,7 +519,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        private void saveGroupActivity(int careerModalityId, int levelId, int activityId)
+        private void saveGroupActivity(int careerModalityId, int levelId, int activityId, Boolean sendMail)
         {
             bienestarEntities db = new bienestarEntities();
 
@@ -522,7 +541,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     db.SaveChanges();
                 }
 
-                saveAssistance(group.CODIGO, activityId, careerModalityId, levelId);
+                saveAssistance(group.CODIGO, activityId, careerModalityId, levelId, sendMail);
             }
             catch (InvalidOperationException)
             {
@@ -530,7 +549,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
-        private void saveAssistance(int groupId, int activityId, int careerModalityId, int levelId)
+        private void saveAssistance(int groupId, int activityId, int careerModalityId, int levelId, Boolean sendMail)
         {
             bienestarEntities db = new bienestarEntities();
             int period = getPresentPeriod();
@@ -542,7 +561,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                     CODIGOCARRERAMODULO = s.mi.m.CRRMODCODIGOI,
                     NIVEL = s.mi.m.NVLCODIGOI,
                     CEDULA = s.d.DTPCEDULAC,
-                    NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2
+                    NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2,
+                    CORREO = s.d.DTPEMAILC
                 })
                 .Where(w => w.PERIODO == period && w.CODIGOCARRERAMODULO == careerModalityId && w.NIVEL == levelId).ToList();
 
@@ -567,6 +587,15 @@ namespace SistemaBienestarEstudiantil.WebServices
                 db.BE_ASISTENCIA.AddObject(newAssitance);
 
                 db.SaveChanges();
+
+                if (sendMail && data[i].CORREO != null && data[i].CORREO != "")
+                {
+                    BE_ACTIVIDAD activity = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
+                    string to = data[i].CORREO;
+                    string subject = "Creaci\u00F3n de actividad";
+                    //string body = "Estimado/a " + data[i].NOMBRE + ": \nHa sido creada la actividad " + activityName.ToUpper() + " bajo su responsabilidad, para la fecha " + activityDate.ToString("dd/MM/yyyy") + ". \nPor favor ingrese con su usuario ''" + responsable.NOMBREUSUARIO + "'' para revisar los detalles";
+                    Class.Utils.sendMail(to, subject, body);
+                }
             }
         }
 
