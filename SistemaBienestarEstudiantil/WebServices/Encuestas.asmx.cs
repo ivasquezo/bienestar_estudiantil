@@ -193,8 +193,16 @@ namespace SistemaBienestarEstudiantil.WebServices
             Models.bienestarEntities db = new Models.bienestarEntities();
             GRADUADO alumno = db.GRADUADOS.Single(a => a.DTPCEDULAC == cedula);
 
-            int count = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOGRADUADO == alumno.GRDCODIGOI && era.CODIGOENCUESTA == codigoEncuesta).Count();
-            count += db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOGRADUADO == alumno.GRDCODIGOI && ert.CODIGOENCUESTA == codigoEncuesta).Count();
+            DateTime today = DateTime.Now;
+
+            int count = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOGRADUADO == alumno.GRDCODIGOI && era.CODIGOENCUESTA == codigoEncuesta &&
+                                                              era.FECHA.Month == today.Month &&
+                                                              era.FECHA.Day == today.Day &&
+                                                              era.FECHA.Year == today.Year).Count();
+            count += db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOGRADUADO == alumno.GRDCODIGOI && ert.CODIGOENCUESTA == codigoEncuesta &&
+                                                          ert.FECHA.Month == today.Month &&
+                                                          ert.FECHA.Day == today.Day &&
+                                                          ert.FECHA.Year == today.Year).Count();
 
             if (count == 0)
                 writeResponse(new JavaScriptSerializer().Serialize(alumno));

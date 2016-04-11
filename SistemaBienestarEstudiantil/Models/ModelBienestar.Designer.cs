@@ -4413,7 +4413,7 @@ namespace SistemaBienestarEstudiantil.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> FECHA
+        public global::System.DateTime FECHA
         {
             get
             {
@@ -4428,7 +4428,7 @@ namespace SistemaBienestarEstudiantil.Models
                 OnFECHAChanged();
             }
         }
-        private Nullable<global::System.DateTime> _FECHA;
+        private global::System.DateTime _FECHA;
         partial void OnFECHAChanging(Nullable<global::System.DateTime> value);
         partial void OnFECHAChanged();
 
@@ -8462,7 +8462,6 @@ namespace SistemaBienestarEstudiantil.Models
         /// <summary>
         /// No hay documentación de metadatos disponible.
         /// </summary>
-        [ScriptIgnore]
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
