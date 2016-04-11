@@ -20,6 +20,7 @@
     	</div>
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<center><img style="width:150px;" src="../../Content/logo-universidad-israel.png"></center>
+	    	<div style="font-size:15px;margin-bottom:5px;">Ingrese número de cédula: </div>
 	    	<input ng-model="ALUMNO.DTPCEDULAC" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
 				name="validIdentification" placeholder="Número de cédula" type="text"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
@@ -31,7 +32,7 @@
 	        	{{ALUMNO.DTPNOMBREC}}{{ALUMNO.DTPAPELLIC}}{{ALUMNO.DTPAPELLIC2}}
 	        </span>
 	    	<hr/>
-			<div ng-if="BECA_SOLICITUD == null">
+			<div ng-if="BECA_SOLICITUD == null && (ALUMNO != null && ALUMNO.DTPNOMBREC != undefined)">
 				<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
 				<select ng-change="printText()" required ng-model="seleccion.TIPO" id="becaTipo" name="becaTipo" class="form-control"
 		            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
@@ -49,7 +50,7 @@
 				</div>
 			</div>
     	</form>
-    	<form id="formFiles" name="formFiles" enctype="multipart/form-data" ng-if="ALUMNO != null">
+    	<form id="formFiles" name="formFiles" enctype="multipart/form-data" ng-if="ALUMNO != null && ALUMNO.DTPNOMBREC != undefined">
     		<div>
 
 	    		<div class="document-message-title" ng-if="seleccion.TIPO != null">
@@ -82,7 +83,7 @@
 							<div class="document-message">- {{tipoDocumento.NOMBRE}}</div>
 						</td>
 					</tr>
-					<tr ng-if="seleccion.TIPO != null && BECA_SOLICITUD.APROBADA == 0 && BECA_SOLICITUD.BE_BECA_ADJUNTO.length < 6">
+					<tr ng-if="seleccion.TIPO != null && (BECA_SOLICITUD == null || BECA_SOLICITUD.APROBADA == 0) && (BECA_SOLICITUD == null || BECA_SOLICITUD.BE_BECA_ADJUNTO.length < 6)">
 						<td>
 							<div>
 								<input name="descripcion" id="descripcion" ng-model="descripcion" type="text" placeholder="Ingrese descripción del documento" ng-required="hasFile('otrosDocumentosSolicitud')" style="width:90%;height:20px;padding:3px;font-size:14px;margin-bottom:5px;" /><br/>
@@ -96,7 +97,7 @@
 					</tr>
 				</table>
 				
-				<br/><input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload" ng-if="BECA_SOLICITUD.APROBADA == 0"/>
+				<br/><input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload" ng-if="ALUMNO != null && ALUMNO.DTPNOMBREC != undefined && (BECA_SOLICITUD == null || BECA_SOLICITUD.APROBADA == 0)"/>
 
     		</div>
 		</form>

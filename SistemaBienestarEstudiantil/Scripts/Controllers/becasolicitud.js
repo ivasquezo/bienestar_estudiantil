@@ -54,7 +54,7 @@
         };
 
         $scope.uploadFileDataBase = function () {
-            
+           
            if (this.formFiles.$valid && this.becaSolicitudForm.$valid) {
 
                 if ($scope.BECA_SOLICITUD == null) $scope.BECA_SOLICITUD = {};
@@ -144,8 +144,14 @@
         };
 
         $scope.hasFile = function (idFileElement) {
-            var ods = document.getElementById(idFileElement);
-            return ods.value != "";
+            var inputFile = document.getElementById(idFileElement);
+            var countFiles = 0;
+            try {
+                countFiles = inputFile.files.length;
+            } catch (err) {
+                console.log(err);
+            }
+            return countFiles > 0;
         }
 
         $scope.getCodeTypesDocuments = function (typesDocuments) {
@@ -185,6 +191,7 @@
 
                         scope.BECA_SOLICITUD = null;
                         scope.ALUMNO = null;
+                        scope.seleccion['TIPO'] = null;
 
                         scope.promise = $http.post('../../WebServices/Becas.asmx/getStudentSolicitud', {
                             cedula: ngModelValue
