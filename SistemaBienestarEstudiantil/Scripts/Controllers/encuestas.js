@@ -12,13 +12,28 @@
         $scope.mode = 'init';
         $scope.view = 'summary';
 
+        // method for load periodos
+        $scope.cargarPeriodos = function () {
+            $scope.promise = $http.get('../../WebServices/Encuestas.asmx/getPeriodos')
+            .success(function (data, status, headers, config) {
+                $scope.PERIODOS = data;
+                for (var i = 0; i < $scope.PERIODOS.length; i++) {
+                    $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
+                    $scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
+                };
+                console.log("periodos:", data);
+            }).error(function (data, status, headers, config) {
+                console.log("error al cargar periodos...", data);
+            });
+        };
+
         // method for load encuestas from server
         $scope.cargarEncuestas = function () {
             $scope.promise = $http.post('../../WebServices/Encuestas.asmx/getAllEncuestas', {
             }).success(function (data, status, headers, config) {
                 $scope.gridOptions.data = data;
                 $scope.loadDefaultSurvey();
-                $scope.cargarEncuestasContestadas(data);
+                $scope.cargarEncuestasContestadas();
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar los usuarios...", data);
             });
@@ -42,6 +57,10 @@
             });
         };
 
+        $scope.convertDate = function(fecha) {
+            return fecha.substring(6, fecha.length-2);
+        };
+
         // grid define options
         $scope.gridOptions = {
             enableSorting: true,
@@ -56,9 +75,7 @@
 
         // load encuestas from server and set in the grid
         $scope.cargarEncuestas();
-
-        $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-        $scope.data = [300, 500, 100];
+        $scope.cargarPeriodos();
 
         // prepare messages
         $('#messages').puigrowl();
@@ -143,19 +160,65 @@
             };
         };
 
+        $scope.getPeriodoSiguiente = function (periodo) {
+            
+            for (var i = 0; i < $scope.PERIODOS.length; i++) {
+                if ($scope.PERIODOS[i].PRDCODIGOI == periodo.PRDCODIGOI && i <= $scope.PERIODOS.length - 1) {
+                    return $scope.PERIODOS[i+1];
+                };
+            };
+            return null;
+        }
+
+        $scope.toDate = function(dateTime) {
+            var mEpoch = parseInt(dateTime); 
+            var dDate = new Date();
+
+            if(mEpoch<10000000000) mEpoch *= 1000;
+        
+            dDate.setTime(mEpoch)
+            return dDate;
+        }
+
+        $scope.restarDias = function (date, days) {
+            if (date == null) return null;
+            var date = parseInt(date);
+            return date - 24*60*60*1000*days;
+        }
+
+        $scope.viewReport = function(){
+
+            if ($scope.PERIODO != undefined && $scope.PERIODO != null) {
+
+                $scope.PERIODOSIGUIENTE = $scope.getPeriodoSiguiente($scope.PERIODO);
+                var iniDate = $scope.toDate($scope.PERIODO.PRDFECINIF);
+                var endDate = ($scope.PERIODOSIGUIENTE != null ? $scope.toDate($scope.PERIODOSIGUIENTE.PRDFECINIF) : null);
+
+                $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
+                    surveyCode: $scope.CODIDOENCUESTA,
+                    iniDate: iniDate,
+                    endDate: endDate
+                }).success(function (data, status, headers, config) {
+
+                    $scope.separateQuestionResponse(data);
+                    $scope.encuestaReport = data;
+                    console.log("showReport: ", data);
+
+                }).error(function (data, status, headers, config) {
+                    console.log("error in report ...", data);
+                });
+
+            } else {
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Debe seleccionar el periodo'}]);
+            }
+        };
+
         this.showReport = function(code){
             $scope.mode = "report";
-            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
-                surveyCode: code
-            }).success(function (data, status, headers, config) {
-
-                $scope.separateQuestionResponse(data);
-                $scope.encuestaReport = data;
-                console.log("showReport: ", data);
-
-            }).error(function (data, status, headers, config) {
-                console.log("error in report ...", data);
-            });
+            $scope.CODIDOENCUESTA = code;
+            if ($scope.PERIODO != undefined && $scope.PERIODO != null) {
+                $scope.viewReport();
+            }
         };
 
         $scope.setDefaultSurvey = function(code){

@@ -15,6 +15,22 @@ Encuestas
 	<script type="text/javascript" src="../../Scripts/angular-chart/Chart.min.js"></script>
 	<script type="text/javascript" src="../../Scripts/angular-chart/angular-chart.js"></script>
 	<script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
+	<style type="text/css">
+		@media print {
+		    .content_print {
+		        background-color: white;
+		        height: 100%;
+		        width: 100%;
+		        position: fixed;
+		        top: 0;
+		        left: 0;
+		        margin: 0;
+		        padding: 15px;
+		        font-size: 14px;
+		        line-height: 18px;
+		    }
+		}
+	</style>
     <div id="messages"></div>
     <div ng-controller="EncuestasController as Main" class="encuestas">
 	    <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
@@ -107,8 +123,7 @@ Encuestas
 		    	</div>
 	    	</form>
     	</div>
-    	<div ng-show="mode == 'init'"
-    		style="width:60%;display:inline-block;vertical-align:top;text-align:center;height:370px;">
+    	<div ng-show="mode == 'init'" style="width:60%;display:inline-block;vertical-align:top;text-align:center;height:370px;">
     		<br/>
     		<br/>
     		<span style="vertical-align:middle;font-size:27px;">Edite o ingrese una nueva encuesta, click en el botón "Nueva".</span>
@@ -116,49 +131,72 @@ Encuestas
     		<br/>
     		<a href="/Home/Encuesta" style="vertical-align:middle;font-size:18px;">Clic para visualizar encuesta seleccionada</a>
     	</div>
-    	<div ng-show="encuestaReport != null && mode == 'report'" style="margin-left:5px;width:60%;display:inline-block;vertical-align:top;">
-			<div ng-click="cambiarVista('summary')" ng-class="view == 'summary' ? 'selected' : '' " class="title-report">RESUMEN</div>
-			<div ng-click="cambiarVista('list')" ng-class="view == 'list' ? 'selected' : '' " class="title-report">LISTA</div>
-			<br/>
-			<br/>
-			<div style="display:inline-block;font-size: 18px;">Encuesta:</div>
-			<div style="display:inline-block;font-size: 18px;font-style: italic;color: #5C87B2;">{{encuestaReport.TITULO}}</div>
-			<div style="display:inline-block;font-size: 12px;color: rgba(106, 108, 109, 0.68);">({{encuestaReport.encuestados}} respuestas)</div>
-			<div ng-show="view == 'summary'">
-				<div ng-repeat="pregunta in encuestaReport.preguntas">
-					<div class="preguntas">{{pregunta.pregunta}}</div>
-					<div class="respuestas" style="display:inline-block;vertical-align: top;">
-						<table>
-							<tr ng-show="pregunta.tipo != 3" ng-repeat="respuesta in pregunta.respuestas">
-								<td class="opcion">{{respuesta.nombre}}</td>
-								<td class="valor">
-									<div style="display: inline-block;">{{respuesta.cantidad}}</div>
-									<div style="font-size:10px;display:inline-block;color:#5C87B2;">({{respuesta.cantidad*100/encuestaReport.encuestados | number:1}}%)</div>
-								</td>
-							</tr>
-							<tr ng-show="pregunta.tipo == 3" ng-repeat="respuesta in pregunta.respuestas">
-								<td colspan="2" class="opcion">{{respuesta.parrafo}}</td>
-							</tr>
-						</table>
-					</div>
-					<div ng-if="pregunta.tipo != 3" style="display:inline-block;">
-						<canvas class="chart chart-pie" chart-data="pregunta.valorRespuestas" chart-labels="pregunta.labelRespuestas"
-							width="200" height="120"></canvas>
+    	<div ng-show="mode == 'report'" style="display:inline-block;vertical-align:top;width:60%;">
+			<div>
+				<label for="periodos">Seleccione el período:</label>
+				<select required name="periodos" ng-options="o as o.PRDCODIGOI for o in PERIODOS"
+					    ng-model="PERIODO">
+				</select>
+		    	<button ng-click="viewReport()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+		    		<span class="ui-button-icon-primary ui-icon ui-icon-circle-arrow-e"></span>
+		    		<span class="ui-button-text">Visualizar reporte</span>
+		    	</button>
+		    	<button ng-if="encuestaReport != null" onclick="window.print()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+		    		<span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+		    		<span class="ui-button-text">Imprimir</span>
+		    	</button>
+			</div><br/>
+	    	<div ng-show="encuestaReport != null" style="margin-left:5px;width:100%;display:inline-block;vertical-align:top;" class="content_print">
+				<div ng-click="cambiarVista('summary')" ng-class="view == 'summary' ? 'selected' : '' " class="title-report">RESUMEN</div>
+				<div ng-click="cambiarVista('list')" ng-class="view == 'list' ? 'selected' : '' " class="title-report">LISTA DE GRADUADOS</div>
+				<br/>
+				<br/>
+				<div style="display:inline-block;font-size: 18px;">Periodo encuestado:</div>
+				<div style="display:inline-block;font-size: 18px;font-style: italic;color: #5C87B2;">{{PERIODO.PRDCODIGOI}}</div>
+				<div style="display:inline-block;font-size: 12px;color: rgba(106, 108, 109, 0.68);">
+					({{PERIODO.PRDFECINIF|date:"MM/dd/yyyy"}}
+					{{PERIODOSIGUIENTE != null ? " - " : ""}}
+					{{restarDias(PERIODOSIGUIENTE.PRDFECINIF,1)|date:"MM/dd/yyyy"}})
+				</div><br/>
+				<div style="display:inline-block;font-size: 18px;">Encuesta:</div>
+				<div style="display:inline-block;font-size: 18px;font-style: italic;color: #5C87B2;">{{encuestaReport.TITULO}}</div>
+				<div style="display:inline-block;font-size: 12px;color: rgba(106, 108, 109, 0.68);">({{encuestaReport.encuestados}} respuestas)</div>
+				<div ng-show="view == 'summary'">
+					<div ng-repeat="pregunta in encuestaReport.preguntas">
+						<div class="preguntas">{{pregunta.pregunta}}</div>
+						<div class="respuestas" style="display:inline-block;vertical-align: top;">
+							<table>
+								<tr ng-show="pregunta.tipo != 3" ng-repeat="respuesta in pregunta.respuestas">
+									<td class="opcion">{{respuesta.nombre}}</td>
+									<td class="valor">
+										<div style="display: inline-block;">{{respuesta.cantidad}}</div>
+										<div style="font-size:10px;display:inline-block;color:#5C87B2;">({{respuesta.cantidad*100/encuestaReport.encuestados | number:1}}%)</div>
+									</td>
+								</tr>
+								<tr ng-show="pregunta.tipo == 3" ng-repeat="respuesta in pregunta.respuestas">
+									<td colspan="2" class="opcion">{{respuesta.parrafo}}</td>
+								</tr>
+							</table>
+						</div>
+						<div ng-if="pregunta.tipo != 3" style="display:inline-block;">
+							<canvas class="chart chart-pie" chart-data="pregunta.valorRespuestas" chart-labels="pregunta.labelRespuestas"
+								width="200" height="120"></canvas>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div ng-show="view == 'list'" style="margin-top:10px;">
-				<table>
-					<tr ng-repeat="estudiante in encuestaReport.estudiantes" class="student-list">
-						<td class="id">{{estudiante.DATOSPERSONALE.DTPCEDULAC}}</td>
-						<td class="name">{{estudiante.DATOSPERSONALE.DTPNOMBREC}}{{estudiante.DATOSPERSONALE.DTPAPELLIC}}{{estudiante.DATOSPERSONALE.DTPAPELLIC2}}</td>
-					</tr>
-				</table>
-				<div ng-show="encuestaReport.estudiantes.length == 0">
-					Encuesta no respondida aún.
-				</div>
+				<div ng-show="view == 'list'" style="margin-top:10px;">
+					<table>
+						<tr ng-repeat="estudiante in encuestaReport.estudiantes" class="student-list">
+							<td class="id">{{estudiante.DATOSPERSONALE.DTPCEDULAC}}</td>
+							<td class="name">{{estudiante.DATOSPERSONALE.DTPNOMBREC}}{{estudiante.DATOSPERSONALE.DTPAPELLIC}}{{estudiante.DATOSPERSONALE.DTPAPELLIC2}}</td>
+						</tr>
+					</table>
+					<div ng-show="encuestaReport.estudiantes.length == 0">
+						Encuesta no respondida aún.
+					</div>
+		    	</div>
 	    	</div>
-    	</div>
+	    </div>
     </div>
 	    
 </asp:Content>

@@ -8,6 +8,7 @@ using System.Data.Objects.DataClasses;
 using System.Web.Script.Services;
 using System.Data.Objects.SqlClient;
 using SistemaBienestarEstudiantil.Models;
+using SistemaBienestarEstudiantil.Class;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -186,28 +187,64 @@ namespace SistemaBienestarEstudiantil.WebServices
             return encuestaEntity;
         }
 
-        /// metodo devuelve el alumno si no ha respondido encuesta
+        /// metodo devuelve el alumno si puede hacer encuesta
         [WebMethod]
         public void getStudentByCedula(string cedula, int codigoEncuesta)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            GRADUADO alumno = db.GRADUADOS.Single(a => a.DTPCEDULAC == cedula);
+            GRADUADO alumno = db.GRADUADOS.Where(a => a.DTPCEDULAC == cedula).FirstOrDefault();
 
             DateTime today = DateTime.Now;
 
-            int count = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOGRADUADO == alumno.GRDCODIGOI && era.CODIGOENCUESTA == codigoEncuesta &&
-                                                              era.FECHA.Month == today.Month &&
-                                                              era.FECHA.Day == today.Day &&
-                                                              era.FECHA.Year == today.Year).Count();
-            count += db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOGRADUADO == alumno.GRDCODIGOI && ert.CODIGOENCUESTA == codigoEncuesta &&
-                                                          ert.FECHA.Month == today.Month &&
-                                                          ert.FECHA.Day == today.Day &&
-                                                          ert.FECHA.Year == today.Year).Count();
+            BE_ENCUESTA_RESPUESTA_ALUMNO be_era = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOGRADUADO == alumno.GRDCODIGOI && era.CODIGOENCUESTA == codigoEncuesta).FirstOrDefault();
 
-            if (count == 0)
+            BE_ENCUESTA_RESPUESTA_TEXTO be_ert = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(ert => ert.CODIGOGRADUADO == alumno.GRDCODIGOI && ert.CODIGOENCUESTA == codigoEncuesta).FirstOrDefault();
+
+            int periodo1 = 0;
+            int periodo2 = 0;
+
+            if (be_era != null)
+            {
+                periodo1 = getPeriodo(be_era.FECHA);
+            }
+            else if (be_ert != null)
+            {
+                periodo1 = getPeriodo(be_ert.FECHA);
+            }
+
+            periodo2 = getPeriodo(today);
+
+            if (periodo1 == 0 || (periodo1 != periodo2))
+            {
                 writeResponse(new JavaScriptSerializer().Serialize(alumno));
+            }
             else
+            {
                 writeResponse(new JavaScriptSerializer().Serialize(null));
+            }
+        }
+        
+        
+
+        private int getPeriodo(DateTime date)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            PERIODO periodo = db.PERIODOes.Where(p => p.PRDHABILMAT == "1" && p.TPECODIGOI == 1).FirstOrDefault();
+            if (periodo != null)
+            {
+                return date.CompareTo(periodo.PRDFECINIF) >= 0 ? periodo.PRDCODIGOI : -1;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// devuelve todos los periodos
+        /// </summary>
+        [WebMethod]
+        public void getPeriodos()
+        {
+            bienestarEntities db = new bienestarEntities();
+            Utils.writeResponseObject(db.PERIODOes.Where(p => p.TPECODIGOI == 1).ToList());
         }
 
         /// <summary>
@@ -241,7 +278,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         /// </summary>
         /// <param name="surveyCode"></param>
         [WebMethod]
-        public void surveysReport(int surveyCode)
+        public void surveysReport(int surveyCode, DateTime iniDate, DateTime? endDate)
         {
             bienestarEntities db = new bienestarEntities();
             BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == surveyCode);
@@ -257,10 +294,10 @@ namespace SistemaBienestarEstudiantil.WebServices
                     // cada respuesta
                     foreach (Models.BE_ENCUESTA_RESPUESTA enres in enpre.BE_ENCUESTA_RESPUESTA)
                     {
-                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.BE_ENCUESTA_RESPUESTA_ALUMNO.Count(), null));
+                        rs.respuestas.Add(new Respuesta(enres.TEXTO, enres.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => (endDate != null ? iniDate <= era.FECHA && era.FECHA <= endDate : iniDate <= era.FECHA)).Count(), null));
                     }
                 }
-                else foreach (Models.BE_ENCUESTA_RESPUESTA_TEXTO ert in enpre.BE_ENCUESTA_RESPUESTA_TEXTO)
+                else foreach (Models.BE_ENCUESTA_RESPUESTA_TEXTO ert in enpre.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => (endDate != null ? iniDate <= era.FECHA && era.FECHA <= endDate : iniDate <= era.FECHA)))
                 {
                     rs.respuestas.Add(new Respuesta(null, 0, ert.TEXTO));
                 }
@@ -269,8 +306,8 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             // estudiantes que hicieron la encuesta
-            List<int> studentCodesSelect = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().ToList();
-            List<int> studentCodesParagr = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().ToList();
+            List<int> studentCodesSelect = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode && (endDate != null ? iniDate <= era.FECHA && era.FECHA <= endDate : iniDate <= era.FECHA)).Select(a => a.CODIGOGRADUADO).Distinct().ToList();
+            List<int> studentCodesParagr = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode && (endDate != null ? iniDate <= era.FECHA && era.FECHA <= endDate : iniDate <= era.FECHA)).Select(a => a.CODIGOGRADUADO).Distinct().ToList();
             foreach (int studCode in studentCodesParagr)
             {
                 if (!studentCodesSelect.Contains(studCode))
@@ -282,7 +319,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             List<GRADUADO> listAlumnos = db.GRADUADOS.Where(a => studentCodesSelect.Contains(a.GRDCODIGOI)).ToList();
 
             writeResponse(
-                "{\"encuestados\": " + getSurveyAnsweredCount(surveyCode) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\","
+                "{\"encuestados\": " + getSurveyAnsweredCount(surveyCode, iniDate, endDate) + ",\"" + "TITULO\":\"" + encuesta.TITULO + "\","
                 + "\"" + "estudiantes\":" + new JavaScriptSerializer().Serialize(listAlumnos) + ","
                 + "\"preguntas\":" + new JavaScriptSerializer().Serialize(resultadoSeleccione)
                 + "}"
@@ -301,6 +338,22 @@ namespace SistemaBienestarEstudiantil.WebServices
         /// </summary>
         /// <param name="surveyCode"></param>
         /// <returns>cantidad</returns>
+        private int getSurveyAnsweredCount(int surveyCode, DateTime iniDate, DateTime? endDate)
+        {
+            bienestarEntities db = new bienestarEntities();
+            BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == surveyCode);
+
+            int stuResp = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode && (endDate != null ? iniDate <= era.FECHA && era.FECHA <= endDate : iniDate <= era.FECHA)).Select(a => a.CODIGOGRADUADO).Distinct().Count();
+            int stuText = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode && (endDate != null ? iniDate <= era.FECHA && era.FECHA <= endDate : iniDate <= era.FECHA)).Select(a => a.CODIGOGRADUADO).Distinct().Count();
+
+            return stuResp > stuText ? stuResp : stuText;
+        }
+
+        /// <summary>
+        /// devuelve la cantidad de estudiantes que hicieron la encuesta
+        /// </summary>
+        /// <param name="surveyCode"></param>
+        /// <returns>cantidad</returns>
         private int getSurveyAnsweredCount(int surveyCode)
         {
             bienestarEntities db = new bienestarEntities();
@@ -308,7 +361,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             int stuResp = db.BE_ENCUESTA_RESPUESTA_ALUMNO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().Count();
             int stuText = db.BE_ENCUESTA_RESPUESTA_TEXTO.Where(era => era.CODIGOENCUESTA == surveyCode).Select(a => a.CODIGOGRADUADO).Distinct().Count();
-            
+
             return stuResp > stuText ? stuResp : stuText;
         }
 

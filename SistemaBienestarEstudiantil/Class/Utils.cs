@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using SistemaBienestarEstudiantil.Models;
 using System.Net.Mail;
+using System.Web.Script.Serialization;
 
 namespace SistemaBienestarEstudiantil.Class
 {
@@ -124,6 +125,13 @@ namespace SistemaBienestarEstudiantil.Class
             {
                 return false;
             }
+        }
+
+        static public void writeResponseObject(Object response)
+        {
+            System.Web.HttpContext.Current.Response.Write(new JavaScriptSerializer().Serialize(response));
+            System.Web.HttpContext.Current.Response.Flush();
+            System.Web.HttpContext.Current.Response.End();
         }
     }
 }
