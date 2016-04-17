@@ -1,24 +1,32 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<dynamic>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-	Becas
+    Becas
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="Content2" ContentPlaceHolderID="HeaderContent" runat="server">
+    <link href="../../Scripts/ng-dialog/ngDialog-report.css" rel="stylesheet" type="text/css" />
+</asp:Content>
+
+<asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
     <%
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
     <script type="text/javascript" src="../../Scripts/Controllers/becas.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="../../Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
 
 	<div id="messages"></div>
 
     <h2>Becas</h2>
-    <div ng-controller="BecasController as Main" ng-init='CODIGOUSUARIO=<%=@Session["userCode"]%>'>
+    <div ng-controller="BecasController as Main" ng-init='CODIGOUSUARIO=<%=@Session["userCode"]%>' class="main">
 	    <div style="font-size:18px;font-weight: bold;">Administrar Solicitudes de <a href="/Home/BecaSolicitud" target="_blank">Becas</a></div>
         <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
             <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
         </div>
+        <button ng-click="printBecas()" style="margin-bottom:5px;margin-top:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar tipo de beca">
+            <span class="ui-button-icon-primary ui-icon ui-icon-print"></span><span class="ui-button-text">Imprimir</span>
+        </button>
 	    <div ui-grid="gridOptions"></div>
 	    <br/><div style="font-size:18px;font-weight: bold;">Administrar Tipos de Becas y Documentos</div>
         <button ng-click="addTipoBecaDialog()" style="margin-bottom:5px;margin-top:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar tipo de beca">
@@ -197,26 +205,71 @@
                 <legend>Historial de cambios</legend>
                 <div class="form-group">
                     <table>
-                    	<tr>
-                    		<td>USUARIO</td>
-                    		<td>FECHA</td>
-                    		<td>RUBRO</td>
-                    		<td>OTORGADO</td>
-                    	</tr>
-                    	<tr ng-if="solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL.length == 0">
-                    		<td colspan="4">No tiene historial de cambios</td>
-                    	</tr>
-                    	<tr ng-repeat="historial in solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL" style="color:#508ECC;font-size:15px;">
-                    		<td>{{historial.BE_USUARIO.NOMBREUSUARIO}}</td>
-                    		<td>{{convertDate(historial.FECHA) | date:"MM/dd/yyyy ' ' h:mma"}}</td>
-                    		<td>{{RUBROS[historial.RUBRO].n}}</td>
-                    		<td style="text-align:center;">{{historial.OTORGADO}}%</td>
-                    	</tr>
+                        <tr>
+                            <td>USUARIO</td>
+                            <td>FECHA</td>
+                            <td>RUBRO</td>
+                            <td>OTORGADO</td>
+                        </tr>
+                        <tr ng-if="solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL.length == 0">
+                            <td colspan="4">No tiene historial de cambios</td>
+                        </tr>
+                        <tr ng-repeat="historial in solicitudbeca.BE_BECA_SOLICITUD_HISTORIAL" style="color:#508ECC;font-size:15px;">
+                            <td>{{historial.BE_USUARIO.NOMBREUSUARIO}}</td>
+                            <td>{{convertDate(historial.FECHA) | date:"MM/dd/yyyy ' ' h:mma"}}</td>
+                            <td>{{RUBROS[historial.RUBRO].n}}</td>
+                            <td style="text-align:center;">{{historial.OTORGADO}}%</td>
+                        </tr>
                     </table>
                 </div>
             </fieldset>
         </script>
 
+        <script type="text/ng-template" id="printBecas.html">
+            <div class="content_print" style="line-height: 14px;">
+            <fieldset>
+                <div class="form-group" style="font-size:12px;">
+                    <div class="noprint">
+                        Seleccione el periodo: <select ng-model="selectedPeriodo" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="p.PRDCODIGOI as p.PRDCODIGOI for p in PERIODOS"></select>
+                        <button onclick="printElement('.content_print', 'Imprimir Reporte Becas')" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+                            <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+                            <span class="ui-button-text">Imprimir</span>
+                        </button>
+                    </div>
+                    <table cellspacing=0>
+                        <thead><tr>
+                                <th>CÉDULA</th>
+                                <th>NOMBRE</th>
+                                <th>CARRERA</th>
+                                <th>NIVEL</th>
+                                <th>TIPO BECA</th>
+                                <th>PORCENTAJE</th>
+                                <th>ESTADO</th>
+                                <th>RUBRO</th>
+                                <th>PERIODO</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr ng-if="solicitudbecaReport == null || solicitudbecaReport == undefined">
+                                <td colspan="9">No existen solicitudes de beca</td>
+                            </tr>
+                            <tr ng-repeat="solicitud in solicitudbecaReport | filter: {PERIODO: {ID: selectedPeriodo}}" style="color:#508ECC;font-size:11px;">
+                                <td>{{solicitud.CEDULA}}</td>
+                                <td>{{solicitud.NOMBRE}}</td>
+                                <td>{{solicitud.NIVELCARRERA.CARRERA}}</td>
+                                <td>{{solicitud.NIVELCARRERA.NIVEL}}</td>
+                                <td>{{solicitud.BECA}}</td>
+                                <td style="text-align:center;">{{solicitud.OTORGADO}}%</td>
+                                <td>{{solicitud.ESTADO}}</td>
+                                <td>{{RUBROS[solicitud.RUBRO].n}}</td>
+                                <td style="text-align:center;">{{solicitud.PERIODO.ID}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            </div>
+        </script>
     </div>
 
 </asp:Content>

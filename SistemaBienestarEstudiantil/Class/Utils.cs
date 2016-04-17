@@ -133,5 +133,21 @@ namespace SistemaBienestarEstudiantil.Class
             System.Web.HttpContext.Current.Response.Flush();
             System.Web.HttpContext.Current.Response.End();
         }
+
+        static public int getPeriodo(DateTime date)
+        {
+            Models.bienestarEntities db = new Models.bienestarEntities();
+            var periodos = db.PERIODOes.Where(p => p.TPECODIGOI == 1).OrderByDescending(o => o.PRDCODIGOI).ToList();
+
+            foreach (var periodo in periodos)
+            {
+                if (date.CompareTo(periodo.PRDFECINIF) >= 0)
+                {
+                    return periodo.PRDCODIGOI;
+                }
+            }
+
+            return -1;
+        }
     }
 }

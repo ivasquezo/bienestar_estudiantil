@@ -15,9 +15,10 @@
         $('#messages').puigrowl('option', {life: 5000});
 
         $scope.RUBROS = [
-            { n: 'Pensión', v: 0 },
-            { n: 'Matrícula', v: 1 },
-            { n: 'Pensión y matrícula', v: 2 }
+            { n: 'Ninguno', v: 0 },
+            { n: 'Pensión', v: 1 },
+            { n: 'Matrícula', v: 2 },
+            { n: 'Pensión y matrícula', v: 3 }
         ];
         
         $scope.ESTADOS = [
@@ -74,20 +75,35 @@
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los tipos de becas'}]);
             });
         };
-        
+
+        // method for load periodos
+        $scope.cargarPeriodos = function () {
+            $scope.promise = $http.get('../../WebServices/Encuestas.asmx/getPeriodos')
+            .success(function (data, status, headers, config) {
+                $scope.PERIODOS = data;
+                for (var i = 0; i < $scope.PERIODOS.length; i++) {
+                    $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
+                    $scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
+                };
+                console.log("periodos:", data);
+            }).error(function (data, status, headers, config) {
+                console.log("error al cargar periodos...", data);
+            });
+        };
+
         $scope.gridOptions = {
             enableSorting: true,
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'Código', field: 'CODIGO', width: 65},
-              {name:'Beca', field: 'BECA'},
-              {name:'Otorgado', field: 'OTORGADO', width: 80},
-              {name:'Rubro', field: 'RUBRONOMBRE', width: 150},
-              {name:'Estado', field: 'ESTADO', width: 100},
-              {name:'C\u00E9dula', field: 'CEDULA', width: 100},
-              {name:'Nombre', field: 'NOMBRE', width: 320},
-              {name:'Acci\u00F3n', field: 'CODIGO', width: 120, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
+                {name:'Código', field:'CODIGO', width: 65, type:'number'},
+                {name:'Beca', field:'BECA'},
+                {name:'Otorgado %', field:'OTORGADO', width: 100},
+                {name:'Rubro', field:'RUBRONOMBRE', width: 150},
+                {name:'Estado', field:'ESTADO', width: 100},
+                {name:'C\u00E9dula', field:'CEDULA', width: 100},
+                {name:'Nombre', field:'NOMBRE', width: 320},
+                {name:'Acci\u00F3n', field:'CODIGO', width: 120, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
             ]
         };
 
@@ -96,18 +112,19 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'Código', field: 'CODIGO', width: 65},
-              {name:'Tipo de beca', field: 'NOMBRE'},
-              {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsTiposBecas.html', enableFiltering: false, enableSorting: false}
+                {name:'Código', field: 'CODIGO', width: 65, type:'number'},
+                {name:'Tipo de beca', field: 'NOMBRE'},
+                {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsTiposBecas.html', enableFiltering: false, enableSorting: false}
             ]
         };
 
         $scope.cargarBecas();
         $scope.cargarTipos();
+        $scope.cargarPeriodos();
 
         this.removeBeca = function(code){
             var parentObject = this;
-            if (confirm("Desea eliminar esta beca?")) {
+            if (confirm("\u00bfDesea eliminar esta solicitud de beca?")) {
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/removeBeca', {
                     codeBeca: code
                 }).success(function (data, status, headers, config) {
@@ -122,7 +139,7 @@
 
         this.removeTipoBeca = function(code){
             var parentObject = this;
-            if (confirm("Desea eliminar este tipo de beca?")) {
+            if (confirm("\u00bfDesea eliminar este tipo de beca?")) {
 
                 $scope.promise = $http.post('../../WebServices/Becas.asmx/removeTipoBeca', {
                     codeTipoBeca: code
@@ -221,6 +238,23 @@
             ngDialog.open({
                 template: 'viewHistoryChanges.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
+        $scope.printBecas = function () {
+
+            $scope.solicitudbecaReport = angular.copy($scope.gridOptions.data);
+            
+            ngDialog.open({
+                template: 'printBecas.html',
+                className: 'ngdialog-theme-flat ngdialog-report',
                 closeByDocument: true,
                 closeByEscape: true,
                 scope: $scope,

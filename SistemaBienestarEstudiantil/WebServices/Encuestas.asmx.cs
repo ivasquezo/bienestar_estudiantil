@@ -205,14 +205,14 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             if (be_era != null)
             {
-                periodo1 = getPeriodo(be_era.FECHA);
+                periodo1 = Utils.getPeriodo(be_era.FECHA);
             }
             else if (be_ert != null)
             {
-                periodo1 = getPeriodo(be_ert.FECHA);
+                periodo1 = Utils.getPeriodo(be_ert.FECHA);
             }
 
-            periodo2 = getPeriodo(today);
+            periodo2 = Utils.getPeriodo(today);
 
             if (periodo1 == 0 || (periodo1 != periodo2))
             {
@@ -222,19 +222,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 writeResponse(new JavaScriptSerializer().Serialize(null));
             }
-        }
-        
-        
-
-        private int getPeriodo(DateTime date)
-        {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-            PERIODO periodo = db.PERIODOes.Where(p => p.PRDHABILMAT == "1" && p.TPECODIGOI == 1).FirstOrDefault();
-            if (periodo != null)
-            {
-                return date.CompareTo(periodo.PRDFECINIF) >= 0 ? periodo.PRDCODIGOI : -1;
-            }
-            return -1;
         }
 
         /// <summary>
