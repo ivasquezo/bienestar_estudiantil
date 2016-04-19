@@ -248,6 +248,70 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
+        [WebMethod]
+        public void getActivitiesReport()
+        {
+            Response response = null;
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
+                                    Select(s => new
+                                    {
+                                        CODIGO = s.ac.CODIGO,
+                                        ACTIVIDAD = s.ac.NOMBRE,
+                                        ACTIVIDADGENERAL = s.ag.NOMBRE,
+                                        FECHA = s.ac.FECHA,
+                                        ESTADO = s.ac.ESTADO,
+                                        DATOS = new Datos()
+                                    }).ToList();
+
+                foreach (var actividad in actividades)
+                {
+                    //Datos datos = getNivelCarreraModalidad(actividad.CODIGO);
+                    //actividad.DATOS.
+                    actividad.DATOS.ASISTENCIA = getActitityAssistance(actividad.CODIGO);
+                }
+
+                response = new Response(true, "", "", "", actividades);
+            }
+            catch (Exception ex)
+            {
+                response = new Response(false, "error", "Error", "Error al cargar los grupos asignados a una actividad", ex.ToString());
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        private Datos getNivelCarreraModalidad(int codigoActividad)
+        {
+            bienestarEntities db = new bienestarEntities();
+            var data = db.BE_GRUPO_ACTIVIDAD.Join(db.BE_GRUPO, ga => ga.CODIGOGRUPO, g => g.CODIGO,
+                    (ga, g) => new { ga, g }).Join(db.CARRERA_MODAL, gcm => gcm.g.CODIGOMODALIDAD, cm => cm.CRRMODCODIGOI,
+                    (gcm, cm) => new { gcm, cm }).Select(s => new
+                    {
+                        CODIGOACTIVIDAD = s.gcm.ga.CODIGOACTIVIDAD,
+                        CODIGOGRUPO = s.gcm.ga.CODIGOGRUPO,
+                        CODIGOCARRERA = s.cm.CRRCODIGOI,
+                        CODIGOMODALIDAD = s.cm.MDLCODIGOI,
+                        CODIGONIVEL = s.gcm.g.CODIGONIVEL
+                    }).Where(w => w.CODIGOACTIVIDAD == codigoActividad).ToList();
+            return null;
+        }
+
+        private int getActitityAssistance(int activityId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            int count = db.BE_ASISTENCIA.Join(db.MATRICULAs, a => a.CODIGOALUMNO, m => m.MTRNUMEROI, (a, m) => new { a, m })
+                .Join(db.INSCRIPCIONs, am => am.m.INSCODIGOI, i => i.INSCODIGOI, (am, i) => new { am, i })
+                .Join(db.DATOSPERSONALES, ami => ami.i.DTPCEDULAC, d => d.DTPCEDULAC, (ami, d) => new { ami, d })
+                .Where(w => w.ami.am.a.CODIGOACTIVIDAD == activityId).Count();
+                
+            return count;
+        }
+
         private int[] getCareerModalityIds(int[] modalities, int[] carees)
         {
             bienestarEntities db = new bienestarEntities();
@@ -1009,5 +1073,21 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
+    }
+
+    //
+    public class Datos
+    {
+        public string NIVEL { set; get; }
+        public string CARRERA { set; get; }
+        public string MODALIDAD { set; get; }
+        public int ASISTENCIA { set; get; }
+        public string ADJUNTOS { set; get; }
+    }
+
+    //
+    public class Asistencia
+    {
+        public int cantidad { set; get; }
     }
 }
