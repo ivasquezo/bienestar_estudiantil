@@ -28,8 +28,8 @@
         <div ui-grid="gridOptions"></div>
 
         <script type="text/ng-template" id="actionsUsers.html">
-              <div class="ui-grid-cell-contents">
-                <button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)" title="Eliminar usuario"><span class="ui-icon ui-icon-trash"></span></button>
+              <div class="ui-grid-cell-contents" style="text-align:center">
+                <!--<button type="button" ng-click="grid.appScope.Main.removeUser(COL_FIELD)" title="Eliminar usuario"><span class="ui-icon ui-icon-trash"></span></button>-->
                 <button type="button" ng-click="grid.appScope.Main.editUser(COL_FIELD)" title="Editar usuario"><span class="ui-icon ui-icon-pencil"></span></button>
               </div>
         </script>

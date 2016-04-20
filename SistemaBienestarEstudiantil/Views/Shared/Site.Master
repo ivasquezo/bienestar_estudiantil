@@ -67,7 +67,7 @@
             <div id="menucontainer">
                 <ul id="menu">
                     <li><% if (accessFirstPasswordValid) { %><%: Html.ActionLink("Iniciar sesión", "ChangePassword", "Home")%><% } %></li>
-                    <li><% if (validateAccessTarea) { %><%: Html.ActionLink("Tareas", "Tareas", "Home")%><% } %></li>
+                    <li><% if (validateAccessTarea) { %><%: Html.ActionLink("Actividades", "Tareas", "Home")%><% } %></li>
                     <li><% if (validateAccessBeca) { %><%: Html.ActionLink("Becas", "Becas", "Home")%><% } %></li>
                     <li><% if (validateAccessEncuesta) { %><%: Html.ActionLink("Encuestas", "Encuestas", "Home")%><% } %></li>
                     <li><% if (validateAccessUsuario) { %><%: Html.ActionLink("Usuarios", "Usuarios", "Home")%><% } %></li>

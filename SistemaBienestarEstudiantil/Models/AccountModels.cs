@@ -128,7 +128,7 @@ namespace SistemaBienestarEstudiantil.Models
 
             try
             {
-                usuario = db.BE_USUARIO.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == password);
+                usuario = db.BE_USUARIO.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == password && u.ESTADO == true);
             }
             catch (InvalidOperationException e) // catch too Win32Exception (error en coneccion) System.Data.EntityException
             {
