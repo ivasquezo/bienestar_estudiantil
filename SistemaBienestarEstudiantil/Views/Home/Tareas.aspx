@@ -104,7 +104,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
                         <div class="col-md-4">
-                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
+                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
                             <br/><span class="help-block">Observaci&oacute;n sobre la actividad</span>
                         </div>
                     </div>
@@ -191,7 +191,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
                         <div class="col-md-4">
-                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;"></textarea>
+                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
                             <br/><span class="help-block">Observaci&oacute;n sobre la actividad</span>
                         </div>
                     </div>
