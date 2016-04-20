@@ -80,11 +80,11 @@ namespace SistemaBienestarEstudiantil.WebServices
                     response = new Response(true, "", "", "", becas);
                 }
                 else
-                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado usuarios registrados", null);
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado becas registradas", null);
             }
             catch (Exception e)
             {
-                response = new Response(false, "error", "Error", "Error al obtener los usuarios", e);
+                response = new Response(false, "error", "Error", "Error al obtener las becas", e);
                 writeResponseObject(response);
             }
 

@@ -10,6 +10,8 @@ namespace SistemaBienestarEstudiantil.Class
 {
     public class Utils
     {
+        public const string DOCENTE = "DOCENTE";
+        
         /// <summary>
         /// Valida si la clave actual es igual a la anterior para solicitar cambio de clave
         /// </summary>
@@ -148,6 +150,20 @@ namespace SistemaBienestarEstudiantil.Class
             }
 
             return -1;
+        }
+
+        static public object getSession(string attribute)
+        {
+            HttpSessionStateBase session = new HttpSessionStateWrapper(HttpContext.Current.Session);
+            return session[attribute];
+        }
+
+        static public bool isTeacher(int userCode)
+        {
+            bienestarEntities db = new bienestarEntities();
+            var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                          Where(w => w.r.NOMBRE == Utils.DOCENTE && w.u.CODIGO == userCode).Select(s => s.u).FirstOrDefault();
+            return user != null;
         }
     }
 }

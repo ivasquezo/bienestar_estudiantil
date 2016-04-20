@@ -6,7 +6,8 @@
     windowPrint.document.write('<link rel="stylesheet" href="../../Content/print.css?_' + Math.random() + '" type="text/css" media="print" />');
     windowPrint.document.write('<style type="text/css">');
     windowPrint.document.write('.noprint {display:none!important;}');
-    windowPrint.document.write('td,th {border-bottom:1px solid black;}');
+    windowPrint.document.write('table,td,th {border:1px solid black;border-collapse:collapse;}');
+    windowPrint.document.write('table {border-collapse:collapse;}');
     windowPrint.document.write('</style>');
     windowPrint.document.write('</head><body >');
     windowPrint.document.write(data);

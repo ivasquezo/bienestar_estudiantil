@@ -80,3 +80,11 @@ textarea.ng-invalid:focus, input.ng-invalid:focus, select.ng-invalid:focus {
 .cg-busy {
     z-index:10000;
 }
+.item-report {
+    border-radius: 4px;
+    border: 1px solid gray;
+    background-color: rgba(184, 205, 10, 0.17);
+    padding: 2px;
+    margin: 1px;
+    text-align: left;
+}

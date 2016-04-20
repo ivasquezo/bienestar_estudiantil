@@ -12,6 +12,11 @@
         $scope.delay = 2;
         $scope.minDuration = 2;
 
+        $scope.date = {
+            dateFrom: new Date(),
+            dateTo: new Date()
+        };
+
         $scope.ESTADOS = [
             { name: 'Inactivo', value: 0 },
             { name: 'En proceso', value: 1 },
@@ -997,4 +1002,24 @@
             }
         };
     }]);
+
+    app.filter("rangeDateFilter", function() {
+        return function(items, from, to) {
+            
+            var result = [];        
+            if (items != undefined) {
+                
+                var df = from;
+                var dt = to;
+                for (var i=0; i<items.length; i++){
+                    var t = new Date(parseInt(items[i].FECHA));
+                    if (df <= t && t <= dt)  {
+                        result.push(items[i]);
+                    }
+                }            
+            }
+            return result;
+        };
+    });
+
 })();

@@ -400,8 +400,8 @@
             <fieldset>
                 <div class="form-group" style="font-size:12px;">
                     <div class="noprint">
-                        Seleccione el periodo: <select ng-model="selectedPeriodo" style="height:20px; width:150px;margin-top:5px;"
-                                ng-options="p.PRDCODIGOI as p.PRDCODIGOI for p in PERIODOS"></select>
+                        Desde: <input name="date1" id="date1" ng-model="date.dateFrom" type="date" />
+                        Hasta: <input name="date2" id="date2" ng-model="date.dateTo" type="date" />
                         <button onclick="printElement('.content_print', 'Imprimir Reporte Actividades')" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
                             <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
                             <span class="ui-button-text">Imprimir</span>
@@ -409,32 +409,30 @@
                     </div>
                     <table cellspacing=0>
                         <thead><tr>
-                                <th>CODIGO</th>
                                 <th>ACTIVIDAD</th>
-                                <th>ACTIVIDAD GENERAL</th>
+                                <th>A. GENERAL</th>
                                 <th>FECHA</th>
                                 <th>ESTADO</th>
-                                <th>ASISTENCIA</th>
-                                <th>NIVEL</th>
+                                <th>ASIST</th>
+                                <th>NIV</th>
                                 <th>CARRERA</th>
-                                <th>MODALIDAD</th>
-                                <th>ADJUNTOS</th>
+                                <th>MOD</th>
+                                <th>ADJ</th>
                         </tr></thead>
                         <tbody>
                             <tr ng-if="reportActivitiesData == null || reportActivitiesData == undefined">
                                 <td colspan="9">No existen solicitudes de beca</td>
                             </tr>
-                            <tr ng-repeat="activitiesReport in reportActivitiesData" style="color:#508ECC;font-size:11px;">
-                                <td>{{activitiesReport.CODIGO}}</td>
+                            <tr ng-repeat="activitiesReport in reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo" style="color:#508ECC;font-size:11px;">
                                 <td>{{activitiesReport.ACTIVIDAD}}</td>
                                 <td>{{activitiesReport.ACTIVIDADGENERAL}}</td>
                                 <td>{{activitiesReport.FECHA | date:"MM/dd/yyyy"}}</td>
                                 <td>{{ESTADOS[activitiesReport.ESTADO].name}}</td>
-                                <td>{{activitiesReport.DATOS.ASISTENCIA}}</td>
-                                <td>{{activitiesReport.DATOS.NIVEL}}</td>
-                                <td>{{activitiesReport.DATOS.CARRERA}}</td>
-                                <td>{{activitiesReport.DATOS.MODALIDAD}}</td>
-                                <td>{{activitiesReport.DATOS.ADJUNTOS}}</td>
+                                <td style="text-align:center;">{{activitiesReport.DATOS.ASISTENCIA}}</td>
+                                <td><div class="item-report" ng-repeat="nivel in activitiesReport.DATOS.NIVELES">{{nivel}}</div></td>
+                                <td><div class="item-report" ng-repeat="carrera in activitiesReport.DATOS.CARRERAS">-{{carrera}}</div></td>
+                                <td><div class="item-report" ng-repeat="modalidad in activitiesReport.DATOS.MODALIDADES">{{modalidad}}</div></td>
+                                <td><div class="item-report" ng-repeat="adjunto in activitiesReport.DATOS.ADJUNTOS">{{adjunto}};</div></td>
                             </tr>
                         </tbody>
                     </table>
