@@ -4,6 +4,10 @@
     Actividades
 </asp:Content>
 
+<asp:Content ID="activityHeader" ContentPlaceHolderID="HeaderContent" runat="server">
+    <link href="../../Scripts/ng-dialog/ngDialog-report.css" rel="stylesheet" type="text/css" />
+</asp:Content>
+
 <asp:Content ID="activityContent" ContentPlaceHolderID="MainContent" runat="server">
     <%
         Random rand = new Random((int)DateTime.Now.Ticks);
@@ -12,6 +16,7 @@
     
     <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
     <script type="text/javascript" src="../../Scripts/Controllers/activities.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="../../Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
 
     <h2>Actividades</h2>
 
@@ -24,6 +29,9 @@
 
         <button ng-click="addNewActivityDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar actividad">
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>
+        </button>
+        <button ng-click="openDialogAtivitiesReport()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Imprimir reporte">
+            <span class="ui-button-icon-primary ui-icon ui-icon-print"></span><span class="ui-button-text">Imprimir</span>
         </button>
 
         <div ui-grid="gridOptions"></div>
@@ -386,5 +394,52 @@
                 </form>
             </fieldset>
         </script>
+
+        <script type="text/ng-template" id="activitiesReport.html">
+            <div class="content_print" style="line-height: 14px;">
+            <fieldset>
+                <div class="form-group" style="font-size:12px;">
+                    <div class="noprint">
+                        Desde: <input name="date1" id="date1" ng-model="date.dateFrom" type="date" />
+                        Hasta: <input name="date2" id="date2" ng-model="date.dateTo" type="date" />
+                        <button onclick="printElement('.content_print', 'Imprimir Reporte Actividades')" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+                            <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+                            <span class="ui-button-text">Imprimir</span>
+                        </button>
+                    </div>
+                    <table cellspacing=0>
+                        <thead><tr>
+                                <th>ACTIVIDAD</th>
+                                <th>A. GENERAL</th>
+                                <th>FECHA</th>
+                                <th>ESTADO</th>
+                                <th>ASIST</th>
+                                <th>NIV</th>
+                                <th>CARRERA</th>
+                                <th>MOD</th>
+                                <th>ADJ</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr ng-if="reportActivitiesData == null || reportActivitiesData == undefined">
+                                <td colspan="9">No existen solicitudes de beca</td>
+                            </tr>
+                            <tr ng-repeat="activitiesReport in reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo" style="color:#508ECC;font-size:11px;">
+                                <td>{{activitiesReport.ACTIVIDAD}}</td>
+                                <td>{{activitiesReport.ACTIVIDADGENERAL}}</td>
+                                <td>{{activitiesReport.FECHA | date:"MM/dd/yyyy"}}</td>
+                                <td>{{ESTADOS[activitiesReport.ESTADO].name}}</td>
+                                <td style="text-align:center;">{{activitiesReport.DATOS.ASISTENCIA}}</td>
+                                <td><div class="item-report" ng-repeat="nivel in activitiesReport.DATOS.NIVELES">{{nivel}}</div></td>
+                                <td><div class="item-report" ng-repeat="carrera in activitiesReport.DATOS.CARRERAS">-{{carrera}}</div></td>
+                                <td><div class="item-report" ng-repeat="modalidad in activitiesReport.DATOS.MODALIDADES">{{modalidad}}</div></td>
+                                <td><div class="item-report" ng-repeat="adjunto in activitiesReport.DATOS.ADJUNTOS">{{adjunto}};</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            </div>
+        </script>
+
     </div>
 </asp:Content>

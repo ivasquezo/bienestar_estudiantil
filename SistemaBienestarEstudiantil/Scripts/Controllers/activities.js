@@ -12,6 +12,18 @@
         $scope.delay = 2;
         $scope.minDuration = 2;
 
+        $scope.date = {
+            dateFrom: new Date(),
+            dateTo: new Date()
+        };
+
+        $scope.ESTADOS = [
+            { name: 'Inactivo', value: 0 },
+            { name: 'En proceso', value: 1 },
+            { name: 'Procesado', value: 2 },
+            { name: 'Finalizado', value: 3 }
+        ];
+
         $scope.activityCopy = {
             CODIGO: ''
         };
@@ -24,15 +36,7 @@
         };
 
         $scope.cargarNombreEstado = function(statusId) {
-            if (statusId == 0) {
-                return "Inactivo";
-            } else if (statusId == 1) {
-                return "En proceso";
-            } else if (statusId == 2) {
-                return "Procesado";
-            } else if (statusId == 3) {
-                return "Finalizado";
-            }
+            return $scope.ESTADOS[statusId].name;
         };
 
         $scope.cargarEstadoActividades = function(actividades){
@@ -53,6 +57,21 @@
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar las actividades... ", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades'}]);
+            });
+        };
+
+        $scope.getReportActivities = function () {
+            $scope.promise = $http.post('../../WebServices/Activities.asmx/getActivitiesReport', {
+            }).success(function (data, status, headers, config) {
+                console.log("Cargar actividades... ", data);
+                if (data.success) {
+                    $scope.convertDate(data.response);
+                    $scope.reportActivitiesData = data.response;
+                } else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar reportes de actividades... ", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener reportes de actividades'}]);
             });
         };
 
@@ -739,7 +758,27 @@
                 $scope.sendMail = false;
             else
                 $scope.sendMail = true;
-        }; 
+        };
+
+        $scope.openDialogAtivitiesReport = function () {
+
+            //$scope.solicitudbecaReport = angular.copy($scope.gridOptions.data);
+
+            $scope.getReportActivities();
+            
+            ngDialog.open({
+                template: 'activitiesReport.html',
+                className: 'ngdialog-theme-flat ngdialog-report',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
@@ -888,6 +927,7 @@
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
             }
         };
+
     }]);
 
     app.directive('validActivityName', ['$http', function($http) {
@@ -962,4 +1002,24 @@
             }
         };
     }]);
+
+    app.filter("rangeDateFilter", function() {
+        return function(items, from, to) {
+            
+            var result = [];        
+            if (items != undefined) {
+                
+                var df = from;
+                var dt = to;
+                for (var i=0; i<items.length; i++){
+                    var t = new Date(parseInt(items[i].FECHA));
+                    if (df <= t && t <= dt)  {
+                        result.push(items[i]);
+                    }
+                }            
+            }
+            return result;
+        };
+    });
+
 })();

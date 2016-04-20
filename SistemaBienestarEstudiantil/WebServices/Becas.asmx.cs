@@ -53,28 +53,79 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                var becas = db.BE_BECA_SOLICITUD.Select(be => new {
+                var becas = db.BE_BECA_SOLICITUD.Select(be => new
+                {
                     be.CODIGO,
                     be.OBSERVACION,
                     be.APROBADA,
                     be.CEDULA,
                     BECA = be.BE_BECA_TIPO.NOMBRE,
                     TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
-                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), be.BE_BECA_SOLICITUD_HISTORIAL
-                }).ToList();
+                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(),
+                    be.BE_BECA_SOLICITUD_HISTORIAL,
+                    NIVELCARRERA = new NivelCarrera(),
+                    PERIODO = new Periodo()
+                }).OrderBy(o => o.CODIGO).ToList();
 
                 if (becas != null && becas.Count > 0)
+                {
+                    foreach (var beca in becas){
+                        var temp = this.getNivelCarrera(beca.CEDULA);
+                        beca.NIVELCARRERA.PERIODO = temp.PERIODO;
+                        beca.NIVELCARRERA.NIVEL = temp.NIVEL;
+                        beca.NIVELCARRERA.CARRERA = temp.CARRERA;
+                        BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
+                        beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                    }
                     response = new Response(true, "", "", "", becas);
+                }
                 else
-                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado usuarios registrados", null);
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado becas registradas", null);
             }
             catch (Exception e)
             {
-                response = new Response(false, "error", "Error", "Error al obtener los usuarios", e);
+                response = new Response(false, "error", "Error", "Error al obtener las becas", e);
                 writeResponseObject(response);
             }
 
-            writeResponseObject(response);
+            Utils.writeResponseObject(response);
+        }
+
+        private NivelCarrera getNivelCarrera(string cedula)
+        {
+            /*
+             * inscripcion -> cedula <- codigoinscripcion
+             * codigoinscripcion -> matricula
+             * matricula -> codigonivel (nvlcodigoi), codigocarreramodalidad (crrmodcodigoi)
+             * carreramodal -> codigocarrera
+             * carrera
+             * 
+             * inscripcion cedula and tpecodigoi == 1
+            */
+
+            bienestarEntities db = new bienestarEntities();
+
+            var nivelCarreraTemp = db.INSCRIPCIONs.Join(db.MATRICULAs, i => i.INSCODIGOI, m => m.INSCODIGOI, (i, m) => new { i, m }).Where(w => w.i.TPECODIGOI == 1 && w.i.DTPCEDULAC == cedula).
+                            Join(db.CARRERA_MODAL, mi => mi.m.CRRMODCODIGOI, cm => cm.CRRMODCODIGOI, (mi, cm) => new { mi, cm }).
+                            Join(db.CARRERAs, micm => micm.cm.CRRCODIGOI, c => c.CRRCODIGOI, (micm, c) => new { micm, c }).
+                            Join(db.NIVELs, micmc => micmc.micm.mi.m.NVLCODIGOI, n => n.NVLCODIGOI, (micmc, n) => new { micmc, n }).
+                            Select(s => new
+                            {
+                                PERIODO = s.micmc.micm.mi.m.PRDCODIGOI,
+                                NIVEL = s.n.NVLDESCRIPC,
+                                CARRERA = s.micmc.c.CRRDESCRIPC
+                            }).
+                            OrderByDescending(o => o.PERIODO).FirstOrDefault();
+
+            NivelCarrera nivelCarrera = new NivelCarrera();
+            if (nivelCarreraTemp != null)
+            {
+                nivelCarrera.PERIODO = nivelCarreraTemp.PERIODO;
+                nivelCarrera.NIVEL = nivelCarreraTemp.NIVEL.Trim();
+                nivelCarrera.CARRERA = nivelCarreraTemp.CARRERA.Trim();
+            }
+            
+            return nivelCarrera;
         }
 
         /*
@@ -135,7 +186,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     string to = "micheljqh@yahoo.es"; // beca.DATOSPERSONALE.DTPEMAILC;
                     string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
                     string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
-                    Class.Utils.sendMail(to, subject, body);
+                    Utils.sendMail(to, subject, body);
                 }
             }
         }
@@ -330,12 +381,20 @@ namespace SistemaBienestarEstudiantil.WebServices
             if (beca_solicitud.CODIGO == 0)
             {
                 db.BE_BECA_SOLICITUD.AddObject(beca_solicitud);
+
+                BE_USUARIO sysUser = db.BE_USUARIO.Where(u => u.NOMBREUSUARIO.ToLower() == "sistema").FirstOrDefault();
+                if (sysUser != null)
+                {
+                    BE_BECA_SOLICITUD_HISTORIAL bsh = new BE_BECA_SOLICITUD_HISTORIAL();
+                    bsh.FECHA = DateTime.Now;
+                    bsh.CODIGOUSUARIO = sysUser.CODIGO;
+                    beca_solicitud.BE_BECA_SOLICITUD_HISTORIAL.Add(bsh);
+                }
             }
             else
             {
                 editBS = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGO == beca_solicitud.CODIGO).First();
                 editBS.CODIGOTIPO = beca_solicitud.CODIGOTIPO;
-                //editBS.APROBADA = beca_solicitud.APROBADA;
             }
             
             db.SaveChanges();
@@ -434,5 +493,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             public string NOMBRE { set; get; }
         }
 
+        //
+        public class NivelCarrera
+        {
+            public string NIVEL { set; get; }
+            public string CARRERA { set; get; }
+            public int PERIODO { set; get; }
+        }
+
+        //
+        public class Periodo
+        {
+            public int ID { set; get; }
+        }
     }
 }

@@ -1,0 +1,36 @@
+﻿fieldset {padding: 0px; border: none;}
+
+body { 
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  /*line-height: 1.4;*/
+  word-spacing: 1.1pt;
+  letter-spacing: 0.2pt;
+  font-family: Garamond, Perpetua, "Times New Roman", serif;
+  color: #000;
+  background: none;
+  font-size: 11pt;
+}
+.noprint {display: none!important;}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{text-decoration: none !important;}
+
+/* Forms */
+form {display: none!important;}
+input {display: none!important;}
+button {display: none!important;}
+select {display: none!important;}
+label {display: none!important;}
+
+/* Table */
+table {
+  background:none !important;
+  margin: 30px;
+  text-align: left;
+}
+th {text-align: center;font-weight: 700;}
+th,td {padding: 10px 15px 10px 0;}
+table { page-break-inside:auto!important; }
+tr { page-break-inside:avoid!important; page-break-after:auto!important; }
+thead { display:table-header-group!important; }
+tfoot { display:table-footer-group!important; }

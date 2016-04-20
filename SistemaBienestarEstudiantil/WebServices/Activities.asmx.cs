@@ -27,11 +27,14 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.End();
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void getAllGeneralActivitiesWithActivity()
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
+
+            int userCode = (int)Utils.getSession("userCode");
+            bool isTeacher = Utils.isTeacher(userCode);
 
             try
             {
@@ -50,7 +53,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     }).OrderBy(y => y.NOMBREACTIVIDAD).ToList();
 
                 if (data != null && data.Count > 0)
-                    response = new Response(true, "", "", "", data);
+                    response = new Response(true, "", "", "", isTeacher ? data.Where( w => w.CODIGOUSUARIO == userCode) : data);
                 else
                     response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado actividades registradas", null);
             }
@@ -246,6 +249,89 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void getActivitiesReport()
+        {
+            Response response = null;
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                int userCode = (int)Utils.getSession("userCode");
+                bool isTeacher = Utils.isTeacher(userCode);
+                
+                var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
+                                    Select(s => new
+                                    {
+                                        CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
+                                        CODIGO = s.ac.CODIGO,
+                                        ACTIVIDAD = s.ac.NOMBRE,
+                                        ACTIVIDADGENERAL = s.ag.NOMBRE,
+                                        FECHA = s.ac.FECHA,
+                                        ESTADO = s.ac.ESTADO,
+                                        DATOS = new Datos()
+                                    }).ToList();
+
+                foreach (var actividad in actividades)
+                {
+                    Datos datos = getNivelCarreraModalidad(actividad.CODIGO);
+                    actividad.DATOS.ADJUNTOS = datos.ADJUNTOS;
+                    actividad.DATOS.NIVELES = datos.NIVELES;
+                    actividad.DATOS.MODALIDADES = datos.MODALIDADES;
+                    actividad.DATOS.CARRERAS = datos.CARRERAS;
+                    actividad.DATOS.ASISTENCIA = getActitityAssistance(actividad.CODIGO);
+                }
+
+                response = new Response(true, "", "", "", isTeacher ? actividades.Where(w => w.CODIGOUSUARIO == userCode) : actividades);
+            }
+            catch (Exception ex)
+            {
+                response = new Response(false, "error", "Error", "Error al cargar los grupos asignados a una actividad", ex.ToString());
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        private Datos getNivelCarreraModalidad(int codigoActividad)
+        {
+            bienestarEntities db = new bienestarEntities();
+            var listActivitiesCodes = db.BE_GRUPO_ACTIVIDAD.Join(db.BE_GRUPO, ga => ga.CODIGOGRUPO, g => g.CODIGO, (ga, g) => new { ga, g }).
+                            Join(db.CARRERA_MODAL, gcm => gcm.g.CODIGOMODALIDAD, cm => cm.CRRMODCODIGOI, (gcm, cm) => new { gcm, cm }).
+                            Select(s => new
+                            {
+                                CODIGOACTIVIDAD = s.gcm.ga.CODIGOACTIVIDAD,
+                                CODIGOGRUPO = s.gcm.ga.CODIGOGRUPO,
+                                CODIGOCARRERA = s.cm.CRRCODIGOI,
+                                CODIGOMODALIDAD = s.cm.MDLCODIGOI,
+                                CODIGONIVEL = s.gcm.g.CODIGONIVEL
+                            }).Where(w => w.CODIGOACTIVIDAD == codigoActividad).ToList();
+            
+            List<int> codigosCarreras = listActivitiesCodes.Select(a => a.CODIGOCARRERA).Distinct().ToList();
+            List<string> carreras = db.CARRERAs.Where(w => codigosCarreras.Contains(w.CRRCODIGOI)).Select(c => c.CRRDESCRIPC.Trim()).ToList();
+
+            List<int> codigosNiveles = listActivitiesCodes.Select(a => a.CODIGONIVEL).Distinct().ToList();
+            List<string> niveles = db.NIVELs.Where(w => codigosNiveles.Contains(w.NVLCODIGOI)).Select(c => c.NVLDESCRIPC.Trim()).ToList();
+
+            List<int> codigosModalidades = listActivitiesCodes.Select(a => a.CODIGOMODALIDAD).Distinct().ToList();
+            List<string> modalidades = db.MODALIDADs.Where(w => codigosModalidades.Contains(w.MDLCODIGOI)).Select(c => c.MDLDESCRIPC.Trim()).ToList();
+
+            List<string> adjuntos = db.BE_ACTIVIDAD_ADJUNTO.Where(w => w.CODIGOACTIVIDAD == codigoActividad).Select(c => c.DESCRIPCION.Trim()).ToList();
+
+            return new Datos(niveles, carreras, modalidades, adjuntos);
+        }
+
+        private int getActitityAssistance(int activityId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            int count = db.BE_ASISTENCIA.Join(db.MATRICULAs, a => a.CODIGOALUMNO, m => m.MTRNUMEROI, (a, m) => new { a, m })
+                .Join(db.INSCRIPCIONs, am => am.m.INSCODIGOI, i => i.INSCODIGOI, (am, i) => new { am, i })
+                .Join(db.DATOSPERSONALES, ami => ami.i.DTPCEDULAC, d => d.DTPCEDULAC, (ami, d) => new { ami, d })
+                .Where(w => w.ami.am.a.CODIGOACTIVIDAD == activityId).Count();
+                
+            return count;
         }
 
         private int[] getCareerModalityIds(int[] modalities, int[] carees)
@@ -1009,5 +1095,29 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
+    }
+
+    //
+    public class Datos
+    {
+        public List<string> NIVELES { set; get; }
+        public List<string> CARRERAS { set; get; }
+        public List<string> MODALIDADES { set; get; }
+        public List<string> ADJUNTOS { set; get; }
+        public int ASISTENCIA { set; get; }
+        public Datos( List<string> n, List<string> c, List<string> m, List<string> a )
+        {
+            NIVELES = n;
+            CARRERAS = c;
+            MODALIDADES = m;
+            ADJUNTOS = a;
+        }
+        public Datos() { }
+    }
+
+    //
+    public class Asistencia
+    {
+        public int cantidad { set; get; }
     }
 }
