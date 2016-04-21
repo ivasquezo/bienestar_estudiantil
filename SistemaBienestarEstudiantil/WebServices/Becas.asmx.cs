@@ -136,61 +136,67 @@ namespace SistemaBienestarEstudiantil.WebServices
          * 2 aprobada
          * 3 rechazada
          */
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void saveBeca(EditedBeca editedBeca)
         {
-            using (Models.bienestarEntities db = new Models.bienestarEntities())
+            if (Utils.haveAccessTo(Utils.MODULOBECAS))
             {
-                BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == editedBeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
-
-                // add new historial
-                if (historial == null || (historial != null && 
-                   (historial.OTORGADO != editedBeca.OTORGADO ||
-                    historial.RUBRO != editedBeca.RUBRO)))
+                using (Models.bienestarEntities db = new Models.bienestarEntities())
                 {
-                    BE_BECA_SOLICITUD_HISTORIAL newHistorial = new BE_BECA_SOLICITUD_HISTORIAL();
-                    newHistorial.CODIGOSOLICITUD = editedBeca.CODIGO;
-                    newHistorial.CODIGOUSUARIO = editedBeca.CODIGOUSUARIO;
-                    newHistorial.FECHA = DateTime.Now;
-                    newHistorial.RUBRO = editedBeca.RUBRO;
-                    newHistorial.OTORGADO = editedBeca.OTORGADO;
-                    db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(newHistorial);
-                    db.SaveChanges();
-                }
-            }
+                    BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == editedBeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
 
-            /*
-             * save changes for beca
-             */
-            using (Models.bienestarEntities db = new Models.bienestarEntities())
-            {
-                BE_BECA_SOLICITUD beca = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == editedBeca.CODIGO).FirstOrDefault();
-                if (beca != null && 
-                   (beca.OBSERVACION != editedBeca.OBSERVACION ||
-                    beca.APROBADA != editedBeca.APROBADA))
-                {
-                    beca.OBSERVACION = editedBeca.OBSERVACION;
-                    if (beca.APROBADA != editedBeca.APROBADA)
+                    // add new historial
+                    if (historial == null || (historial != null &&
+                       (historial.OTORGADO != editedBeca.OTORGADO ||
+                        historial.RUBRO != editedBeca.RUBRO)))
                     {
-                        beca.APROBADA = editedBeca.APROBADA;
-                        if (beca.APROBADA == 2 || beca.APROBADA == 3)
-                        {
-                            editedBeca.ENVIARNOTIFICACION = true;
-                        }
+                        BE_BECA_SOLICITUD_HISTORIAL newHistorial = new BE_BECA_SOLICITUD_HISTORIAL();
+                        newHistorial.CODIGOSOLICITUD = editedBeca.CODIGO;
+                        newHistorial.CODIGOUSUARIO = editedBeca.CODIGOUSUARIO;
+                        newHistorial.FECHA = DateTime.Now;
+                        newHistorial.RUBRO = editedBeca.RUBRO;
+                        newHistorial.OTORGADO = editedBeca.OTORGADO;
+                        db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(newHistorial);
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
                 }
 
-                if (beca != null && editedBeca.ENVIARNOTIFICACION)
+                /*
+                 * save changes for beca
+                 */
+                using (Models.bienestarEntities db = new Models.bienestarEntities())
                 {
-                    string to = "micheljqh@yahoo.es"; // beca.DATOSPERSONALE.DTPEMAILC;
-                    string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
-                    string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
-                    Utils.sendMail(to, subject, body);
+                    BE_BECA_SOLICITUD beca = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == editedBeca.CODIGO).FirstOrDefault();
+                    if (beca != null &&
+                       (beca.OBSERVACION != editedBeca.OBSERVACION ||
+                        beca.APROBADA != editedBeca.APROBADA))
+                    {
+                        beca.OBSERVACION = editedBeca.OBSERVACION;
+                        if (beca.APROBADA != editedBeca.APROBADA)
+                        {
+                            beca.APROBADA = editedBeca.APROBADA;
+                            if (beca.APROBADA == 2 || beca.APROBADA == 3)
+                            {
+                                editedBeca.ENVIARNOTIFICACION = true;
+                            }
+                        }
+                        db.SaveChanges();
+                    }
+
+                    if (beca != null && editedBeca.ENVIARNOTIFICACION)
+                    {
+                        string to = "micheljqh@yahoo.es"; // beca.DATOSPERSONALE.DTPEMAILC;
+                        string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
+                        string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
+                        Utils.sendMail(to, subject, body);
+                    }
                 }
             }
         }
 
+        /**
+         * upload files when the student take beca
+         **/
         [WebMethod]
         public void addUploadedFileDataBase()
         {
@@ -202,7 +208,14 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             string descripcion = System.Web.HttpContext.Current.Request.Params.Get("descripcion");
 
-            if (hfc.Count > 0 && codigoSolicitud != 0)
+            int cantidadDocSolicitados = db.BE_BECA_TIPO.Join(db.BE_BECA_TIPO_DOCUMENTO, bt => bt.CODIGO, btd => btd.CODIGOTIPO, (bt, btd) => new { bt, btd }).
+                                         Join(db.BE_BECA_SOLICITUD, btbtd => btbtd.bt.CODIGO, bs => bs.CODIGOTIPO, (btbtd, bs) => new { btbtd, bs}).
+                                         Where(w => w.bs.CODIGO == codigoSolicitud).Count();
+
+            int cantidadAdjuntos = db.BE_BECA_ADJUNTO.Where(w => w.CODIGOSOLICITUD == codigoSolicitud).Count();
+
+            // set attach if only if have files, and if attach count is more than count of document to attach
+            if (hfc.Count > 0 && codigoSolicitud != 0 && cantidadAdjuntos < cantidadDocSolicitados + Utils.DOCUMENTMAXCANT)
             {
                 Models.BE_BECA_ADJUNTO[] becaAdjunto = new Models.BE_BECA_ADJUNTO[hfc.Count];
                 // CHECK THE FILE COUNT.
@@ -237,15 +250,16 @@ namespace SistemaBienestarEstudiantil.WebServices
                         inserted++;
                     }
                 }
-                
+
                 if (inserted > 0)
                     db.SaveChanges();
             }
 
             var beca_solicitud = db.BE_BECA_SOLICITUD.Single(bs => bs.CODIGO == codigoSolicitud);
 
-            writeResponseObject(new {
-                beca_solicitud, 
+            writeResponseObject(new
+            {
+                beca_solicitud,
                 System.Web.HttpContext.Current.Request.Params
             });
         }
@@ -298,32 +312,38 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse("ok");
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void removeBeca(int codeBeca)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-
-            Models.BE_BECA_SOLICITUD ba = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == codeBeca).First();
-            if (ba != null)
+            if (Utils.haveAccessTo(Utils.MODULOBECAS))
             {
-                db.BE_BECA_SOLICITUD.DeleteObject(ba);
-                db.SaveChanges();
+                Models.bienestarEntities db = new Models.bienestarEntities();
+
+                Models.BE_BECA_SOLICITUD ba = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == codeBeca).First();
+                if (ba != null)
+                {
+                    db.BE_BECA_SOLICITUD.DeleteObject(ba);
+                    db.SaveChanges();
+                }
+                writeResponse("ok");
             }
-            writeResponse("ok");
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void removeTipoBeca(int codeTipoBeca)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-
-            Models.BE_BECA_TIPO bt = db.BE_BECA_TIPO.Where(b => b.CODIGO == codeTipoBeca).First();
-            if (bt != null)
+            if (Utils.haveAccessTo(Utils.MODULOBECAS))
             {
-                db.BE_BECA_TIPO.DeleteObject(bt);
-                db.SaveChanges();
+                Models.bienestarEntities db = new Models.bienestarEntities();
+
+                Models.BE_BECA_TIPO bt = db.BE_BECA_TIPO.Where(b => b.CODIGO == codeTipoBeca).First();
+                if (bt != null)
+                {
+                    db.BE_BECA_TIPO.DeleteObject(bt);
+                    db.SaveChanges();
+                }
+                writeResponse("ok");
             }
-            writeResponse("ok");
         }
 
         [WebMethod]
@@ -410,34 +430,37 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponseObject(editBS == null ? beca_solicitud : editBS);
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void saveBecaTipo(BecaTipo becaTipo)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
+            if (Utils.haveAccessTo(Utils.MODULOBECAS))
+            {
+                Models.bienestarEntities db = new Models.bienestarEntities();
 
-            if (becaTipo.CODIGO == 0)
-            {
-                BE_BECA_TIPO becaTipoSave = convertToBECA_TIPO(becaTipo);
-                db.BE_BECA_TIPO.AddObject(becaTipoSave);
-                db.SaveChanges();
-                writeResponseObject(becaTipoSave);
-            }
-            else
-            {
-                using (Models.bienestarEntities dbTemp = new Models.bienestarEntities())
+                if (becaTipo.CODIGO == 0)
                 {
-                    Models.BE_BECA_TIPO currentBecaTipo = dbTemp.BE_BECA_TIPO.Single(bt => bt.CODIGO == becaTipo.CODIGO);
-
-                    currentBecaTipo.BE_BECA_TIPO_DOCUMENTO.ToList().ForEach(btd => dbTemp.BE_BECA_TIPO_DOCUMENTO.DeleteObject(btd));
-                    dbTemp.SaveChanges();
+                    BE_BECA_TIPO becaTipoSave = convertToBECA_TIPO(becaTipo);
+                    db.BE_BECA_TIPO.AddObject(becaTipoSave);
+                    db.SaveChanges();
+                    writeResponseObject(becaTipoSave);
                 }
-                
-                BE_BECA_TIPO becaTipoSave = db.BE_BECA_TIPO.Where(b => b.CODIGO == becaTipo.CODIGO).Single();
-                becaTipoSave.NOMBRE = becaTipo.NOMBRE;
-                convertToBECA_TIPO(becaTipo).BE_BECA_TIPO_DOCUMENTO.ToList().ForEach(btd => becaTipoSave.BE_BECA_TIPO_DOCUMENTO.Add(btd));
-                db.SaveChanges();
-                writeResponseObject(becaTipoSave);
-            }            
+                else
+                {
+                    using (Models.bienestarEntities dbTemp = new Models.bienestarEntities())
+                    {
+                        Models.BE_BECA_TIPO currentBecaTipo = dbTemp.BE_BECA_TIPO.Single(bt => bt.CODIGO == becaTipo.CODIGO);
+
+                        currentBecaTipo.BE_BECA_TIPO_DOCUMENTO.ToList().ForEach(btd => dbTemp.BE_BECA_TIPO_DOCUMENTO.DeleteObject(btd));
+                        dbTemp.SaveChanges();
+                    }
+
+                    BE_BECA_TIPO becaTipoSave = db.BE_BECA_TIPO.Where(b => b.CODIGO == becaTipo.CODIGO).Single();
+                    becaTipoSave.NOMBRE = becaTipo.NOMBRE;
+                    convertToBECA_TIPO(becaTipo).BE_BECA_TIPO_DOCUMENTO.ToList().ForEach(btd => becaTipoSave.BE_BECA_TIPO_DOCUMENTO.Add(btd));
+                    db.SaveChanges();
+                    writeResponseObject(becaTipoSave);
+                }
+            }
         }
 
         // transforma el objecto BecaTipo en una entidad BE_BECA_TIPO

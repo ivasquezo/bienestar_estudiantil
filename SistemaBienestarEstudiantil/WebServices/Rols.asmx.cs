@@ -50,53 +50,58 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void removeRolById(int rolId)
         {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
+            Response response = new Response(false, "", "", "No tiene acceso", null);
 
-            try
+            if (Utils.haveAccessTo(Utils.MODULOROLES))
             {
-                BE_ROL rolDeleted = db.BE_ROL.Single(r => r.CODIGO == rolId);
+                bienestarEntities db = new bienestarEntities();
+                try
+                {
+                    BE_ROL rolDeleted = db.BE_ROL.Single(r => r.CODIGO == rolId);
 
-                this.removeRolAccesByRolId(rolId);
+                    this.removeRolAccesByRolId(rolId);
 
-                this.changeUserRol(rolId);
+                    this.changeUserRol(rolId);
 
-                db.BE_ROL.DeleteObject(rolDeleted);
+                    db.BE_ROL.DeleteObject(rolDeleted);
 
-                db.SaveChanges();
+                    db.SaveChanges();
 
-                response = new Response(true, "info", "Eliminar", "Rol eliminado correctamente", null);
+                    response = new Response(true, "info", "Eliminar", "Rol eliminado correctamente", null);
+                }
+                catch (InvalidOperationException)
+                {
+                    response = new Response(false, "error", "Error", "Error al obtener los datos para eliminar el rol", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
+                catch (Exception)
+                {
+                    response = new Response(false, "error", "Error", "Error al eliminar el rol", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
             }
-            catch (InvalidOperationException)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener los datos para eliminar el rol", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al eliminar el rol", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         private void removeRolAccesByRolId(int rolId)
         {
-            bienestarEntities db = new bienestarEntities();
-
-            List<BE_ROL_ACCESO> rolAccessDeleted = db.BE_ROL_ACCESO.Where(ra => ra.CODIGOROL == rolId).ToList();
-
-            if (rolAccessDeleted != null && rolAccessDeleted.Count > 0)
+            if (Utils.haveAccessTo(Utils.MODULOROLES))
             {
-                foreach (BE_ROL_ACCESO rolAccess in rolAccessDeleted)
-                    db.BE_ROL_ACCESO.DeleteObject(rolAccess);
+                bienestarEntities db = new bienestarEntities();
 
-                db.SaveChanges();
+                List<BE_ROL_ACCESO> rolAccessDeleted = db.BE_ROL_ACCESO.Where(ra => ra.CODIGOROL == rolId).ToList();
+
+                if (rolAccessDeleted != null && rolAccessDeleted.Count > 0)
+                {
+                    foreach (BE_ROL_ACCESO rolAccess in rolAccessDeleted)
+                        db.BE_ROL_ACCESO.DeleteObject(rolAccess);
+
+                    db.SaveChanges();
+                }
             }
         }
 
@@ -118,43 +123,45 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void saveRolData(int rolId, String rolName, int[] accessRols)
         {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
+            Response response = new Response(false, "", "", "No tiene acceso", null);
+            
+            if (Utils.haveAccessTo(Utils.MODULOROLES))
             {
-                BE_ROL rolUpdated = db.BE_ROL.Single(r => r.CODIGO == rolId);
-
-                rolUpdated.NOMBRE = rolName;
-
-                for (int accRol = 0; accRol < accessRols.Length; accRol++)
+                bienestarEntities db = new bienestarEntities();
+                try
                 {
-                    BE_ROL_ACCESO rolAccess = getStatusRolAccesById(rolId, accessRols[accRol]);
+                    BE_ROL rolUpdated = db.BE_ROL.Single(r => r.CODIGO == rolId);
 
-                    if (rolAccess != null)
-                        updateRolAccess(rolId, accessRols[accRol]);
-                    else
-                        createRolAccess(rolId, accessRols[accRol]);
+                    rolUpdated.NOMBRE = rolName;
+
+                    for (int accRol = 0; accRol < accessRols.Length; accRol++)
+                    {
+                        BE_ROL_ACCESO rolAccess = getStatusRolAccesById(rolId, accessRols[accRol]);
+
+                        if (rolAccess != null)
+                            updateRolAccess(rolId, accessRols[accRol]);
+                        else
+                            createRolAccess(rolId, accessRols[accRol]);
+                    }
+
+                    db.SaveChanges();
+
+                    response = new Response(true, "info", "Actualizar", "Rol actualizado correctamente", null);
                 }
-
-                db.SaveChanges();
-
-                response = new Response(true, "info", "Actualizar", "Rol actualizado correctamente", null);
+                catch (InvalidOperationException)
+                {
+                    response = new Response(false, "error", "Error", "Error al obtener los datos para actualizar el rol", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
+                catch (Exception)
+                {
+                    response = new Response(false, "error", "Error", "Error al actualizar el rol", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
             }
-            catch (InvalidOperationException)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener los datos para actualizar el rol", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al actualizar el rol", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
@@ -220,64 +227,72 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void addNewRol(String rolName, int[] accessRols)
         {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
+            Response response = new Response(false, "", "", "No tiene acceso", null);
 
-            try
+            if (Utils.haveAccessTo(Utils.MODULOROLES))
             {
-                BE_ROL newRol = new BE_ROL();
+                bienestarEntities db = new bienestarEntities();
+                try
+                {
+                    BE_ROL newRol = new BE_ROL();
 
-                newRol.NOMBRE = rolName;
+                    newRol.NOMBRE = rolName;
 
-                db.BE_ROL.AddObject(newRol);
-                db.SaveChanges();
+                    db.BE_ROL.AddObject(newRol);
+                    db.SaveChanges();
 
-                for (int accRol = 0; accRol < accessRols.Length; accRol++)
-                    createRolAccess(Decimal.ToInt32(newRol.CODIGO), accessRols[accRol]);
+                    for (int accRol = 0; accRol < accessRols.Length; accRol++)
+                        createRolAccess(Decimal.ToInt32(newRol.CODIGO), accessRols[accRol]);
 
-                response = new Response(true, "info", "Agregar", "Rol agregado correctamente", newRol);
+                    response = new Response(true, "info", "Agregar", "Rol agregado correctamente", newRol);
+                }
+                catch (Exception)
+                {
+                    response = new Response(false, "error", "Error", "Error al agregar el rol", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
             }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al agregar el rol", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         private void updateRolAccess(int idRol, int idAccess)
         {
-            bienestarEntities db = new bienestarEntities();
+            if (Utils.haveAccessTo(Utils.MODULOROLES))
+            {
+                bienestarEntities db = new bienestarEntities();
 
-            BE_ROL_ACCESO rolAccess = db.BE_ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
+                BE_ROL_ACCESO rolAccess = db.BE_ROL_ACCESO.Single(ra => ra.CODIGOROL == idRol && ra.CODIGOACCESO == idAccess);
 
-            if (rolAccess.VALIDO)
-                rolAccess.VALIDO = false;
-            else
-                rolAccess.VALIDO = true;
+                if (rolAccess.VALIDO)
+                    rolAccess.VALIDO = false;
+                else
+                    rolAccess.VALIDO = true;
 
-            db.SaveChanges();
+                db.SaveChanges();
+            }
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         private void createRolAccess(int rolId, int accessId)
         {
-            bienestarEntities db = new bienestarEntities();
+            if (Utils.haveAccessTo(Utils.MODULOROLES))
+            {
+                bienestarEntities db = new bienestarEntities();
 
-            BE_ROL_ACCESO newRolAccess = new BE_ROL_ACCESO();
+                BE_ROL_ACCESO newRolAccess = new BE_ROL_ACCESO();
 
-            newRolAccess.CODIGOROL = rolId;
-            newRolAccess.CODIGOACCESO = accessId;
-            newRolAccess.VALIDO = true;
+                newRolAccess.CODIGOROL = rolId;
+                newRolAccess.CODIGOACCESO = accessId;
+                newRolAccess.VALIDO = true;
 
-            db.BE_ROL_ACCESO.AddObject(newRolAccess);
+                db.BE_ROL_ACCESO.AddObject(newRolAccess);
 
-            db.SaveChanges();
+                db.SaveChanges();
+            }
         }
 
         [WebMethod]

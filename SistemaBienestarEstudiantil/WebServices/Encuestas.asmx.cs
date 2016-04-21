@@ -37,28 +37,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void pruebaJoins()
-        {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-
-            /*
-            var data = db.Categorie
-            .Join(db.CategoryMap,
-            cat => cat.CategoryId,
-            catmap => catmap.ChildCategoryId,
-            (cat, catmap) => new { Category = cat, CategoryMap = catmap })
-            .Select(x => x.Category);
-             */
-            int code = 1;
-            var data = db.BE_ACCESO.Join(db.BE_ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
-                       (a, ra) => new { ACCESO = a, ROL_ACCESO = ra })
-                       .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.BE_ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
-                       .Where(y => y.CODIGOROL == code).ToList();
-
-            writeResponse(new JavaScriptSerializer().Serialize(data));
-        }
-
-        [WebMethod]
         public void getDefaultSurvey()
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
@@ -73,81 +51,93 @@ namespace SistemaBienestarEstudiantil.WebServices
             );
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void setDefaultSurvey(int surveyCode)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-
-            Models.BE_DATOS_SISTEMA datosSistema = db.BE_DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
-
-            bool success = false;
-
-            if (datosSistema != null)
+            if (Utils.haveAccessTo(Utils.MODULOENCUESTAS))
             {
-                datosSistema.VALOR = surveyCode.ToString();
-                success = true;
+                Models.bienestarEntities db = new Models.bienestarEntities();
+
+                Models.BE_DATOS_SISTEMA datosSistema = db.BE_DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
+
+                bool success = false;
+
+                if (datosSistema != null)
+                {
+                    datosSistema.VALOR = surveyCode.ToString();
+                    success = true;
+                }
+
+                db.SaveChanges();
+                writeResponse(new JavaScriptSerializer().Serialize(new Class.Response(success, null, null, null, null)));
             }
-
-            db.SaveChanges();
-
-            writeResponse(new JavaScriptSerializer().Serialize(new Class.Response(success, null, null, null, null)));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void saveEncuesta(Encuesta encuestaEdited)
         {
             Models.BE_ENCUESTA updatedEncuesta = convertToENCUESTA(encuestaEdited);
 
-            using (Models.bienestarEntities db = new Models.bienestarEntities())
+            if (Utils.haveAccessTo(Utils.MODULOENCUESTAS))
             {
-                Models.BE_ENCUESTA currentEncuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
-
-                currentEncuesta.BE_ENCUESTA_PREGUNTA.ToList().ForEach(ep => db.BE_ENCUESTA_PREGUNTA.DeleteObject(ep));
-                db.SaveChanges();
-
-                foreach (Models.BE_ENCUESTA_PREGUNTA ep in updatedEncuesta.BE_ENCUESTA_PREGUNTA)
+                using (Models.bienestarEntities db = new Models.bienestarEntities())
                 {
-                    ep.CODIGO = default(int);
-                    foreach (Models.BE_ENCUESTA_RESPUESTA er in ep.BE_ENCUESTA_RESPUESTA)
+                    Models.BE_ENCUESTA currentEncuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
+
+                    currentEncuesta.BE_ENCUESTA_PREGUNTA.ToList().ForEach(ep => db.BE_ENCUESTA_PREGUNTA.DeleteObject(ep));
+                    db.SaveChanges();
+
+                    foreach (Models.BE_ENCUESTA_PREGUNTA ep in updatedEncuesta.BE_ENCUESTA_PREGUNTA)
                     {
-                        er.CODIGO = default(int);
+                        ep.CODIGO = default(int);
+                        foreach (Models.BE_ENCUESTA_RESPUESTA er in ep.BE_ENCUESTA_RESPUESTA)
+                        {
+                            er.CODIGO = default(int);
+                        }
                     }
                 }
-            }
 
-            using(Models.bienestarEntities db = new Models.bienestarEntities()){
-
-                Models.BE_ENCUESTA currentEncuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
-                currentEncuesta.DESCRIPCION = updatedEncuesta.DESCRIPCION;
-                currentEncuesta.TITULO = updatedEncuesta.TITULO;
-                foreach (Models.BE_ENCUESTA_PREGUNTA ep in updatedEncuesta.BE_ENCUESTA_PREGUNTA.ToList())
+                using (Models.bienestarEntities db = new Models.bienestarEntities())
                 {
-                    currentEncuesta.BE_ENCUESTA_PREGUNTA.Add(ep);
+
+                    Models.BE_ENCUESTA currentEncuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == updatedEncuesta.CODIGO);
+                    currentEncuesta.DESCRIPCION = updatedEncuesta.DESCRIPCION;
+                    currentEncuesta.TITULO = updatedEncuesta.TITULO;
+                    foreach (Models.BE_ENCUESTA_PREGUNTA ep in updatedEncuesta.BE_ENCUESTA_PREGUNTA.ToList())
+                    {
+                        currentEncuesta.BE_ENCUESTA_PREGUNTA.Add(ep);
+                    }
+                    db.SaveChanges();
+                    writeResponse(new JavaScriptSerializer().Serialize(currentEncuesta));
                 }
-                db.SaveChanges();
-                writeResponse(new JavaScriptSerializer().Serialize(currentEncuesta));
             }
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void addNewEncuesta(Encuesta encuesta)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-            Models.BE_ENCUESTA newEncuesta = convertToENCUESTA(encuesta);
-            newEncuesta.FECHA = DateTime.Now;
-            db.BE_ENCUESTA.AddObject(newEncuesta);
-            db.SaveChanges();
-            writeResponse(new JavaScriptSerializer().Serialize(newEncuesta));
+            if (Utils.haveAccessTo(Utils.MODULOENCUESTAS))
+            {
+                Models.bienestarEntities db = new Models.bienestarEntities();
+                Models.BE_ENCUESTA newEncuesta = convertToENCUESTA(encuesta);
+                newEncuesta.FECHA = DateTime.Now;
+                db.BE_ENCUESTA.AddObject(newEncuesta);
+                db.SaveChanges();
+                writeResponse(new JavaScriptSerializer().Serialize(newEncuesta));
+            }
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void removeEncuestaByCode(int code)
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
-            Models.BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == code);
-            db.BE_ENCUESTA.DeleteObject(encuesta);
-            db.SaveChanges();
-            writeResponse("ok");
+            if (Utils.haveAccessTo(Utils.MODULOENCUESTAS))
+            {
+                Models.bienestarEntities db = new Models.bienestarEntities();
+                Models.BE_ENCUESTA encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == code);
+                db.BE_ENCUESTA.DeleteObject(encuesta);
+                db.SaveChanges();
+                writeResponse("ok");
+            }
         }
 
         /// convert Simple class Encuesta to object ENCUESTA entity
@@ -242,7 +232,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod]
         public void saveResponseStudent(List<BE_ENCUESTA_RESPUESTA_ALUMNO> listResponseSelect, List<BE_ENCUESTA_RESPUESTA_TEXTO> listResponseText)
         {
-
             bienestarEntities db = new bienestarEntities();
             foreach (BE_ENCUESTA_RESPUESTA_ALUMNO era in listResponseSelect)
             {
@@ -400,32 +389,23 @@ namespace SistemaBienestarEstudiantil.WebServices
     public class Encuesta
     {
         public int CODIGO { get; set; }
-        
         public String TITULO { get; set; }
-
         public String DESCRIPCION { get; set; }
-
         public List<BE_ENCUESTA_PREGUNTA> BE_ENCUESTA_PREGUNTA { get; set; }
-
     }
 
     public class BE_ENCUESTA_PREGUNTA
     {
         public int CODIGO { get; set; }
-
         public String TITULO { get; set; }
-
         public int TIPO { get; set; }
-
         public bool REQUERIDO { get; set; }
-
         public List<BE_ENCUESTA_RESPUESTA> BE_ENCUESTA_RESPUESTA { get; set; }
     }
 
     public class BE_ENCUESTA_RESPUESTA
     {
         public int CODIGO { get; set; }
-
         public String TEXTO { get; set; }
     }
 }

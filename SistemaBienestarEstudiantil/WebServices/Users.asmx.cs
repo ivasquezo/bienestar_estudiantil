@@ -64,100 +64,108 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse("{\"cantidad\":" + cantidad + "}");
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void saveUserData(BE_USUARIO user, Boolean resetPassword)
         {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
+            Response response = new Response(false, "", "", "No tiene acceso", null);
 
-            try
+            if (Utils.haveAccessTo(Utils.MODULOUSUARIO))
             {
-                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == user.CODIGO);
+                bienestarEntities db = new bienestarEntities();
 
-                usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
-                usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
-                usuario.CEDULA = user.CEDULA;
-                usuario.CORREO = user.CORREO;
-                usuario.ESTADO = user.ESTADO;
-                usuario.CODIGOROL = user.CODIGOROL;
-
-                if (resetPassword)
+                try
                 {
-                    usuario.CONTRASENAACTUAL = user.CEDULA;
-                    usuario.CONTRASENAANTERIOR = user.CEDULA;
+                    BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == user.CODIGO);
+
+                    usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
+                    usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
+                    usuario.CEDULA = user.CEDULA;
+                    usuario.CORREO = user.CORREO;
+                    usuario.ESTADO = user.ESTADO;
+                    usuario.CODIGOROL = user.CODIGOROL;
+
+                    if (resetPassword)
+                    {
+                        usuario.CONTRASENAACTUAL = user.CEDULA;
+                        usuario.CONTRASENAANTERIOR = user.CEDULA;
+                    }
+
+                    db.SaveChanges();
+
+                    response = new Response(true, "info", "Actualizar", "Usuario actualizado correctamente", usuario);
                 }
-
-                db.SaveChanges();
-
-                response = new Response(true, "info", "Actualizar", "Usuario actualizado correctamente", usuario);
-            }
-            catch (InvalidOperationException)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener los datos para actualizar el usuario", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al actualizar el usuario", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
+                catch (InvalidOperationException)
+                {
+                    response = new Response(false, "error", "Error", "Error al obtener los datos para actualizar el usuario", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
+                catch (Exception)
+                {
+                    response = new Response(false, "error", "Error", "Error al actualizar el usuario", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
             }
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void addNewUser(BE_USUARIO newUser)
         {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
+            Response response = new Response(false, "", "", "No tiene acceso", null);
+            if (Utils.haveAccessTo(Utils.MODULOUSUARIO))
             {
-                newUser.CONTRASENAACTUAL = newUser.CEDULA;
-                newUser.CONTRASENAANTERIOR = newUser.CEDULA;
+                bienestarEntities db = new bienestarEntities();
 
-                db.BE_USUARIO.AddObject(newUser);
+                try
+                {
+                    newUser.CONTRASENAACTUAL = newUser.CEDULA;
+                    newUser.CONTRASENAANTERIOR = newUser.CEDULA;
 
-                db.SaveChanges();
+                    db.BE_USUARIO.AddObject(newUser);
 
-                response = new Response(true, "info", "Agregar", "El usuario agregado correctamente", newUser);
+                    db.SaveChanges();
+
+                    response = new Response(true, "info", "Agregar", "El usuario agregado correctamente", newUser);
+                }
+                catch (Exception)
+                {
+                    response = new Response(false, "error", "Error", "Error al agregar el usuario", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
             }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al agregar el usuario", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public void removeUserById(int id)
         {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
+            Response response = new Response(false, "", "", "No tiene acceso", null);
+            if (Utils.haveAccessTo(Utils.MODULOUSUARIO))
             {
-                BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
+                bienestarEntities db = new bienestarEntities();
 
-                db.BE_USUARIO.DeleteObject(usuario);
+                try
+                {
+                    BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
 
-                db.SaveChanges();
+                    db.BE_USUARIO.DeleteObject(usuario);
 
-                response = new Response(true, "info", "Eliminar", "Usuario eliminado correctamente", null);
+                    db.SaveChanges();
+
+                    response = new Response(true, "info", "Eliminar", "Usuario eliminado correctamente", null);
+                }
+                catch (InvalidOperationException)
+                {
+                    response = new Response(false, "error", "Error", "Error al obtener los datos para eliminar el usuario", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
+                catch (Exception)
+                {
+                    response = new Response(false, "error", "Error", "Error al eliminar el usuario", null);
+                    writeResponse(new JavaScriptSerializer().Serialize(response));
+                }
             }
-            catch (InvalidOperationException)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener los datos para eliminar el usuario", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al eliminar el usuario", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
     }

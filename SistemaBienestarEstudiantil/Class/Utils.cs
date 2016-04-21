@@ -11,6 +11,12 @@ namespace SistemaBienestarEstudiantil.Class
     public class Utils
     {
         public const string DOCENTE = "DOCENTE";
+        public const string MODULOUSUARIO = "EDITAR USUARIOS";
+        public const string MODULOROLES = "EDITAR ROLES";
+        public const string MODULOBECAS = "EDITAR BECAS";
+        public const string MODULOENCUESTAS = "EDITAR ENCUESTAS";
+        public const string USERCODE = "userCode";
+        public const int DOCUMENTMAXCANT = 3;
         
         /// <summary>
         /// Valida si la clave actual es igual a la anterior para solicitar cambio de clave
@@ -164,6 +170,47 @@ namespace SistemaBienestarEstudiantil.Class
             var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
                           Where(w => w.r.NOMBRE == Utils.DOCENTE && w.u.CODIGO == userCode).Select(s => s.u).FirstOrDefault();
             return user != null;
+        }
+
+        /// <summary>
+        /// return true is exist user logued
+        /// </summary>
+        /// <returns></returns>
+        static public bool isLogued()
+        {
+            int userCode = (int)getSession(USERCODE);
+
+            bienestarEntities db = new bienestarEntities();
+            var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                          Where(w => w.u.CODIGO == userCode && w.u.ESTADO == true).
+                          Select(s => s.u).FirstOrDefault();
+            
+            // is valid logued user
+            if (user != null) return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// return true if user is logued and have access to module
+        /// </summary>
+        /// <param name="module"></param>
+        /// <returns></returns>
+        static public bool haveAccessTo(string module)
+        {
+            int userCode = (int)getSession(USERCODE);
+
+            bienestarEntities db = new bienestarEntities();
+            var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                          Join(db.BE_ROL_ACCESO, ur => ur.r.CODIGO, ra => ra.CODIGOROL, (ur, ra) => new { ur, ra }).
+                          Join(db.BE_ACCESO, urra => urra.ra.CODIGOACCESO, a => a.CODIGO, (urra, a) => new { urra, a }).
+                          Where(w => w.urra.ur.u.CODIGO == userCode && w.urra.ur.u.ESTADO == true && w.a.NOMBRE.ToUpper() == module.ToUpper()).
+                          Select(s => s.urra.ur.u).FirstOrDefault();
+
+            // is valid logued user
+            if (user != null) return true;
+
+            return false;
         }
     }
 }
