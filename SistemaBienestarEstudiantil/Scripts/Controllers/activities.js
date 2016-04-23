@@ -80,10 +80,22 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
+              {name:'C\u00F3digo', field: 'CODIGO', width: 80, type: 'number'},
               {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
               {name:'Actividad', field: 'NOMBRE'},
-              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false},
+              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false,
+                sortingAlgorithm: function (dateA, dateB) {
+                        var a = parseInt(dateA);
+                        var b = parseInt(dateB);
+                        if (a < b) {
+                            return -1;
+                        } else if (a > b) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    }
+              },
               {name:'Estado', field: 'NOMBREESTADO', width: 90},
               {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false, enableSorting: false}
             ]

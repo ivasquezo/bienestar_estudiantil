@@ -50,7 +50,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         ESTADO = x.ACTIVIDAD.ESTADO,
                         OBSERVACION = x.ACTIVIDAD.OBSERVACION,
                         CODIGOUSUARIO = x.ACTIVIDAD.CODIGOUSUARIO
-                    }).OrderBy(y => y.NOMBREACTIVIDAD).ToList();
+                    }).OrderBy(o => o.CODIGO).ToList();
 
                 if (data != null && data.Count > 0)
                     response = new Response(true, "", "", "", isTeacher ? data.Where( w => w.CODIGOUSUARIO == userCode) : data);
@@ -272,7 +272,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                                         FECHA = s.ac.FECHA,
                                         ESTADO = s.ac.ESTADO,
                                         DATOS = new Datos()
-                                    }).ToList();
+                                    }).OrderBy( o => o.FECHA).ToList();
 
                 foreach (var actividad in actividades)
                 {

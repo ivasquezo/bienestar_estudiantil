@@ -409,24 +409,24 @@
                     </div>
                     <table cellspacing=0>
                         <thead><tr>
+                                <th>FECHA</th>
                                 <th>ACTIVIDAD</th>
                                 <th>A. GENERAL</th>
-                                <th>FECHA</th>
                                 <th>ESTADO</th>
-                                <th>ASIST</th>
-                                <th>NIV</th>
+                                <th>ASIST.</th>
+                                <th>NIVEL</th>
                                 <th>CARRERA</th>
-                                <th>MOD</th>
-                                <th>ADJ</th>
+                                <th>MOD.</th>
+                                <th>DOC. ADJ.</th>
                         </tr></thead>
                         <tbody>
                             <tr ng-if="reportActivitiesData == null || reportActivitiesData == undefined">
                                 <td colspan="9">No existen solicitudes de beca</td>
                             </tr>
                             <tr ng-repeat="activitiesReport in reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo" style="color:#508ECC;font-size:11px;">
+                                <td>{{activitiesReport.FECHA | date:"MM/dd/yyyy"}}</td>
                                 <td>{{activitiesReport.ACTIVIDAD}}</td>
                                 <td>{{activitiesReport.ACTIVIDADGENERAL}}</td>
-                                <td>{{activitiesReport.FECHA | date:"MM/dd/yyyy"}}</td>
                                 <td>{{ESTADOS[activitiesReport.ESTADO].name}}</td>
                                 <td style="text-align:center;">{{activitiesReport.DATOS.ASISTENCIA}}</td>
                                 <td><div class="item-report" ng-repeat="nivel in activitiesReport.DATOS.NIVELES">{{nivel}}</div></td>
