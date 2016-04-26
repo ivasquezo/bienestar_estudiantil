@@ -49,7 +49,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                         FECHA = x.ACTIVIDAD.FECHA,
                         ESTADO = x.ACTIVIDAD.ESTADO,
                         OBSERVACION = x.ACTIVIDAD.OBSERVACION,
-                        CODIGOUSUARIO = x.ACTIVIDAD.CODIGOUSUARIO
+                        CODIGOUSUARIO = x.ACTIVIDAD.CODIGOUSUARIO,
+                        ISTEACHER = isTeacher
                     }).OrderBy(o => o.CODIGO).ToList();
 
                 if (data != null && data.Count > 0)

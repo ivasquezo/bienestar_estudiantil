@@ -40,7 +40,7 @@
             <div class="ui-grid-cell-contents">
                 <button type="button" ng-click="grid.appScope.Main.removeActivity(COL_FIELD)" title="Elimiar actividad">
                 <span class="ui-icon ui-icon-trash"></span></button>
-                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad">
+                <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad" ng-hide="grid.appScope.Main.getIsTeacher()">
                 <span class="ui-icon ui-icon-pencil"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.getLevelActivity(COL_FIELD)" title="Grupos asignados">
                 <span class="ui-icon ui-icon-script"></span></button>
@@ -113,7 +113,7 @@
                         <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
                         <div class="col-md-4">
                             <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
-                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad</span>
+                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad (Lugar del evento)</span>
                         </div>
                     </div>
 

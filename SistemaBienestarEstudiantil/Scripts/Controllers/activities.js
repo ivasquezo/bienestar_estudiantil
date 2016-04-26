@@ -60,6 +60,14 @@
             });
         };
 
+        this.getIsTeacher = function () {
+            for (var i = 0; i < $scope.gridOptions.data.length; i++) {
+                if ($scope.gridOptions.data[i].ISTEACHER)
+                    return true;
+                return false;
+            }
+        };
+
         $scope.getReportActivities = function () {
             $scope.promise = $http.post('../../WebServices/Activities.asmx/getActivitiesReport', {
             }).success(function (data, status, headers, config) {
