@@ -185,7 +185,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                     if (beca != null && editedBeca.ENVIARNOTIFICACION)
                     {
-                        string to = "micheljqh@yahoo.es"; // beca.DATOSPERSONALE.DTPEMAILC;
+                        string to = beca.DATOSPERSONALE.DTPEMAILC;
                         string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
                         string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
                         Utils.sendMail(to, subject, body);

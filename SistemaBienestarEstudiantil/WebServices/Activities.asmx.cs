@@ -854,7 +854,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     Console.WriteLine(studentsMails[i]);
                     if (Utils.IsValidEmail(studentsMails[i].Trim()))
                     {
-                        string to = "stephy_vas@hotmail.com"; //studentsMails[i].Trim();
+                        string to = studentsMails[i].Trim();
                         string subject = "Invitaci\u00F3n a la actividad (Bienestar Estudiantil)";
                         string body = "Estimado/a: \nDebe asistir a la actividad ''" + activity.NOMBRE + "'', que se efectuar\u00E1 en la fecha: " + fecha.ToString("dd/MM/yyyy") + " en el lugar: ''" + activity.OBSERVACION + "''. \nEsperamos su asistencia.";
                         Utils.sendMail(to, subject, body);
