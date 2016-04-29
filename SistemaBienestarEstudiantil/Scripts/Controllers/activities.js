@@ -88,7 +88,7 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'C\u00F3digo', field: 'CODIGO', width: 80, type: 'number'},
+              {name:'C\u00F3digo', field: 'CODIGO', width: 85, type: 'number'},
               {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
               {name:'Actividad', field: 'NOMBRE'},
               {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false,
@@ -105,7 +105,7 @@
                     }
               },
               {name:'Estado', field: 'NOMBREESTADO', width: 90},
-              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 190, enableFiltering: false, enableSorting: false}
+              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 230, enableFiltering: false, enableSorting: false}
             ]
         };
 
@@ -652,7 +652,7 @@
                 $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al enviar notificacion estudiantes...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener enviar la notificación a los estudiantes'}]);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener enviar la notificaci&oacute;n a los estudiantes'}]);
             });
         }
 

@@ -37,7 +37,7 @@
         <div ui-grid="gridOptions"></div>
 
         <script type="text/ng-template" id="actionsActivities.html">
-            <div class="ui-grid-cell-contents">
+            <div class="ui-grid-cell-contents" style="text-align:center">
                 <button type="button" ng-click="grid.appScope.Main.removeActivity(COL_FIELD)" title="Elimiar actividad">
                 <span class="ui-icon ui-icon-trash"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.editActivity(COL_FIELD)" title="Editar actividad" ng-hide="grid.appScope.Main.getIsTeacher()">
@@ -95,8 +95,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="fecha">Fecha</label>  
                         <div class="col-md-4">
-                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="Fecha" class="form-control input-md">
-                            <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span>  
+                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="aaaa-mm-dd"form-control input-md">
+                            <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span>
                         </div>
                     </div>
 
@@ -175,7 +175,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="fecha">Fecha</label>  
                         <div class="col-md-4">
-                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="Fecha" class="form-control input-md" required>
+                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="aaaa-mm-dd" class="form-control input-md" required>
                             <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span> 
                             <span ng-messages="newActivityForm.fecha.$error">
                                 <span ng-message="required" class="help-block ng-message">Seleccione una fecha</span>
@@ -200,7 +200,7 @@
                         <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
                         <div class="col-md-4">
                             <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
-                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad</span>
+                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad (Lugar del evento)</span>
                         </div>
                     </div>
 
@@ -358,7 +358,7 @@
                 <form id="attachedForm" name="attachedForm" ng-submit="saveAttachedDB()">
                     <div ng-if="allAttaches.length < 10">
                         <div>
-                            <textarea required name="observacion" id="observacion" ng-model="descripcion" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="240" style="text-transform:uppercase; width:450px"></textarea><br/>
+                            <textarea required name="observacion" id="observacion" ng-model="descripcion" class="title" placeholder="Descripci&oacute;n" row="1" ng-maxlength="150" maxlength="240" style="text-transform:uppercase; width:450px"></textarea><br/>
                             <input valid-file-input required ng-model="attachedActivity" type="file" name="attachedActivity" id="attachedActivity" accept="image/*, application/pdf"/>
                             <span ng-show="attachedForm.attachedActivity.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
                             <span ng-show="attachedForm.attachedActivity.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
@@ -376,14 +376,14 @@
                         <br/><br/>
                     </div>
                     <div class="form-group" ng-if="allAttaches.length > 0">
-                        <table style="width:100%; font-size:16px">
+                        <table style="width:100%; font-size:12px">
                             <tr>
                                 <th>Descripci&oacute;n</th>
                                 <th>Adjunto</th>
                                 <th>Acci&oacute;n</th>
                             </tr>
                             <tr ng-repeat="attach in allAttaches">                                
-                                <td>{{ attach.DESCRIPCION }}</td>
+                                <td style="width:200px">{{ attach.DESCRIPCION }}</td>
                                 <td><a href="../../WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
                                         {{attach.NOMBRE}}
                                 </a></td>
