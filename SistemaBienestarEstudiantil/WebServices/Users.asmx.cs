@@ -86,8 +86,8 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                     if (resetPassword)
                     {
-                        usuario.CONTRASENAACTUAL = user.CEDULA;
-                        usuario.CONTRASENAANTERIOR = user.CEDULA;
+                        usuario.CONTRASENAACTUAL = Utils.Encripta(user.CEDULA);
+                        usuario.CONTRASENAANTERIOR = Utils.Encripta(user.CEDULA);
                     }
 
                     db.SaveChanges();
@@ -119,8 +119,8 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 try
                 {
-                    newUser.CONTRASENAACTUAL = newUser.CEDULA;
-                    newUser.CONTRASENAANTERIOR = newUser.CEDULA;
+                    newUser.CONTRASENAACTUAL = Utils.Encripta(newUser.CEDULA);
+                    newUser.CONTRASENAANTERIOR = Utils.Encripta(newUser.CEDULA);
 
                     db.BE_USUARIO.AddObject(newUser);
 

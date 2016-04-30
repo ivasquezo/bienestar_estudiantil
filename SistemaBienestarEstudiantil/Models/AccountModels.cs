@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Data.SqlClient;
+using SistemaBienestarEstudiantil.Class;
 
 namespace SistemaBienestarEstudiantil.Models
 {
@@ -128,7 +129,8 @@ namespace SistemaBienestarEstudiantil.Models
 
             try
             {
-                usuario = db.BE_USUARIO.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == password && u.ESTADO == true);
+                string passwordEncripted = Utils.Encripta(password);
+                usuario = db.BE_USUARIO.Single(u => u.NOMBREUSUARIO == userName && u.CONTRASENAACTUAL == passwordEncripted && u.ESTADO == true);
             }
             catch (InvalidOperationException e) // catch too Win32Exception (error en coneccion) System.Data.EntityException
             {
@@ -148,7 +150,7 @@ namespace SistemaBienestarEstudiantil.Models
                 db = new bienestarEntities();
 
                 BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == userId);
-                usuario.CONTRASENAACTUAL = newPassword;
+                usuario.CONTRASENAACTUAL = Utils.Encripta(newPassword);
                 db.SaveChanges();
             }
             catch (InvalidOperationException e)

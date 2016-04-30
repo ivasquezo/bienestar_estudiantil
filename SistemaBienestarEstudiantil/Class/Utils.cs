@@ -5,6 +5,9 @@ using System.Web;
 using SistemaBienestarEstudiantil.Models;
 using System.Net.Mail;
 using System.Web.Script.Serialization;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
 
 namespace SistemaBienestarEstudiantil.Class
 {
@@ -47,7 +50,7 @@ namespace SistemaBienestarEstudiantil.Class
             if (String.IsNullOrEmpty(newPassword)) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "newPassword"); }
             if (String.IsNullOrEmpty(confirmPassword)) { throw new ArgumentException("El valor no puede ser NULL ni estar vac\u00EDo.", "confirmPassword"); }
 
-            if (userPassword.CompareTo(oldPassword) == 0 && newPassword.CompareTo(confirmPassword) == 0) { return true; }
+            if (userPassword.CompareTo(Utils.Encripta(oldPassword)) == 0 && Utils.Encripta(newPassword).CompareTo(Utils.Encripta(confirmPassword)) == 0) { return true; }
 
             return false;
         }
@@ -211,6 +214,49 @@ namespace SistemaBienestarEstudiantil.Class
             if (user != null) return true;
 
             return false;
+        }
+
+        static public string Encripta(string Cadena)
+        {
+            byte[] Clave = Encoding.ASCII.GetBytes("Tu Clave");
+            byte[] IV = Encoding.ASCII.GetBytes("Devjoker7.37hAES");
+
+            byte[] inputBytes = Encoding.ASCII.GetBytes(Cadena);
+            byte[] encripted;
+            RijndaelManaged cripto = new RijndaelManaged();
+            using (MemoryStream ms = new MemoryStream(inputBytes.Length))
+            {
+                using (CryptoStream objCryptoStream = new CryptoStream(ms, cripto.CreateEncryptor(Clave, IV), CryptoStreamMode.Write))
+                {
+                    objCryptoStream.Write(inputBytes, 0, inputBytes.Length);
+                    objCryptoStream.FlushFinalBlock();
+                    objCryptoStream.Close();
+                }
+                encripted = ms.ToArray();
+            }
+            return Convert.ToBase64String(encripted);
+        }
+
+        static public string Desencripta(string Cadena)
+        {
+            byte[] Clave = Encoding.ASCII.GetBytes("Tu Clave");
+            byte[] IV = Encoding.ASCII.GetBytes("Devjoker7.37hAES");
+
+            byte[] inputBytes = Convert.FromBase64String(Cadena);
+            byte[] resultBytes = new byte[inputBytes.Length];
+            string textoLimpio = String.Empty;
+            RijndaelManaged cripto = new RijndaelManaged();
+            using (MemoryStream ms = new MemoryStream(inputBytes))
+            {
+                using (CryptoStream objCryptoStream = new CryptoStream(ms, cripto.CreateDecryptor(Clave, IV), CryptoStreamMode.Read))
+                {
+                    using (StreamReader sr = new StreamReader(objCryptoStream, true))
+                    {
+                        textoLimpio = sr.ReadToEnd();
+                    }
+                }
+            }
+            return textoLimpio;
         }
     }
 }
