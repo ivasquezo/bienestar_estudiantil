@@ -144,6 +144,7 @@
                         break;
                     }
                 };
+                row.selected = true;
                 $scope.setDefaultSurvey(row.CODIGO);
             }
         }
