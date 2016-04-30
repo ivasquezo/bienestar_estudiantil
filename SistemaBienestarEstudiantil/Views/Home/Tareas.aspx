@@ -51,71 +51,102 @@
             </div>
         </script>
 
+        <style type="text/css">
+            .dialogClassTable,
+            table.dialogClassTable tr,
+            table.dialogClassTable td
+            {
+                border: none !important;
+            }
+        </style>
+
         <script type="text/ng-template" id="editActivity.html">
             <fieldset>
                 <legend>Editar actividades</legend>
                 <form name="activityForm" ng-submit="saveEditedActivity()">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
-                        <div class="col-md-4">                            
-                            <select ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities"></select>
-                            <br/><span class="help-block">Nombre de la actividad general</span>
-                            <span ng-messages="activityForm.generalActivityBox.$error">
-                                <span ng-message="required" class="help-block ng-message">Seleccione una actividad general</span>
-                            </span>
-                        </div>
-                    </div>
+                    <table class="dialogClassTable">
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
+                                    <div class="col-md-4">                            
+                                        <select ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities"></select>
+                                        <br/><span class="help-block">Nombre de la actividad general</span>
+                                        <span ng-messages="activityForm.generalActivityBox.$error">
+                                            <span ng-message="required" class="help-block ng-message">Seleccione una actividad general</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="nombre">Actividad</label>  
+                                    <div class="col-md-4">
+                                        <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
+                                        <br/><span class="help-block">Nombre de la actividad</span>
+                                        <span ng-messages="activityForm.nombre.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
+                                            <span ng-message="activityNameExist" class="help-block ng-message">Existe una actividad con este nombre</span>
+                                            <span ng-message="activityNameValidator" class="help-block ng-message">Debe ingresar un nombre de actividad v&aacute;lido</span>
+                                            <span ng-message="activityNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombre">Actividad</label>  
-                        <div class="col-md-4">
-                            <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
-                            <br/><span class="help-block">Nombre de la actividad</span>
-                            <span ng-messages="activityForm.nombre.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
-                                <span ng-message="activityNameExist" class="help-block ng-message">Existe una actividad con este nombre</span>
-                                <span ng-message="activityNameValidator" class="help-block ng-message">Debe ingresar un nombre de actividad v&aacute;lido</span>
-                                <span ng-message="activityNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="responsableBox">Responsable
-                            <input type="checkbox" ng-checked="sendMail" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
-                            <div style="font-size:12px; color:red; line-height:normal;">Seleccionar para enviar al correo del responsable</div>
-                        </label>
-                        <div class="col-md-4">                            
-                            <select ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
-                            </select>
-                            <br/><span class="help-block">Responsable de ejecutar la actividad</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="fecha">Fecha</label>  
-                        <div class="col-md-4">
-                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="aaaa-mm-dd"form-control input-md">
-                            <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="statusActivityBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="activityCopy.ESTADO" id="statusActivityBox" name="statusActivityBox" class="form-control" ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: 0 }, { n: 'En Proceso', v: 1 }, { n: 'Procesado', v: 2 }, { n: 'Finalizado', v: 3 }]">
-                            </select>
-                            <br/><span class="help-block">Estado en que se encuentra la actividad</span> 
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
-                        <div class="col-md-4">
-                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
-                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad (Lugar del evento)</span>
-                        </div>
-                    </div>
+                                <div>
+                                    <label class="col-md-4 control-label" for="responsableBox">Responsable
+                                        <input type="checkbox" ng-checked="sendMail" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
+                                        <div style="font-size:12px; color:red; line-height:normal;">Seleccionar para enviar al correo del responsable</div>
+                                    </label>
+                                    <div class="col-md-4">                            
+                                        <select ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
+                                        </select>
+                                        <br/><span class="help-block">Responsable de ejecutar la actividad</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="fecha">Fecha</label>  
+                                    <div class="col-md-4">
+                                        <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="aaaa-mm-dd" form-control input-md>
+                                        <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="statusActivityBox">Estado</label>
+                                    <div class="col-md-4">
+                                        <select ng-model="activityCopy.ESTADO" id="statusActivityBox" name="statusActivityBox" class="form-control" ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: 0 }, { n: 'En Proceso', v: 1 }, { n: 'Procesado', v: 2 }, { n: 'Finalizado', v: 3 }]">
+                                        </select>
+                                        <br/><span class="help-block">Estado en que se encuentra la actividad</span> 
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>                                
+                                <div>
+                                    <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
+                                    <div class="col-md-4">
+                                        <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
+                                        <br/><span class="help-block">Observaci&oacute;n sobre la actividad (Lugar del evento)</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveActivity"></label>
@@ -131,78 +162,103 @@
             <fieldset>
                 <legend>Nueva actividad</legend>
                 <form name="newActivityForm" ng-submit="addNewActivityDB()">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
-                        <div class="col-md-4">                            
-                            <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities">
-                            </select>
-                            <br/><span class="help-block">Nombre de la actividad general</span>
-                            <span ng-messages="newActivityForm.generalActivityBox.$error">
-                                <span ng-message="required" class="help-block ng-message">Selecione una actividad general</span>
-                            </span>
-                        </div>
-                    </div>
+                    <table class="dialogClassTable">
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
+                                    <div class="col-md-4">                            
+                                        <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities">
+                                        </select>
+                                        <br/><span class="help-block">Nombre de la actividad general</span>
+                                        <span ng-messages="newActivityForm.generalActivityBox.$error">
+                                            <span ng-message="required" class="help-block ng-message">Selecione una actividad general</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="nombre">Actividad</label>  
+                                    <div class="col-md-4">
+                                        <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
+                                        <br/><span class="help-block">Nombre de la actividad</span>  
+                                        <span ng-messages="newActivityForm.nombre.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese el nombre de la actividad</span>
+                                            <span ng-message="activityNameExist" class="help-block ng-message">Existe una actividad con este nombre</span>
+                                            <span ng-message="activityNameValidator" class="help-block ng-message">Debe ingresar un nombre de actividad v&aacute;lido</span>
+                                            <span ng-message="activityNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombre">Actividad</label>  
-                        <div class="col-md-4">
-                            <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
-                            <br/><span class="help-block">Nombre de la actividad</span>  
-                            <span ng-messages="newActivityForm.nombre.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese el nombre de la actividad</span>
-                                <span ng-message="activityNameExist" class="help-block ng-message">Existe una actividad con este nombre</span>
-                                <span ng-message="activityNameValidator" class="help-block ng-message">Debe ingresar un nombre de actividad v&aacute;lido</span>
-                                <span ng-message="activityNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
-                            </span>
-                        </div>
-                    </div>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="responsableBox">Responsable
+                                        <input type="checkbox" ng-checked="sendMail" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
+                                        <div style="font-size:12px; color:red; line-height:normal;">Seleccionar para enviar al correo del responsable</div>
+                                    </label>
+                                    <div class="col-md-4">                            
+                                        <select required ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
+                                        </select>
+                                        <br/><span class="help-block">Responsable de ejecutar la actividad</span>
+                                        <span ng-messages="newActivityForm.responsableBox.$error">
+                                            <span ng-message="required" class="help-block ng-message">Seleccione un responsable</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="responsableBox">Responsable
-                            <input type="checkbox" ng-checked="sendMail" ng-click="setSendMail()" style="height:18px; width:18px; vertical-align:middle;">
-                            <div style="font-size:12px; color:red; line-height:normal;">Seleccionar para enviar al correo del responsable</div>
-                        </label>
-                        <div class="col-md-4">                            
-                            <select required ng-model="activityCopy.CODIGOUSUARIO" id="responsableBox" name="responsableBox" class="form-control" ng-options="o.value as o.name for o in allResponsables">
-                            </select>
-                            <br/><span class="help-block">Responsable de ejecutar la actividad</span>
-                            <span ng-messages="newActivityForm.responsableBox.$error">
-                                <span ng-message="required" class="help-block ng-message">Seleccione un responsable</span>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="fecha">Fecha</label>  
-                        <div class="col-md-4">
-                            <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="aaaa-mm-dd" class="form-control input-md" required>
-                            <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span> 
-                            <span ng-messages="newActivityForm.fecha.$error">
-                                <span ng-message="required" class="help-block ng-message">Seleccione una fecha</span>
-                            </span>
-                        </div>
-                    </div>
+                        <tr>
+                            <td>                    
+                                <div>
+                                    <label class="col-md-4 control-label" for="fecha">Fecha</label>  
+                                    <div class="col-md-4">
+                                        <input ng-model="activityCopy.FECHA" id="fecha" name="fecha" type="date" placeholder="aaaa-mm-dd" class="form-control input-md" required>
+                                        <br/><span class="help-block">Fecha de ejecuci&oacute;n de la actividad</span> 
+                                        <span ng-messages="newActivityForm.fecha.$error">
+                                            <span ng-message="required" class="help-block ng-message">Seleccione una fecha</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="statusActivityBox">Estado</label>
-                        <div class="col-md-4">
-                            <select required ng-model="activityCopy.ESTADO" id="statusActivityBox" name="statusActivityBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: 0 }, { n: 'En Proceso', v: 1 }, { n: 'Procesado', v: 2 }, { n: 'Finalizado', v: 3 }]">
-                            </select>
-                            <br/><span class="help-block">Estado en que se encuentra la actividad</span>
-                            <span ng-messages="newActivityForm.statusActivityBox.$error">
-                                <span ng-message="required" class="help-block ng-message">Seleccione un estado</span>
-                            </span>
-                        </div>
-                    </div>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="statusActivityBox">Estado</label>
+                                    <div class="col-md-4">
+                                        <select required ng-model="activityCopy.ESTADO" id="statusActivityBox" name="statusActivityBox" class="form-control"
+                                            ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: 0 }, { n: 'En Proceso', v: 1 }, { n: 'Procesado', v: 2 }, { n: 'Finalizado', v: 3 }]">
+                                        </select>
+                                        <br/><span class="help-block">Estado en que se encuentra la actividad</span>
+                                        <span ng-messages="newActivityForm.statusActivityBox.$error">
+                                            <span ng-message="required" class="help-block ng-message">Seleccione un estado</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
-                        <div class="col-md-4">
-                            <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:250px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
-                            <br/><span class="help-block">Observaci&oacute;n sobre la actividad (Lugar del evento)</span>
-                        </div>
-                    </div>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="observacion">Observaci&oacute;n</label>  
+                                    <div class="col-md-4">
+                                        <textarea id="observacion" ng-model="activityCopy.OBSERVACION" class="title" placeholder="Observaci&oacute;n" row="1" ng-maxlength="150" maxlength="150" style="text-transform:uppercase;max-width:160px;max-height:70px;min-width:250px;min-height:70px;"></textarea>
+                                        <br/><span class="help-block">Observaci&oacute;n sobre la actividad (Lugar del evento)</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="saveActivity"></label>

@@ -16,9 +16,9 @@
 
         $scope.RUBROS = [
             { n: 'Ninguno', v: 0 },
-            { n: 'Pensión', v: 1 },
-            { n: 'Matrícula', v: 2 },
-            { n: 'Pensión y matrícula', v: 3 }
+            { n: 'Pensi\u00F3n', v: 1 },
+            { n: 'Matr\u00EDcula', v: 2 },
+            { n: 'Pensi\u00F3n y matr\u00EDcula', v: 3 }
         ];
         
         $scope.ESTADOS = [
@@ -96,14 +96,14 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-                {name:'Código', field:'CODIGO', width: 65, type:'number'},
+                {name:'C\u00F3digo', field:'CODIGO', width: 85, type:'number'},
                 {name:'Beca', field:'BECA'},
-                {name:'Otorgado %', field:'OTORGADO', width: 100},
-                {name:'Rubro', field:'RUBRONOMBRE', width: 150},
+                {name:'Otorgado %', field:'OTORGADO', width: 110},
+                {name:'Rubro', field:'RUBRONOMBRE', width: 140},
                 {name:'Estado', field:'ESTADO', width: 100},
                 {name:'C\u00E9dula', field:'CEDULA', width: 100},
                 {name:'Nombre', field:'NOMBRE', width: 320},
-                {name:'Acci\u00F3n', field:'CODIGO', width: 120, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
+                {name:'Acci\u00F3n', field:'CODIGO', width: 140, cellTemplate: 'actionsBecas.html', enableFiltering: false, enableSorting: false}
             ]
         };
 
@@ -112,9 +112,9 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-                {name:'Código', field: 'CODIGO', width: 65, type:'number'},
+                {name:'C\u00F3digo', field: 'CODIGO', width: 85, type:'number'},
                 {name:'Tipo de beca', field: 'NOMBRE'},
-                {name:'Acci\u00F3n', field: 'CODIGO', width: 80, cellTemplate: 'actionsTiposBecas.html', enableFiltering: false, enableSorting: false}
+                {name:'Acci\u00F3n', field: 'CODIGO', width: 100, cellTemplate: 'actionsTiposBecas.html', enableFiltering: false, enableSorting: false}
             ]
         };
 
@@ -129,7 +129,7 @@
                     codeBeca: code
                 }).success(function (data, status, headers, config) {
                     parentObject.removeElementArray($scope.gridOptions.data, code);
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Beca eliminada'}]);
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Informaci&oacute;n', detail: 'Beca eliminada'}]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error eliminar beca...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la beca'}]);
@@ -145,7 +145,7 @@
                     codeTipoBeca: code
                 }).success(function (data, status, headers, config) {
                     parentObject.removeElementArray($scope.gridOptionsTipos.data, code);
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Tipo de Beca eliminado'}]);
+                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Informaci&oacute;n', detail: 'Tipo de Beca eliminado'}]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error eliminar tipo beca...", data);
                     $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar el tipo de beca'}]);

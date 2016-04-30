@@ -35,7 +35,7 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
+              {name:'C\u00F3digo', field: 'CODIGO', width: 85},
               {name:'Nombre', field: 'NOMBRE'},
               {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsRols.html', width: 80, enableFiltering: false, enableSorting: false}
             ]

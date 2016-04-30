@@ -62,7 +62,7 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'C\u00F3digo', field: 'CODIGO', width: 80},
+              {name:'C\u00F3digo', field: 'CODIGO', width: 85},
               {name:'Nombre', field: 'NOMBRECOMPLETO'},
               {name:'Usuario', field: 'NOMBREUSUARIO', width: 200},
               {name:'C\u00E9dula', field: 'CEDULA', width: 100},

@@ -34,90 +34,123 @@
               </div>
         </script>
 
+        <style type="text/css">
+            .dialogClassTable,
+            table.dialogClassTable tr,
+            table.dialogClassTable td
+            {
+                border: none !important;
+            }
+        </style>
+
         <script type="text/ng-template" id="editUser.html">
             <fieldset>
                 <legend>Editar usuario</legend>
                 <form name="userForm">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
-                        <div class="col-md-4">
-                            <input valid-user-name required ng-model="userCopy.NOMBREUSUARIO" id="nombreusuario" name="nombreusuario" type="text" placeholder="Nombre usuario" class="form-control input-md" style="text-transform:lowercase;">
-                            <br/><span class="help-block">Nombre de inicio de sesi&oacute;n</span>
-                            <span ng-messages="userForm.nombreusuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese nombre de usuario</span>
-                                <span ng-message="userNameExist" class="help-block ng-message">Existe un usuario con este nombre</span>
-                                <span ng-message="userNameValidator" class="help-block ng-message">Debe ingresar un nombre de usuario v&aacute;lido</span>
-                                <span ng-message="userNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombrecompleto">Nombre completo</label>  
-                        <div class="col-md-4">
-                            <input required ng-model="userCopy.NOMBRECOMPLETO" id="nombrecompleto" name="nombrecompleto" type="text" placeholder="Nombre" class="form-control input-md" style="text-transform:uppercase;">
-                            <br/><span class="help-block">Nombre completo</span>
-                            <span ng-messages="userForm.nombrecompleto.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese nombre completo</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="cedulausuario">C&eacute;dula:</label>  
-                        <div class="col-md-4">
-                            <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="C&eacute;dula" class="form-control input-md">
-                            <br/><span class="help-block">N&uacute;mero de identificaci&oacute;n</span>
-                            <span ng-messages="userForm.cedulausuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese una identificaci&oacute;n</span>
-                                <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un n&uacute;mero de c&eacute;dula v&aacute;lido</span>
-                                <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este n&uacute;mero de c&eacute;dula</span>
-                                <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="correousuario">Correo:</label>  
-                        <div class="col-md-4">
-                            <input ng-model="userCopy.CORREO" name="correousuario" id="correousuario" placeholder="Correo del usuario" class="form-control input-md" required type="email">
-                            <br/><span class="help-block">Correo electr&oacute;nico</span>
-                            <span ng-messages="userForm.correousuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese una direcci&oacute;n de correo</span>
-                                <span ng-message="email" class="help-block ng-message">Ingrese correctamente la direcci&oacute;n de correo</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
-                            </select>
-                            <br/><span class="help-block">Estado del usuario</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
-                        <div class="col-md-4">
-                            <select ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
-                                ng-options="o.CODIGO as o.NOMBRE for o in Rols">
-                            </select>
-                            <br/><span class="help-block">Rol al que pertenece el usuario</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeUserBox">Reiniciar</label>
-                        <div class="col-md-4">
-                            <select ng-model="password.reset" id="activeUserBox" name="activeUserBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'No', v: false }, { n: 'Si', v: true }]">
-                            </select>
-                            <br/><span class="help-block">Reiniciar contrase&ntilde;a por defecto</span>
-                        </div>
-                    </div>
+                    <table class="dialogClassTable">
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
+                                    <div class="col-md-4">
+                                        <input valid-user-name required ng-model="userCopy.NOMBREUSUARIO" id="nombreusuario" name="nombreusuario" type="text" placeholder="Nombre usuario" class="form-control input-md" style="text-transform:lowercase;">
+                                        <br/><span class="help-block">Nombre de inicio de sesi&oacute;n</span>
+                                        <span ng-messages="userForm.nombreusuario.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese nombre de usuario</span>
+                                            <span ng-message="userNameExist" class="help-block ng-message">Existe un usuario con este nombre</span>
+                                            <span ng-message="userNameValidator" class="help-block ng-message">Debe ingresar un nombre de usuario v&aacute;lido</span>
+                                            <span ng-message="userNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="nombrecompleto">Nombre completo</label>  
+                                    <div class="col-md-4">
+                                        <input required ng-model="userCopy.NOMBRECOMPLETO" id="nombrecompleto" name="nombrecompleto" type="text" placeholder="Nombre" class="form-control input-md" style="text-transform:uppercase;">
+                                        <br/><span class="help-block">Nombre completo</span>
+                                        <span ng-messages="userForm.nombrecompleto.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese nombre completo</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="cedulausuario">C&eacute;dula:</label>  
+                                    <div class="col-md-4">
+                                        <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="C&eacute;dula" class="form-control input-md">
+                                        <br/><span class="help-block">N&uacute;mero de identificaci&oacute;n</span>
+                                        <span ng-messages="userForm.cedulausuario.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese una identificaci&oacute;n</span>
+                                            <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un n&uacute;mero de c&eacute;dula v&aacute;lido</span>
+                                            <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este n&uacute;mero de c&eacute;dula</span>
+                                            <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="correousuario">Correo:</label>  
+                                    <div class="col-md-4">
+                                        <input ng-model="userCopy.CORREO" name="correousuario" id="correousuario" placeholder="Correo del usuario" class="form-control input-md" required type="email">
+                                        <br/><span class="help-block">Correo electr&oacute;nico</span>
+                                        <span ng-messages="userForm.correousuario.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese una direcci&oacute;n de correo</span>
+                                            <span ng-message="email" class="help-block ng-message">Ingrese correctamente la direcci&oacute;n de correo</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
+                                    <div class="col-md-4">
+                                        <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                                            ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
+                                        </select>
+                                        <br/><span class="help-block">Estado del usuario</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
+                                    <div class="col-md-4">
+                                        <select ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
+                                            ng-options="o.CODIGO as o.NOMBRE for o in Rols">
+                                        </select>
+                                        <br/><span class="help-block">Rol al que pertenece el usuario</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="activeUserBox">Reiniciar</label>
+                                    <div class="col-md-4">
+                                        <select ng-model="password.reset" id="activeUserBox" name="activeUserBox" class="form-control"
+                                            ng-options="o.v as o.n for o in [{ n: 'No', v: false }, { n: 'Si', v: true }]">
+                                        </select>
+                                        <br/><span class="help-block">Reiniciar contrase&ntilde;a por defecto</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="buttonsave1"></label>
@@ -133,79 +166,100 @@
             <fieldset>
                 <legend>Nuevo usuario</legend>
                 <form id="newUserForm" name="newUserForm" ng-submit="addNewUserDB()">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
-                        <div class="col-md-4">
-                            <input valid-user-name required ng-model="userCopy.NOMBREUSUARIO" id="nombreusuario" name="nombreusuario" type="text" placeholder="Nombre usuario" class="form-control input-md" style="text-transform:lowercase;">
-                            <br/><span class="help-block">Nombre de inicio de sesi&oacute;n</span>
-                            <span ng-messages="newUserForm.nombreusuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese un nombre de usuario</span>
-                                <span ng-message="userNameExist" class="help-block ng-message">Existe un usuario con este nombre</span>
-                                <span ng-message="userNameValidator" class="help-block ng-message">Debe ingresar un nombre de usuario v&aacute;lido</span>
-                                <span ng-message="userNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="nombrecompleto">Nombre completo</label>  
-                        <div class="col-md-4">
-                            <input required ng-model="userCopy.NOMBRECOMPLETO" id="nombrecompleto" name="nombrecompleto" type="text" placeholder="Nombre" class="form-control input-md" style="text-transform:uppercase;">
-                            <br/><span class="help-block">Nombre completo</span>
-                            <span ng-messages="newUserForm.nombrecompleto.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese un nombre completo</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="cedulausuario">C&eacute;dula:</label>  
-                        <div class="col-md-4">
-                            <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="C&eacute;dula" class="form-control input-md">
-                            <br/><span class="help-block">N&uacute;mero de identificaci&oacute;n</span>
-                            <span ng-messages="newUserForm.cedulausuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese una identificaci&oacute;n</span>
-                                <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un n&uacute;mero de c&eacute;dula v&aacute;lido</span>
-                                <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este n&uacute;mero de c&eacute;dula</span>
-                                <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
-                            </span>
-                        </div>
-                    </div>
-                   
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="correousuario">Correo:</label>  
-                        <div class="col-md-4">
-                            <input required ng-model="userCopy.CORREO" name="correousuario" id="correousuario" type="email" placeholder="Correo del usuario" class="form-control input-md">
-                            <br/><span class="help-block">Correo electr&oacute;nico</span>
-                            <span ng-messages="newUserForm.correousuario.$error">
-                                <span ng-message="required" class="help-block ng-message">Ingrese una direcci&oacute;n de correo</span>
-                                <span ng-message="email" class="help-block ng-message">Ingrese correctamente la direcci&oacute;n de correo</span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
-                        <div class="col-md-4">
-                            <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
-                                ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
-                            </select>
-                            <br/><span class="help-block">Estado del usuario</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
-                        <div class="col-md-4">
-                            <select name="rol" ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
-                                ng-options="o.CODIGO as o.NOMBRE for o in Rols" required>
-                            </select>
-                            <br/><span class="help-block">Rol al que pertenece el usuario</span>
-                            <span ng-messages="newUserForm.rol.$error">
-                                <span ng-message="required" class="help-block ng-message">Seleccione un rol para el usuario</span>
-                            </span>
-                        </div>
-                    </div>
+                    <table class="dialogClassTable">
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="nombreusuario">Nombre de usuario</label>  
+                                    <div class="col-md-4">
+                                        <input valid-user-name required ng-model="userCopy.NOMBREUSUARIO" id="nombreusuario" name="nombreusuario" type="text" placeholder="Nombre usuario" class="form-control input-md" style="text-transform:lowercase;">
+                                        <br/><span class="help-block">Nombre de inicio de sesi&oacute;n</span>
+                                        <span ng-messages="newUserForm.nombreusuario.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese un nombre de usuario</span>
+                                            <span ng-message="userNameExist" class="help-block ng-message">Existe un usuario con este nombre</span>
+                                            <span ng-message="userNameValidator" class="help-block ng-message">Debe ingresar un nombre de usuario v&aacute;lido</span>
+                                            <span ng-message="userNameChecking" class="help-block ng-message">Chequeando la base de datos...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="nombrecompleto">Nombre completo</label>  
+                                    <div class="col-md-4">
+                                        <input required ng-model="userCopy.NOMBRECOMPLETO" id="nombrecompleto" name="nombrecompleto" type="text" placeholder="Nombre" class="form-control input-md" style="text-transform:uppercase;">
+                                        <br/><span class="help-block">Nombre completo</span>
+                                        <span ng-messages="newUserForm.nombrecompleto.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese un nombre completo</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="cedulausuario">C&eacute;dula:</label>  
+                                    <div class="col-md-4">
+                                        <input valid-identification required ng-model="userCopy.CEDULA" id="cedulausuario" name="cedulausuario" type="text" placeholder="C&eacute;dula" class="form-control input-md">
+                                        <br/><span class="help-block">N&uacute;mero de identificaci&oacute;n</span>
+                                        <span ng-messages="newUserForm.cedulausuario.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese una identificaci&oacute;n</span>
+                                            <span ng-message="cedulaValidator" class="help-block ng-message">Debe ingresar un n&uacute;mero de c&eacute;dula v&aacute;lido</span>
+                                            <span ng-message="cedulaExist" class="help-block ng-message">Existe un usuario con este n&uacute;mero de c&eacute;dula</span>
+                                            <span ng-message="cedulaChecking" class="help-block ng-message">Chequeando la base de datos...</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>                               
+                                <div>
+                                    <label class="col-md-4 control-label" for="correousuario">Correo:</label>  
+                                    <div class="col-md-4">
+                                        <input required ng-model="userCopy.CORREO" name="correousuario" id="correousuario" type="email" placeholder="Correo del usuario" class="form-control input-md">
+                                        <br/><span class="help-block">Correo electr&oacute;nico</span>
+                                        <span ng-messages="newUserForm.correousuario.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese una direcci&oacute;n de correo</span>
+                                            <span ng-message="email" class="help-block ng-message">Ingrese correctamente la direcci&oacute;n de correo</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="activeUserBox">Estado</label>
+                                    <div class="col-md-4">
+                                        <select ng-model="userCopy.ESTADO" id="activeUserBox" name="activeUserBox" class="form-control"
+                                            ng-options="o.v as o.n for o in [{ n: 'Inactivo', v: false }, { n: 'Activo', v: true }]">
+                                        </select>
+                                        <br/><span class="help-block">Estado del usuario</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="activeUserBox">Rol</label>
+                                    <div class="col-md-4">
+                                        <select name="rol" ng-model="userCopy.CODIGOROL" id="activeUserBox" name="activeUserBox" class="form-control"
+                                            ng-options="o.CODIGO as o.NOMBRE for o in Rols" required>
+                                        </select>
+                                        <br/><span class="help-block">Rol al que pertenece el usuario</span>
+                                        <span ng-messages="newUserForm.rol.$error">
+                                            <span ng-message="required" class="help-block ng-message">Seleccione un rol para el usuario</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="buttonsave1"></label>

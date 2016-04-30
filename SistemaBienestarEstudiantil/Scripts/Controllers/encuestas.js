@@ -69,7 +69,7 @@
             multiSelect: false,
             columnDefs: [
                 {name:'Título', field: 'TITULO'},
-                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 110, enableFiltering: false}
+                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 130, enableFiltering: false}
             ]
         };
 
