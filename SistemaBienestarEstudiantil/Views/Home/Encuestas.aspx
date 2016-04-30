@@ -37,7 +37,7 @@ Encuestas
     		<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
     	</div>
 		<script type="text/ng-template" id="actionsEncuestas.html">
-			<div class="ui-grid-cell-contents">
+			<div class="ui-grid-cell-contents" style="text-align:center">
 				<button title="Eliminar" type="button" style="width:22px; padding-left:1px;" ng-click="grid.appScope.Main.removeEncuesta(COL_FIELD)">
 					<span class="ui-icon ui-icon-trash"></span>
 				</button>
