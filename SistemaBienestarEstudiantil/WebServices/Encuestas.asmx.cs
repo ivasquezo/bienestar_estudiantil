@@ -39,16 +39,23 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod]
         public void getDefaultSurvey()
         {
-            Models.bienestarEntities db = new Models.bienestarEntities();
+            try {
+                Models.bienestarEntities db = new Models.bienestarEntities();
 
-            Models.BE_DATOS_SISTEMA datoSistema = db.BE_DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
+                Models.BE_DATOS_SISTEMA datoSistema = db.BE_DATOS_SISTEMA.Single(ds => ds.NOMBRE == "ENCUESTA");
 
-            int valor = datoSistema.VALOR != null ? Int32.Parse(datoSistema.VALOR) : 0;
+                int valor = datoSistema.VALOR != null ? Int32.Parse(datoSistema.VALOR) : 0;
 
-            var encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == valor);
-            writeResponse(
-                new JavaScriptSerializer().Serialize(new Class.Response(encuesta != null ? true : false, "info", null, null, encuesta))
-            );
+                var encuesta = db.BE_ENCUESTA.Single(e => e.CODIGO == valor);
+                writeResponse(
+                    new JavaScriptSerializer().Serialize(new Class.Response(encuesta != null ? true : false, "info", null, null, encuesta))
+                );
+                }
+            catch (Exception e)
+            {
+                Response response = new Response(false, "error", "Error", e.ToString(), null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
         }
 
         [WebMethod(EnableSession = true)]

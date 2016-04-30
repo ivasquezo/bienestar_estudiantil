@@ -139,58 +139,65 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod(EnableSession = true)]
         public void saveBeca(EditedBeca editedBeca)
         {
-            if (Utils.haveAccessTo(Utils.MODULOBECAS))
+            try
             {
-                using (Models.bienestarEntities db = new Models.bienestarEntities())
+                if (Utils.haveAccessTo(Utils.MODULOBECAS))
                 {
-                    BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == editedBeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
-
-                    // add new historial
-                    if (historial == null || (historial != null &&
-                       (historial.OTORGADO != editedBeca.OTORGADO ||
-                        historial.RUBRO != editedBeca.RUBRO)))
+                    using (Models.bienestarEntities db = new Models.bienestarEntities())
                     {
-                        BE_BECA_SOLICITUD_HISTORIAL newHistorial = new BE_BECA_SOLICITUD_HISTORIAL();
-                        newHistorial.CODIGOSOLICITUD = editedBeca.CODIGO;
-                        newHistorial.CODIGOUSUARIO = editedBeca.CODIGOUSUARIO;
-                        newHistorial.FECHA = DateTime.Now;
-                        newHistorial.RUBRO = editedBeca.RUBRO;
-                        newHistorial.OTORGADO = editedBeca.OTORGADO;
-                        db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(newHistorial);
-                        db.SaveChanges();
-                    }
-                }
+                        BE_BECA_SOLICITUD_HISTORIAL historial = db.BE_BECA_SOLICITUD_HISTORIAL.Where(h => h.CODIGOSOLICITUD == editedBeca.CODIGO).OrderByDescending(h => h.FECHA).FirstOrDefault();
 
-                /*
-                 * save changes for beca
-                 */
-                using (Models.bienestarEntities db = new Models.bienestarEntities())
-                {
-                    BE_BECA_SOLICITUD beca = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == editedBeca.CODIGO).FirstOrDefault();
-                    if (beca != null &&
-                       (beca.OBSERVACION != editedBeca.OBSERVACION ||
-                        beca.APROBADA != editedBeca.APROBADA))
-                    {
-                        beca.OBSERVACION = editedBeca.OBSERVACION;
-                        if (beca.APROBADA != editedBeca.APROBADA)
+                        // add new historial
+                        if (historial == null || (historial != null &&
+                           (historial.OTORGADO != editedBeca.OTORGADO ||
+                            historial.RUBRO != editedBeca.RUBRO)))
                         {
-                            beca.APROBADA = editedBeca.APROBADA;
-                            if (beca.APROBADA == 2 || beca.APROBADA == 3)
-                            {
-                                editedBeca.ENVIARNOTIFICACION = true;
-                            }
+                            BE_BECA_SOLICITUD_HISTORIAL newHistorial = new BE_BECA_SOLICITUD_HISTORIAL();
+                            newHistorial.CODIGOSOLICITUD = editedBeca.CODIGO;
+                            newHistorial.CODIGOUSUARIO = editedBeca.CODIGOUSUARIO;
+                            newHistorial.FECHA = DateTime.Now;
+                            newHistorial.RUBRO = editedBeca.RUBRO;
+                            newHistorial.OTORGADO = editedBeca.OTORGADO;
+                            db.BE_BECA_SOLICITUD_HISTORIAL.AddObject(newHistorial);
+                            db.SaveChanges();
                         }
-                        db.SaveChanges();
                     }
 
-                    if (beca != null && editedBeca.ENVIARNOTIFICACION)
+                    /*
+                     * save changes for beca
+                     */
+                    using (Models.bienestarEntities db = new Models.bienestarEntities())
                     {
-                        string to = beca.DATOSPERSONALE.DTPEMAILC;
-                        string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
-                        string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
-                        Utils.sendMail(to, subject, body);
+                        BE_BECA_SOLICITUD beca = db.BE_BECA_SOLICITUD.Where(b => b.CODIGO == editedBeca.CODIGO).FirstOrDefault();
+                        if (beca != null &&
+                           (beca.OBSERVACION != editedBeca.OBSERVACION ||
+                            beca.APROBADA != editedBeca.APROBADA))
+                        {
+                            beca.OBSERVACION = editedBeca.OBSERVACION;
+                            if (beca.APROBADA != editedBeca.APROBADA)
+                            {
+                                beca.APROBADA = editedBeca.APROBADA;
+                                if (beca.APROBADA == 2 || beca.APROBADA == 3)
+                                {
+                                    editedBeca.ENVIARNOTIFICACION = true;
+                                }
+                            }
+                            db.SaveChanges();
+                        }
+
+                        if (beca != null && editedBeca.ENVIARNOTIFICACION)
+                        {
+                            string to = beca.DATOSPERSONALE.DTPEMAILC;
+                            string subject = "Notificación Bienestar Estudiantil (Beca solicitada)";
+                            string body = beca.OBSERVACION + (beca.APROBADA == 2 ? " ESTADO SOLICITUD BECA: 'Aprobada'" : (beca.APROBADA == 3 ? " ESTADO SOLICITUD BECA: 'Rechazada'" : ""));
+                            Utils.sendMail(to, subject, body);
+                        }
                     }
                 }
+            }
+            catch (Exception e) {
+                Response response = new Response(false, "error", "Error", e.ToString(), null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
             }
         }
 
