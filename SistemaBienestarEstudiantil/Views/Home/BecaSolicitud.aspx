@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<dynamic>" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Solicitud de Beca
@@ -9,7 +10,7 @@
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
-    <script type="text/javascript" src="../../Scripts/Controllers/becasolicitud.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/becasolicitud.js?nocache=<%=RandomNumber%>"></script>
 
 	<div id="messages"></div>
 
@@ -19,7 +20,7 @@
     		<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
     	</div>
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
-	    	<center><img style="width:150px;" src="../../Content/logo-universidad-israel.png"></center>
+	    	<center><img style="width:150px;" src="<%=Utils.APP_CONTEXT%>/Content/logo-universidad-israel.png"></center>
 	    	<div style="font-size:15px;margin-bottom:5px;">Ingrese número de cédula: </div>
 	    	<input ng-model="ALUMNO.DTPCEDULAC" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
 				name="validIdentification" placeholder="Número de cédula" type="text"/>
@@ -129,8 +130,8 @@
 				</button>
 				<div class="document-message" style="margin-left:5px;display:inline-block;width:50%;vertical-align:top;">{{adjunto.DESCRIPCION}}</div>
 				<div style="width:120px;height:120px;display:inline-block;" >
-					<img ng-if="!isPDF(adjunto.CONTENTTYPE)" style="max-width:100%;max-height:100%;" src="../../WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}">
-					<a ng-if="isPDF(adjunto.CONTENTTYPE)" href="../../WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}" target="_blank">{{adjunto.NOMBRE}}</a>
+					<img ng-if="!isPDF(adjunto.CONTENTTYPE)" style="max-width:100%;max-height:100%;" src="<%=Utils.APP_CONTEXT%>/WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}">
+					<a ng-if="isPDF(adjunto.CONTENTTYPE)" href="<%=Utils.APP_CONTEXT%>/WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}" target="_blank">{{adjunto.NOMBRE}}</a>
 				</div>
 			</div>
 		</div>

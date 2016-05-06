@@ -5,6 +5,18 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
+        // session listener
+        document.onclick = function(){
+            $http.get('/WebServices/Users.asmx/checkSession')
+            .success(function (data, status, headers, config) {
+                if (!data.success) {
+                    document.location.href = "/";
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Error checkSession", data);
+            });
+        };
+
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
@@ -45,7 +57,7 @@
         };
 
         $scope.chargeGeneralActivities = function () {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllGeneralActivitiesWithActivity', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivitiesWithActivity', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
@@ -69,7 +81,7 @@
         };
 
         $scope.getReportActivities = function () {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getActivitiesReport', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getActivitiesReport', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
@@ -110,7 +122,7 @@
         };
 
         $scope.getGeneralActivities = function () {     
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllGeneralActivity'
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivity'
             ).success(function (data, status, headers, config) {
                 console.log("Actividades generales existentes... ", data);
                 $scope.allGeneralActivities = [];
@@ -124,7 +136,7 @@
         };
 
         $scope.getAllResponsables = function () {     
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllResponsables'
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllResponsables'
             ).success(function (data, status, headers, config) {
                 console.log("Docentes... ", data);
                 if (data.success) {
@@ -286,7 +298,7 @@
         };
 
         $scope.saveAllGroups = function () {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/saveAllGroups'
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveAllGroups'
             ).success(function (data, status, headers, config) {
                 console.log("Guardar grupos nuevos... ", data);
             }).error(function (data, status, headers, config) {
@@ -296,7 +308,7 @@
         };
 
         $scope.getGroupsByActivity = function () {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getGroupActivityByActivity', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getGroupActivityByActivity', {
                 activityId: $scope.activityCopy.CODIGO
             }).success(function (data, status, headers, config) {
                 console.log("Obtener grupos de actividad...", data);
@@ -358,7 +370,7 @@
         };
 
         $scope.getAllFaculty = function () {     
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllFaculties'
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllFaculties'
             ).success(function (data, status, headers, config) {
                 console.log("Facultades... ", data);
                 if (data.success)
@@ -372,7 +384,7 @@
         };
 
         $scope.getAllSchools = function () {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllSchools', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllSchools', {
                 faculties: $scope.selectedFaculties
             }).success(function (data, status, headers, config) {
                 console.log("Escuelas... ", data);
@@ -387,7 +399,7 @@
         };
 
         $scope.getAllCareers = function () {     
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllCareers', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllCareers', {
                 schools: $scope.selectedSchools
             }).success(function (data, status, headers, config) {
                 console.log("Carreras... ", data);
@@ -402,7 +414,7 @@
         };
 
         $scope.getAllModalities = function () {     
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllModalities'
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllModalities'
             ).success(function (data, status, headers, config) {
                 console.log("Modalidades... ", data);
                 if (data.success)
@@ -416,7 +428,7 @@
         };
 
         $scope.getAllLevels = function () {     
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAllLevels', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllLevels', {
                 modalities: $scope.selectedModalities,
                 carees: $scope.selectedCareers
             }).success(function (data, status, headers, config) {
@@ -644,7 +656,7 @@
                 $scope.studentsMails.push($scope.allLevelAssistance[i].CORREO);
             };
 
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/sendStudentsNotification', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/sendStudentsNotification', {
                 studentsMails: $scope.studentsMails,
                 activityId: $scope.activityId
             }).success(function (data, status, headers, config) {
@@ -657,7 +669,7 @@
         }
 
         $scope.getAllStudents = function (code, successFunction) {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getStudentsAssistance', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getStudentsAssistance', {
                 activityId: code
             }).success(function (data, status, headers, config) {
                 console.log("Estudiantes de la actividad... ", data);
@@ -721,7 +733,7 @@
         };
 
         $scope.getAllActivitiesAttach = function (code, successFunction) {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/getAttachByActivity', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAttachByActivity', {
                 activityId: $scope.activityCopy.CODIGO
             }).success(function (data, status, headers, config) {
                 console.log("Adjuntos de la actividad... ", data);
@@ -738,7 +750,7 @@
         };
 
         $scope.removeAttach = function (attachCode) {
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/removeAttach', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/removeAttach', {
                 attachCode: attachCode
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar adjunto...", data);
@@ -751,7 +763,7 @@
         this.removeActivity = function (code) {
             var parentObject = this;
             
-            $scope.promise = $http.post('../../WebServices/Activities.asmx/removeActivityById', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/removeActivityById', {
                 activityId: code
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar actividad... ", data);
@@ -806,7 +818,7 @@
             if (!this.activityForm.$invalid) {
                 var parentObject = this;
 
-                $scope.promise = $http.post('../../WebServices/Activities.asmx/saveActivityData', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveActivityData', {
                     activityId: $scope.activityCopy.CODIGO,
                     activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
                     activityDate: $scope.activityCopy.FECHA,
@@ -839,7 +851,7 @@
             if (!this.newActivityForm.$invalid) {
                 var newParentObject = this;
 
-                $scope.promise = $http.post('../../WebServices/Activities.asmx/addNewActivity', {                
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addNewActivity', {                
                     activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
                     activityDate: $scope.activityCopy.FECHA,
                     activityStatus: $scope.activityCopy.ESTADO,
@@ -880,7 +892,7 @@
                         $scope.selectedCareers.push($scope.allCareers[i].CRRCODIGOI);
                 }
 
-                $scope.promise = $http.post('../../WebServices/Activities.asmx/saveGroupActivity', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveGroupActivity', {
                     careersV: $scope.selectedCareers,
                     modalitiesV: $scope.selectedModalities,
                     levelsV: $scope.selectedLevels,
@@ -905,7 +917,7 @@
             if (!this.assistanceForm.$invalid) {
                 var parentObject = this;
 
-                $scope.promise = $http.post('../../WebServices/Activities.asmx/saveAssistanceData', {                
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveAssistanceData', {                
                     assistance: $scope.assistance
                 }).success(function (data, status, headers, config) {
                     console.log("Actualizar asistencia: ", data);
@@ -927,7 +939,7 @@
                 var formElement = document.getElementById('attachedForm');
                 var formData = new FormData(formElement);
 
-                $scope.promise = $http.post('../../WebServices/Activities.asmx/addUploadedFileDataBase?codigoActividad='+$scope.activityCopy.CODIGO,
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addUploadedFileDataBase?codigoActividad='+$scope.activityCopy.CODIGO,
                     formData, {
                     withCredentials: true,
                     headers: {'Content-Type': undefined },
@@ -960,7 +972,7 @@
 
                         ctrl.$setValidity('activityNameChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Activities.asmx/countActivityWithName', {
+                        scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/countActivityWithName', {
                             activityName: ngModelValue
                         }).success(function (data, status, headers, config) {
                             if (data.cantidad == 0) {

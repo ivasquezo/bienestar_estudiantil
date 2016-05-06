@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<SistemaBienestarEstudiantil.Models.LogOnModel>" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
 
 <asp:Content ID="loginTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Iniciar sesi&oacute;n
@@ -14,10 +15,17 @@
         <div style="float:left;">
             Especifique su nombre de usuario y contrase&ntilde;a.
         </div>
-        <div style="float:right;width:150px;background:#5C87B2;text-align: center;padding:6px;">
-            <a href="/Home/BecaSolicitud" target="_blank" style="text-decoration: initial;font-weight:bold;">
+        <div style="float:right;width:150px;background:#5C87B2;text-align: center;padding:6px;margin-left:3px;">
+            <a href="<%=Utils.APP_CONTEXT%>/Home/BecaSolicitud" target="_blank" style="text-decoration: initial;font-weight:bold;">
                 <div style="color:white;">
                     Solicitud de becas
+                </div>
+            </a>
+        </div>
+        <div style="float:right;width:190px;background:#5C87B2;text-align:center;padding:6px;margin-left:3px;">
+            <a href="<%=Utils.APP_CONTEXT%>/Home/Encuesta" target="_blank" style="text-decoration: initial;font-weight:bold;">
+                <div style="color:white;">
+                    Seguimiento graduados
                 </div>
             </a>
         </div>

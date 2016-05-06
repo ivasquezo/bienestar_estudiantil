@@ -31,7 +31,7 @@
         $('#messages').puigrowl('option', {life: 5000});
 
         $scope.cargarTipos = function () {
-            $scope.promise = $http.get('../../WebServices/Becas.asmx/getTipos')
+            $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getTipos')
             .success(function (data, status, headers, config) {
                 $scope.TIPOS = data;
                 console.log("tipos cargados correctamente: ", data);
@@ -43,7 +43,7 @@
         $scope.cargarTipos();
 
         $scope.cargarBecaSolicitud = function (code) {
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/getBecaSolicitud', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getBecaSolicitud', {
                 CODIGO: code
             }).success(function (data, status, headers, config) {
                 $scope.BECA_SOLICITUD = data;
@@ -73,7 +73,7 @@
 
                 console.log("beca_solicitud_copy:", $scope.beca_solicitud_copy);
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBecaSolicitud', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/saveBecaSolicitud', {
                     beca_solicitud: $scope.beca_solicitud_copy
                 }).success(function (data, status, headers, config) {
                     
@@ -83,7 +83,7 @@
                     var formElement = document.getElementById('formFiles');
                     var formData = new FormData(formElement);
 
-                    $scope.promise = $http.post('../../WebServices/Becas.asmx/addUploadedFileDataBase?codigoSolicitud=' + $scope.BECA_SOLICITUD.CODIGO, formData,
+                    $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/addUploadedFileDataBase?codigoSolicitud=' + $scope.BECA_SOLICITUD.CODIGO, formData,
                     {
                         withCredentials: true,
                         headers: {'Content-Type': undefined},
@@ -112,7 +112,7 @@
 
         $scope.removeAttach = function (attachCode, becaCodigo) {
 
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/removeAttach', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/removeAttach', {
                 attachCode: attachCode
             }).success(function (data, status, headers, config) {
                 console.log("removeAttach:", data);
@@ -193,7 +193,7 @@
                         scope.ALUMNO = null;
                         scope.seleccion['TIPO'] = null;
 
-                        scope.promise = $http.post('../../WebServices/Becas.asmx/getStudentSolicitud', {
+                        scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getStudentSolicitud', {
                             cedula: ngModelValue
                         }).success(function (data, status, headers, config) {
 

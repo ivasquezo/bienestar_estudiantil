@@ -20,6 +20,8 @@ namespace SistemaBienestarEstudiantil.Class
         public const string MODULOENCUESTAS = "EDITAR ENCUESTAS";
         public const string USERCODE = "userCode";
         public const int DOCUMENTMAXCANT = 3;
+
+        public const string APP_CONTEXT = "";
         
         /// <summary>
         /// Valida si la clave actual es igual a la anterior para solicitar cambio de clave
@@ -167,6 +169,13 @@ namespace SistemaBienestarEstudiantil.Class
             return session[attribute];
         }
 
+        static public void terminateSession()
+        {
+            HttpSessionStateBase session = new HttpSessionStateWrapper(HttpContext.Current.Session);
+            session.Clear();
+            session.Abandon();
+        }
+
         static public bool isTeacher(int userCode)
         {
             bienestarEntities db = new bienestarEntities();
@@ -179,18 +188,22 @@ namespace SistemaBienestarEstudiantil.Class
         /// return true is exist user logued
         /// </summary>
         /// <returns></returns>
-        static public bool isLogued()
+        static public bool isLogged()
         {
-            int userCode = (int)getSession(USERCODE);
 
-            bienestarEntities db = new bienestarEntities();
-            var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
-                          Where(w => w.u.CODIGO == userCode && w.u.ESTADO == true).
-                          Select(s => s.u).FirstOrDefault();
-            
-            // is valid logued user
-            if (user != null) return true;
+            object userCodeSession = getSession(USERCODE);
+            if (userCodeSession != null)
+            {
+                int userCode = (int)userCodeSession;
 
+                bienestarEntities db = new bienestarEntities();
+                var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                              Where(w => w.u.CODIGO == userCode && w.u.ESTADO == true).
+                              Select(s => s.u).FirstOrDefault();
+
+                // is valid logued user
+                if (user != null) return true;
+            }
             return false;
         }
 
@@ -201,18 +214,20 @@ namespace SistemaBienestarEstudiantil.Class
         /// <returns></returns>
         static public bool haveAccessTo(string module)
         {
-            int userCode = (int)getSession(USERCODE);
+            object userCodeSession = getSession(USERCODE);
+            if (userCodeSession != null)
+            {
+                int userCode = (int)userCodeSession;
+                bienestarEntities db = new bienestarEntities();
+                var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                              Join(db.BE_ROL_ACCESO, ur => ur.r.CODIGO, ra => ra.CODIGOROL, (ur, ra) => new { ur, ra }).
+                              Join(db.BE_ACCESO, urra => urra.ra.CODIGOACCESO, a => a.CODIGO, (urra, a) => new { urra, a }).
+                              Where(w => w.urra.ur.u.CODIGO == userCode && w.urra.ur.u.ESTADO == true && w.a.NOMBRE.ToUpper() == module.ToUpper()).
+                              Select(s => s.urra.ur.u).FirstOrDefault();
 
-            bienestarEntities db = new bienestarEntities();
-            var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
-                          Join(db.BE_ROL_ACCESO, ur => ur.r.CODIGO, ra => ra.CODIGOROL, (ur, ra) => new { ur, ra }).
-                          Join(db.BE_ACCESO, urra => urra.ra.CODIGOACCESO, a => a.CODIGO, (urra, a) => new { urra, a }).
-                          Where(w => w.urra.ur.u.CODIGO == userCode && w.urra.ur.u.ESTADO == true && w.a.NOMBRE.ToUpper() == module.ToUpper()).
-                          Select(s => s.urra.ur.u).FirstOrDefault();
-
-            // is valid logued user
-            if (user != null) return true;
-
+                // is valid logued user
+                if (user != null) return true;
+            }
             return false;
         }
 

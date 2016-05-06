@@ -14,30 +14,34 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
+<head>
+    <script type="text/javascript">
+        var appContext = "<%=Utils.APP_CONTEXT%>";
+    </script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>
         <asp:ContentPlaceHolder ID="TitleContent" runat="server" />
     </title>
 
     <asp:ContentPlaceHolder ID="HeaderContent" runat="server" />
-    <link href="../../Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/custom.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/print.css" rel="stylesheet" type="text/css" media="print" />
-    <link href="../../Scripts/ui-grid/ui-grid-stable.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/ng-dialog/ngDialog.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/ng-dialog/ngDialog-theme-default.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/ng-dialog/ngDialog-theme-flat.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/angular-busy/angular-busy.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/Utils/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/Utils/primeui/css/growl/growl.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/Utils/primeui/css/core/core.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/Utils/primeui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/Utils/primeui/themes/aristo/theme.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../../Scripts/Utils/jquery/jquery-1.11.3.js"></script>
-    <script type="text/javascript" src="../../Scripts/Utils/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/Utils/primeui/js/growl/growl.js"></script>
-    <script type="text/javascript" src="../../Scripts/Utils/primeui/js/core/core.js"></script>
+    <link href="<%=Utils.APP_CONTEXT%>/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Content/custom.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Content/print.css" rel="stylesheet" type="text/css" media="print" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/ui-grid/ui-grid-stable.min.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog.min.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog-theme-default.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog-theme-flat.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/angular-busy/angular-busy.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/Utils/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/Utils/primeui/css/growl/growl.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/Utils/primeui/css/core/core.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/Utils/primeui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/Utils/primeui/themes/aristo/theme.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/jquery/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/primeui/js/growl/growl.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/primeui/js/core/core.js"></script>
     <style type="text/css">
         .ngdialog-overlay {
             display: none!important;
@@ -49,12 +53,12 @@
 </head>
 
 <body ng-app="BienestarApp">
-    <script type="text/javascript" src="../../Scripts/angularjs/1.4.8/angular.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/angularjs/1.4.8/angular-animate.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/angular-busy/angular-busy.js"></script>
-    <script type="text/javascript" src="../../Scripts/ui-grid/ui-grid-stable.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/ng-dialog/ngDialog.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angular-busy/angular-busy.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/ui-grid/ui-grid-stable.min.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog.min.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
     
     <div class="page">
         <div id="header">

@@ -4,6 +4,18 @@
 
     app.controller('EncuestasController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
+        // session listener
+        document.onclick = function(){
+            $http.get('/WebServices/Users.asmx/checkSession')
+            .success(function (data, status, headers, config) {
+                if (!data.success) {
+                    document.location.href = "/";
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Error checkSession", data);
+            });
+        };
+
         $scope.promise = null;
         $scope.message = 'Procesando...';
         $scope.backdrop = false;
@@ -14,14 +26,14 @@
 
         // method for load periodos
         $scope.cargarPeriodos = function () {
-            $scope.promise = $http.get('../../WebServices/Encuestas.asmx/getPeriodos')
+            $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getPeriodos')
             .success(function (data, status, headers, config) {
                 $scope.PERIODOS = data;
                 for (var i = 0; i < $scope.PERIODOS.length; i++) {
                     $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
                     $scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
                 };
-                console.log("periodos:", data);
+                //console.log("periodos:", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar periodos...", data);
             });
@@ -29,7 +41,7 @@
 
         // method for load encuestas from server
         $scope.cargarEncuestas = function () {
-            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/getAllEncuestas', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getAllEncuestas', {
             }).success(function (data, status, headers, config) {
                 $scope.gridOptions.data = data;
                 $scope.loadDefaultSurvey();
@@ -42,7 +54,7 @@
         // get survey answered
         $scope.cargarEncuestasContestadas = function () {
 
-            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveyAnsweredCodesServices', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveyAnsweredCodesServices', {
             }).success(function (data, status, headers, config) {
                 
                 for (var i = 0; i < data.length; i++) {
@@ -50,7 +62,7 @@
                     row.answered = true;
                 };
 
-                console.log($scope.gridOptions.data);
+                //console.log($scope.gridOptions.data);
 
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar encuestas contestadas ...", data);
@@ -196,7 +208,7 @@
                 var iniDate = $scope.toDate($scope.PERIODO.PRDFECINIF);
                 var endDate = ($scope.PERIODOSIGUIENTE != null ? $scope.toDate($scope.PERIODOSIGUIENTE.PRDFECINIF) : null);
 
-                $scope.promise = $http.post('../../WebServices/Encuestas.asmx/surveysReport', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveysReport', {
                     surveyCode: $scope.CODIDOENCUESTA,
                     iniDate: iniDate,
                     endDate: endDate
@@ -204,7 +216,7 @@
 
                     $scope.separateQuestionResponse(data);
                     $scope.encuestaReport = data;
-                    console.log("showReport: ", data);
+                    //console.log("showReport: ", data);
 
                 }).error(function (data, status, headers, config) {
                     console.log("error in report ...", data);
@@ -224,10 +236,10 @@
         };
 
         $scope.setDefaultSurvey = function(code){
-            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/setDefaultSurvey', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/setDefaultSurvey', {
                 surveyCode: code
             }).success(function (data, status, headers, config) {
-                console.log("setDefaultSurvey:",data);
+                //console.log("setDefaultSurvey:",data);
             }).error(function (data, status, headers, config) {
                 console.log("error in setDefaultSurvey...", data);
             });
@@ -338,8 +350,8 @@
 
         $scope.addNewEncuesta = function(){
 
-            console.log($scope.encuesta);
-            $http.post('../../WebServices/Encuestas.asmx/addNewEncuesta', {
+            //console.log($scope.encuesta);
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/addNewEncuesta', {
                 encuesta: $scope.encuesta
             }).success(function (data, status, headers, config) {
                 $scope.gridOptions.data.push(data);
@@ -352,12 +364,12 @@
 
         $scope.saveEncuesta = function(){
 
-            console.log($scope.encuesta);
+            //console.log($scope.encuesta);
 
-            $http.post('../../WebServices/Encuestas.asmx/saveEncuesta', {
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/saveEncuesta', {
                 encuestaEdited: $scope.encuesta
             }).success(function (data, status, headers, config) {
-                console.log("saveEncuesta", data);
+                //console.log("saveEncuesta", data);
                 $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Encuesta guardada.'}]);
             }).error(function (data, status, headers, config) {
                 console.log("error al añadir nueva encuesta...", data);
@@ -367,7 +379,7 @@
 
         this.removeEncuesta = function(code){
             var parentObject = this;
-            $http.post('../../WebServices/Encuestas.asmx/removeEncuestaByCode', {
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/removeEncuestaByCode', {
                 code: code
             }).success(function (data, status, headers, config) {
                 $('#messages').puigrowl('show', [{severity: 'info', summary: 'Eliminar', detail: 'Encuesta borrada.'}]);
@@ -389,9 +401,9 @@
         // marca de inicio como seleccionada la encuesta habilitada para los estudiantes 
         $scope.loadDefaultSurvey = function(){
 
-            $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getDefaultSurvey', {
             }).success(function (data, status, headers, config) {
-                console.log("loadDefaultSurvey:", data);
+                //console.log("loadDefaultSurvey:", data);
                 if (data.success != undefined && data.success) {
                     $scope.defaultPoll = data.response;
                     var row = $scope.getElementArray($scope.gridOptions.data, data.response.CODIGO);

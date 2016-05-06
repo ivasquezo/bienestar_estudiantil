@@ -7,6 +7,18 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
+        // session listener
+        document.onclick = function(){
+            $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/checkSession')
+            .success(function (data, status, headers, config) {
+                if (!data.success) {
+                    document.location.href = "/";
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Error checkSession", data);
+            });
+        };
+
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
@@ -28,7 +40,7 @@
         };
 
         $scope.cargarUsuarios = function () {
-            $scope.promise = $http.post('../../WebServices/Users.asmx/getAllUser', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/getAllUser', {
             }).success(function (data, status, headers, config) {
                 console.log("Usuarios cargados: ", data);
                 if (data.success) {
@@ -44,7 +56,7 @@
         };
 
         $scope.cargarRoles = function () {
-            $scope.promise = $http.post('../../WebServices/Rols.asmx/getAllRols', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/getAllRols', {
             }).success(function (data, status, headers, config) {
                 console.log("Roles cargados: ", data);
                 if (data.success)
@@ -161,7 +173,7 @@
         this.removeUser = function (code) {
             var parentObject = this;
             
-            $scope.promise = $http.post('../../WebServices/Users.asmx/removeUserById', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/removeUserById', {
                 id: code
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar usuario... ", data);
@@ -202,7 +214,7 @@
             delete $scope.userCopy_copy['BE_BECA_SOLICITUD_HISTORIAL'];
 
             if (!this.userForm.$invalid) {
-                $scope.promise = $http.post('../../WebServices/Users.asmx/saveUserData', {
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/saveUserData', {
                     user: $scope.userCopy_copy,
                     resetPassword: $scope.password.reset
                 }).success(function (data, status, headers, config) {
@@ -231,7 +243,7 @@
                 $scope.userCopy.NOMBREUSUARIO = $scope.userCopy.NOMBREUSUARIO.toLowerCase();
                 $scope.userCopy.NOMBRECOMPLETO = $scope.userCopy.NOMBRECOMPLETO.toUpperCase();
 
-                $scope.promise = $http.post('../../WebServices/Users.asmx/addNewUser', {
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/addNewUser', {
                     newUser: $scope.userCopy
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar usuario: ", data);
@@ -276,7 +288,7 @@
 
                             ctrl.$setValidity('cedulaChecking', false);
 
-                            scope.promise = $http.post('../../WebServices/Users.asmx/countUserWithCedula', {
+                            scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/countUserWithCedula', {
                                 cedula: ngModelValue
                             }).success(function (data, status, headers, config) {
 
@@ -324,7 +336,7 @@
 
                         ctrl.$setValidity('userNameChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Users.asmx/countUserWithUserName', {
+                        scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/countUserWithUserName', {
                             userName: ngModelValue
                         }).success(function (data, status, headers, config) {
                             if (data.cantidad == 0) {

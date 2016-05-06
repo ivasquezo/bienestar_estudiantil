@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
 
 <asp:Content ID="aboutTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Roles
@@ -10,8 +11,8 @@
         int RandomNumber = rand.Next(100000, 999999);
     %>
 
-    <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
-    <script type="text/javascript" src="../../Scripts/Controllers/rols.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/rols.js?nocache=<%=RandomNumber%>"></script>
 
     <h2>Roles</h2>
 

@@ -138,7 +138,7 @@ angular.module('cgBusy').directive('cgBusy',['$compile','$templateCache','cgBusy
                 var tracker = _cgBusyTrackerFactory();
 
                 var defaults = {
-                    templateUrl: '../../Scripts/angular-busy/angular-busy.html',
+                    templateUrl: appContext + '/Scripts/angular-busy/angular-busy.html',
                     delay:0,
                     minDuration:0,
                     backdrop: true,

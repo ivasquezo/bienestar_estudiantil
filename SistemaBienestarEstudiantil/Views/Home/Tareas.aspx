@@ -1,11 +1,12 @@
 <%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
 
 <asp:Content ID="activityTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Actividades
 </asp:Content>
 
 <asp:Content ID="activityHeader" ContentPlaceHolderID="HeaderContent" runat="server">
-    <link href="../../Scripts/ng-dialog/ngDialog-report.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog-report.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 
 <asp:Content ID="activityContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -14,9 +15,9 @@
         int RandomNumber = rand.Next(100000, 999999);
     %>
     
-    <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
-    <script type="text/javascript" src="../../Scripts/Controllers/activities.js?nocache=<%=RandomNumber%>"></script>
-    <script type="text/javascript" src="../../Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/activities.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
 
     <h2>Actividades</h2>
 
@@ -440,7 +441,7 @@
                             </tr>
                             <tr ng-repeat="attach in allAttaches">                                
                                 <td style="width:200px">{{ attach.DESCRIPCION }}</td>
-                                <td><a href="../../WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
+                                <td><a href="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
                                         {{attach.NOMBRE}}
                                 </a></td>
                                 <td style="text-align:center"><button title="Eliminar" type="button" ng-click="removeAttach(attach.CODIGO)"><span class="ui-icon ui-icon-trash"></span></button></td>

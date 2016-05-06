@@ -4,6 +4,18 @@
 
     app.controller('BecasController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
         
+        // session listener
+        document.onclick = function(){
+            $http.get('/WebServices/Users.asmx/checkSession')
+            .success(function (data, status, headers, config) {
+                if (!data.success) {
+                    document.location.href = "/";
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Error checkSession", data);
+            });
+        };
+
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
@@ -33,7 +45,7 @@
         };
         
         $scope.cargarBecas = function () {
-            $scope.promise = $http.get('../../WebServices/Becas.asmx/getBecas')
+            $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getBecas')
             .success(function (data, status, headers, config) {
 
                 console.log("Becas cargadas: ", data);
@@ -64,7 +76,7 @@
         };
         
         $scope.cargarTipos = function () {
-            $scope.promise = $http.get('../../WebServices/Becas.asmx/getTipos')
+            $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getTipos')
             .success(function (data, status, headers, config) {
                 
                 console.log("Tipos de becas cargadas: ", data);
@@ -78,7 +90,7 @@
 
         // method for load periodos
         $scope.cargarPeriodos = function () {
-            $scope.promise = $http.get('../../WebServices/Encuestas.asmx/getPeriodos')
+            $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getPeriodos')
             .success(function (data, status, headers, config) {
                 $scope.PERIODOS = data;
                 for (var i = 0; i < $scope.PERIODOS.length; i++) {
@@ -125,7 +137,7 @@
         this.removeBeca = function(code){
             var parentObject = this;
             if (confirm("\u00bfDesea eliminar esta solicitud de beca?")) {
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/removeBeca', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/removeBeca', {
                     codeBeca: code
                 }).success(function (data, status, headers, config) {
                     parentObject.removeElementArray($scope.gridOptions.data, code);
@@ -141,7 +153,7 @@
             var parentObject = this;
             if (confirm("\u00bfDesea eliminar este tipo de beca?")) {
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/removeTipoBeca', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/removeTipoBeca', {
                     codeTipoBeca: code
                 }).success(function (data, status, headers, config) {
                     parentObject.removeElementArray($scope.gridOptionsTipos.data, code);
@@ -172,7 +184,7 @@
         }
 
         $scope.cargarAdjuntosSolicitudBecaEdit = function (code) {
-            $scope.promise = $http.post('../../WebServices/Becas.asmx/getAttachBeca', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getAttachBeca', {
                 codeBeca: code
             }).success(function (data, status, headers, config) {
                 console.log(data);
@@ -308,7 +320,7 @@
         $scope.saveTipoBeca = function () {
             if (!this.addtipoBecaForm.$invalid) {
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBecaTipo', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/saveBecaTipo', {
                     becaTipo: $scope.tipoBeca
                 }).success(function (data, status, headers, config) {
                     console.log("saveBecaTipo: ", data);
@@ -330,7 +342,7 @@
 
                 $scope.solicitudbeca['CODIGOUSUARIO'] = $scope.CODIGOUSUARIO;
 
-                $scope.promise = $http.post('../../WebServices/Becas.asmx/saveBeca', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/saveBeca', {
                     editedBeca: $scope.removeUnnecesaryAttributes($scope.solicitudbeca)
                 }).success(function (data, status, headers, config) {
                     console.log("solicitudbeca edited: ", data);

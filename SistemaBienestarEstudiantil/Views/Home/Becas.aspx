@@ -1,11 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<dynamic>" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
     Becas
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="HeaderContent" runat="server">
-    <link href="../../Scripts/ng-dialog/ngDialog-report.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog-report.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="MainContent" runat="server">
@@ -13,8 +14,8 @@
         Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
-    <script type="text/javascript" src="../../Scripts/Controllers/becas.js?nocache=<%=RandomNumber%>"></script>
-    <script type="text/javascript" src="../../Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/becas.js?nocache=<%=RandomNumber%>"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
 
 	<div id="messages"></div>
 
@@ -166,7 +167,7 @@
                                         </div>
                                     	<div ng-repeat="adjunto in solicitudbeca.ADJUNTOS"
                                         	style="font-size:11px;width:250px;color:blue;line-height:normal;margin-bottom:5px;">
-                                        	* <a href="../../WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}" target="_blank" title="Click para descargar documento">
+                                        	* <a href="<%=Utils.APP_CONTEXT%>/WebServices/Becas.asmx/getAttach?code={{adjunto.CODIGO}}" target="_blank" title="Click para descargar documento">
                                         			{{adjunto.DESCRIPCION}}
                                         	</a>
                                         </div>

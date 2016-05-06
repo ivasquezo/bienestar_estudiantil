@@ -34,7 +34,7 @@
         $scope.loadDefaultSurvey = function(){
 
             $scope.defaultSurvey = null;
-            $scope.promise = $http.post('../../WebServices/Encuestas.asmx/getDefaultSurvey', {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getDefaultSurvey', {
             }).success(function (data, status, headers, config) {
 
                 if (data.success != undefined && data.success) {
@@ -143,7 +143,7 @@
                 console.log("surveySelectResult:", surveySelectResult);
                 console.log("surveyTextResult:", surveyTextResult);
 
-                $scope.promise = $http.post('../../WebServices/Encuestas.asmx/saveResponseStudent', {
+                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/saveResponseStudent', {
                     listResponseSelect: surveySelectResult,
                     listResponseText: surveyTextResult
                 }).success(function (data, status, headers, config) {
@@ -183,7 +183,7 @@
                         
                         ctrl.$setValidity('cedulaChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Encuestas.asmx/getStudentByCedula', {
+                        scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getStudentByCedula', {
                             cedula: ngModelValue,
                             codigoEncuesta: scope.defaultSurvey.CODIGO
                         }).success(function (data, status, headers, config) {

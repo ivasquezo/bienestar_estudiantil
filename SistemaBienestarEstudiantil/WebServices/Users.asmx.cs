@@ -24,6 +24,22 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.End();
         }
 
+        private void writeResponse(Object response)
+        {
+            Context.Response.Write(new JavaScriptSerializer().Serialize(response));
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void checkSession()
+        {
+            bool isLogged = Utils.isLogged();
+            Response response = new Response(isLogged, null, null, null, null);
+            if (!isLogged) Utils.terminateSession();
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
         [WebMethod]
         public void getAllUser()
         {

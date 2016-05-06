@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<dynamic>" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Encuesta
@@ -11,9 +12,9 @@
     %>
     <h2>Responder encuesta</h2>
 
-    <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
-    <script type="text/javascript" src="../../Scripts/Controllers/encuesta.js?nocache=<%=RandomNumber%>"></script>
+    <link href="<%=Utils.APP_CONTEXT%>/Content/encuestas.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/encuesta.js?nocache=<%=RandomNumber%>"></script>
 	<div id="messages"></div>
     <div ng-controller="EncuestaController as Main" class="encuestas">
     	<div style="position:fixed;top:0px;left:50%;margin-left:-85px;">

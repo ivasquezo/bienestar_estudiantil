@@ -5,6 +5,18 @@
         $('#messages').puigrowl();
         $('#messages').puigrowl('option', {life: 5000});
 
+        // session listener
+        document.onclick = function(){
+            $http.get('/WebServices/Users.asmx/checkSession')
+            .success(function (data, status, headers, config) {
+                if (!data.success) {
+                    document.location.href = "/";
+                }
+            }).error(function (data, status, headers, config) {
+                console.log("Error checkSession", data);
+            });
+        };
+
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
@@ -17,9 +29,9 @@
         };
 		
         $scope.chargeRols = function () {
-            $http.post('../../WebServices/Rols.asmx/getAllRols', {
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/getAllRols', {
             }).success(function (data, status, headers, config) {
-                console.log("Cargar roles... ", data);
+                //console.log("Cargar roles... ", data);
                 if (data.success)
                     $scope.gridOptions.data = data.response;
                 else
@@ -55,10 +67,10 @@
         this.removeRol = function (code) {
             var parentObject = this;
             
-            $http.post('../../WebServices/Rols.asmx/removeRolById', {
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/removeRolById', {
                 rolId: code
             }).success(function (data, status, headers, config) {
-                console.log("Eliminar rol... ", data);
+                //console.log("Eliminar rol... ", data);
                 if (data.success)
                     parentObject.removeElementArray($scope.gridOptions.data, code);
 
@@ -112,10 +124,10 @@
         
         $scope.getAccessByRol = function (code) {
             if (code > 0) {
-                $http.post('../../WebServices/Rols.asmx/getAccessByRolId', {
+                $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/getAccessByRolId', {
                     rolId: code
                 }).success(function (data, status, headers, config) {
-                    console.log("Accesos del rol... ", data);
+                    //console.log("Accesos del rol... ", data);
                     $scope.rolsAccess = data.response;
                 }).error(function (data, status, headers, config) {
                     console.log("Error al cargar accesos del rol...", data);
@@ -123,9 +135,9 @@
                 });
             }
 
-            $http.post('../../WebServices/Rols.asmx/getAllAccess'
+            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/getAllAccess'
             ).success(function (data, status, headers, config) {
-                console.log("Accesos existentes... ", data);
+                //console.log("Accesos existentes... ", data);
                 $scope.allAccess = data.response;
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar accesos...", data);
@@ -184,12 +196,12 @@
             var parentObject = this;
 
             if (!this.rolForm.$invalid) {
-                $http.post('../../WebServices/Rols.asmx/saveRolData', {
+                $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/saveRolData', {
                     rolId: $scope.rolCopy.CODIGO,
                     rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
                     accessRols: $scope.accessRols
                 }).success(function (data, status, headers, config) {
-                    console.log("Editar rol: ", data);
+                    //console.log("Editar rol: ", data);
                     if (data.success) {
                         $scope.updateElementArray($scope.gridOptions.data, $scope.rolCopy.CODIGO, $scope.rolCopy.NOMBRE);
                         parentObject.closeThisDialog();
@@ -209,11 +221,11 @@
             var newParentObject = this;
 
             if (!this.newRolForm.$invalid) {
-                $http.post('../../WebServices/Rols.asmx/addNewRol', {                
+                $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/addNewRol', {                
                     rolName: $scope.rolCopy.NOMBRE.toUpperCase(),
                     accessRols: $scope.accessRols
                 }).success(function (data, status, headers, config) {
-                    console.log("Agregar rol: ", data);
+                    //console.log("Agregar rol: ", data);
                     if (data.success) {
                         $scope.addElementArray($scope.gridOptions.data, data.response);
                         newParentObject.closeThisDialog();
@@ -239,7 +251,7 @@
                     if (ngModelValue != null && ngModelValue != scope.rolCopy) {
                         ctrl.$setValidity('rolNameChecking', false);
 
-                        scope.promise = $http.post('../../WebServices/Rols.asmx/countRolWithName', {
+                        scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Rols.asmx/countRolWithName', {
                             rolName: ngModelValue
                         }).success(function (data, status, headers, config) {
                             if (data.cantidad == 0) {

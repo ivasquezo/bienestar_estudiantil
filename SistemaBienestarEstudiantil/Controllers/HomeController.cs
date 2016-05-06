@@ -33,6 +33,8 @@ namespace SistemaBienestarEstudiantil.Controllers
         [HttpPost]
         public ActionResult Index(LogOnModel model, string returnUrl)
         {
+            if (Utils.isLogged()) return Redirect("/");
+
             if (ModelState.IsValid)
             {
                 usuario = MembershipService.ValidateUser(model.UserName, model.Password);

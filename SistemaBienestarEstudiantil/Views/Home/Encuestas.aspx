@@ -1,4 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="SistemaBienestarEstudiantil.Class" %>
+
 <asp:Content ID="aboutTitle" ContentPlaceHolderID="TitleContent" runat="server">
 Encuestas
 </asp:Content>
@@ -9,12 +11,12 @@ Encuestas
     %>
     <h2>Encuestas</h2>
 
-    <link href="../../Content/encuestas.css" rel="stylesheet" type="text/css" />
-    <link href="../../Scripts/angular-chart/angular-chart.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../../Scripts/Utils/angular-messages.js"></script>
-	<script type="text/javascript" src="../../Scripts/angular-chart/Chart.min.js"></script>
-	<script type="text/javascript" src="../../Scripts/angular-chart/angular-chart.js"></script>
-	<script type="text/javascript" src="../../Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
+    <link href="<%=Utils.APP_CONTEXT%>/Content/encuestas.css" rel="stylesheet" type="text/css" />
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/angular-chart/angular-chart.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
+	<script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angular-chart/Chart.min.js"></script>
+	<script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angular-chart/angular-chart.js"></script>
+	<script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/encuestas.js?nocache=<%=RandomNumber%>"></script>
 	<style type="text/css">
 		@media print {
 		    .content_print {
@@ -88,8 +90,8 @@ Encuestas
 			    		</tr></table>
 			    		<!-- responses -->
 			    		<div ng-show="question.TIPO != 3" ng-repeat="response in question.BE_ENCUESTA_RESPUESTA" class="response">
-				    		<img ng-show="question.TIPO == 2" src="../../Content/radio-button-30.png" class="input-img"/>
-				    		<img ng-show="question.TIPO == 1" src="../../Content/checkbox-30.png" class="input-img"/>
+				    		<img ng-show="question.TIPO == 2" src="<%=Utils.APP_CONTEXT%>/Content/radio-button-30.png" class="input-img"/>
+				    		<img ng-show="question.TIPO == 1" src="<%=Utils.APP_CONTEXT%>/Content/checkbox-30.png" class="input-img"/>
 				    		<input type="text" ng-model="response.TEXTO" placeholder="Opción de respuesta" ng-required="question.TIPO != 3" />
 				    		<button ng-show="question.BE_ENCUESTA_RESPUESTA.length > 1" ng-click="question.removeResponse(response.id)" 
 				    			class="ui-button ui-widget ui-state-default"
