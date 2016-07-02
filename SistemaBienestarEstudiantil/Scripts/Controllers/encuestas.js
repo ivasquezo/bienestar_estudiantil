@@ -4,6 +4,11 @@
 
     app.controller('EncuestasController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
+        var monthNames = ["Enero", "Febrero", "Marzo",
+            "Abril", "Mayo", "Junio", "Julio",
+            "Agosto", "Septiembre", "Octubre",
+            "Noviembre", "Diciembre"];
+
         // session listener
         document.onclick = function(){
             $http.get('/WebServices/Users.asmx/checkSession')
@@ -24,6 +29,21 @@
         $scope.mode = 'init';
         $scope.view = 'summary';
 
+        $scope.toDateLabel = function(dateTime) {
+            var mEpoch = parseInt(dateTime); 
+            var date = new Date();
+
+            if(mEpoch<10000000000) mEpoch *= 1000;
+
+            date.setTime(mEpoch)
+
+            var day = date.getDate();
+            var monthIndex = date.getMonth();
+            var year = date.getFullYear();
+
+            return monthNames[monthIndex] + " " + year;
+        }
+
         // method for load periodos
         $scope.cargarPeriodos = function () {
             $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getPeriodos')
@@ -32,6 +52,7 @@
                 for (var i = 0; i < $scope.PERIODOS.length; i++) {
                     $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
                     $scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
+                    $scope.PERIODOS[i].PERIODLABEL = $scope.PERIODOS[i].PRDCODIGOI + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECINIF) + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECFINF)
                 };
                 //console.log("periodos:", data);
             }).error(function (data, status, headers, config) {

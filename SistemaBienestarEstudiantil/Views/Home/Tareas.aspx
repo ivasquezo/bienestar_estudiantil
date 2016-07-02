@@ -458,8 +458,10 @@
                 <div class="form-group" style="font-size:12px;">
                     <div class="noprint">
                         Desde: <input name="date1" id="date1" ng-model="date.dateFrom" type="date" />
-                        Hasta: <input name="date2" id="date2" ng-model="date.dateTo" type="date" />
-                        <button onclick="printElement('.content_print', 'Imprimir Reporte Actividades')" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+                        hasta: <input name="date2" id="date2" ng-model="date.dateTo" type="date" />
+                        <button onclick="printElement('.content_print', 'Imprimir Reporte Actividades')"
+                            ng-disabled="(reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo).length == 0"
+                            style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
                             <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
                             <span class="ui-button-text">Imprimir</span>
                         </button>
@@ -480,8 +482,11 @@
                                 <th>DOC. ADJ.</th>
                         </tr></thead>
                         <tbody>
+                            <tr ng-if="(reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo).length == 0">
+                                <td colspan="9">No existen actividades en este rango de fechas</td>
+                            </tr>
                             <tr ng-if="reportActivitiesData == null || reportActivitiesData == undefined">
-                                <td colspan="9">No existen solicitudes de beca</td>
+                                <td colspan="9">No existen actividades</td>
                             </tr>
                             <tr ng-repeat="activitiesReport in reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo" style="color:#508ECC;font-size:11px;">
                                 <td>{{activitiesReport.FECHA | date:"MM/dd/yyyy"}}</td>

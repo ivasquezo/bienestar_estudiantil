@@ -271,19 +271,35 @@
             </fieldset>
         </script>
 
+        <style type="text/css">
+            .floatingDiv {width: 150px;float:left;margin:2px;margin-right:5px;margin-left:0;}
+        </style>
+
         <script type="text/ng-template" id="printBecas.html">
             <div class="content_print" style="line-height: 14px;">
             <fieldset>
                 <div class="form-group" style="font-size:12px;">
                     <div class="noprint">
-                        Seleccione el periodo: <select ng-model="selectedPeriodo" style="height:20px; width:150px;margin-top:5px;"
-                                ng-options="p.PRDCODIGOI as p.PRDCODIGOI for p in PERIODOS"></select>
-                        <button onclick="printElement('.content_print', 'Imprimir Reporte Becas')" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+                        <div class="floatingDiv">Carreras: <select ng-model="selectedSolicitud.NIVELCARRERA.CARRERA" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="n as n for n in CARRERAS"></select></div>
+                        <div class="floatingDiv">Nivel: <select ng-model="selectedSolicitud.NIVELCARRERA.NIVEL" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="n as n for n in NIVELES"></select></div>
+                        <div class="floatingDiv">Tipo de beca: <select ng-model="selectedSolicitud.BECA" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="p.NOMBRE as p.NOMBRE for p in gridOptionsTipos.data"></select></div>
+                        <div class="floatingDiv">Estado: <select ng-model="selectedSolicitud.ESTADO" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="p.n as p.n for p in ESTADOS"></select></div>
+                        <div class="floatingDiv">Rubro: <select ng-model="selectedSolicitud.RUBRO" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="p.v as p.n for p in RUBROS"></select></div>
+                        <div class="floatingDiv">Periodo: <select ng-model="selectedSolicitud.PERIODO.ID" style="height:20px; width:150px;margin-top:5px;"
+                                ng-options="p.PRDCODIGOI as p.PERIODLABEL for p in PERIODOS"></select></div>
+                        <div class="floatingDiv" style="width:100%;"><button onclick="printElement('.content_print', 'Imprimir Reporte Becas')"
+                            style="margin-bottom:5px;display: inline-block;" ng-disabled="(solicitudbecaReport | filter : selectedSolicitud : true).length == 0"
+                            class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
                             <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
                             <span class="ui-button-text">Imprimir</span>
-                        </button>
+                        </button></div>
                     </div>
-                    <table cellspacing=0>
+                    <table cellspacing=0 style="display: inline-block;">
                         <thead><tr>
                                 <th>C&Eacute;DULA</th>
                                 <th>NOMBRE</th>
@@ -297,9 +313,12 @@
                         </tr></thead>
                         <tbody>
                             <tr ng-if="solicitudbecaReport == null || solicitudbecaReport == undefined">
-                                <td colspan="9">No existen solicitudes de beca</td>
+                                <td colspan="9">No existen solicitudes de becas</td>
                             </tr>
-                            <tr ng-repeat="solicitud in solicitudbecaReport | filter: {PERIODO: {ID: selectedPeriodo}}" style="color:#508ECC;font-size:11px;">
+                            <tr ng-if="(solicitudbecaReport | filter : selectedSolicitud : true).length == 0">
+                                <td colspan="9">No existen solicitudes de becas con el filtro utilizado</td>
+                            </tr>
+                            <tr ng-repeat="solicitud in solicitudbecaReport | filter : selectedSolicitud : true" style="color:#508ECC;font-size:11px;">
                                 <td>{{solicitud.CEDULA}}</td>
                                 <td>{{solicitud.NOMBRE}}</td>
                                 <td>{{solicitud.NIVELCARRERA.CARRERA}}</td>
