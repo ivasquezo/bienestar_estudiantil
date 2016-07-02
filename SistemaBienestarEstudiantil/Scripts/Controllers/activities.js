@@ -82,6 +82,8 @@
 
         $scope.getReportActivities = function () {
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getActivitiesReport', {
+                dateFrom: $scope.date.dateFrom,
+                dateTo: $scope.date.dateTo
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
@@ -913,6 +915,18 @@
             }
         };
 
+        $scope.exportExcelReport = function () {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/exportExcelReport', {
+                dateFrom: $scope.date.dateFrom,
+                dateTo: $scope.date.dateTo
+            }).success(function (data, status, headers, config) {
+                console.log("Reporte excel de actividades", data);
+            }).error(function (data, status, headers, config) {
+                console.log("Error en reporte excel de actividades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de actividades en excel'}]);
+            });
+        };
+
         $scope.saveAssistanceDB = function () {
             if (!this.assistanceForm.$invalid) {
                 var parentObject = this;
@@ -1036,6 +1050,8 @@
     }]);
 
     app.filter("rangeDateFilter", function() {
+        $scope.getActivitiesReport();
+        
         return function(items, from, to) {
             
             var result = [];        

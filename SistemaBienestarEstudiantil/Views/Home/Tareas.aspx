@@ -463,6 +463,9 @@
                             <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
                             <span class="ui-button-text">Imprimir</span>
                         </button>
+                        <button ng-click="exportExcelReport()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Imprimir reporte">
+                            <span class="ui-button-icon-primary ui-icon ui-icon-print"></span><span class="ui-button-text">Excel</span>
+                        </button>
                     </div>
                     <table cellspacing=0>
                         <thead><tr>

@@ -10,6 +10,7 @@ using SistemaBienestarEstudiantil.Models;
 using SistemaBienestarEstudiantil.Class;
 using System.IO;
 using System.Web.Script.Services;
+using Microsoft.Office.Interop.Excel;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -54,7 +55,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     }).OrderBy(o => o.CODIGO).ToList();
 
                 if (data != null && data.Count > 0)
-                    response = new Response(true, "", "", "", isTeacher ? data.Where( w => w.CODIGOUSUARIO == userCode) : data);
+                    response = new Response(true, "", "", "", isTeacher ? data.Where(w => w.CODIGOUSUARIO == userCode) : data);
                 else
                     response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado actividades registradas", null);
             }
@@ -253,7 +254,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod(EnableSession = true)]
-        public void getActivitiesReport()
+        public void getActivitiesReport(DateTime dateFrom, DateTime dateTo)
         {
             Response response = null;
             bienestarEntities db = new bienestarEntities();
@@ -262,18 +263,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 int userCode = (int)Utils.getSession("userCode");
                 bool isTeacher = Utils.isTeacher(userCode);
-                
+                DateTime lastDate = dateFrom.AddDays(-1);
                 var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
-                                    Select(s => new
-                                    {
-                                        CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
-                                        CODIGO = s.ac.CODIGO,
-                                        ACTIVIDAD = s.ac.NOMBRE,
-                                        ACTIVIDADGENERAL = s.ag.NOMBRE,
-                                        FECHA = s.ac.FECHA,
-                                        ESTADO = s.ac.ESTADO,
-                                        DATOS = new Datos()
-                                    }).OrderBy( o => o.FECHA).ToList();
+                Select(s => new
+                {
+                    CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
+                    CODIGO = s.ac.CODIGO,
+                    ACTIVIDAD = s.ac.NOMBRE,
+                    ACTIVIDADGENERAL = s.ag.NOMBRE,
+                    FECHA = s.ac.FECHA,
+                    ESTADO = s.ac.ESTADO,
+                    DATOS = new Datos()
+                }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
 
                 foreach (var actividad in actividades)
                 {
@@ -308,7 +309,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                                 CODIGOMODALIDAD = s.cm.MDLCODIGOI,
                                 CODIGONIVEL = s.gcm.g.CODIGONIVEL
                             }).Where(w => w.CODIGOACTIVIDAD == codigoActividad).ToList();
-            
+
             List<int> codigosCarreras = listActivitiesCodes.Select(a => a.CODIGOCARRERA).Distinct().ToList();
             List<string> carreras = db.CARRERAs.Where(w => codigosCarreras.Contains(w.CRRCODIGOI)).Select(c => c.CRRDESCRIPC.Trim()).ToList();
 
@@ -330,8 +331,8 @@ namespace SistemaBienestarEstudiantil.WebServices
             int count = db.BE_ASISTENCIA.Join(db.MATRICULAs, a => a.CODIGOALUMNO, m => m.MTRNUMEROI, (a, m) => new { a, m })
                 .Join(db.INSCRIPCIONs, am => am.m.INSCODIGOI, i => i.INSCODIGOI, (am, i) => new { am, i })
                 .Join(db.DATOSPERSONALES, ami => ami.i.DTPCEDULAC, d => d.DTPCEDULAC, (ami, d) => new { ami, d })
-                .Where(w => w.ami.am.a.CODIGOACTIVIDAD == activityId).Count();
-                
+                .Where(w => w.ami.am.a.CODIGOACTIVIDAD == activityId && w.ami.am.a.ASISTENCIA == true).Count();
+
             return count;
         }
 
@@ -378,7 +379,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             for (int i = 0; i < careerModalityIds.Length; i++)
             {
                 int[] levelIds = getLevelByCareerModality(careerModalityIds[i]);
-                
+
                 for (int j = 0; j < levelIds.Length; j++)
                 {
                     int careerId = careerModalityIds[i];
@@ -591,7 +592,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 for (int i = 0; i < careerModalityIds.Length; i++)
                 {
                     for (int j = 0; j < levels.Length; j++)
-                        saveGroupActivity(careerModalityIds[i], levels[j], activityId);                        
+                        saveGroupActivity(careerModalityIds[i], levels[j], activityId);
                 }
 
                 response = new Response(true, "info", "Agregar", "Grupos agregado correctamente", null);
@@ -641,7 +642,8 @@ namespace SistemaBienestarEstudiantil.WebServices
             int period = getPresentPeriod();
             var data = db.MATRICULAs.Join(db.INSCRIPCIONs, m => m.INSCODIGOI, i => i.INSCODIGOI, (m, i) => new { m, i })
                 .Join(db.DATOSPERSONALES, mi => mi.i.DTPCEDULAC, d => d.DTPCEDULAC, (mi, d) => new { mi, d })
-                .Select(s => new {
+                .Select(s => new
+                {
                     ALUMNO = s.mi.m.MTRNUMEROI,
                     PERIODO = s.mi.m.PRDCODIGOI,
                     CODIGOCARRERAMODULO = s.mi.m.CRRMODCODIGOI,
@@ -767,7 +769,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         private int[] getObjectsToDelete(int[] originArray, int[] lastArray)
         {
-            Boolean exist;            
+            Boolean exist;
             int band = 0;
 
             for (int i = 0; i < originArray.Length; i++)
@@ -814,7 +816,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                 var data = db.BE_ASISTENCIA.Join(db.MATRICULAs, a => a.CODIGOALUMNO, m => m.MTRNUMEROI, (a, m) => new { a, m })
                     .Join(db.INSCRIPCIONs, am => am.m.INSCODIGOI, i => i.INSCODIGOI, (am, i) => new { am, i })
                     .Join(db.DATOSPERSONALES, ami => ami.i.DTPCEDULAC, d => d.DTPCEDULAC, (ami, d) => new { ami, d })
-                    .Select(s => new {
+                    .Select(s => new
+                    {
                         CODIGO = s.ami.am.a.CODIGO,
                         ACTIVIDAD = s.ami.am.a.CODIGOACTIVIDAD,
                         CEDULA = s.d.DTPCEDULAC,
@@ -1096,6 +1099,109 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
+
+        [WebMethod(EnableSession = true)]
+        public void exportExcelReport(DateTime dateFrom, DateTime dateTo)
+        {
+            Microsoft.Office.Interop.Excel.Application xls = new Application();
+            Workbook wb = xls.Workbooks.Add(XlSheetType.xlWorksheet);
+            Worksheet ws = (Worksheet)xls.ActiveSheet;
+            xls.Visible = true;
+
+            ws.Cells[1, 1] = "FECHA";
+            ws.Cells[1, 2] = "ACTIVIDAD";
+            ws.Cells[1, 3] = "A.GENERAL";
+            ws.Cells[1, 4] = "ESTADO";
+            ws.Cells[1, 5] = "ASIST.";
+            ws.Cells[1, 6] = "NIVEL";
+            ws.Cells[1, 7] = "CARRERA";
+            ws.Cells[1, 8] = "MOD.";
+            ws.Cells[1, 9] = "DOC.ADJ.";
+
+            bienestarEntities db = new bienestarEntities();
+
+            int userCode = (int)Utils.getSession("userCode");
+            bool isTeacher = Utils.isTeacher(userCode);
+            DateTime lastDate = dateFrom.AddDays(-1);
+            var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
+                Select(s => new
+                    {
+                        CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
+                        CODIGO = s.ac.CODIGO,
+                        ACTIVIDAD = s.ac.NOMBRE,
+                        ACTIVIDADGENERAL = s.ag.NOMBRE,
+                        FECHA = s.ac.FECHA,
+                        ESTADO = s.ac.ESTADO,
+                        DATOS = new Datos()
+                    }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
+
+            foreach (var actividad in actividades)
+            {
+                Datos datos = getNivelCarreraModalidad(actividad.CODIGO);
+                actividad.DATOS.ADJUNTOS = datos.ADJUNTOS;
+                actividad.DATOS.NIVELES = datos.NIVELES;
+                actividad.DATOS.MODALIDADES = datos.MODALIDADES;
+                actividad.DATOS.CARRERAS = datos.CARRERAS;
+                actividad.DATOS.ASISTENCIA = getActitityAssistance(actividad.CODIGO);
+            }
+
+            if (isTeacher)
+            {
+                actividades.Where(w => w.CODIGOUSUARIO == userCode);
+            }
+
+            for (var i = 0; i < actividades.Count; i++)
+            {
+                ws.Cells[i + 2, 1] = actividades[i].FECHA;
+                ws.Cells[i + 2, 2] = actividades[i].ACTIVIDAD;
+                ws.Cells[i + 2, 3] = actividades[i].ACTIVIDADGENERAL;
+                ws.Cells[i + 2, 4] = actividades[i].ESTADO == 0 ? "Inactivo" : actividades[i].ESTADO == 1 ? "En proceso" : actividades[i].ESTADO == 2 ? "Procesado" : "Finalizado";
+                ws.Cells[i + 2, 5] = actividades[i].DATOS.ASISTENCIA;
+                String niveles = "";
+
+                for (var j = 0; j < actividades[i].DATOS.NIVELES.Count; j++)
+                {
+                    if (niveles != "")
+                        niveles = niveles + "\n" + actividades[i].DATOS.NIVELES[j];
+                    else
+                        niveles = actividades[i].DATOS.NIVELES[j];
+                }
+                ws.Cells[i + 2, 6] = niveles;
+
+                String carreras = "";
+
+                for (var j = 0; j < actividades[i].DATOS.CARRERAS.Count; j++)
+                {
+                    if (carreras != "")
+                        carreras = carreras + "\n" + actividades[i].DATOS.CARRERAS[j];
+                    else
+                        carreras = actividades[i].DATOS.CARRERAS[j];
+                }
+                ws.Cells[i + 2, 7] = carreras;
+
+                String modalidades = "";
+
+                for (var j = 0; j < actividades[i].DATOS.MODALIDADES.Count; j++)
+                {
+                    if (modalidades != "")
+                        modalidades = modalidades + "\n" + actividades[i].DATOS.MODALIDADES[j];
+                    else
+                        modalidades = actividades[i].DATOS.MODALIDADES[j];
+                }
+                ws.Cells[i + 2, 8] = modalidades;
+
+                String adjuntos = "";
+
+                for (var j = 0; j < actividades[i].DATOS.ADJUNTOS.Count; j++)
+                {
+                    if (adjuntos != "")
+                        adjuntos = adjuntos + "\n" + actividades[i].DATOS.ADJUNTOS[j];
+                    else
+                        adjuntos = actividades[i].DATOS.ADJUNTOS[j];
+                }
+                ws.Cells[i + 2, 9] = adjuntos;
+            }
+        }
     }
 
     //
@@ -1106,7 +1212,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public List<string> MODALIDADES { set; get; }
         public List<string> ADJUNTOS { set; get; }
         public int ASISTENCIA { set; get; }
-        public Datos( List<string> n, List<string> c, List<string> m, List<string> a )
+        public Datos(List<string> n, List<string> c, List<string> m, List<string> a)
         {
             NIVELES = n;
             CARRERAS = c;
