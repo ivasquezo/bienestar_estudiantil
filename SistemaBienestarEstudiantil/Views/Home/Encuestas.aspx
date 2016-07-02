@@ -136,7 +136,7 @@ Encuestas
     	<div ng-show="mode == 'report'" style="display:inline-block;vertical-align:top;width:60%;">
 			<div>
 				<label for="periodos">Seleccione el período:</label>
-				<select required name="periodos" ng-options="o as o.PRDCODIGOI for o in PERIODOS"
+				<select required name="periodos" ng-options="o as o.PERIODLABEL for o in PERIODOS"
 					    ng-model="PERIODO">
 				</select>
 		    	<button ng-click="viewReport()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">

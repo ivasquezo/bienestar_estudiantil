@@ -72,7 +72,9 @@ namespace SistemaBienestarEstudiantil.WebServices
                     foreach (var beca in becas){
                         var temp = this.getNivelCarrera(beca.CEDULA);
                         beca.NIVELCARRERA.PERIODO = temp.PERIODO;
+                        beca.NIVELCARRERA.CODIGONIVEL = temp.CODIGONIVEL;
                         beca.NIVELCARRERA.NIVEL = temp.NIVEL;
+                        beca.NIVELCARRERA.CODIGOCARRERA = temp.CODIGOCARRERA;
                         beca.NIVELCARRERA.CARRERA = temp.CARRERA;
                         BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
                         beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
@@ -112,7 +114,9 @@ namespace SistemaBienestarEstudiantil.WebServices
                             Select(s => new
                             {
                                 PERIODO = s.micmc.micm.mi.m.PRDCODIGOI,
+                                CODIGONIVEL = s.n.NVLCODIGOI,
                                 NIVEL = s.n.NVLDESCRIPC,
+                                CODIGOCARRERA = s.micmc.c.CRRCODIGOI,
                                 CARRERA = s.micmc.c.CRRDESCRIPC
                             }).
                             OrderByDescending(o => o.PERIODO).FirstOrDefault();
@@ -121,7 +125,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             if (nivelCarreraTemp != null)
             {
                 nivelCarrera.PERIODO = nivelCarreraTemp.PERIODO;
+                nivelCarrera.CODIGONIVEL = nivelCarreraTemp.CODIGONIVEL;
                 nivelCarrera.NIVEL = nivelCarreraTemp.NIVEL.Trim();
+                nivelCarrera.CODIGOCARRERA = nivelCarreraTemp.CODIGOCARRERA;
                 nivelCarrera.CARRERA = nivelCarreraTemp.CARRERA.Trim();
             }
             
@@ -526,7 +532,9 @@ namespace SistemaBienestarEstudiantil.WebServices
         //
         public class NivelCarrera
         {
+            public int CODIGONIVEL { set; get; }
             public string NIVEL { set; get; }
+            public int CODIGOCARRERA { set; get; }
             public string CARRERA { set; get; }
             public int PERIODO { set; get; }
         }

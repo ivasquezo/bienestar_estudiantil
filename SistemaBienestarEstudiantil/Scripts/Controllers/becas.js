@@ -4,6 +4,13 @@
 
     app.controller('BecasController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
         
+        var monthNames = ["Enero", "Febrero", "Marzo",
+            "Abril", "Mayo", "Junio", "Julio",
+            "Agosto", "Septiembre", "Octubre",
+            "Noviembre", "Diciembre"];
+
+        $scope.selectedPeriodo = {};
+
         // session listener
         document.onclick = function(){
             $http.get('/WebServices/Users.asmx/checkSession')
@@ -48,8 +55,10 @@
             $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getBecas')
             .success(function (data, status, headers, config) {
 
-                console.log("Becas cargadas: ", data);
                 if (data.success) {
+
+                    var nivelTemp = {};
+                    var carreraTemp = {};
 
                     for (var i = 0; i < data.response.length; i++) {
                         
@@ -61,25 +70,43 @@
                             data.response[i].RUBRO = lastHistorial.RUBRO;
                             data.response[i].RUBRONOMBRE = $scope.RUBROS[lastHistorial.RUBRO].n;
                             data.response[i].OTORGADO = lastHistorial.OTORGADO;
+                            
+                            if (data.response[i].NIVELCARRERA.NIVEL != null) nivelTemp[data.response[i].NIVELCARRERA.CODIGONIVEL] = data.response[i].NIVELCARRERA.NIVEL;
+                            if (data.response[i].NIVELCARRERA.CARRERA != null) carreraTemp[data.response[i].NIVELCARRERA.CODIGOCARRERA] = data.response[i].NIVELCARRERA.CARRERA;
                         }
                     };
-
+                    $scope.addNivel(nivelTemp);
+                    $scope.addCarrera(carreraTemp);
                     $scope.gridOptions.data = data.response;
                 }
                 else
                     $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
 
             }).error(function (data, status, headers, config) {
-                console.log("Error cargar becas...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las becas'}]);
             });
         };
+
+        $scope.NIVELES = [];
+
+        $scope.addNivel = function(niveles){
+            Object.keys(niveles).forEach(function (key) {
+                $scope.NIVELES.push(niveles[key]);
+            });
+        }
+        
+        $scope.CARRERAS = [];
+
+        $scope.addCarrera = function(carreras){
+            Object.keys(carreras).forEach(function (key) {
+                $scope.CARRERAS.push(carreras[key]);
+            });
+        }
         
         $scope.cargarTipos = function () {
             $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getTipos')
             .success(function (data, status, headers, config) {
                 
-                console.log("Tipos de becas cargadas: ", data);
                 $scope.gridOptionsTipos.data = data;
 
             }).error(function (data, status, headers, config) {
@@ -96,8 +123,9 @@
                 for (var i = 0; i < $scope.PERIODOS.length; i++) {
                     $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
                     $scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
+
+                    $scope.PERIODOS[i].PERIODLABEL = $scope.PERIODOS[i].PRDCODIGOI + " - " + $scope.toDate($scope.PERIODOS[i].PRDFECINIF) + " - " + $scope.toDate($scope.PERIODOS[i].PRDFECFINF)
                 };
-                console.log("periodos:", data);
             }).error(function (data, status, headers, config) {
                 console.log("error al cargar periodos...", data);
             });
@@ -133,6 +161,21 @@
         $scope.cargarBecas();
         $scope.cargarTipos();
         $scope.cargarPeriodos();
+
+        $scope.toDate = function(dateTime) {
+            var mEpoch = parseInt(dateTime); 
+            var date = new Date();
+
+            if(mEpoch<10000000000) mEpoch *= 1000;
+        
+            date.setTime(mEpoch)
+
+            var day = date.getDate();
+            var monthIndex = date.getMonth();
+            var year = date.getFullYear();
+
+            return monthNames[monthIndex] + " " + year;
+        }
 
         this.removeBeca = function(code){
             var parentObject = this;
@@ -187,7 +230,6 @@
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getAttachBeca', {
                 codeBeca: code
             }).success(function (data, status, headers, config) {
-                console.log(data);
                 $scope.solicitudbeca.ADJUNTOS = data;
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar adjuntos de la solicitud de beca:", data);
@@ -323,7 +365,6 @@
                 $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/saveBecaTipo', {
                     becaTipo: $scope.tipoBeca
                 }).success(function (data, status, headers, config) {
-                    console.log("saveBecaTipo: ", data);
                     $('#messages').puigrowl('show', [{severity: "info", summary: "Guardar", detail: "Tipo beca guardado correctamente"}]);
                     $scope.cargarTipos();
                 }).error(function (data, status, headers, config) {
@@ -345,7 +386,6 @@
                 $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/saveBeca', {
                     editedBeca: $scope.removeUnnecesaryAttributes($scope.solicitudbeca)
                 }).success(function (data, status, headers, config) {
-                    console.log("solicitudbeca edited: ", data);
                     $scope.cargarBecas();
                     $('#messages').puigrowl('show', [{severity: "info", summary: "Guardar", detail: "Beca guardada correctamente"}]);
                 }).error(function (data, status, headers, config) {
@@ -378,7 +418,6 @@
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
             var overlay = document.getElementsByClassName("ngdialog-overlay")[0];
-            console.log(overlay);
             if (overlay != undefined) overlay.parentNode.removeChild(overlay);
     }]);
 

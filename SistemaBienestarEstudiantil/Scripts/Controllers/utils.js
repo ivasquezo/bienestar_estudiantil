@@ -22,3 +22,18 @@
 
     return true;
 }
+
+function toDateLabel(dateTime) {
+    var mEpoch = parseInt(dateTime); 
+    var date = new Date();
+
+    if(mEpoch<10000000000) mEpoch *= 1000;
+
+    date.setTime(mEpoch)
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return monthNames[monthIndex] + " " + year;
+}
