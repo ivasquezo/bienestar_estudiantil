@@ -51,6 +51,16 @@
             return invalidDate.substring(6, invalidDate.length-2);
         };
         
+        $scope.exportExcelReport = function () {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/exportExcelReport', {
+            }).success(function (data, status, headers, config) {
+                console.log("Reporte excel de actividades", data);
+            }).error(function (data, status, headers, config) {
+                console.log("Error en reporte excel de actividades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de actividades en excel'}]);
+            });
+        };
+
         $scope.cargarBecas = function () {
             $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/getBecas')
             .success(function (data, status, headers, config) {

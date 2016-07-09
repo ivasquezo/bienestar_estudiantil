@@ -254,7 +254,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod(EnableSession = true)]
-        public void getActivitiesReport(DateTime dateFrom, DateTime dateTo)
+        public void getActivitiesReport()
         {
             Response response = null;
             bienestarEntities db = new bienestarEntities();
@@ -263,7 +263,6 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 int userCode = (int)Utils.getSession("userCode");
                 bool isTeacher = Utils.isTeacher(userCode);
-                DateTime lastDate = dateFrom.AddDays(-1);
                 var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
                 Select(s => new
                 {
@@ -274,7 +273,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     FECHA = s.ac.FECHA,
                     ESTADO = s.ac.ESTADO,
                     DATOS = new Datos()
-                }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
+                }).OrderBy(o => o.FECHA).ToList();
 
                 foreach (var actividad in actividades)
                 {
@@ -1125,15 +1124,15 @@ namespace SistemaBienestarEstudiantil.WebServices
             DateTime lastDate = dateFrom.AddDays(-1);
             var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
                 Select(s => new
-                    {
-                        CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
-                        CODIGO = s.ac.CODIGO,
-                        ACTIVIDAD = s.ac.NOMBRE,
-                        ACTIVIDADGENERAL = s.ag.NOMBRE,
-                        FECHA = s.ac.FECHA,
-                        ESTADO = s.ac.ESTADO,
-                        DATOS = new Datos()
-                    }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
+                {
+                    CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
+                    CODIGO = s.ac.CODIGO,
+                    ACTIVIDAD = s.ac.NOMBRE,
+                    ACTIVIDADGENERAL = s.ag.NOMBRE,
+                    FECHA = s.ac.FECHA,
+                    ESTADO = s.ac.ESTADO,
+                    DATOS = new Datos()
+                }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
 
             foreach (var actividad in actividades)
             {

@@ -9,6 +9,7 @@ using System.Web.Script.Services;
 using System.Net.Mail;
 using SistemaBienestarEstudiantil.Class;
 using SistemaBienestarEstudiantil.Models;
+using Microsoft.Office.Interop.Excel;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -496,6 +497,73 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             return becaTipoResult;
+        }
+
+        [WebMethod]
+        public void exportExcelReport()
+        {
+            Microsoft.Office.Interop.Excel.Application xls = new Application();
+            Workbook wb = xls.Workbooks.Add(XlSheetType.xlWorksheet);
+            Worksheet ws = (Worksheet)xls.ActiveSheet;
+            xls.Visible = true;
+
+            ws.Cells[1, 1] = "CEDULA";
+            ws.Cells[1, 2] = "NOMBRE";
+            ws.Cells[1, 3] = "CARRERA";
+            ws.Cells[1, 4] = "NIVEL";
+            ws.Cells[1, 5] = "TIPO BECA";
+            ws.Cells[1, 6] = "PORCENTAJE";
+            ws.Cells[1, 7] = "ESTADO";
+            ws.Cells[1, 8] = "RUBRO";
+            ws.Cells[1, 9] = "PERIODO";
+
+            bienestarEntities db = new bienestarEntities();
+
+            var becas = db.BE_BECA_SOLICITUD.Select(be => new
+            {
+                CEDULA = be.CEDULA,
+                NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), 
+                be.BE_BECA_SOLICITUD_HISTORIAL,
+                be.CODIGO,
+                be.OBSERVACION,
+                be.APROBADA,
+                BECA = be.BE_BECA_TIPO.NOMBRE,
+                TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
+                NIVELCARRERA = new NivelCarrera(),
+                PERIODO = new Periodo()
+            }).OrderBy(o => o.CODIGO).ToList();
+
+            if (becas != null && becas.Count > 0)
+            {
+                foreach (var beca in becas)
+                {
+                    var temp = this.getNivelCarrera(beca.CEDULA);
+                    beca.NIVELCARRERA.PERIODO = temp.PERIODO;
+                    beca.NIVELCARRERA.CODIGONIVEL = temp.CODIGONIVEL;
+                    beca.NIVELCARRERA.NIVEL = temp.NIVEL;
+                    beca.NIVELCARRERA.CODIGOCARRERA = temp.CODIGOCARRERA;
+                    beca.NIVELCARRERA.CARRERA = temp.CARRERA;
+                    BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
+                    beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                }
+            }
+
+            for (int i = 0; i < becas.Count; i++)
+            {
+                ws.Cells[i + 2, 1] = becas[i].CEDULA;
+                ws.Cells[i + 2, 2] = becas[i].NOMBRE;
+                ws.Cells[i + 2, 3] = becas[i].NIVELCARRERA.CARRERA;
+                ws.Cells[i + 2, 4] = becas[i].NIVELCARRERA.NIVEL;
+                ws.Cells[i + 2, 5] = becas[i].BECA;
+                if (becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null)
+                {
+                    ws.Cells[i + 2, 6] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO;
+                    ws.Cells[i + 2, 8] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO;
+                }
+                ws.Cells[i + 2, 7] = becas[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
+                
+                ws.Cells[i + 2, 9] = becas[i].PERIODO.ID;
+            }
         }
 
         /*

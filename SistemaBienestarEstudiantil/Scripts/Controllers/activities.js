@@ -82,8 +82,6 @@
 
         $scope.getReportActivities = function () {
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getActivitiesReport', {
-                dateFrom: $scope.date.dateFrom,
-                dateTo: $scope.date.dateTo
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
@@ -1050,8 +1048,6 @@
     }]);
 
     app.filter("rangeDateFilter", function() {
-        $scope.getActivitiesReport();
-        
         return function(items, from, to) {
             
             var result = [];        
@@ -1069,5 +1065,4 @@
             return result;
         };
     });
-
 })();

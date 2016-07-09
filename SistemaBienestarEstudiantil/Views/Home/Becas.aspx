@@ -292,13 +292,17 @@
                                 ng-options="p.v as p.n for p in RUBROS"></select></div>
                         <div class="floatingDiv">Periodo: <select ng-model="selectedSolicitud.PERIODO.ID" style="height:20px; width:150px;margin-top:5px;"
                                 ng-options="p.PRDCODIGOI as p.PERIODLABEL for p in PERIODOS"></select></div>
-                        <div class="floatingDiv" style="width:100%;"><button onclick="printElement('.content_print', 'Imprimir Reporte Becas')"
-                            style="margin-bottom:5px;display: inline-block;" ng-disabled="(solicitudbecaReport | filter : selectedSolicitud : true).length == 0"
-                            class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
-                            <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
-                            <span class="ui-button-text">Imprimir</span>
-                        </button></div>
-                    </div>
+                        <div class="floatingDiv" style="width:100%;">
+                            <button onclick="printElement('.content_print', 'Imprimir Reporte Becas')"
+                                style="margin-bottom:5px;display: inline-block;" ng-disabled="(solicitudbecaReport | filter : selectedSolicitud : true).length == 0" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+                                <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+                                <span class="ui-button-text">Imprimir</span>
+                            </button>
+                            <button ng-click="exportExcelReport()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Exportar reporte a Excel">
+                                <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+                                <span class="ui-button-text">Excel</span>
+                            </button></div>
+                        </div>
                     <table cellspacing=0 style="display: inline-block;">
                         <thead><tr>
                                 <th>C&Eacute;DULA</th>
