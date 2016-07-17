@@ -331,7 +331,7 @@
                                 <td style="text-align:center;">{{solicitud.OTORGADO}}%</td>
                                 <td>{{solicitud.ESTADO}}</td>
                                 <td>{{RUBROS[solicitud.RUBRO].n}}</td>
-                                <td style="text-align:center;">{{solicitud.PERIODO.ID}}</td>
+                                <td style="text-align:center;">{{solicitud.PERIODO.NOMBRE}}</td>
                             </tr>
                         </tbody>
                     </table>

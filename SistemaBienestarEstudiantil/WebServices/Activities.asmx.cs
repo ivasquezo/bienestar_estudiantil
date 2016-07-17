@@ -29,8 +29,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod(EnableSession = true)]
-        public void getAllGeneralActivitiesWithActivity()
-        {
+        public void getAllGeneralActivitiesWithActivity(){
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
 

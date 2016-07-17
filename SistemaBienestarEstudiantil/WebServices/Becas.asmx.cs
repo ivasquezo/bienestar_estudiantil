@@ -65,7 +65,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(),
                     be.BE_BECA_SOLICITUD_HISTORIAL,
                     NIVELCARRERA = new NivelCarrera(),
-                    PERIODO = new Periodo()
+                    PERIODO = new Periodo(),
                 }).OrderBy(o => o.CODIGO).ToList();
 
                 if (becas != null && becas.Count > 0)
@@ -79,6 +79,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                         beca.NIVELCARRERA.CARRERA = temp.CARRERA;
                         BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
                         beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                        PERIODO period = getPeriodById(beca.PERIODO.ID);
+                        beca.PERIODO.NOMBRE = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
                     }
                     response = new Response(true, "", "", "", becas);
                 }
@@ -557,13 +559,23 @@ namespace SistemaBienestarEstudiantil.WebServices
                 ws.Cells[i + 2, 5] = becas[i].BECA;
                 if (becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null)
                 {
-                    ws.Cells[i + 2, 6] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO;
-                    ws.Cells[i + 2, 8] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO;
+                    ws.Cells[i + 2, 6] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO + "%";
+                    ws.Cells[i + 2, 8] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 1 ? "Pensi\u00F3n" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 2 ? "Matr\u00EDcula" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 3 ? "Pensi\u00F3n y matr\u00EDcula" : "Ninguno";
                 }
                 ws.Cells[i + 2, 7] = becas[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
-                
-                ws.Cells[i + 2, 9] = becas[i].PERIODO.ID;
+
+                PERIODO period = getPeriodById(becas[i].PERIODO.ID);
+                ws.Cells[i + 2, 9] = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
             }
+        }
+
+        private PERIODO getPeriodById(int periodId)
+        {
+            bienestarEntities db = new bienestarEntities();
+
+            PERIODO period = db.PERIODOes.Single(a => a.PRDCODIGOI == periodId);
+
+            return period;
         }
 
         /*
@@ -611,6 +623,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public class Periodo
         {
             public int ID { set; get; }
+            public string NOMBRE { set; get; }
         }
     }
 }
