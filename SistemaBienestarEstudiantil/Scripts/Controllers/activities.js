@@ -918,7 +918,7 @@
                 dateFrom: $scope.date.dateFrom,
                 dateTo: $scope.date.dateTo
             }).success(function (data, status, headers, config) {
-                console.log("Reporte excel de actividades", data);
+                //console.log("Reporte excel de actividades", data);
             }).error(function (data, status, headers, config) {
                 console.log("Error en reporte excel de actividades...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de actividades en excel'}]);
