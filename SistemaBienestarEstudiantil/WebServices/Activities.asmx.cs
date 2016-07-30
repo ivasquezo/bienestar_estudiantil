@@ -1102,97 +1102,25 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod(EnableSession = true)]
         public void exportExcelReport(DateTime dateFrom, DateTime dateTo)
         {
-            Response responseWS = null;
-            try
-            {
-                byte[] response = Encoding.ASCII.GetBytes(getResponse());
-                Context.Response.ClearContent();
-                Context.Response.Clear();
-                Context.Response.ContentType = "application/vnd.ms-excel";
-                Context.Response.AddHeader("content-disposition", "attachment; filename=excel_exported.xls");
-                Context.Response.BinaryWrite(response);
-                Context.Response.Flush();
-                Context.Response.End();
-            }
-            catch (Exception e)
-            {
-                // Error
-                responseWS = new Response(false, "error", "Error", "Error al generar reporte excel" + e, null);
-                writeResponse(new JavaScriptSerializer().Serialize(responseWS));
-            }
+
+            string[] header = {"FECHA","ACTIVIDAD","A.GENERAL","ESTADO","ASIST.","NIVEL","CARRERA","MOD.","DOC.ADJ."};
+            List<string[]> rows = exportExcelReportData(dateFrom, dateTo);
+            byte[] response = Encoding.ASCII.GetBytes(Utils.MakeHtmlTable(header, rows));
+            Context.Response.ClearContent();
+            Context.Response.Clear();
+            Context.Response.ContentType = "application/vnd.ms-excel";
+            Context.Response.AddHeader("content-disposition", "attachment; filename=excel_exported.xls");
+            Context.Response.BinaryWrite(response);
+            Context.Response.Flush();
+            Context.Response.End();
         }
 
-        public string getResponse(){
-            StringBuilder sb = new StringBuilder();
-            sb.Append(EscribeCabecera());
-            for (int i = 0; i < 20; i++)
-            {
-                sb.Append(EscribeLinea(i));
-            }  
-            sb.Append(EscribePiePagina());
-            return sb.ToString();
-        }
-
-        public StringBuilder EscribeCabecera()
+        public List<string[]> exportExcelReportData(DateTime dateFrom, DateTime dateTo)
         {
-            StringBuilder html = new StringBuilder();
-            html.Append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
-            html.Append("<html><head><title>Excel</title>");
-            html.Append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-            html.Append("</head>");
-            html.Append("<body>");
-            html.Append("<p>");
-            html.Append("<table>");
-            html.Append("<tr style=\"font-weight: bold;font-size: 12px;color: white;\">");
-            html.Append("<td></td><td bgcolor=\"Blue\">Titulo de la tabla:</td>");
-            html.Append("<td bgcolor=\"Blue\">Iteración:</td>");
-            html.Append("</tr>");
-            return html;
-        }
-
-        public StringBuilder EscribeLinea(int i)
-        {
-            StringBuilder sb = new StringBuilder();
-            string bgColor = "", fontColor = "";
-            if (i % 2 == 0)
-            {
-                bgColor = " bgcolor=\"LightBlue\" ";
-                fontColor = " style=\"font-size: 10px;color: white;\" ";
-            }
-            return sb.AppendFormat("<tr ><td ></td><td {2} {3}>Titulo de la celda:{0}</td><td {2} {3}>Valor de la celda: {1}</td></tr>", i.ToString(), i.ToString(), bgColor, fontColor);
-        }
-
-        public StringBuilder EscribePiePagina()
-        {
-            StringBuilder html = new StringBuilder();
-            html.Append("</table>");
-            html.Append("</p>");
-            html.Append("</body>");
-            html.Append("</html>");
-            return html;
-        }
-
-        [WebMethod(EnableSession = true)]
-        public void exportExcelReport1(DateTime dateFrom, DateTime dateTo)
-        {
-            Response response = new Response(true, "", "", "", null);
+            List<string[]> rows = new List<string[]>();
 
             try
             {
-                Microsoft.Office.Interop.Excel.Application xls = new Application();
-                Workbook wb = xls.Workbooks.Add(XlSheetType.xlWorksheet);
-                Worksheet ws = (Worksheet)xls.ActiveSheet;
-                xls.Visible = true;
-
-                ws.Cells[1, 1] = "FECHA";
-                ws.Cells[1, 2] = "ACTIVIDAD";
-                ws.Cells[1, 3] = "A.GENERAL";
-                ws.Cells[1, 4] = "ESTADO";
-                ws.Cells[1, 5] = "ASIST.";
-                ws.Cells[1, 6] = "NIVEL";
-                ws.Cells[1, 7] = "CARRERA";
-                ws.Cells[1, 8] = "MOD.";
-                ws.Cells[1, 9] = "DOC.ADJ.";
 
                 bienestarEntities db = new bienestarEntities();
 
@@ -1228,11 +1156,14 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 for (var i = 0; i < actividades.Count; i++)
                 {
-                    ws.Cells[i + 2, 1] = actividades[i].FECHA;
-                    ws.Cells[i + 2, 2] = actividades[i].ACTIVIDAD;
-                    ws.Cells[i + 2, 3] = actividades[i].ACTIVIDADGENERAL;
-                    ws.Cells[i + 2, 4] = actividades[i].ESTADO == 0 ? "Inactivo" : actividades[i].ESTADO == 1 ? "En proceso" : actividades[i].ESTADO == 2 ? "Procesado" : "Finalizado";
-                    ws.Cells[i + 2, 5] = actividades[i].DATOS.ASISTENCIA;
+                    string[] row = new string[9];
+
+                    row[0] = actividades[i].FECHA.ToString();
+                    row[1] = actividades[i].ACTIVIDAD;
+                    row[2] = actividades[i].ACTIVIDADGENERAL;
+                    row[3] = actividades[i].ESTADO == 0 ? "Inactivo" : actividades[i].ESTADO == 1 ? "En proceso" : actividades[i].ESTADO == 2 ? "Procesado" : "Finalizado";
+                    row[4] = actividades[i].DATOS.ASISTENCIA.ToString();
+
                     String niveles = "";
 
                     for (var j = 0; j < actividades[i].DATOS.NIVELES.Count; j++)
@@ -1242,7 +1173,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         else
                             niveles = actividades[i].DATOS.NIVELES[j];
                     }
-                    ws.Cells[i + 2, 6] = niveles;
+                    row[5] = niveles;
 
                     String carreras = "";
 
@@ -1253,7 +1184,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         else
                             carreras = actividades[i].DATOS.CARRERAS[j];
                     }
-                    ws.Cells[i + 2, 7] = carreras;
+                    row[6] = carreras;
 
                     String modalidades = "";
 
@@ -1264,7 +1195,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         else
                             modalidades = actividades[i].DATOS.MODALIDADES[j];
                     }
-                    ws.Cells[i + 2, 8] = modalidades;
+                    row[7] = modalidades;
 
                     String adjuntos = "";
 
@@ -1275,15 +1206,17 @@ namespace SistemaBienestarEstudiantil.WebServices
                         else
                             adjuntos = actividades[i].DATOS.ADJUNTOS[j];
                     }
-                    ws.Cells[i + 2, 9] = adjuntos;
+                    row[8] = adjuntos;
+                    rows.Add(row);
                 }
             }
             catch (Exception e)
             {
                 // Error al eliminar el rol
-                response = new Response(false, "error", "Error", "Error al generar reporte excel" + e, null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
+                rows.Add(new string[] { e.ToString() });
             }
+
+            return rows;
         }
     }
 

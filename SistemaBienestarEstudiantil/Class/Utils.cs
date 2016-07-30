@@ -274,5 +274,45 @@ namespace SistemaBienestarEstudiantil.Class
             }
             return textoLimpio;
         }
+
+        static public string MakeHtmlTable(string [] headers, List<string[]> rows)
+        {
+            StringBuilder html = new StringBuilder();
+            html.Append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
+            html.Append("<html><head><title>Excel</title>");
+            html.Append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+            html.Append("</head>");
+            html.Append("<body>");
+            html.Append("<p>");
+            html.Append("<table style=\"font-weight:bold;font-size:12px;color:black;\">");
+            //html.Append("<tr style=\"font-weight: bold;font-size: 12px;color: white;\">");
+            //html.Append("<td></td><td bgcolor=\"Blue\">Titulo de la tabla:</td>");
+            //html.Append("<td bgcolor=\"Blue\">Iteración:</td>");
+            //html.Append("</tr>");
+
+            html.Append("<tr>");
+            for (int i = 0; i < headers.Length; i++)
+            {
+                html.AppendFormat("<th>{0}</th>", headers[i]);
+            }
+            html.Append("</tr>");
+
+            foreach (string [] columns in rows)
+            {
+                html.Append("<tr>");
+                for (int i = 0; i < columns.Length; i++)
+                {
+                    html.AppendFormat("<td>{0}</td>", columns[i]);
+                }
+                html.Append("</tr>");
+            }
+
+            html.Append("</table>");
+            html.Append("</p>");
+            html.Append("</body>");
+            html.Append("</html>");
+
+            return html.ToString();
+        }
     }
 }
