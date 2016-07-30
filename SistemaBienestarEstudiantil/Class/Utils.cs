@@ -278,16 +278,8 @@ namespace SistemaBienestarEstudiantil.Class
         static public string MakeHtmlTable(string [] headers, List<string[]> rows)
         {
             StringBuilder html = new StringBuilder();
-            html.Append("<html><head><title>Excel</title>");
-            html.Append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
-            html.Append("</head>");
-            html.Append("<body>");
-            html.Append("<p>");
+            html.Append("<html><body><p>");
             html.Append("<table border=1 style=\"font-size:12px;color:black;\">");
-            //html.Append("<tr style=\"font-weight: bold;font-size: 12px;color: white;\">");
-            //html.Append("<td></td><td bgcolor=\"Blue\">Titulo de la tabla:</td>");
-            //html.Append("<td bgcolor=\"Blue\">Iteración:</td>");
-            //html.Append("</tr>");
 
             html.Append("<tr style=\"font-weight:bold;font-size:12px;\">");
             for (int i = 0; i < headers.Length; i++)
@@ -307,9 +299,7 @@ namespace SistemaBienestarEstudiantil.Class
             }
 
             html.Append("</table>");
-            html.Append("</p>");
-            html.Append("</body>");
-            html.Append("</html>");
+            html.Append("</p></body></html>");
 
             return html.ToString();
         }

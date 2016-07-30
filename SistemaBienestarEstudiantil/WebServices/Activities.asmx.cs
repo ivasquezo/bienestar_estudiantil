@@ -1120,7 +1120,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             string[] header = { "FECHA", "ACTIVIDAD", "A.GENERAL", "ESTADO", "ASIST.", "NIVEL", "CARRERA", "MOD.", "DOC.ADJ." };
             List<string[]> rows = exportExcelReportData(dateFrom, dateTo);
-            Context.Response.ContentType = "text/plain";
+            Context.Response.ContentType = "application/xml";
             Context.Response.Write(Utils.MakeHtmlTable(header, rows));
             Context.Response.Flush();
             Context.Response.End();
@@ -1132,7 +1132,6 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-
                 bienestarEntities db = new bienestarEntities();
 
                 int userCode = (int)Utils.getSession("userCode");
