@@ -16,6 +16,7 @@
     %>
     
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/file-saver/FileSaver.min.js"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/activities.js?nocache=<%=RandomNumber%>"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/utils.js?nocache=<%=RandomNumber%>"></script>
 

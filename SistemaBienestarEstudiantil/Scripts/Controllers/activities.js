@@ -918,9 +918,24 @@
                 dateFrom: $scope.date.dateFrom,
                 dateTo: $scope.date.dateTo
             }).success(function (data, status, headers, config) {
+                
+                var blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, "actividades.xls", true);
+
+            }).error(function (data, status, headers, config) {
+                console.log("Error en reporte excel de actividades...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de actividades en excel'}]);
+            });
+        };
+
+        $scope.exportExcelReport2 = function () {
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/exportExcelReport', {
+                dateFrom: $scope.date.dateFrom,
+                dateTo: $scope.date.dateTo
+            }).success(function (data, status, headers, config) {
                 var anchor = angular.element('<a/>');
                 anchor.attr({
-                    href: 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURI(data),
+                    href: encodeURI(data),
                     target: '_blank',
                     download: 'filename.xls'
                 })[0].click();

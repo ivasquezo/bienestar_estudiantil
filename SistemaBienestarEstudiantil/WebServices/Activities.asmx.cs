@@ -1100,10 +1100,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod(EnableSession = true)]
-        public void exportExcelReport(DateTime dateFrom, DateTime dateTo)
+        public void exportExcelReport1(DateTime dateFrom, DateTime dateTo)
         {
 
-            string[] header = {"FECHA","ACTIVIDAD","A.GENERAL","ESTADO","ASIST.","NIVEL","CARRERA","MOD.","DOC.ADJ."};
+            string[] header = { "FECHA", "ACTIVIDAD", "A.GENERAL", "ESTADO", "ASIST.", "NIVEL", "CARRERA", "MOD.", "DOC.ADJ." };
             List<string[]> rows = exportExcelReportData(dateFrom, dateTo);
             byte[] response = Encoding.ASCII.GetBytes(Utils.MakeHtmlTable(header, rows));
             Context.Response.ClearContent();
@@ -1111,6 +1111,17 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.ContentType = "application/vnd.ms-excel";
             Context.Response.AddHeader("content-disposition", "attachment; filename=excel_exported.xls");
             Context.Response.BinaryWrite(response);
+            Context.Response.Flush();
+            Context.Response.End();
+        }
+
+        [WebMethod(EnableSession = true)]
+        public void exportExcelReport(DateTime dateFrom, DateTime dateTo)
+        {
+            string[] header = { "FECHA", "ACTIVIDAD", "A.GENERAL", "ESTADO", "ASIST.", "NIVEL", "CARRERA", "MOD.", "DOC.ADJ." };
+            List<string[]> rows = exportExcelReportData(dateFrom, dateTo);
+            Context.Response.ContentType = "text/plain";
+            Context.Response.Write(Utils.MakeHtmlTable(header, rows));
             Context.Response.Flush();
             Context.Response.End();
         }
