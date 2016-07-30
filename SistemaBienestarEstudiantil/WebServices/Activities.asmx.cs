@@ -1101,103 +1101,114 @@ namespace SistemaBienestarEstudiantil.WebServices
         [WebMethod(EnableSession = true)]
         public void exportExcelReport(DateTime dateFrom, DateTime dateTo)
         {
-            Microsoft.Office.Interop.Excel.Application xls = new Application();
-            Workbook wb = xls.Workbooks.Add(XlSheetType.xlWorksheet);
-            Worksheet ws = (Worksheet)xls.ActiveSheet;
-            xls.Visible = true;
+            Response response = new Response(true, "", "", "", null);
 
-            ws.Cells[1, 1] = "FECHA";
-            ws.Cells[1, 2] = "ACTIVIDAD";
-            ws.Cells[1, 3] = "A.GENERAL";
-            ws.Cells[1, 4] = "ESTADO";
-            ws.Cells[1, 5] = "ASIST.";
-            ws.Cells[1, 6] = "NIVEL";
-            ws.Cells[1, 7] = "CARRERA";
-            ws.Cells[1, 8] = "MOD.";
-            ws.Cells[1, 9] = "DOC.ADJ.";
-
-            bienestarEntities db = new bienestarEntities();
-
-            int userCode = (int)Utils.getSession("userCode");
-            bool isTeacher = Utils.isTeacher(userCode);
-            DateTime lastDate = dateFrom.AddDays(-1);
-            var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
-                Select(s => new
-                {
-                    CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
-                    CODIGO = s.ac.CODIGO,
-                    ACTIVIDAD = s.ac.NOMBRE,
-                    ACTIVIDADGENERAL = s.ag.NOMBRE,
-                    FECHA = s.ac.FECHA,
-                    ESTADO = s.ac.ESTADO,
-                    DATOS = new Datos()
-                }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
-
-            foreach (var actividad in actividades)
+            try
             {
-                Datos datos = getNivelCarreraModalidad(actividad.CODIGO);
-                actividad.DATOS.ADJUNTOS = datos.ADJUNTOS;
-                actividad.DATOS.NIVELES = datos.NIVELES;
-                actividad.DATOS.MODALIDADES = datos.MODALIDADES;
-                actividad.DATOS.CARRERAS = datos.CARRERAS;
-                actividad.DATOS.ASISTENCIA = getActitityAssistance(actividad.CODIGO);
+                Microsoft.Office.Interop.Excel.Application xls = new Application();
+                Workbook wb = xls.Workbooks.Add(XlSheetType.xlWorksheet);
+                Worksheet ws = (Worksheet)xls.ActiveSheet;
+                xls.Visible = true;
+
+                ws.Cells[1, 1] = "FECHA";
+                ws.Cells[1, 2] = "ACTIVIDAD";
+                ws.Cells[1, 3] = "A.GENERAL";
+                ws.Cells[1, 4] = "ESTADO";
+                ws.Cells[1, 5] = "ASIST.";
+                ws.Cells[1, 6] = "NIVEL";
+                ws.Cells[1, 7] = "CARRERA";
+                ws.Cells[1, 8] = "MOD.";
+                ws.Cells[1, 9] = "DOC.ADJ.";
+
+                bienestarEntities db = new bienestarEntities();
+
+                int userCode = (int)Utils.getSession("userCode");
+                bool isTeacher = Utils.isTeacher(userCode);
+                DateTime lastDate = dateFrom.AddDays(-1);
+                var actividades = db.BE_ACTIVIDAD.Join(db.BE_ACTIVIDAD_GENERAL, ac => ac.CODIGOACTIVIDADGENERAL, ag => ag.CODIGO, (ac, ag) => new { ac, ag }).
+                    Select(s => new
+                    {
+                        CODIGOUSUARIO = s.ac.CODIGOUSUARIO,
+                        CODIGO = s.ac.CODIGO,
+                        ACTIVIDAD = s.ac.NOMBRE,
+                        ACTIVIDADGENERAL = s.ag.NOMBRE,
+                        FECHA = s.ac.FECHA,
+                        ESTADO = s.ac.ESTADO,
+                        DATOS = new Datos()
+                    }).Where(w => w.FECHA > lastDate && w.FECHA <= dateTo).OrderBy(o => o.FECHA).ToList();
+
+                foreach (var actividad in actividades)
+                {
+                    Datos datos = getNivelCarreraModalidad(actividad.CODIGO);
+                    actividad.DATOS.ADJUNTOS = datos.ADJUNTOS;
+                    actividad.DATOS.NIVELES = datos.NIVELES;
+                    actividad.DATOS.MODALIDADES = datos.MODALIDADES;
+                    actividad.DATOS.CARRERAS = datos.CARRERAS;
+                    actividad.DATOS.ASISTENCIA = getActitityAssistance(actividad.CODIGO);
+                }
+
+                if (isTeacher)
+                {
+                    actividades.Where(w => w.CODIGOUSUARIO == userCode);
+                }
+
+                for (var i = 0; i < actividades.Count; i++)
+                {
+                    ws.Cells[i + 2, 1] = actividades[i].FECHA;
+                    ws.Cells[i + 2, 2] = actividades[i].ACTIVIDAD;
+                    ws.Cells[i + 2, 3] = actividades[i].ACTIVIDADGENERAL;
+                    ws.Cells[i + 2, 4] = actividades[i].ESTADO == 0 ? "Inactivo" : actividades[i].ESTADO == 1 ? "En proceso" : actividades[i].ESTADO == 2 ? "Procesado" : "Finalizado";
+                    ws.Cells[i + 2, 5] = actividades[i].DATOS.ASISTENCIA;
+                    String niveles = "";
+
+                    for (var j = 0; j < actividades[i].DATOS.NIVELES.Count; j++)
+                    {
+                        if (niveles != "")
+                            niveles = niveles + "\n" + actividades[i].DATOS.NIVELES[j];
+                        else
+                            niveles = actividades[i].DATOS.NIVELES[j];
+                    }
+                    ws.Cells[i + 2, 6] = niveles;
+
+                    String carreras = "";
+
+                    for (var j = 0; j < actividades[i].DATOS.CARRERAS.Count; j++)
+                    {
+                        if (carreras != "")
+                            carreras = carreras + "\n" + actividades[i].DATOS.CARRERAS[j];
+                        else
+                            carreras = actividades[i].DATOS.CARRERAS[j];
+                    }
+                    ws.Cells[i + 2, 7] = carreras;
+
+                    String modalidades = "";
+
+                    for (var j = 0; j < actividades[i].DATOS.MODALIDADES.Count; j++)
+                    {
+                        if (modalidades != "")
+                            modalidades = modalidades + "\n" + actividades[i].DATOS.MODALIDADES[j];
+                        else
+                            modalidades = actividades[i].DATOS.MODALIDADES[j];
+                    }
+                    ws.Cells[i + 2, 8] = modalidades;
+
+                    String adjuntos = "";
+
+                    for (var j = 0; j < actividades[i].DATOS.ADJUNTOS.Count; j++)
+                    {
+                        if (adjuntos != "")
+                            adjuntos = adjuntos + "\n" + actividades[i].DATOS.ADJUNTOS[j];
+                        else
+                            adjuntos = actividades[i].DATOS.ADJUNTOS[j];
+                    }
+                    ws.Cells[i + 2, 9] = adjuntos;
+                }
             }
-
-            if (isTeacher)
+            catch (Exception e)
             {
-                actividades.Where(w => w.CODIGOUSUARIO == userCode);
-            }
-
-            for (var i = 0; i < actividades.Count; i++)
-            {
-                ws.Cells[i + 2, 1] = actividades[i].FECHA;
-                ws.Cells[i + 2, 2] = actividades[i].ACTIVIDAD;
-                ws.Cells[i + 2, 3] = actividades[i].ACTIVIDADGENERAL;
-                ws.Cells[i + 2, 4] = actividades[i].ESTADO == 0 ? "Inactivo" : actividades[i].ESTADO == 1 ? "En proceso" : actividades[i].ESTADO == 2 ? "Procesado" : "Finalizado";
-                ws.Cells[i + 2, 5] = actividades[i].DATOS.ASISTENCIA;
-                String niveles = "";
-
-                for (var j = 0; j < actividades[i].DATOS.NIVELES.Count; j++)
-                {
-                    if (niveles != "")
-                        niveles = niveles + "\n" + actividades[i].DATOS.NIVELES[j];
-                    else
-                        niveles = actividades[i].DATOS.NIVELES[j];
-                }
-                ws.Cells[i + 2, 6] = niveles;
-
-                String carreras = "";
-
-                for (var j = 0; j < actividades[i].DATOS.CARRERAS.Count; j++)
-                {
-                    if (carreras != "")
-                        carreras = carreras + "\n" + actividades[i].DATOS.CARRERAS[j];
-                    else
-                        carreras = actividades[i].DATOS.CARRERAS[j];
-                }
-                ws.Cells[i + 2, 7] = carreras;
-
-                String modalidades = "";
-
-                for (var j = 0; j < actividades[i].DATOS.MODALIDADES.Count; j++)
-                {
-                    if (modalidades != "")
-                        modalidades = modalidades + "\n" + actividades[i].DATOS.MODALIDADES[j];
-                    else
-                        modalidades = actividades[i].DATOS.MODALIDADES[j];
-                }
-                ws.Cells[i + 2, 8] = modalidades;
-
-                String adjuntos = "";
-
-                for (var j = 0; j < actividades[i].DATOS.ADJUNTOS.Count; j++)
-                {
-                    if (adjuntos != "")
-                        adjuntos = adjuntos + "\n" + actividades[i].DATOS.ADJUNTOS[j];
-                    else
-                        adjuntos = actividades[i].DATOS.ADJUNTOS[j];
-                }
-                ws.Cells[i + 2, 9] = adjuntos;
+                // Error al eliminar el rol
+                response = new Response(false, "error", "Error", "Error al generar reporte excel" + e, null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
             }
         }
     }

@@ -11,7 +11,7 @@
 
         // session listener
         document.onclick = function(){
-            $http.get('/WebServices/Users.asmx/checkSession')
+            $http.get((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/checkSession')
             .success(function (data, status, headers, config) {
                 if (!data.success) {
                     document.location.href = "/";

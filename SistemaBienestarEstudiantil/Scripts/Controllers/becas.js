@@ -1,19 +1,15 @@
 ﻿(function () {
-
     var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages','cgBusy']);
 
     app.controller('BecasController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
         
-        var monthNames = ["Enero", "Febrero", "Marzo",
-            "Abril", "Mayo", "Junio", "Julio",
-            "Agosto", "Septiembre", "Octubre",
-            "Noviembre", "Diciembre"];
+        
 
         $scope.selectedPeriodo = {};
 
         // session listener
         document.onclick = function(){
-            $http.get('/WebServices/Users.asmx/checkSession')
+            $http.get((appContext != undefined ? appContext : "") +'/WebServices/Users.asmx/checkSession')
             .success(function (data, status, headers, config) {
                 if (!data.success) {
                     document.location.href = "/";
@@ -54,10 +50,10 @@
         $scope.exportExcelReport = function () {
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/exportExcelReport', {
             }).success(function (data, status, headers, config) {
-                console.log("Reporte excel de actividades", data);
+                console.log("Reporte excel de becas", data);
             }).error(function (data, status, headers, config) {
-                console.log("Error en reporte excel de actividades...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de actividades en excel'}]);
+                console.log("Error en reporte excel de becas...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de becas en excel'}]);
             });
         };
 
@@ -183,6 +179,8 @@
             var day = date.getDate();
             var monthIndex = date.getMonth();
             var year = date.getFullYear();
+
+            var monthNames = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
             return monthNames[monthIndex] + " " + year;
         }

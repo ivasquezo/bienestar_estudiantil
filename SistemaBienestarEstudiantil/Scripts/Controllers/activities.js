@@ -7,7 +7,7 @@
 
         // session listener
         document.onclick = function(){
-            $http.get('/WebServices/Users.asmx/checkSession')
+            $http.get((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/checkSession')
             .success(function (data, status, headers, config) {
                 if (!data.success) {
                     document.location.href = "/";
@@ -1052,9 +1052,10 @@
             
             var result = [];        
             if (items != undefined) {
-                
                 var df = from;
+                df.setHours(0,0,0,0);
                 var dt = to;
+                dt.setHours(24);
                 for (var i=0; i<items.length; i++){
                     var t = new Date(parseInt(items[i].FECHA));
                     if (df <= t && t <= dt)  {
