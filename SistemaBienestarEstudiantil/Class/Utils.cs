@@ -148,6 +148,16 @@ namespace SistemaBienestarEstudiantil.Class
             System.Web.HttpContext.Current.Response.End();
         }
 
+        static public void writeResponseExcel(string response, string fileName)
+        {
+            System.Web.HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
+            System.Web.HttpContext.Current.Response.AddHeader("Content-Type", "application/vnd.ms-excel");
+            System.Web.HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName);
+            System.Web.HttpContext.Current.Response.BinaryWrite(Encoding.ASCII.GetBytes(response));
+            System.Web.HttpContext.Current.Response.Flush();
+            System.Web.HttpContext.Current.Response.End();
+        }
+
         static public int getPeriodo(DateTime date)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
@@ -288,12 +298,18 @@ namespace SistemaBienestarEstudiantil.Class
             }
             html.Append("</tr>");
 
+            string colSpan = "";
+
             foreach (string [] columns in rows)
             {
                 html.Append("<tr>");
+
+                if (columns.Length == 1) colSpan = "colspan=" + headers.Length;
+                else colSpan = "colspan=1";
+
                 for (int i = 0; i < columns.Length; i++)
                 {
-                    html.AppendFormat("<td>{0}</td>", columns[i]);
+                    html.AppendFormat("<td " + colSpan + ">{0}</td>", columns[i]);
                 }
                 html.Append("</tr>");
             }

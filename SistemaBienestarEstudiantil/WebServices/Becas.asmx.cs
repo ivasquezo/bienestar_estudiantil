@@ -501,72 +501,75 @@ namespace SistemaBienestarEstudiantil.WebServices
             return becaTipoResult;
         }
 
-        [WebMethod]
-        public void exportExcelReport()
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(UseHttpGet = true)]
+        public void exportExcelReport(string _carrera, string _nivel, string _beca, string _estado, string _rubro, string _periodo)
         {
-            Microsoft.Office.Interop.Excel.Application xls = new Application();
-            Workbook wb = xls.Workbooks.Add(XlSheetType.xlWorksheet);
-            Worksheet ws = (Worksheet)xls.ActiveSheet;
-            xls.Visible = true;
+            List<string[]> rows = new List<string[]>();
+            string[] header = { "CEDULA", "NOMBRE", "CARRERA", "NIVEL", "TIPO BECA", "PORCENTAJE", "ESTADO", "RUBRO", "PERIODO" };
 
-            ws.Cells[1, 1] = "CEDULA";
-            ws.Cells[1, 2] = "NOMBRE";
-            ws.Cells[1, 3] = "CARRERA";
-            ws.Cells[1, 4] = "NIVEL";
-            ws.Cells[1, 5] = "TIPO BECA";
-            ws.Cells[1, 6] = "PORCENTAJE";
-            ws.Cells[1, 7] = "ESTADO";
-            ws.Cells[1, 8] = "RUBRO";
-            ws.Cells[1, 9] = "PERIODO";
-
-            bienestarEntities db = new bienestarEntities();
-
-            var becas = db.BE_BECA_SOLICITUD.Select(be => new
+            try
             {
-                CEDULA = be.CEDULA,
-                NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(), 
-                be.BE_BECA_SOLICITUD_HISTORIAL,
-                be.CODIGO,
-                be.OBSERVACION,
-                be.APROBADA,
-                BECA = be.BE_BECA_TIPO.NOMBRE,
-                TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
-                NIVELCARRERA = new NivelCarrera(),
-                PERIODO = new Periodo()
-            }).OrderBy(o => o.CODIGO).ToList();
+                bienestarEntities db = new bienestarEntities();
 
-            if (becas != null && becas.Count > 0)
-            {
-                foreach (var beca in becas)
+                var becas = db.BE_BECA_SOLICITUD.Select(be => new
                 {
-                    var temp = this.getNivelCarrera(beca.CEDULA);
-                    beca.NIVELCARRERA.PERIODO = temp.PERIODO;
-                    beca.NIVELCARRERA.CODIGONIVEL = temp.CODIGONIVEL;
-                    beca.NIVELCARRERA.NIVEL = temp.NIVEL;
-                    beca.NIVELCARRERA.CODIGOCARRERA = temp.CODIGOCARRERA;
-                    beca.NIVELCARRERA.CARRERA = temp.CARRERA;
-                    BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
-                    beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                    CEDULA = be.CEDULA,
+                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(),
+                    be.BE_BECA_SOLICITUD_HISTORIAL,
+                    be.CODIGO,
+                    be.OBSERVACION,
+                    be.APROBADA,
+                    BECA = be.BE_BECA_TIPO.NOMBRE,
+                    TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
+                    NIVELCARRERA = new NivelCarrera(),
+                    PERIODO = new Periodo()
+                }).OrderBy(o => o.CODIGO).ToList();
+
+                if (becas != null && becas.Count > 0)
+                {
+                    foreach (var beca in becas)
+                    {
+                        var temp = this.getNivelCarrera(beca.CEDULA);
+                        beca.NIVELCARRERA.PERIODO = temp.PERIODO;
+                        beca.NIVELCARRERA.CODIGONIVEL = temp.CODIGONIVEL;
+                        beca.NIVELCARRERA.NIVEL = temp.NIVEL;
+                        beca.NIVELCARRERA.CODIGOCARRERA = temp.CODIGOCARRERA;
+                        beca.NIVELCARRERA.CARRERA = temp.CARRERA;
+                        BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
+                        beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                    }
+                }
+
+                for (int i = 0; i < becas.Count; i++)
+                {
+                    string[] row = new string[9];
+                    row[0] = becas[i].CEDULA;
+                    row[1] = becas[i].NOMBRE;
+                    row[2] = becas[i].NIVELCARRERA.CARRERA;
+                    row[3] = becas[i].NIVELCARRERA.NIVEL;
+                    row[4] = becas[i].BECA;
+                    if (becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null)
+                    {
+                        row[5] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO + "%";
+                        row[7] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 1 ? "Pensi\u00F3n" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 2 ? "Matr\u00EDcula" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 3 ? "Pensi\u00F3n y matr\u00EDcula" : "Ninguno";
+                    }
+                    row[6] = becas[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
+
+                    PERIODO period = getPeriodById(becas[i].PERIODO.ID);
+                    row[8] = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
+                    rows.Add(row);
                 }
             }
-
-            for (int i = 0; i < becas.Count; i++)
+            catch (Exception e)
             {
-                ws.Cells[i + 2, 1] = becas[i].CEDULA;
-                ws.Cells[i + 2, 2] = becas[i].NOMBRE;
-                ws.Cells[i + 2, 3] = becas[i].NIVELCARRERA.CARRERA;
-                ws.Cells[i + 2, 4] = becas[i].NIVELCARRERA.NIVEL;
-                ws.Cells[i + 2, 5] = becas[i].BECA;
-                if (becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null)
-                {
-                    ws.Cells[i + 2, 6] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO + "%";
-                    ws.Cells[i + 2, 8] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 1 ? "Pensi\u00F3n" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 2 ? "Matr\u00EDcula" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 3 ? "Pensi\u00F3n y matr\u00EDcula" : "Ninguno";
-                }
-                ws.Cells[i + 2, 7] = becas[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
-
-                PERIODO period = getPeriodById(becas[i].PERIODO.ID);
-                ws.Cells[i + 2, 9] = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
+                string[] row = new string[] { "Error al exportar becas... (" + e.ToString() + ")" };
+                rows.Add(row);
             }
+
+            // export data
+            string response = Utils.MakeHtmlTable(header, rows);
+            Utils.writeResponseExcel(response, "becas.xls");
         }
 
         private PERIODO getPeriodById(int periodId)

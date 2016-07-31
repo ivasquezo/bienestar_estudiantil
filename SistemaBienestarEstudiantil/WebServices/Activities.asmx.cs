@@ -1100,30 +1100,13 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod(EnableSession = true)]
-        public void exportExcelReport1(DateTime dateFrom, DateTime dateTo)
-        {
-
-            string[] header = { "FECHA", "ACTIVIDAD", "A.GENERAL", "ESTADO", "ASIST.", "NIVEL", "CARRERA", "MOD.", "DOC.ADJ." };
-            List<string[]> rows = exportExcelReportData(dateFrom, dateTo);
-            byte[] response = Encoding.ASCII.GetBytes(Utils.MakeHtmlTable(header, rows));
-            Context.Response.ClearContent();
-            Context.Response.Clear();
-            Context.Response.ContentType = "application/vnd.ms-excel";
-            Context.Response.AddHeader("content-disposition", "attachment; filename=excel_exported.xls");
-            Context.Response.BinaryWrite(response);
-            Context.Response.Flush();
-            Context.Response.End();
-        }
-
-        [WebMethod(EnableSession = true)]
+        [ScriptMethod(UseHttpGet = true)]
         public void exportExcelReport(DateTime dateFrom, DateTime dateTo)
         {
             string[] header = { "FECHA", "ACTIVIDAD", "A.GENERAL", "ESTADO", "ASIST.", "NIVEL", "CARRERA", "MOD.", "DOC.ADJ." };
             List<string[]> rows = exportExcelReportData(dateFrom, dateTo);
-            Context.Response.ContentType = "application/xml";
-            Context.Response.Write(Utils.MakeHtmlTable(header, rows));
-            Context.Response.Flush();
-            Context.Response.End();
+            string response = Utils.MakeHtmlTable(header, rows);
+            Utils.writeResponseExcel(response, "actividades.xls");
         }
 
         public List<string[]> exportExcelReportData(DateTime dateFrom, DateTime dateTo)

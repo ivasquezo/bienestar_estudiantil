@@ -24,7 +24,7 @@
         $scope.delay = 2;
         $scope.minDuration = 2;
 
-        $scope.date = {
+       $scope.date = {
             dateFrom: new Date(),
             dateTo: new Date()
         };
@@ -913,20 +913,36 @@
             }
         };
 
-        $scope.exportExcelReport = function () {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/exportExcelReport', {
-                dateFrom: $scope.date.dateFrom,
-                dateTo: $scope.date.dateTo
-            }).success(function (data, status, headers, config) {
+        function pad(number) {
+            if (number < 10) {
+                return '0' + number;
+            }
+            return number;
+        }
 
-                var blob = new Blob([data], {type: 'application/xml;charset=utf-8'});
-                saveAs(blob, "actividades.xls", true);
-
-            }).error(function (data, status, headers, config) {
-                console.log("Error en reporte excel de actividades...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error obtener el reporte de actividades en excel'}]);
-            });
+        //2016-07-31T05:00:00.000Z
+        var toUTCDateTimeDigits = function (dateParam) {
+            return  dateParam.getUTCFullYear() +"-"+ pad(dateParam.getUTCMonth() + 1) + "-" + pad(dateParam.getUTCDate()) + 'T' + 
+                    pad(dateParam.getUTCHours()) + ":" + pad(dateParam.getUTCMinutes()) + ":" + pad(dateParam.getUTCSeconds()) + "." + pad(dateParam.getUTCMilliseconds()) + 'Z';
         };
+
+        var exportExcelReport = function () {
+            var dateFrom = toUTCDateTimeDigits($scope.date.dateFrom);
+            var dateTo = toUTCDateTimeDigits($scope.date.dateTo);
+            //console.log(JSON.stringify({dateFrom: '2011-04-02 17:15:45'}));
+            var url = (appContext ? appContext : "") + '/WebServices/Activities.asmx/exportExcelReport?dateFrom='+dateFrom+'&dateTo='+dateTo;
+            return url;
+        };
+
+        $scope.urlExport = exportExcelReport();
+
+        $scope.$watch('date.dateTo', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
+        $scope.$watch('date.dateFrom', function() {
+            $scope.urlExport = exportExcelReport();
+        });
 
         $scope.saveAssistanceDB = function () {
             if (!this.assistanceForm.$invalid) {

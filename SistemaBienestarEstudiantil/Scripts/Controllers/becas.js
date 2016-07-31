@@ -19,6 +19,11 @@
             });
         };
 
+        $scope.selectedSolicitud = {
+            NIVELCARRERA: {},
+            PERIODO: {}
+        };
+
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
@@ -46,7 +51,46 @@
         $scope.convertDate = function(invalidDate) {
             return invalidDate.substring(6, invalidDate.length-2);
         };
-        
+
+        var exportExcelReport = function () {
+            var carrera = $scope.selectedSolicitud.NIVELCARRERA.CARRERA;
+            var nivel = $scope.selectedSolicitud.NIVELCARRERA.NIVEL;
+            var beca = $scope.selectedSolicitud.BECA;
+            var estado = $scope.selectedSolicitud.ESTADO;
+            var rubro = $scope.selectedSolicitud.RUBRO;
+            var periodo = $scope.selectedSolicitud.PERIODO.ID;
+            var sendData = "_carrera=" + carrera + "&_nivel=" + nivel + "&_beca=" + beca + "&_estado=" + estado + "&_rubro=" + rubro + "&_periodo=" + periodo 
+
+            var url = (appContext ? appContext : "") + '/WebServices/Becas.asmx/exportExcelReport?' + sendData;
+            return url;
+        };
+
+        $scope.urlExport = exportExcelReport();
+
+        $scope.$watch('selectedSolicitud.NIVELCARRERA.CARRERA', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
+        $scope.$watch('selectedSolicitud.NIVELCARRERA.NIVEL', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
+        $scope.$watch('selectedSolicitud.BECA', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
+        $scope.$watch('selectedSolicitud.ESTADO', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
+        $scope.$watch('selectedSolicitud.RUBRO', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
+        $scope.$watch('selectedSolicitud.PERIODO.ID', function() {
+            $scope.urlExport = exportExcelReport();
+        });
+
         $scope.exportExcelReport = function () {
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Becas.asmx/exportExcelReport', {
             }).success(function (data, status, headers, config) {
