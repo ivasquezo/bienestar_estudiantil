@@ -293,7 +293,7 @@
                         <div class="floatingDiv">Periodo: <select ng-model="selectedSolicitud.PERIODO.ID" style="height:20px; width:150px;margin-top:5px;"
                                 ng-options="p.PRDCODIGOI as p.PERIODLABEL for p in PERIODOS"></select></div>
                         <div class="floatingDiv" style="width:100%;">
-                            <button onclick="printElement('.content_print', 'Imprimir Reporte Becas')"
+                            <button ng-click="prueba()" onclick="printElement('.content_print', 'Imprimir Reporte Becas')"
                                 style="margin-bottom:5px;display: inline-block;" ng-disabled="(solicitudbecaReport | filter : selectedSolicitud : true).length == 0" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
                                 <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
                                 <span class="ui-button-text">Imprimir</span>

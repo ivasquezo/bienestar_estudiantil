@@ -53,12 +53,12 @@
         };
 
         var exportExcelReport = function () {
-            var carrera = $scope.selectedSolicitud.NIVELCARRERA.CARRERA;
-            var nivel = $scope.selectedSolicitud.NIVELCARRERA.NIVEL;
-            var beca = $scope.selectedSolicitud.BECA;
-            var estado = $scope.selectedSolicitud.ESTADO;
-            var rubro = $scope.selectedSolicitud.RUBRO;
-            var periodo = $scope.selectedSolicitud.PERIODO.ID;
+            var carrera = $scope.selectedSolicitud.NIVELCARRERA.CARRERA ? $scope.selectedSolicitud.NIVELCARRERA.CARRERA : null;
+            var nivel = $scope.selectedSolicitud.NIVELCARRERA.NIVEL ? $scope.selectedSolicitud.NIVELCARRERA.NIVEL : null;
+            var beca = $scope.selectedSolicitud.BECA ? $scope.selectedSolicitud.BECA : null;
+            var estado = $scope.selectedSolicitud.ESTADO ? $scope.selectedSolicitud.ESTADO : null;
+            var rubro = $scope.selectedSolicitud.RUBRO ? $scope.selectedSolicitud.RUBRO : 0;
+            var periodo = $scope.selectedSolicitud.PERIODO.ID ? $scope.selectedSolicitud.PERIODO.ID : 0;
             var sendData = "_carrera=" + carrera + "&_nivel=" + nivel + "&_beca=" + beca + "&_estado=" + estado + "&_rubro=" + rubro + "&_periodo=" + periodo 
 
             var url = (appContext ? appContext : "") + '/WebServices/Becas.asmx/exportExcelReport?' + sendData;
@@ -353,6 +353,10 @@
                 })
             });
         };
+
+        $scope.prueba = function () {
+            console.log($scope.selectedSolicitud);
+        }
 
         $scope.printBecas = function () {
 

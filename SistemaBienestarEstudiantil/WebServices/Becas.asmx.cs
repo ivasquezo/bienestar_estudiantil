@@ -96,6 +96,55 @@ namespace SistemaBienestarEstudiantil.WebServices
             Utils.writeResponseObject(response);
         }
 
+        private void nuevo()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities(); 
+            try
+            {
+                var becas = db.BE_BECA_SOLICITUD.Select(be => new
+                {
+                    be.CODIGO,
+                    be.OBSERVACION,
+                    be.APROBADA,
+                    be.CEDULA,
+                    BECA = be.BE_BECA_TIPO.NOMBRE,
+                    TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
+                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(),
+                    be.BE_BECA_SOLICITUD_HISTORIAL,
+                    NIVELCARRERA = new NivelCarrera(),
+                    PERIODO = new Periodo(),
+                }).OrderBy(o => o.CODIGO).ToList();
+
+                if (becas != null && becas.Count > 0)
+                {
+                    foreach (var beca in becas)
+                    {
+                        var temp = this.getNivelCarrera(beca.CEDULA);
+                        beca.NIVELCARRERA.PERIODO = temp.PERIODO;
+                        beca.NIVELCARRERA.CODIGONIVEL = temp.CODIGONIVEL;
+                        beca.NIVELCARRERA.NIVEL = temp.NIVEL;
+                        beca.NIVELCARRERA.CODIGOCARRERA = temp.CODIGOCARRERA;
+                        beca.NIVELCARRERA.CARRERA = temp.CARRERA;
+                        BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
+                        beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                        PERIODO period = getPeriodById(beca.PERIODO.ID);
+                        beca.PERIODO.NOMBRE = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
+                    }
+                    int periodo = 0;
+                    becas = becas.Where(w => (periodo == 0 || w.NIVELCARRERA.PERIODO == periodo) || true).ToList();
+
+                    response = new Response(true, "", "", "", becas);
+                }
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado becas registradas", null);
+            }
+            catch (Exception e)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener las becas", e);
+                writeResponseObject(response);
+            }
+        }
         private NivelCarrera getNivelCarrera(string cedula)
         {
             /*
@@ -503,7 +552,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(UseHttpGet = true)]
-        public void exportExcelReport(string _carrera, string _nivel, string _beca, string _estado, string _rubro, string _periodo)
+        public void exportExcelReport(string _carrera, string _nivel, string _beca, string _estado, int _rubro, int _periodo)
         {
             List<string[]> rows = new List<string[]>();
             string[] header = { "CEDULA", "NOMBRE", "CARRERA", "NIVEL", "TIPO BECA", "PORCENTAJE", "ESTADO", "RUBRO", "PERIODO" };
@@ -511,19 +560,18 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 bienestarEntities db = new bienestarEntities();
-
                 var becas = db.BE_BECA_SOLICITUD.Select(be => new
                 {
-                    CEDULA = be.CEDULA,
-                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(),
-                    be.BE_BECA_SOLICITUD_HISTORIAL,
                     be.CODIGO,
                     be.OBSERVACION,
                     be.APROBADA,
+                    be.CEDULA,
                     BECA = be.BE_BECA_TIPO.NOMBRE,
                     TIPOCODIGO = be.BE_BECA_TIPO.CODIGO,
+                    NOMBRE = be.DATOSPERSONALE.DTPNOMBREC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC.Trim() + " " + be.DATOSPERSONALE.DTPAPELLIC2.Trim(),
+                    be.BE_BECA_SOLICITUD_HISTORIAL,
                     NIVELCARRERA = new NivelCarrera(),
-                    PERIODO = new Periodo()
+                    PERIODO = new Periodo(),
                 }).OrderBy(o => o.CODIGO).ToList();
 
                 if (becas != null && becas.Count > 0)
@@ -538,25 +586,31 @@ namespace SistemaBienestarEstudiantil.WebServices
                         beca.NIVELCARRERA.CARRERA = temp.CARRERA;
                         BE_BECA_SOLICITUD_HISTORIAL bsh = beca.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault();
                         beca.PERIODO.ID = Utils.getPeriodo(bsh != null ? bsh.FECHA : DateTime.Now);
+                        PERIODO period = getPeriodById(beca.PERIODO.ID);
+                        beca.PERIODO.NOMBRE = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
                     }
-                }
+                    becas = becas.Where(w => (_periodo == 0 || w.NIVELCARRERA.PERIODO == _periodo) &&
+                                        (_rubro == 0 || w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault() != null && w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault().RUBRO == _rubro)).ToList();
 
-                for (int i = 0; i < becas.Count; i++)
+                }
+                
+
+                foreach (var beca in becas)
                 {
                     string[] row = new string[9];
-                    row[0] = becas[i].CEDULA;
-                    row[1] = becas[i].NOMBRE;
-                    row[2] = becas[i].NIVELCARRERA.CARRERA;
-                    row[3] = becas[i].NIVELCARRERA.NIVEL;
-                    row[4] = becas[i].BECA;
-                    if (becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null)
+                    row[0] = beca.CEDULA;
+                    row[1] = beca.NOMBRE;
+                    row[2] = beca.NIVELCARRERA.CARRERA;
+                    row[3] = beca.NIVELCARRERA.NIVEL;
+                    row[4] = beca.BECA;
+                    if (beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null)
                     {
-                        row[5] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO + "%";
-                        row[7] = becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 1 ? "Pensi\u00F3n" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 2 ? "Matr\u00EDcula" : becas[i].BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 3 ? "Pensi\u00F3n y matr\u00EDcula" : "Ninguno";
+                        row[5] = beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO + "%";
+                        row[7] = beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 1 ? "Pensi\u00F3n" : beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 2 ? "Matr\u00EDcula" : beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 3 ? "Pensi\u00F3n y matr\u00EDcula" : "Ninguno";
                     }
-                    row[6] = becas[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
+                    //row[6] = beca[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
 
-                    PERIODO period = getPeriodById(becas[i].PERIODO.ID);
+                    PERIODO period = getPeriodById(beca.PERIODO.ID);
                     row[8] = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
                     rows.Add(row);
                 }
