@@ -589,9 +589,16 @@ namespace SistemaBienestarEstudiantil.WebServices
                         PERIODO period = getPeriodById(beca.PERIODO.ID);
                         beca.PERIODO.NOMBRE = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
                     }
-                    becas = becas.Where(w => (_periodo == 0 || w.NIVELCARRERA.PERIODO == _periodo) &&
-                                        (_rubro == 0 || w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault() != null && w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault().RUBRO == _rubro)).ToList();
 
+                    becas = becas.Where(w => (_carrera != "null" ? w.NIVELCARRERA.CARRERA == _carrera : true) &&
+                            (_nivel != "null" ? w.NIVELCARRERA.NIVEL == _nivel : true) && 
+                            (_beca != "null" ? w.BECA == _beca : true) &&
+                            (_estado != "null" ? (_estado == "Pendiente" ? w.APROBADA == 0 : _estado == "Procesando" ? w.APROBADA == 1 : _estado == "Aprobada" ? w.APROBADA == 2 : w.APROBADA == 3) : true) &&
+                            (w.PERIODO.ID == _periodo)).ToList();
+                    
+                    /*becas = becas.Where(w => (_periodo == 0 || w.NIVELCARRERA.PERIODO == _periodo) &&
+                                        (_rubro == 0 || w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault() != null && w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault().RUBRO == _rubro)).ToList();
+                    */
                 }
                 
 
@@ -608,7 +615,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                         row[5] = beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().OTORGADO + "%";
                         row[7] = beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 1 ? "Pensi\u00F3n" : beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 2 ? "Matr\u00EDcula" : beca.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == 3 ? "Pensi\u00F3n y matr\u00EDcula" : "Ninguno";
                     }
-                    //row[6] = beca[i].APROBADA == 0 ? "Pendiente" : becas[i].APROBADA == 1 ? "Procesando" : becas[i].APROBADA == 2 ? "Aprobada" : "Rechazada";
+                    row[6] = beca.APROBADA == 0 ? "Pendiente" : beca.APROBADA == 1 ? "Procesando" : beca.APROBADA == 2 ? "Aprobada" : "Rechazada";
 
                     PERIODO period = getPeriodById(beca.PERIODO.ID);
                     row[8] = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
