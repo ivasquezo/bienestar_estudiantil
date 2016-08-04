@@ -590,15 +590,15 @@ namespace SistemaBienestarEstudiantil.WebServices
                         beca.PERIODO.NOMBRE = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
                     }
 
-                    becas = becas.Where(w => (_carrera != "null" ? w.NIVELCARRERA.CARRERA == _carrera : true) &&
+                    becas = becas.Where(w => 
+                            (_carrera != "null" ? w.NIVELCARRERA.CARRERA == _carrera : true) &&
                             (_nivel != "null" ? w.NIVELCARRERA.NIVEL == _nivel : true) && 
                             (_beca != "null" ? w.BECA == _beca : true) &&
                             (_estado != "null" ? (_estado == "Pendiente" ? w.APROBADA == 0 : _estado == "Procesando" ? w.APROBADA == 1 : _estado == "Aprobada" ? w.APROBADA == 2 : w.APROBADA == 3) : true) &&
-                            (w.PERIODO.ID == _periodo)).ToList();
-                    
-                    /*becas = becas.Where(w => (_periodo == 0 || w.NIVELCARRERA.PERIODO == _periodo) &&
-                                        (_rubro == 0 || w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault() != null && w.BE_BECA_SOLICITUD_HISTORIAL.FirstOrDefault().RUBRO == _rubro)).ToList();
-                    */
+                            (_periodo != 0 ? w.PERIODO.ID == _periodo : true) &&
+                            ((w.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault() != null && _rubro != -1) ? w.BE_BECA_SOLICITUD_HISTORIAL.LastOrDefault().RUBRO == _rubro : true)
+                    ).ToList();
+
                 }
                 
 
