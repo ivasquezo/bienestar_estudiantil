@@ -57,7 +57,7 @@
             var nivel = $scope.selectedSolicitud.NIVELCARRERA.NIVEL ? $scope.selectedSolicitud.NIVELCARRERA.NIVEL : null;
             var beca = $scope.selectedSolicitud.BECA ? $scope.selectedSolicitud.BECA : null;
             var estado = $scope.selectedSolicitud.ESTADO ? $scope.selectedSolicitud.ESTADO : null;
-            var rubro = $scope.selectedSolicitud.RUBRO ? $scope.selectedSolicitud.RUBRO : -1;
+            var rubro = $scope.selectedSolicitud.RUBRO != undefined && $scope.selectedSolicitud.RUBRO != null ? $scope.selectedSolicitud.RUBRO : -1;
             var periodo = $scope.selectedSolicitud.PERIODO.ID ? $scope.selectedSolicitud.PERIODO.ID : 0;
             var sendData = "_carrera=" + carrera + "&_nivel=" + nivel + "&_beca=" + beca + "&_estado=" + estado + "&_rubro=" + rubro + "&_periodo=" + periodo 
 
