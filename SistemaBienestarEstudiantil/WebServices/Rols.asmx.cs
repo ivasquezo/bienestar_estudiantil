@@ -35,7 +35,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             try
             {
                 List<BE_ROL> rols = db.BE_ROL.ToList();
-                
+
                 if (rols != null && rols.Count > 0)
                     response = new Response(true, "", "", "", rols);
                 else
@@ -127,7 +127,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void saveRolData(int rolId, String rolName, int[] accessRols)
         {
             Response response = new Response(false, "", "", "No tiene acceso", null);
-            
+
             if (Utils.haveAccessTo(Utils.MODULOROLES))
             {
                 bienestarEntities db = new bienestarEntities();
@@ -192,19 +192,19 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             try
             {
-                var data = db.BE_ACCESO.Join(db.BE_ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO, 
+                var data = db.BE_ACCESO.Join(db.BE_ROL_ACCESO, a => a.CODIGO, ra => ra.CODIGOACCESO,
                     (a, ra) => new { ACCESO = a, ROL_ACCESO = ra })
                     .Select(x => new { x.ACCESO.NOMBRE, x.ROL_ACCESO.BE_ACCESO.CODIGO, x.ROL_ACCESO.CODIGOROL, x.ROL_ACCESO.VALIDO })
                     .Where(y => y.CODIGOROL == rolId).ToList();
 
                 response = new Response(true, "", "", "", data);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 response = new Response(false, "error", "Error", "Error al obtener los accesos del rol", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
-            
+
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 

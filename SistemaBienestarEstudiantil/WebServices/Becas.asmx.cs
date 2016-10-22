@@ -70,7 +70,8 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                 if (becas != null && becas.Count > 0)
                 {
-                    foreach (var beca in becas){
+                    foreach (var beca in becas)
+                    {
                         var temp = this.getNivelCarrera(beca.CEDULA);
                         beca.NIVELCARRERA.PERIODO = temp.PERIODO;
                         beca.NIVELCARRERA.CODIGONIVEL = temp.CODIGONIVEL;
@@ -99,7 +100,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         private void nuevo()
         {
             Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities(); 
+            bienestarEntities db = new bienestarEntities();
             try
             {
                 var becas = db.BE_BECA_SOLICITUD.Select(be => new
@@ -182,7 +183,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 nivelCarrera.CODIGOCARRERA = nivelCarreraTemp.CODIGOCARRERA;
                 nivelCarrera.CARRERA = nivelCarreraTemp.CARRERA.Trim();
             }
-            
+
             return nivelCarrera;
         }
 
@@ -253,7 +254,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                     }
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Response response = new Response(false, "error", "Error", e.ToString(), null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
@@ -274,7 +276,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             string descripcion = System.Web.HttpContext.Current.Request.Params.Get("descripcion");
 
             int cantidadDocSolicitados = db.BE_BECA_TIPO.Join(db.BE_BECA_TIPO_DOCUMENTO, bt => bt.CODIGO, btd => btd.CODIGOTIPO, (bt, btd) => new { bt, btd }).
-                                         Join(db.BE_BECA_SOLICITUD, btbtd => btbtd.bt.CODIGO, bs => bs.CODIGOTIPO, (btbtd, bs) => new { btbtd, bs}).
+                                         Join(db.BE_BECA_SOLICITUD, btbtd => btbtd.bt.CODIGO, bs => bs.CODIGOTIPO, (btbtd, bs) => new { btbtd, bs }).
                                          Where(w => w.bs.CODIGO == codigoSolicitud).Count();
 
             int cantidadAdjuntos = db.BE_BECA_ADJUNTO.Where(w => w.CODIGOSOLICITUD == codigoSolicitud).Count();
@@ -425,16 +427,16 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             /* listar codigos matriculas donde buscar */
             List<long> matriculas = db.MATRICULAs.Where(m => periodos.Contains(m.PRDCODIGOI) && m.NVLCODIGOI > 0).Select(m => m.INSCODIGOI).ToList();
-            
+
             /* listar cedulas de inscripciones donde buscar */
             List<DATOSPERSONALE> datosPersonalesInscripciones = db.INSCRIPCIONs.Where(i => matriculas.Contains(i.INSCODIGOI) && i.DTPCEDULAC == cedula).Select(m => m.DATOSPERSONALE).ToList();
-            
+
             DATOSPERSONALE alumno = null;
             if (datosPersonalesInscripciones.Count > 0)
             {
                 alumno = datosPersonalesInscripciones.FirstOrDefault();
             }
-            
+
             Models.BE_BECA_SOLICITUD beca_solicitud = null;
             var becas_solicitud = alumno != null ? db.BE_BECA_SOLICITUD.Where(bs => bs.CEDULA == alumno.DTPCEDULAC) : null;
             if (becas_solicitud != null && becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.FirstOrDefault();
@@ -446,7 +448,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         public void getBecaSolicitud(int CODIGO)
         {
             Models.bienestarEntities db = new Models.bienestarEntities();
-            
+
             Models.BE_BECA_SOLICITUD beca_solicitud = null;
             var becas_solicitud = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGO == CODIGO);
             if (becas_solicitud.Count() > 0) beca_solicitud = becas_solicitud.First();
@@ -481,7 +483,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 editBS = db.BE_BECA_SOLICITUD.Where(bs => bs.CODIGO == beca_solicitud.CODIGO).First();
                 editBS.CODIGOTIPO = beca_solicitud.CODIGOTIPO;
             }
-            
+
             db.SaveChanges();
 
             // send notification mail
@@ -590,9 +592,9 @@ namespace SistemaBienestarEstudiantil.WebServices
                         beca.PERIODO.NOMBRE = period.PRDCODIGOI + " - " + period.PRDFECINIF.ToString("MMMM yyyy") + " - " + period.PRDFECFINF.ToString("MMMM yyyy");
                     }
 
-                    becas = becas.Where(w => 
+                    becas = becas.Where(w =>
                             (_carrera != "null" ? w.NIVELCARRERA.CARRERA == _carrera : true) &&
-                            (_nivel != "null" ? w.NIVELCARRERA.NIVEL == _nivel : true) && 
+                            (_nivel != "null" ? w.NIVELCARRERA.NIVEL == _nivel : true) &&
                             (_beca != "null" ? w.BECA == _beca : true) &&
                             (_estado != "null" ? (_estado == "Pendiente" ? w.APROBADA == 0 : _estado == "Procesando" ? w.APROBADA == 1 : _estado == "Aprobada" ? w.APROBADA == 2 : w.APROBADA == 3) : true) &&
                             (_periodo != 0 ? w.PERIODO.ID == _periodo : true) &&
@@ -600,7 +602,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     ).ToList();
 
                 }
-                
+
 
                 foreach (var beca in becas)
                 {

@@ -21,8 +21,8 @@ namespace SistemaBienestarEstudiantil.Class
         public const string USERCODE = "userCode";
         public const int DOCUMENTMAXCANT = 3;
 
-        //public const string APP_CONTEXT = "/BienestarEstudiantil";
-        public const string APP_CONTEXT = "../..";
+        public const string APP_CONTEXT = "/BienestarEstudiantil";
+        //public const string APP_CONTEXT = "../..";
         
         /// <summary>
         /// Valida si la clave actual es igual a la anterior para solicitar cambio de clave

@@ -48,11 +48,13 @@
         $scope.cargarPeriodos = function () {
             $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getPeriodos')
             .success(function (data, status, headers, config) {
+                $scope.FECHAINICIO = null;
+                $scope.FECHAFIN = null;
                 $scope.PERIODOS = data;
                 for (var i = 0; i < $scope.PERIODOS.length; i++) {
                     $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
-                    $scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
-                    $scope.PERIODOS[i].PERIODLABEL = $scope.PERIODOS[i].PRDCODIGOI + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECINIF) + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECFINF)
+                    //$scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
+                    //$scope.PERIODOS[i].PERIODLABEL = $scope.PERIODOS[i].PRDCODIGOI + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECINIF) + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECFINF)
                 };
                 //console.log("periodos:", data);
             }).error(function (data, status, headers, config) {
@@ -195,7 +197,7 @@
             };
         };
 
-        $scope.getPeriodoSiguiente = function (periodo) {
+        /*$scope.getPeriodoSiguiente = function (periodo) {
             
             for (var i = 0; i < $scope.PERIODOS.length; i++) {
                 if ($scope.PERIODOS[i].PRDCODIGOI == periodo.PRDCODIGOI && i <= $scope.PERIODOS.length - 1) {
@@ -203,7 +205,7 @@
                 };
             };
             return null;
-        }
+        }*/
 
         $scope.toDate = function(dateTime) {
             var mEpoch = parseInt(dateTime); 
@@ -223,16 +225,16 @@
 
         $scope.viewReport = function(){
 
-            if ($scope.PERIODO != undefined && $scope.PERIODO != null) {
+            if ($scope.FECHAINICIO != undefined && $scope.FECHAINICIO != null && $scope.FECHAFIN != undefined && $scope.FECHAFIN != null) {
 
-                $scope.PERIODOSIGUIENTE = $scope.getPeriodoSiguiente($scope.PERIODO);
-                var iniDate = $scope.toDate($scope.PERIODO.PRDFECINIF);
-                var endDate = ($scope.PERIODOSIGUIENTE != null ? $scope.toDate($scope.PERIODOSIGUIENTE.PRDFECINIF) : null);
+                //$scope.PERIODOSIGUIENTE = $scope.getPeriodoSiguiente($scope.PERIODO);
+                //var iniDate = $scope.toDate($scope.PERIODO.PRDFECINIF);
+                //var endDate = ($scope.PERIODOSIGUIENTE != null ? $scope.toDate($scope.PERIODOSIGUIENTE.PRDFECINIF) : null);
 
                 $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveysReport', {
                     surveyCode: $scope.CODIDOENCUESTA,
-                    iniDate: iniDate,
-                    endDate: endDate
+                    iniDate: $scope.FECHAINICIO,
+                    endDate: $scope.FECHAFIN
                 }).success(function (data, status, headers, config) {
 
                     $scope.separateQuestionResponse(data);
