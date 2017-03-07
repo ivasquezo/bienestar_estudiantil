@@ -13,6 +13,15 @@ body.main
     color: #696969;
 }
 
+ .login-button {
+     display: inline-block;
+     width:230px;
+     background:#5C87B2;
+     text-align:center;
+     padding:6px;
+     margin-left:3px;
+ }
+
 a:link
 {
     color: #034af3;
@@ -117,7 +126,7 @@ ancho de página. O bien puede especificar un ancho de píxel exacto. */
     _height: 1px; /* solo IE6 aplica las propiedades de CSS con un carácter de subrayado inicial */
 }
 
-#footer
+.main #footer
 {
     color: #999;
     padding: 10px 0;
@@ -184,31 +193,38 @@ ul#menu li.selected a
 /* ELEMENTOS DE DISEÑO DE FORMULARIOS  
 ----------------------------------------------------------*/
 
-fieldset 
+.main fieldset 
 {
-    margin: 1em 0;
     padding: 1em;
     border: 1px solid #CCC;
 }
 
-fieldset p 
+.main fieldset p 
 {
     margin: 2px 12px 10px 10px;
 }
 
-legend 
+.main legend 
 {
     font-size: 1.1em;
     font-weight: 600;
     padding: 2px 4px 8px 4px;
+    width: unset;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 21px;
+    line-height: inherit;
+    color: #333;
+    border: 0;
+    border-bottom: none;
 }
 
-input[type="text"] 
+.main input[type="text"] 
 {
     width: 200px;
 }
 
-input[type="password"] 
+.main input[type="password"] 
 {
     width: 200px;
 }
@@ -216,19 +232,19 @@ input[type="password"]
 /* TABLA
 ----------------------------------------------------------*/
 
-table 
+.main table 
 {
   border: solid 1px #e8eef4;
   border-collapse: collapse;
 }
 
-table td 
+.main table td 
 {
   padding: 5px;   
   border: solid 1px #e8eef4;
 }
 
-table th
+.main table th
 {
   padding: 6px 5px;
   text-align: left;
@@ -238,17 +254,17 @@ table th
 
 /* VARIOS  
 ----------------------------------------------------------*/
-.clear
+.main .clear
 {
     clear: both;
 }
 
-.error
+.main .error
 {
     color:Red;
 }
 
-#menucontainer
+.main #menucontainer
 {
     margin-top:40px;
 }
