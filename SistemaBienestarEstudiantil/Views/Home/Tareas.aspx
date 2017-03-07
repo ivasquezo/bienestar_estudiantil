@@ -441,17 +441,15 @@
                                 <th>Acci&oacute;n</th>
                             </tr>
                             <tr ng-repeat="attach in allAttaches"
-                                tooltip-enable="{{isImage(attach.CONTENTTYPE)}}"
-                                uib-tooltip-template="'myTooltipTemplate.html'"
+
+                                popover-enable="{{isImage(attach.CONTENTTYPE)}}"
+                                uib-popover-template="'myTooltipTemplate.html'"
+                                popover-trigger="'mouseenter'"
                                 >
                                 <td style="width:200px">{{ attach.DESCRIPCION }}</td>
                                 <td><a href="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
                                         {{attach.NOMBRE}}
                                 </a></td>
-                                <td><img ng-if="isImage(attach.CONTENTTYPE)" style="max-width:50px;min-height:50px;"
-                                    ng-src="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}"
-                                    title="Click para descargar documento">
-                                </td>
                                 <td style="text-align:center"><button title="Eliminar" type="button" ng-click="removeAttach(attach.CODIGO)"><span class="ui-icon ui-icon-trash"></span></button></td>
                             </tr>
                         </table>
@@ -461,9 +459,9 @@
         </script>
 
         <script type="text/ng-template" id="myTooltipTemplate.html">
-            <div style="max-width: 300px;max-height: 250px;"><img ng-if="isImage(attach.CONTENTTYPE)"
-                style="width: 100%;"
-                ng-src="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}">
+            <div style="height:250px;width:250px;text-align:center;">
+                <img style="max-height:100%;max-width:100%;vertical-align:50%;"
+                    ng-src="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}">
             </div>
         </script>
 
