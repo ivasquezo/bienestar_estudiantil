@@ -69,13 +69,29 @@
                     <table class="dialogClassTable">
                         <tr>
                             <td>
-                                <div>
+                                <div ng-if="!presentEditGeneralActivity">
                                     <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
                                     <div class="col-md-4">                            
-                                        <select ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities"></select>
-                                        <br/><span class="help-block">Nombre de la actividad general</span>
+                                        <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities"></select>
+                                        <button type="button" ng-click="editGeneralActivities()" title="Agregar una nueva actividad general">
+                                            <span class="ui-icon ui-icon-plusthick"></span>
+                                        </button>
+                                        <span class="help-block">Nombre de la actividad general</span>
                                         <span ng-messages="activityForm.generalActivityBox.$error">
                                             <span ng-message="required" class="help-block ng-message">Seleccione una actividad general</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div ng-if="presentEditGeneralActivity">
+                                    <label class="col-md-4 control-label" for="generalActivityTxt">Actividad general</label>
+                                    <div class="col-md-4">                            
+                                        <input valid-general-activity-name required ng-model="activityCopy.NOMBREACTIVIDAD" id="generalActivityTxt" name="generalActivityTxt" type="text" placeholder="Nueva actividad general" class="form-control input-md" style="text-transform: uppercase;">
+                                        <button type="button" ng-click="removeGeneralActivities()" title="Seleccionar de la lista de actividades">
+                                            <span class="ui-icon ui-icon-arrowreturnthick-1-w"></span>
+                                        </button>
+                                        <span class="help-block">Nombre de la actividad general</span>
+                                        <span ng-messages="newActivityForm.generalActivityTxt.$error">
+                                            <span ng-message="generalActivityNameExist" class="help-block ng-message">Existe una actividad general con este nombre</span>
                                         </span>
                                     </div>
                                 </div>
@@ -167,14 +183,29 @@
                     <table class="dialogClassTable">
                         <tr>
                             <td>
-                                <div>
+                                <div ng-if="!presentEditGeneralActivity">
                                     <label class="col-md-4 control-label" for="generalActivityBox">Actividad general</label>
                                     <div class="col-md-4">                            
-                                        <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities">
-                                        </select>
-                                        <br/><span class="help-block">Nombre de la actividad general</span>
+                                        <select required ng-model="activityCopy.CODIGOACTIVIDAD" id="generalActivityBox" name="generalActivityBox" class="form-control" ng-options="o.value as o.name for o in allGeneralActivities"></select>
+                                        <button type="button" ng-click="editGeneralActivities()" title="Agregar una nueva actividad general">
+                                            <span class="ui-icon ui-icon-plusthick"></span>
+                                        </button>
+                                        <span class="help-block">Nombre de la actividad general</span>
                                         <span ng-messages="newActivityForm.generalActivityBox.$error">
                                             <span ng-message="required" class="help-block ng-message">Selecione una actividad general</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div ng-if="presentEditGeneralActivity">
+                                    <label class="col-md-4 control-label" for="generalActivityTxt">Actividad general</label>
+                                    <div class="col-md-4">                            
+                                        <input valid-general-activity-name required ng-model="activityCopy.NOMBREACTIVIDAD" id="generalActivityTxt" name="generalActivityTxt" type="text" placeholder="Nueva actividad general" class="form-control input-md" style="text-transform: uppercase;">
+                                        <button type="button" ng-click="removeGeneralActivities()" title="Seleccionar de la lista de actividades">
+                                            <span class="ui-icon ui-icon-arrowreturnthick-1-w"></span>
+                                        </button>
+                                        <span class="help-block">Nombre de la actividad general</span>
+                                        <span ng-messages="newActivityForm.generalActivityTxt.$error">
+                                            <span ng-message="generalActivityNameExist" class="help-block ng-message">Existe una actividad general con este nombre</span>
                                         </span>
                                     </div>
                                 </div>

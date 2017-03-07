@@ -129,16 +129,36 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
+        public void countGeneralActivityWithName(String activityName)
+        {
+            bienestarEntities db = new bienestarEntities();
+            // Obtiene la cantidad de actividades generales con un nombre determinado
+            int cantidad = db.BE_ACTIVIDAD_GENERAL.Where(a => activityName != null && a.NOMBRE == activityName).Count();
+            writeResponse("{\"cantidad\":" + cantidad + "}");
+        }
+
+        [WebMethod]
         public void saveActivityData(int activityId, String activityName, DateTime activityDate, int activityStatus,
-            String activityObservation, int generalActivityId, int userId, Boolean sendMail)
+            String activityObservation, int generalActivityId, String generalActivityName, int userId, Boolean sendMail)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
-
             try
             {
+                // Si se agrega una nueva actividad general
+                if (generalActivityId == 0)
+                {
+                    // Agrega una nueva actividad general
+                    BE_ACTIVIDAD_GENERAL newGeneralActivity = new BE_ACTIVIDAD_GENERAL();
+                    newGeneralActivity.NOMBRE = generalActivityName;
+                    db.BE_ACTIVIDAD_GENERAL.AddObject(newGeneralActivity);
+                    db.SaveChanges();
+                    // Obtiene los datos de la actividad general agregada
+                    BE_ACTIVIDAD_GENERAL generalActivity = db.BE_ACTIVIDAD_GENERAL.Where(w => w.NOMBRE == generalActivityName).FirstOrDefault();
+                    generalActivityId = generalActivity.CODIGO;
+                }
+                // Agregar los datos de la actividad
                 BE_ACTIVIDAD activityUpdated = db.BE_ACTIVIDAD.Single(a => a.CODIGO == activityId);
-
                 activityUpdated.NOMBRE = activityName.ToUpper();
                 activityUpdated.FECHA = activityDate;
                 activityUpdated.ESTADO = activityStatus;
@@ -148,13 +168,12 @@ namespace SistemaBienestarEstudiantil.WebServices
                     activityUpdated.OBSERVACION = null;
                 activityUpdated.CODIGOACTIVIDADGENERAL = generalActivityId;
                 activityUpdated.CODIGOUSUARIO = userId;
-
                 db.SaveChanges();
-
                 response = new Response(true, "info", "Actualizar", "Actividad actualizada correctamente", null);
-
+                // Si se desea enviar un correo electronico al responsable asignado
                 if (sendMail)
                 {
+                    // Obtiene los datos del usuario seleccionado para enviar el correo electronico
                     BE_USUARIO responsable = db.BE_USUARIO.Single(u => u.CODIGO == userId);
                     string to = responsable.CORREO;
                     string subject = "Creaci\u00F3n de actividad";
@@ -172,21 +191,31 @@ namespace SistemaBienestarEstudiantil.WebServices
                 response = new Response(false, "error", "Error", "Error al actualizar la actividad", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
         [WebMethod]
-        public void addNewActivity(String activityName, DateTime activityDate, int activityStatus,
-            String activityObservation, int generalActivityId, int userId, Boolean sendMail)
+        public void addNewActivity(String activityName, DateTime activityDate, int activityStatus, String activityObservation, int generalActivityId,
+            String generalActivityName, int userId, Boolean sendMail)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
-
             try
             {
+                // Si se agrega una nueva actividad general
+                if (generalActivityId == 0)
+                {
+                    // Agrega una nueva actividad general
+                    BE_ACTIVIDAD_GENERAL newGeneralActivity = new BE_ACTIVIDAD_GENERAL();
+                    newGeneralActivity.NOMBRE = generalActivityName;
+                    db.BE_ACTIVIDAD_GENERAL.AddObject(newGeneralActivity);
+                    db.SaveChanges();
+                    // Obtiene los datos de la actividad general agregada
+                    BE_ACTIVIDAD_GENERAL generalActivity = db.BE_ACTIVIDAD_GENERAL.Where(w => w.NOMBRE == generalActivityName).FirstOrDefault();
+                    generalActivityId = generalActivity.CODIGO;
+                }
+                // Agregar los datos de la actividad
                 BE_ACTIVIDAD newActivity = new BE_ACTIVIDAD();
-
                 newActivity.NOMBRE = activityName;
                 newActivity.FECHA = activityDate;
                 newActivity.ESTADO = activityStatus;
@@ -196,15 +225,13 @@ namespace SistemaBienestarEstudiantil.WebServices
                     newActivity.OBSERVACION = null;
                 newActivity.CODIGOACTIVIDADGENERAL = generalActivityId;
                 newActivity.CODIGOUSUARIO = userId;
-
                 db.BE_ACTIVIDAD.AddObject(newActivity);
-
                 db.SaveChanges();
-
                 response = new Response(true, "info", "Agregar", "Actividad agregada correctamente", newActivity);
-
+                // Si se desea enviar un correo electronico al responsable asignado
                 if (sendMail)
                 {
+                    // Obtiene los datos del usuario seleccionado para enviar el correo electronico
                     BE_USUARIO responsable = db.BE_USUARIO.Single(u => u.CODIGO == userId);
                     string to = responsable.CORREO;
                     string subject = "Creaci\u00F3n de actividad";
@@ -217,7 +244,6 @@ namespace SistemaBienestarEstudiantil.WebServices
                 response = new Response(false, "error", "Error", "Error al agregar la actividad", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
