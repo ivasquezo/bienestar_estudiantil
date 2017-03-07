@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages','cgBusy']);
+    var app = angular.module('BienestarApp', ['ui.grid', 'ngDialog', 'ngMessages', 'cgBusy', 'ui.bootstrap']);
 
     app.controller('ActivitiesController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
         $('#messages').puigrowl();
@@ -59,7 +59,7 @@
         $scope.chargeGeneralActivities = function () {
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivitiesWithActivity', {
             }).success(function (data, status, headers, config) {
-                console.log("Cargar actividades... ", data);
+                // console.log("Cargar actividades... ", data);
                 if (data.success) {
                     $scope.convertDate(data.response);
                     $scope.cargarEstadoActividades(data.response);
@@ -124,7 +124,7 @@
         $scope.getGeneralActivities = function () {     
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivity'
             ).success(function (data, status, headers, config) {
-                console.log("Actividades generales existentes... ", data);
+                // console.log("Actividades generales existentes... ", data);
                 $scope.allGeneralActivities = [];
 
                 for (var i = 0; i < data.response.length; i++)
@@ -138,7 +138,7 @@
         $scope.getAllResponsables = function () {     
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllResponsables'
             ).success(function (data, status, headers, config) {
-                console.log("Docentes... ", data);
+                // console.log("Docentes... ", data);
                 if (data.success) {
                     $scope.allResponsables = [];
 
@@ -402,7 +402,7 @@
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllCareers', {
                 schools: $scope.selectedSchools
             }).success(function (data, status, headers, config) {
-                console.log("Carreras... ", data);
+                // console.log("Carreras... ", data);
                 if (data.success)
                     $scope.allCareers = data.response;
                 else
@@ -976,7 +976,7 @@
                     headers: {'Content-Type': undefined },
                     transformRequest: angular.identity
                 }).success(function (data, status, headers, config) {
-                    console.log("Adjuntos", data);
+                    // console.log("Adjuntos", data);
                     if (data.success) {
                         $scope.getAllActivitiesAttach();
                         document.getElementById("observacion").value = "";
@@ -989,6 +989,15 @@
             } else {
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
             }
+        };
+
+        $scope.isImage = function (contentType) {
+            console.log(contentType);
+            if (typeof contentType === 'string' && contentType.includes('image')) {
+                console.log(contentType);
+                return true;
+            }
+            return false;
         };
 
     }]);
