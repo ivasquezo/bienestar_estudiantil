@@ -110,10 +110,8 @@
             $scope.userCopy = {
                 ESTADO: true
             };
-
             $scope.userSavedCedula = null;
             $scope.userSavedName = null;
-
             ngDialog.open({
                 template: 'newUser.html',
                 className: 'ngdialog-theme-flat ngdialog-theme-custom',
@@ -164,6 +162,38 @@
             arrayUser.push(newUser);
             for (var i = 0; i < arrayUser.length; i++)
                 arrayUser[i].NOMBREESTADO = $scope.cargarNombreEstado(newUser.ESTADO)
+        };
+
+        // Modal para agregar un nuevo usuario
+        $scope.editBecasMail = function () {
+            $scope.getEmailBecasMail();
+            $scope.userMailCopy = "";
+
+            ngDialog.open({
+                template: 'editBecasMail.html',
+                className: 'ngdialog-theme-flat ngdialog-theme-custom',
+                closeByDocument: true,
+                closeByEscape: true,
+                scope: $scope,
+                controller: $controller('ngDialogController', {
+                    $scope: $scope,
+                    $http: $http
+                })
+            });
+        };
+        // Cargar los usuarios registrados
+        $scope.getEmailBecasMail = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/getEmailBecasMail', {
+            }).success(function (data, status, headers, config) {
+                if (data.success) {
+                    $scope.userMailCopy = data.response.EMAIL;
+                }
+                else
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error cargar usuarios...", data);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los usuarios'}]);
+            });
         };
     } ]);
 
@@ -222,6 +252,25 @@
                 });
             } else {
                 $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+            }
+        };
+        // Agregar un nuevo correo electronico
+        $scope.addNewMail = function () {
+            var parentObject = this;
+            if (!this.mailBecasForm.$invalid) {
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/addNewMail', {
+                    mailNotification: parentObject.userMailCopy
+                }).success(function (data, status, headers, config) {
+                    if (data.success) {
+                        parentObject.closeThisDialog();
+                    }
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message}]);
+                }).error(function (data, status, headers, config) {
+                    console.log("Error agregar correo electronico...", data);
+                    $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al agregar el correo'}]);
+                });
+            } else {
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
             }
         };
     } ]);

@@ -21,6 +21,11 @@
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span>
             <span class="ui-button-text">Nuevo</span>
         </button>
+        <button ng-click="editBecasMail()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary"
+            role="button" title="Agregar usuario">
+            <span class="ui-button-icon-primary ui-icon ui-icon-bookmark"></span>
+            <span class="ui-button-text">Notificaciones</span>
+        </button>
         <div ui-grid="gridOptions"></div>
         <script type="text/ng-template" id="actionsUsers.html">
               <div class="ui-grid-cell-contents" style="text-align:center">
@@ -254,6 +259,36 @@
                         <label class="col-md-4 control-label" for="buttonsave1"></label>
                         <div class="col-md-8">
                             <button ng-click="saveEditedUser()" id="buttonsave1" name="buttonsave1" class="btn btn-success">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </fieldset>
+        </script>
+
+        <script type="text/ng-template" id="editBecasMail.html">
+            <fieldset>
+                <legend>Correo para notificaciones</legend>
+                <form name="mailBecasForm">
+                    <table class="dialogClassTable">
+                        <tr>
+                            <td>
+                                <div>
+                                    <label class="col-md-4 control-label" for="becasmail">Correo electr&oacute;nico</label>  
+                                    <div class="col-md-4">
+                                        <input required ng-model="userMailCopy" id="becasmail" name="becasmail" type="text" placeholder="Correo electr&oacute;nico" class="form-control input-md">
+                                        <span class="help-block">Correo electr&oacute;nico que recibir&aacute; las notificaciones</span>
+                                        <span ng-messages="mailBecasForm.becasmail.$error">
+                                            <span ng-message="required" class="help-block ng-message">Ingrese un correo electr&oacute;nico</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"></label>
+                        <div class="col-md-8">
+                            <button ng-click="addNewMail()" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
                 </form>

@@ -155,5 +155,55 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
+        /// <summary>
+        /// Obtener el correo electronico registrado para recibir notificaciones
+        /// </summary>
+        [WebMethod]
+        public void getEmailBecasMail()
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+            try
+            {
+                var email = db.BE_DATOS_SISTEMA.Select(s => new
+                {
+                    NOMBRE = s.NOMBRE,
+                    EMAIL = s.VALOR
+                }).Where(w => w.NOMBRE == Utils.BECANOTIFICACION).FirstOrDefault();
+                if (email != null)
+                    response = new Response(true, "", "", "", email);
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado correos registrados", null);
+            }
+            catch (Exception e)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los correos registrados", e);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+        /// <summary>
+        /// Insertar un nuevo correo electronico de quien recibira las notificaciones
+        /// </summary>
+        /// <param name="newUser"></param>
+        [WebMethod(EnableSession = true)]
+        public void addNewMail(String mailNotification)
+        {
+            Response response = new Response(false, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+            try
+            {
+                BE_DATOS_SISTEMA newData = db.BE_DATOS_SISTEMA.Single(w => w.NOMBRE == Utils.BECANOTIFICACION);
+                newData.NOMBRE = Utils.BECANOTIFICACION;
+                newData.VALOR = mailNotification;
+                db.SaveChanges();
+                response = new Response(true, "info", "Actualizar", "El correo ha sido agregado correctamente", newData);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al agregar el correo electronico", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+        }
     }
 }
