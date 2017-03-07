@@ -14,6 +14,7 @@ namespace SistemaBienestarEstudiantil.Class
     public class Utils
     {
         public const string DOCENTE = "DOCENTE";
+        public const string ADMINISTRADOR = "ADMINISTRADOR";
         public const string MODULOUSUARIO = "EDITAR USUARIOS";
         public const string MODULOROLES = "EDITAR ROLES";
         public const string MODULOBECAS = "EDITAR BECAS";
@@ -193,7 +194,22 @@ namespace SistemaBienestarEstudiantil.Class
         {
             bienestarEntities db = new bienestarEntities();
             var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
-                          Where(w => w.r.NOMBRE == Utils.DOCENTE && w.u.CODIGO == userCode).Select(s => s.u).FirstOrDefault();
+                    Join(db.BE_ROL_ACCESO, rra => rra.r.CODIGO, ra => ra.CODIGOROL, (rra, ra) => new { rra, ra }).
+                    Join(db.BE_ACCESO, raa => raa.ra.CODIGOACCESO, a => a.CODIGO, (raa, a) => new { raa, a }).Select(x => new
+                    {
+                        NOMBREACCESO = x.a.NOMBRE,
+                        VALIDO = x.raa.ra.VALIDO,
+                        CODIGO = x.raa.rra.u.CODIGO
+                    })
+                    .Where(y => y.NOMBREACCESO == Utils.MODULOTAREAS && y.VALIDO == true && y.CODIGO == userCode).FirstOrDefault();
+            return user != null && isAdministator(userCode) == false;
+        }
+
+        static public bool isAdministator(int userCode)
+        {
+            bienestarEntities db = new bienestarEntities();
+            var user = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                          Where(w => w.r.NOMBRE == Utils.ADMINISTRADOR && w.u.CODIGO == userCode).Select(s => s.u).FirstOrDefault();
             return user != null;
         }
 
