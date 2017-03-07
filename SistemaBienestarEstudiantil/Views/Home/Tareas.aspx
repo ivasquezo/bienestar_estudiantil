@@ -431,7 +431,12 @@
                                 <th>Adjunto</th>
                                 <th>Acci&oacute;n</th>
                             </tr>
-                            <tr ng-repeat="attach in allAttaches">                                
+                            <tr ng-repeat="attach in allAttaches"
+
+                                popover-enable="{{isImage(attach.CONTENTTYPE)}}"
+                                uib-popover-template="'myTooltipTemplate.html'"
+                                popover-trigger="'mouseenter'"
+                                >
                                 <td style="width:200px">{{ attach.DESCRIPCION }}</td>
                                 <td><a href="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}" target="_blank" title="Click para descargar documento">
                                         {{attach.NOMBRE}}
@@ -442,6 +447,13 @@
                     </div>
                 </form>
             </fieldset>
+        </script>
+
+        <script type="text/ng-template" id="myTooltipTemplate.html">
+            <div style="height:250px;width:250px;text-align:center;">
+                <img style="max-height:100%;max-width:100%;vertical-align:50%;"
+                    ng-src="<%=Utils.APP_CONTEXT%>/WebServices/Activities.asmx/getAttach?code={{attach.CODIGO}}">
+            </div>
         </script>
 
         <script type="text/ng-template" id="activitiesReport.html">

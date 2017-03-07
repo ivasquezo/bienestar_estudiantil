@@ -52,13 +52,16 @@
     </style>
 </head>
 
-<body ng-app="BienestarApp">
+<body class="main" ng-app="BienestarApp">
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angularjs/1.4.8/angular.min.js"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angularjs/1.4.8/angular-animate.min.js"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/angular-busy/angular-busy.js"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/ui-grid/ui-grid-stable.min.js"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/ng-dialog/ngDialog.min.js"></script>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Utils/angular-messages.js"></script>
+    <!--link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"-->
+    <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/ui-bootstrap/ui-bootstrap-tpls-2.5.0.min.js"></script>
+    <link href="<%=Utils.APP_CONTEXT%>/Scripts/bootstrap/bootstrap.min.css" rel="stylesheet">
     
     <div class="page">
         <div id="header">

@@ -11,18 +11,15 @@
 
     <% using (Html.BeginForm()) { %>
     <%: Html.ValidationSummary(true, "No se ha iniciado la sesi\u00F3n. Corrija los errores e int\u00E9ntelo de nuevo.")%>
-    <div style="min-width:100%">
-        <div style="float:left;">
-            Especifique su nombre de usuario y contrase&ntilde;a.
-        </div>
-        <div style="float:right;width:150px;background:#5C87B2;text-align: center;padding:6px;margin-left:3px;">
+    <div style="min-width:100%;text-align: right;">
+        <div class="login-button">
             <a href="<%=Utils.APP_CONTEXT%>/Home/BecaSolicitud" target="_blank" style="text-decoration: initial;font-weight:bold;">
                 <div style="color:white;">
                     Solicitud de becas
                 </div>
             </a>
         </div>
-        <div style="float:right;width:190px;background:#5C87B2;text-align:center;padding:6px;margin-left:3px;">
+        <div class="login-button">
             <a href="<%=Utils.APP_CONTEXT%>/Home/Encuesta" target="_blank" style="text-decoration: initial;font-weight:bold;">
                 <div style="color:white;">
                     Seguimiento graduados
@@ -30,10 +27,12 @@
             </a>
         </div>
     </div>
-    <br/>
     <div style="position:relative;min-width:100%;">
         <fieldset>
             <legend>Informaci&oacute;n de cuenta</legend>
+            <div style="display: inline-block;">
+                <span>Especifique su nombre de usuario y contrase&ntilde;a.</span>
+            </div>
             <div class="editor-label">
                 <%: Html.LabelFor(m => m.UserName)%>
             </div>
