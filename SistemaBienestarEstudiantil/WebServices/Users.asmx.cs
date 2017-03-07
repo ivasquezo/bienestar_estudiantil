@@ -186,10 +186,10 @@ namespace SistemaBienestarEstudiantil.WebServices
         /// Insertar un nuevo correo electronico de quien recibira las notificaciones
         /// </summary>
         /// <param name="newUser"></param>
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
         public void addNewMail(String mailNotification)
         {
-            Response response = new Response(false, "", "", "", null);
+            Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
             try
             {
@@ -197,13 +197,14 @@ namespace SistemaBienestarEstudiantil.WebServices
                 newData.NOMBRE = Utils.BECANOTIFICACION;
                 newData.VALOR = mailNotification;
                 db.SaveChanges();
-                response = new Response(true, "info", "Actualizar", "El correo ha sido agregado correctamente", newData);
+                response = new Response(true, "info", "Actualizar", "El correo ha sido agregado correctamente", null);
             }
             catch (Exception)
             {
                 response = new Response(false, "error", "Error", "Error al agregar el correo electronico", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
+            writeResponse(new JavaScriptSerializer().Serialize(response));
         }
     }
 }
