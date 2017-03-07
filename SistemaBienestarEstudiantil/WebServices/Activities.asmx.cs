@@ -93,18 +93,18 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
-
             try
             {
-                var data = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO,
-                    (u, r) => new { USUARIO = u, ROL = r })
-                    .Select(x => new
+                var data = db.BE_USUARIO.Join(db.BE_ROL, u => u.CODIGOROL, r => r.CODIGO, (u, r) => new { u, r }).
+                    Join(db.BE_ROL_ACCESO, rra => rra.r.CODIGO, ra => ra.CODIGOROL, (rra, ra) => new { rra, ra }).
+                    Join(db.BE_ACCESO, raa => raa.ra.CODIGOACCESO, a => a.CODIGO, (raa, a) => new { raa, a }).Select(x => new
                     {
-                        ROL = x.ROL.NOMBRE,
-                        CODIGO = x.USUARIO.CODIGO,
-                        NOMBRECOMPLETO = x.USUARIO.NOMBRECOMPLETO
+                        NOMBREACCESO = x.a.NOMBRE,
+                        VALIDO = x.raa.ra.VALIDO,
+                        CODIGO = x.raa.rra.u.CODIGO,
+                        NOMBRECOMPLETO = x.raa.rra.u.NOMBRECOMPLETO
                     })
-                    .Where(y => y.ROL == "DOCENTE").ToList();
+                    .Where(y => y.NOMBREACCESO == Utils.MODULOTAREAS && y.VALIDO == true).ToList();
 
                 if (data != null && data.Count > 0)
                     response = new Response(true, "", "", "", data);

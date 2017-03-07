@@ -18,6 +18,7 @@ namespace SistemaBienestarEstudiantil.Class
         public const string MODULOROLES = "EDITAR ROLES";
         public const string MODULOBECAS = "EDITAR BECAS";
         public const string MODULOENCUESTAS = "EDITAR ENCUESTAS";
+        public const string MODULOTAREAS = "EDITAR TAREAS";
         public const string USERCODE = "userCode";
         public const string BECANOTIFICACION = "becaMailNotification";
         public const int DOCUMENTMAXCANT = 3;
