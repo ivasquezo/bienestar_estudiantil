@@ -441,47 +441,6 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void getAllFaculties()
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                response = new Response(true, "", "", "", db.FACULTADs.ToList());
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener las facultades", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-        [WebMethod]
-        public void getAllSchools(int[] faculties)
-        {
-            Response response = new Response(true, "", "", "", null);
-            bienestarEntities db = new bienestarEntities();
-
-            try
-            {
-                if (faculties != null && faculties.Length > 0)
-                    response = new Response(true, "", "", "", db.ESCUELAs.Where(e => faculties.Contains(e.FCLCODIGOI)).ToList());
-                else
-                    response = new Response(true, "", "", "", db.ESCUELAs.ToList());
-            }
-            catch (Exception)
-            {
-                response = new Response(false, "error", "Error", "Error al obtener las escuelas", null);
-                writeResponse(new JavaScriptSerializer().Serialize(response));
-            }
-
-            writeResponse(new JavaScriptSerializer().Serialize(response));
-        }
-
-        [WebMethod]
         public void getAllCareers(int[] schools)
         {
             Response response = new Response(true, "", "", "", null);
