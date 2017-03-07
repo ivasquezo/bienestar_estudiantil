@@ -30,7 +30,9 @@ namespace SistemaBienestarEstudiantil.WebServices
             Context.Response.Flush();
             Context.Response.End();
         }
-
+        /// <summary>
+        /// Validacion del usuario logeado
+        /// </summary>
         [WebMethod(EnableSession = true)]
         public void checkSession()
         {
@@ -39,17 +41,17 @@ namespace SistemaBienestarEstudiantil.WebServices
             if (!isLogged) Utils.terminateSession();
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
+        /// <summary>
+        /// Obtener todos los usuarios registrados
+        /// </summary>
         [WebMethod]
         public void getAllUser()
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
-
             try
             {
                 List<BE_USUARIO> users = db.BE_USUARIO.ToList();
-
                 if (users != null && users.Count > 0)
                     response = new Response(true, "", "", "", users);
                 else
@@ -60,10 +62,12 @@ namespace SistemaBienestarEstudiantil.WebServices
                 response = new Response(false, "error", "Error", "Error al obtener los usuarios", e);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
+        /// <summary>
+        /// Contabilizar los usuarios para validar si se ingresa un usuario con un nombre de usuario repetido
+        /// </summary>
+        /// <param name="userName"></param>
         [WebMethod]
         public void countUserWithUserName(String userName)
         {
@@ -71,7 +75,10 @@ namespace SistemaBienestarEstudiantil.WebServices
             int cantidad = db.BE_USUARIO.Where(u => userName != null && u.NOMBREUSUARIO == userName).Count();
             writeResponse("{\"cantidad\":" + cantidad + "}");
         }
-
+        /// <summary>
+        /// Contabilizar los usuarios para validar si se ingresa un usuario con una cedula repetida
+        /// </summary>
+        /// <param name="cedula"></param>
         [WebMethod]
         public void countUserWithCedula(string cedula)
         {
@@ -79,35 +86,33 @@ namespace SistemaBienestarEstudiantil.WebServices
             int cantidad = db.BE_USUARIO.Where(u => cedula != null && u.CEDULA == cedula).Count();
             writeResponse("{\"cantidad\":" + cantidad + "}");
         }
-
+        /// <summary>
+        /// Registrar la edicion de un usuario
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="resetPassword"></param>
         [WebMethod(EnableSession = true)]
         public void saveUserData(BE_USUARIO user, Boolean resetPassword)
         {
             Response response = new Response(false, "", "", "No tiene acceso", null);
-
             if (Utils.haveAccessTo(Utils.MODULOUSUARIO))
             {
                 bienestarEntities db = new bienestarEntities();
-
                 try
                 {
                     BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == user.CODIGO);
-
                     usuario.NOMBREUSUARIO = user.NOMBREUSUARIO;
                     usuario.NOMBRECOMPLETO = user.NOMBRECOMPLETO;
                     usuario.CEDULA = user.CEDULA;
                     usuario.CORREO = user.CORREO;
                     usuario.ESTADO = user.ESTADO;
                     usuario.CODIGOROL = user.CODIGOROL;
-
                     if (resetPassword)
                     {
                         usuario.CONTRASENAACTUAL = Utils.Encripta(user.CEDULA);
                         usuario.CONTRASENAANTERIOR = Utils.Encripta(user.CEDULA);
                     }
-
                     db.SaveChanges();
-
                     response = new Response(true, "info", "Actualizar", "Usuario actualizado correctamente", usuario);
                 }
                 catch (InvalidOperationException)
@@ -121,10 +126,12 @@ namespace SistemaBienestarEstudiantil.WebServices
                     writeResponse(new JavaScriptSerializer().Serialize(response));
                 }
             }
-
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
+        /// <summary>
+        /// Insertar un nuevo usuario
+        /// </summary>
+        /// <param name="newUser"></param>
         [WebMethod(EnableSession = true)]
         public void addNewUser(BE_USUARIO newUser)
         {
@@ -132,16 +139,12 @@ namespace SistemaBienestarEstudiantil.WebServices
             if (Utils.haveAccessTo(Utils.MODULOUSUARIO))
             {
                 bienestarEntities db = new bienestarEntities();
-
                 try
                 {
                     newUser.CONTRASENAACTUAL = Utils.Encripta(newUser.CEDULA);
                     newUser.CONTRASENAANTERIOR = Utils.Encripta(newUser.CEDULA);
-
                     db.BE_USUARIO.AddObject(newUser);
-
                     db.SaveChanges();
-
                     response = new Response(true, "info", "Agregar", "El usuario agregado correctamente", newUser);
                 }
                 catch (Exception)
@@ -152,37 +155,55 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
-
-        [WebMethod(EnableSession = true)]
-        public void removeUserById(int id)
+        /// <summary>
+        /// Obtener el correo electronico registrado para recibir notificaciones
+        /// </summary>
+        [WebMethod]
+        public void getEmailBecasMail()
         {
-            Response response = new Response(false, "", "", "No tiene acceso", null);
-            if (Utils.haveAccessTo(Utils.MODULOUSUARIO))
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+            try
             {
-                bienestarEntities db = new bienestarEntities();
-
-                try
+                var email = db.BE_DATOS_SISTEMA.Select(s => new
                 {
-                    BE_USUARIO usuario = db.BE_USUARIO.Single(u => u.CODIGO == id);
-
-                    db.BE_USUARIO.DeleteObject(usuario);
-
-                    db.SaveChanges();
-
-                    response = new Response(true, "info", "Eliminar", "Usuario eliminado correctamente", null);
-                }
-                catch (InvalidOperationException)
-                {
-                    response = new Response(false, "error", "Error", "Error al obtener los datos para eliminar el usuario", null);
-                    writeResponse(new JavaScriptSerializer().Serialize(response));
-                }
-                catch (Exception)
-                {
-                    response = new Response(false, "error", "Error", "Error al eliminar el usuario", null);
-                    writeResponse(new JavaScriptSerializer().Serialize(response));
-                }
+                    NOMBRE = s.NOMBRE,
+                    EMAIL = s.VALOR
+                }).Where(w => w.NOMBRE == Utils.BECANOTIFICACION).FirstOrDefault();
+                if (email != null)
+                    response = new Response(true, "", "", "", email);
+                else
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado correos registrados", null);
+            }
+            catch (Exception e)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los correos registrados", e);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
             }
             writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+        /// <summary>
+        /// Insertar un nuevo correo electronico de quien recibira las notificaciones
+        /// </summary>
+        /// <param name="newUser"></param>
+        [WebMethod(EnableSession = true)]
+        public void addNewMail(String mailNotification)
+        {
+            Response response = new Response(false, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+            try
+            {
+                BE_DATOS_SISTEMA newData = db.BE_DATOS_SISTEMA.Single(w => w.NOMBRE == Utils.BECANOTIFICACION);
+                newData.NOMBRE = Utils.BECANOTIFICACION;
+                newData.VALOR = mailNotification;
+                db.SaveChanges();
+                response = new Response(true, "info", "Actualizar", "El correo ha sido agregado correctamente", newData);
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al agregar el correo electronico", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
         }
     }
 }
