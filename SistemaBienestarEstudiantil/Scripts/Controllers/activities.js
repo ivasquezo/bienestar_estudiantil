@@ -40,6 +40,8 @@
             CODIGO: ''
         };
 
+        $scope.presentEditGeneralActivity = false;
+
         $scope.convertDate = function(arrayActivity) {
             for (var i = 0; i < arrayActivity.length; i++) {
                 if (arrayActivity[i].FECHA != null)
@@ -175,8 +177,10 @@
         }
 
         this.editActivity = function (code) {
+            $scope.presentEditGeneralActivity = false;
             $scope.activityEdit = angular.copy($scope.getElementArray($scope.gridOptions.data, code));
-            
+            $scope.getGeneralActivities();
+
             $scope.activityCopy.CODIGOACTIVIDAD = $scope.activityEdit.CODIGOACTIVIDAD;
             $scope.activityCopy.NOMBREACTIVIDAD = $scope.activityEdit.NOMBREACTIVIDAD;
             $scope.activityCopy.CODIGO = $scope.activityEdit.CODIGO;
@@ -201,12 +205,16 @@
             });
         };
 
-        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId) {
+        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId, generalActivityName) {
             var nameActivity = '';
 
-            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
-                if ($scope.allGeneralActivities[i].value == generalActivityId)
-                    nameActivity = $scope.allGeneralActivities[i].name;
+            if (generalActivityId == 0) {
+                nameActivity = generalActivityName;
+            } else {
+                for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                    if ($scope.allGeneralActivities[i].value == generalActivityId)
+                        nameActivity = $scope.allGeneralActivities[i].name;
+            }
 
             for (var i=0; i<arrayActivity.length; i++) {
                 if (arrayActivity[i].CODIGO == activityId) {                    
@@ -223,6 +231,8 @@
         };
 
         $scope.addNewActivityDialog = function() {
+            $scope.presentEditGeneralActivity = false;
+            $scope.getGeneralActivities();
             $scope.activityCopy = {
                 OBSERVACION: ''
             };
@@ -241,12 +251,16 @@
             });
         };
 
-        $scope.addElementArray = function(arrayActivity, newActivity, activityDate, generalActivityId, activityStatus) {
+        $scope.addElementArray = function(arrayActivity, newActivity, activityDate, generalActivityId, activityStatus, activityName) {
             var nameActivity = '';
 
-            for (var i = 0; i < $scope.allGeneralActivities.length; i++)
-                if ($scope.allGeneralActivities[i].value == generalActivityId)
-                    nameActivity = $scope.allGeneralActivities[i].name;
+            if (generalActivityId == 0) {
+                nameActivity = activityName;
+            } else {
+                for (var i = 0; i < $scope.allGeneralActivities.length; i++)
+                    if ($scope.allGeneralActivities[i].value == generalActivityId)
+                        nameActivity = $scope.allGeneralActivities[i].name;
+            }
             newActivity.FECHA = activityDate;
             newActivity.CODIGOACTIVIDAD = generalActivityId;
             newActivity.NOMBREACTIVIDAD = nameActivity;
@@ -814,9 +828,26 @@
     }]);
 
     app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
+        // Editar una actividad general
+        $scope.editGeneralActivities = function () {
+            $scope.activityCopy.CODIGOACTIVIDAD = undefined;
+            $scope.activityCopy.NOMBREACTIVIDAD = undefined;
+            $scope.presentEditGeneralActivity = true;
+        };
+        // Eliminar una actividad general
+        $scope.removeGeneralActivities = function () {
+            $scope.activityCopy.CODIGOACTIVIDAD = undefined;
+            $scope.activityCopy.NOMBREACTIVIDAD = undefined;
+            $scope.presentEditGeneralActivity = false;
+        };
+
         $scope.saveEditedActivity = function () {
             if (!this.activityForm.$invalid) {
                 var parentObject = this;
+                if ($scope.activityCopy.CODIGOACTIVIDAD == undefined)
+                    $scope.activityCopy.CODIGOACTIVIDAD = 0;
+                if ($scope.activityCopy.NOMBREACTIVIDAD == undefined)
+                    $scope.activityCopy.NOMBREACTIVIDAD = "";
 
                 $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveActivityData', {
                     activityId: $scope.activityCopy.CODIGO,
@@ -825,15 +856,16 @@
                     activityStatus: $scope.activityCopy.ESTADO,
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
+                    generalActivityName: $scope.activityCopy.NOMBREACTIVIDAD.toUpperCase(),
                     userId: $scope.activityCopy.CODIGOUSUARIO,
                     groupLevelActivity: $scope.groupLevelActivity,
                     sendMail: $scope.sendMail
                 }).success(function (data, status, headers, config) {
                     console.log("Editar actividad: ", data);
                     if (data.success) {
-                        $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO, 
-                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), 
-                            $scope.activityCopy.ESTADO, $scope.activityCopy.OBSERVACION.toUpperCase(), $scope.activityCopy.CODIGOUSUARIO);
+                        $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO,
+                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), $scope.activityCopy.ESTADO, 
+                            $scope.activityCopy.OBSERVACION.toUpperCase(), $scope.activityCopy.CODIGOUSUARIO, $scope.activityCopy.NOMBREACTIVIDAD.toUpperCase());
                         parentObject.closeThisDialog();
                     } 
 
@@ -850,6 +882,10 @@
         $scope.addNewActivityDB = function () {
             if (!this.newActivityForm.$invalid) {
                 var newParentObject = this;
+                if ($scope.activityCopy.CODIGOACTIVIDAD == undefined)
+                    $scope.activityCopy.CODIGOACTIVIDAD = 0;
+                if ($scope.activityCopy.NOMBREACTIVIDAD == undefined)
+                    $scope.activityCopy.NOMBREACTIVIDAD = "";
 
                 $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addNewActivity', {                
                     activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
@@ -857,13 +893,14 @@
                     activityStatus: $scope.activityCopy.ESTADO,
                     activityObservation: $scope.activityCopy.OBSERVACION.toUpperCase(),
                     generalActivityId: $scope.activityCopy.CODIGOACTIVIDAD,
+                    generalActivityName: $scope.activityCopy.NOMBREACTIVIDAD.toUpperCase(),
                     userId: $scope.activityCopy.CODIGOUSUARIO,
                     sendMail: $scope.sendMail
                 }).success(function (data, status, headers, config) {
                     console.log("Agregar actividad: ", data);
                     if (data.success) {
-                        $scope.addElementArray($scope.gridOptions.data, data.response, Date.parse($scope.activityCopy.FECHA), 
-                            $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.ESTADO);
+                        $scope.addElementArray($scope.gridOptions.data, data.response, Date.parse($scope.activityCopy.FECHA),
+                            $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.ESTADO, $scope.activityCopy.NOMBREACTIVIDAD.toUpperCase());
                         newParentObject.closeThisDialog();
                     }
 
@@ -1094,4 +1131,34 @@
             return result;
         };
     });
+
+    app.directive('validGeneralActivityName', ['$http', function ($http) {
+        return {
+            require: 'ngModel',
+
+            link: function (scope, element, attr, ctrl) {
+                function customValidator(ngModelValue) {
+                    if (ngModelValue != null && ngModelValue != scope.activityCopy.NOMBREACTIVIDAD) {
+                        scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/countGeneralActivityWithName', {
+                            activityName: ngModelValue
+                        }).success(function (data, status, headers, config) {
+                            if (data.cantidad == 0) {
+                                ctrl.$setValidity('generalActivityNameExist', true);
+
+                            } else {
+                                ctrl.$setValidity('generalActivityNameExist', false);
+                            }
+                        }).error(function (data, status, headers, config) {
+                            console.log("Error al traer actividad", data);
+                        });
+                    } else {
+                        ctrl.$setValidity('generalActivityNameExist', true);
+                    }
+                    return ngModelValue;
+                }
+
+                ctrl.$parsers.push(customValidator);
+            }
+        };
+    } ]);
 })();
