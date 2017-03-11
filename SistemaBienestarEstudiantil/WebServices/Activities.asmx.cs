@@ -12,6 +12,7 @@ using System.IO;
 using System.Text;
 using System.Web.Script.Services;
 using Microsoft.Office.Interop.Excel;
+using System.Net.Mail;
 
 namespace SistemaBienestarEstudiantil.WebServices
 {
@@ -846,6 +847,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                     {
                         CODIGO = s.ami.am.a.CODIGO,
                         ACTIVIDAD = s.ami.am.a.CODIGOACTIVIDAD,
+                        NOTIFICACIONENVIDA = s.ami.am.a.NOTIFICACIONENVIADA,
                         CEDULA = s.d.DTPCEDULAC,
                         NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2,
                         ASISTENCIA = s.ami.am.a.ASISTENCIA,
@@ -891,6 +893,12 @@ namespace SistemaBienestarEstudiantil.WebServices
                 }
 
                 response = new Response(true, "info", "Actualizar", "La notificaci\u00F3n fu\u00E9 enviada a los estudiantes correctamente", null);
+            }
+            catch (SmtpFailedRecipientsException ex)
+            {
+                Console.WriteLine(ex.Message);
+                response = new Response(false, "error", "Error", "Error al obtener los datos para enviar la notificaci\u00F3n", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
             }
             catch (InvalidOperationException)
             {
