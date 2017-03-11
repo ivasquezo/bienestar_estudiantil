@@ -1909,6 +1909,30 @@ namespace SistemaBienestarEstudiantil.Models
         private global::System.Boolean _ASISTENCIA;
         partial void OnASISTENCIAChanging(global::System.Boolean value);
         partial void OnASISTENCIAChanged();
+    
+        /// <summary>
+        /// No hay documentación de metadatos disponible.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> NOTIFICACIONENVIADA
+        {
+            get
+            {
+                return _NOTIFICACIONENVIADA;
+            }
+            set
+            {
+                OnNOTIFICACIONENVIADAChanging(value);
+                ReportPropertyChanging("NOTIFICACIONENVIADA");
+                _NOTIFICACIONENVIADA = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("NOTIFICACIONENVIADA");
+                OnNOTIFICACIONENVIADAChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _NOTIFICACIONENVIADA;
+        partial void OnNOTIFICACIONENVIADAChanging(Nullable<global::System.Int32> value);
+        partial void OnNOTIFICACIONENVIADAChanged();
 
         #endregion
 

@@ -698,7 +698,6 @@
                 studentsMails: $scope.studentsMails,
                 activityId: $scope.activityId
             }).success(function (data, status, headers, config) {
-                console.log("Enviar notificacion estudiantes... ", data);
                 $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al enviar notificacion estudiantes...", data);
@@ -710,7 +709,7 @@
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getStudentsAssistance', {
                 activityId: code
             }).success(function (data, status, headers, config) {
-                console.log("Estudiantes de la actividad... ", data);
+                // console.log("Estudiantes de la actividad... ", data);
                 if (data.success) {
                     $scope.allLevelAssistance = data.response;
                 } 
