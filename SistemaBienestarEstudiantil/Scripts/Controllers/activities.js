@@ -276,13 +276,14 @@
             $scope.saveAllGroups();
 
             $scope.allModalities = [];
+            $scope.allCareers = [];
+            $scope.allLevels = [];
+
+            $scope.copyAllCareers = [];
             
             $scope.selectedCareers = [];
             $scope.selectedModalities = [];
             $scope.selectedLevels = [];
-
-            $scope.selectedExistCareers = [];
-            $scope.selectedExistLevels = [];
 
             $scope.originCareers = [];
             $scope.originModalities = [];
@@ -331,7 +332,7 @@
                                 if ($scope.selectedCareers[c] == data.response[i].CODIGOCARRERA)
                                     existe = true;
                             }
-                            if (!existe) {
+                            if (existe == false) {
                                 $scope.selectedCareers.push(data.response[i].CODIGOCARRERA);
                                 $scope.originCareers.push(data.response[i].CODIGOCARRERA);
                             }
@@ -346,7 +347,7 @@
                                 if ($scope.selectedModalities[m] == data.response[i].CODIGOMODALIDAD)
                                     existe = true;
                             }
-                            if (!existe) {
+                            if (existe == false) {
                                 $scope.selectedModalities.push(data.response[i].CODIGOMODALIDAD);
                                 $scope.originModalities.push(data.response[i].CODIGOMODALIDAD);
                             }
@@ -361,7 +362,7 @@
                                 if ($scope.selectedLevels[l] == data.response[i].CODIGONIVEL)
                                     existe = true;
                             }
-                            if (!existe) {
+                            if (existe == false) {
                                 $scope.selectedLevels.push(data.response[i].CODIGONIVEL);
                                 $scope.originLevels.push(data.response[i].CODIGONIVEL);
                             }
@@ -379,21 +380,6 @@
             });
         };
 
-        $scope.getAllCareers = function () {     
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllCareers', {
-                schools: []
-            }).success(function (data, status, headers, config) {
-                // console.log("Carreras... ", data);
-                if (data.success)
-                    $scope.allCareers = data.response;
-                else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-            }).error(function (data, status, headers, config) {
-                console.log("Error al cargar carreras...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras'}]);
-            });
-        };
-
         $scope.getAllModalities = function () {     
             $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllModalities'
             ).success(function (data, status, headers, config) {
@@ -405,6 +391,36 @@
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar modalidades...", data);
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las modalidades'}]);
+            });
+        };
+
+        $scope.getAllCareers = function () {     
+            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllCareers', {
+                modalities: $scope.selectedModalities
+            }).success(function (data, status, headers, config) {
+                if (data.success) {
+                    $scope.copyAllCareers = [];
+                    $scope.allCareers = data.response;
+                    for (var i=0; i<$scope.allCareers.length; i++) {
+                        if ($scope.copyAllCareers.length > 0) {
+                            var existe = false;
+                            for (var j=0; j<$scope.copyAllCareers.length; j++) {
+                                if ($scope.copyAllCareers[j].CRRCODIGOI == $scope.allCareers[i].CRRCODIGOI) {
+                                    existe = true;
+                                }
+                            }
+                            if (existe == false) {
+                                $scope.copyAllCareers.push($scope.allCareers[i]);
+                            }
+                        } else
+                            $scope.copyAllCareers.push($scope.allCareers[i]);
+                    }
+                }
+                else
+                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar carreras...", data);
+                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras'}]);
             });
         };
 
@@ -425,60 +441,71 @@
         };  
 
         $scope.cambiarVista = function(viewValue) {
-            if (viewValue == "career") {
-                $scope.validateCareerSelected();
-                $scope.selectedExistCareers = [];
-                $scope.getAllCareers();
+            if (viewValue == "levelCareer") {
+                if ($scope.selectedModalities.length > 0) {
+                    $scope.getAllCareers();
+                    $scope.validateCareerSelected();
+                    $scope.view = "career";
+                }
             }
-
-            if (viewValue == "modality") {
-                $scope.getAllModalities();
+            if (viewValue == "careerLevel") {
+                if ($scope.selectedCareers.length > 0) {
+                    $scope.getAllLevels();
+                    $scope.validateLevelSelected();
+                    $scope.view = "level";
+                }
             }
-
-            if (viewValue == "level") {
-                $scope.validateLevelSelected();
-                $scope.selectedExistLevels = [];
-                $scope.getAllLevels();
+            if (viewValue == "careerModality") {
+                if ($scope.selectedCareers.length > 0) {
+                    $scope.getAllModalities();
+                    $scope.view = "modality";
+                }
             }
-
-            $scope.view = viewValue;
+            if (viewValue == "levelCareer") {
+                if ($scope.selectedLevels.length > 0) {
+                    $scope.getAllCareers();
+                    $scope.validateCareerSelected();
+                    $scope.view = "career";
+                }
+            }
         };
 
         $scope.validateCareerSelected = function () {
-            var exist = false;
-
+            var careerToErase = [];
             for (var i = 0; i < $scope.selectedCareers.length; i++) {
-                for (var j = 0; j < $scope.selectedExistCareers.length; j++) {
-                    if ($scope.selectedCareers[i] == $scope.selectedExistCareers[j]) {
-                        exist = true;
+                for (var j = 0; j < $scope.copyAllCareers.length; j++) {
+                    if ($scope.selectedCareers[i] == $scope.copyAllCareers[j].CRRCODIGOI) {
+                        careerToErase.push($scope.selectedCareers[i]);
                     }
                 }
-                if (!exist) {
-                    $scope.selectedCareers.splice(i, 1);
-                }
             };
+            $scope.selectedCareers = [];
+            $scope.selectedCareers = careerToErase;
         }
 
         $scope.validateLevelSelected = function () {
-            var exist = false;
-
+            var levelToErase = [];
             for (var i = 0; i < $scope.selectedLevels.length; i++) {
-                for (var j = 0; j < $scope.selectedExistLevels.length; j++) {
-                    if ($scope.selectedLevels[i] == $scope.selectedExistLevels[j]) {
-                        exist = true;
+                for (var j = 0; j < $scope.allLevels.length; j++) {
+                    if ($scope.selectedLevels[i] == $scope.allLevels[j].NVLCODIGOI) {
+                        levelToErase.push($scope.selectedLevels[i]);
                     }
                 }
-                if (!exist) {
-                    $scope.selectedLevels.splice(i, 1);
-                }
             };
+            $scope.selectedLevels = [];
+            $scope.selectedLevels = levelToErase;
+        };
+
+        $scope.existAllCareerData = function () {
+            if ($scope.selectedCareers.length > $scope.copyAllCareers.length)
+                return true; 
+            return false;
         };
 
         $scope.existCareerData = function (code) {
             if ($scope.selectedCareers.length > 0) {
                 for (var i = 0; i < $scope.selectedCareers.length; i++) {
                     if ($scope.selectedCareers[i] == code) { 
-                        $scope.selectedExistCareers.push(code);
                         return true; 
                     }
                 }
@@ -502,11 +529,16 @@
             return false;
         };
 
+        $scope.existAllLevelData = function () {
+            if ($scope.selectedLevels.length == $scope.allLevels.length)
+                return true; 
+            return false;
+        };
+
         $scope.existLevelData = function (code) {
             if ($scope.selectedLevels.length > 0) {
                 for (var i = 0; i < $scope.selectedLevels.length; i++) {
                     if ($scope.selectedLevels[i] == code) { 
-                        $scope.selectedExistLevels.push(code);
                         return true; 
                     }
                 }
@@ -514,42 +546,93 @@
             return false;
         };
 
+        $scope.setSelectedAllCareers = function() {
+            if ($scope.selectedCareers.length == $scope.copyAllCareers.length) {
+                for (var i=0; i<$scope.copyAllCareers.length; i++) {
+                    $scope.selectedCareers = [];
+                }
+            } else {
+                var existe = false;
+                for (var i=0; i<$scope.copyAllCareers.length; i++) {
+                    existe = false;
+                    if ($scope.selectedCareers.length == 0) {
+                        $scope.selectedCareers.push($scope.copyAllCareers[i].CRRCODIGOI);
+                    } else {
+                        for (var j=0; j<$scope.selectedCareers.length; j++) {
+                            if ($scope.copyAllCareers[i].CRRCODIGOI == $scope.selectedCareers[j])
+                                existe = true;
+                        }
+                        if (existe == false) {
+                            $scope.selectedCareers.push($scope.copyAllCareers[i].CRRCODIGOI);
+                        }
+                    }
+                }
+            }
+            $scope.getAllLevels();
+        };
+
         $scope.setSelectedCareers = function(id) {
             $scope.selectObjects($scope.selectedCareers, id);
-            $scope.getAllModalities();
             $scope.getAllLevels();
         };
 
         $scope.setSelectedAllModalities = function() {
-            console.log("Selec: ", $scope.selectedModalities.length);
             if ($scope.selectedModalities.length == $scope.allModalities.length) {
                 for (var i=0; i<$scope.allModalities.length; i++) {
-                    $scope.selectedModalities.splice(i, 1);
+                    $scope.selectedModalities = [];
                 }
             } else {
                 var existe = false;
                 for (var i=0; i<$scope.allModalities.length; i++) {
                     existe = false;
-                    for (var j=0; j<$scope.selectedModalities.length; j++) {
-                        if ($scope.allModalities[i].MDLCODIGOI == $scope.selectedModalities[j].MDLCODIGOI) {
-                            existe = true;
+                    if ($scope.selectedModalities.length == 0) {
+                        $scope.selectedModalities.push($scope.allModalities[i].MDLCODIGOI);
+                    } else {
+                        for (var j=0; j<$scope.selectedModalities.length; j++) {
+                            if ($scope.allModalities[i].MDLCODIGOI == $scope.selectedModalities[j])
+                                existe = true;
                         }
-                        if (existe == false)
+                        if (existe == false) {
                             $scope.selectedModalities.push($scope.allModalities[i].MDLCODIGOI);
+                        }
                     }
                 }
             }
-            console.log("son ", $scope.selectedModalities);
-            $scope.getAllModalities();
+            console.log($scope.selectedModalities);
+            $scope.getAllCareers();
         };
 
-        $scope.setSelectedModalities = function(id) {  
+        $scope.setSelectedModalities = function(id) { 
             $scope.selectObjects($scope.selectedModalities, id);
-            $scope.getAllLevels();         
+            $scope.getAllCareers();
+        };
+
+        $scope.setSelectedAllLevels = function() {
+            if ($scope.selectedLevels.length == $scope.allLevels.length) {
+                for (var i=0; i<$scope.allLevels.length; i++) {
+                    $scope.selectedLevels = [];
+                }
+            } else {
+                var existe = false;
+                for (var i=0; i<$scope.allLevels.length; i++) {
+                    existe = false;
+                    if ($scope.selectedLevels.length == 0) {
+                        $scope.selectedLevels.push($scope.allLevels[i].NVLCODIGOI);
+                    } else {
+                        for (var j=0; j<$scope.selectedLevels.length; j++) {
+                            if ($scope.allLevels[i].NVLCODIGOI == $scope.selectedLevels[j])
+                                existe = true;
+                        }
+                        if (existe == false) {
+                            $scope.selectedLevels.push($scope.allLevels[i].NVLCODIGOI);
+                        }
+                    }
+                }
+            }
         };
 
         $scope.setSelectedLevels = function(id) {  
-            $scope.selectObjects($scope.selectedLevels, id);           
+            $scope.selectObjects($scope.selectedLevels, id);
         };
 
         $scope.selectObjects = function(listSelected, id) {
@@ -860,15 +943,6 @@
                 $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un m&oacute;dulo o un nivel'}]);
             } else {
                 var parentObject = this;
-
-                if (($scope.selectedCareers.length > 0 || $scope.selectedModalities.length > 0) && $scope.selectedLevels.length == 0) {
-                    for (var i = 0; i < $scope.allLevels.length; i++)
-                        $scope.selectedLevels.push($scope.allLevels[i].NVLCODIGOI)
-                }
-                else if (($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0) && $scope.selectedLevels.length > 0) {
-                    for (var i = 0; i < $scope.allCareers.length; i++)
-                        $scope.selectedCareers.push($scope.allCareers[i].CRRCODIGOI);
-                }
 
                 $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveGroupActivity', {
                     careersV: $scope.selectedCareers,

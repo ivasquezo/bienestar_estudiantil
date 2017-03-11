@@ -309,7 +309,7 @@
                     <fieldset>
                         <legend>Modalidades</legend>
                         <div style="display:inline">
-                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Siguiente</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelCareer')">Siguiente</button>
                         </div>
                         <table>
                             <tr>
@@ -327,15 +327,15 @@
                     <fieldset>
                         <legend>Carreras</legend>
                         <div style="display:inline">
-                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('modality')">Anterior</button>
-                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('level')">Siguiente</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('careerModality')">Anterior</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('careerLevel')">Siguiente</button>
                         </div>
                         <table>
                             <tr>
-                                <th><input type="checkbox" ng-checked="existCareerData(career.CRRCODIGOI)" ng-click="setSelectedCareers(career.CRRCODIGOI)"></th>
+                                <th><input type="checkbox" ng-checked="existAllCareerData()" ng-click="setSelectedAllCareers()"></th>
                                 <th>Nombre</th> 
                             </tr>
-                            <tr ng-repeat="career in allCareers">
+                            <tr ng-repeat="career in copyAllCareers">
                                 <td style="width:50px"><input type="checkbox" ng-checked="existCareerData(career.CRRCODIGOI)" ng-click="setSelectedCareers(career.CRRCODIGOI)"></td>
                                 <td style="width:100%">{{ career.CRRDESCRIPC }}</td>
                             </tr>
@@ -345,10 +345,10 @@
                 <div ng-show="view == 'level'">
                     <fieldset>
                         <legend>Niveles</legend>
-                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('career')">Anterior</button>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelCareer')">Anterior</button>
                         <table>
                             <tr>
-                                <th><input type="checkbox" ng-checked="existLevelData(level.NVLCODIGOI)" ng-click="setSelectedLevels(level.NVLCODIGOI)"></th>
+                                <th><input type="checkbox" ng-checked="existAllLevelData()" ng-click="setSelectedAllLevels()"></th>
                                 <th>Nombre</th> 
                             </tr>
                             <tr ng-repeat="level in allLevels">
@@ -359,7 +359,7 @@
                     </fieldset>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" ng-show="view == 'level'">
                     <label class="col-md-4 control-label" for="saveLevel"></label>
                     <div class="col-md-8">
                         <button type="submit" id="saveLevel" name="saveLevel" class="btn btn-success" ng-click="saveGroupActivity()">Guardar</button>
