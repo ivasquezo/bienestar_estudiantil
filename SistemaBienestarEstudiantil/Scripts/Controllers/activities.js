@@ -3,28 +3,26 @@
 
     app.controller('ActivitiesController', ['$scope', '$http', 'ngDialog', '$controller', function ($scope, $http, ngDialog, $controller) {
         $('#messages').puigrowl();
-        $('#messages').puigrowl('option', {life: 5000});
+        $('#messages').puigrowl('option', { life: 5000 });
 
         // session listener
-        document.onclick = function(){
+        document.onclick = function () {
             $http.get((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/checkSession')
-            .success(function (data, status, headers, config) {
-                if (!data.success) {
-                    document.location.href = "/";
-                }
-            }).error(function (data, status, headers, config) {
-                console.log("Error checkSession", data);
-            });
+                .success(function (data, status, headers, config) {
+                    if (!data.success) {
+                        document.location.href = "/";
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log("Error checkSession", data);
+                });
         };
 
         // for procesing message
         $scope.promise = null;
         $scope.message = 'Procesando...';
         $scope.backdrop = true;
-        $scope.delay = 2;
-        $scope.minDuration = 2;
 
-       $scope.date = {
+        $scope.date = {
             dateFrom: new Date(),
             dateTo: new Date()
         };
@@ -42,24 +40,24 @@
 
         $scope.presentEditGeneralActivity = false;
 
-        $scope.convertDate = function(arrayActivity) {
+        $scope.convertDate = function (arrayActivity) {
             for (var i = 0; i < arrayActivity.length; i++) {
                 if (arrayActivity[i].FECHA != null)
-                    arrayActivity[i].FECHA = arrayActivity[i].FECHA.substring(6, arrayActivity[i].FECHA.length-2);
+                    arrayActivity[i].FECHA = arrayActivity[i].FECHA.substring(6, arrayActivity[i].FECHA.length - 2);
             };
         };
 
-        $scope.cargarNombreEstado = function(statusId) {
+        $scope.cargarNombreEstado = function (statusId) {
             return $scope.ESTADOS[statusId].name;
         };
 
-        $scope.cargarEstadoActividades = function(actividades){
+        $scope.cargarEstadoActividades = function (actividades) {
             for (var i = 0; i < actividades.length; i++)
                 actividades[i].NOMBREESTADO = $scope.cargarNombreEstado(actividades[i].ESTADO);
         };
 
         $scope.chargeGeneralActivities = function () {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivitiesWithActivity', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivitiesWithActivity', {
             }).success(function (data, status, headers, config) {
                 // console.log("Cargar actividades... ", data);
                 if (data.success) {
@@ -67,10 +65,10 @@
                     $scope.cargarEstadoActividades(data.response);
                     $scope.gridOptions.data = data.response;
                 } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar las actividades... ", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades' }]);
             });
         };
 
@@ -83,17 +81,17 @@
         };
 
         $scope.getReportActivities = function () {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getActivitiesReport', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getActivitiesReport', {
             }).success(function (data, status, headers, config) {
                 console.log("Cargar actividades... ", data);
                 if (data.success) {
                     $scope.convertDate(data.response);
                     $scope.reportActivitiesData = data.response;
                 } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar reportes de actividades... ", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener reportes de actividades'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener reportes de actividades' }]);
             });
         };
 
@@ -102,11 +100,12 @@
             enableFiltering: true,
             enableColumnMenus: false,
             columnDefs: [
-              {name:'C\u00F3digo', field: 'CODIGO', width: 85, type: 'number'},
-              {name:'Actividad general', field: 'NOMBREACTIVIDAD'},
-              {name:'Actividad', field: 'NOMBRE'},
-              {name:'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false,
-                sortingAlgorithm: function (dateA, dateB) {
+                { name: 'C\u00F3digo', field: 'CODIGO', width: 85, type: 'number' },
+                { name: 'Actividad general', field: 'NOMBREACTIVIDAD' },
+                { name: 'Actividad', field: 'NOMBRE' },
+                {
+                    name: 'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false,
+                    sortingAlgorithm: function (dateA, dateB) {
                         var a = parseInt(dateA);
                         var b = parseInt(dateB);
                         if (a < b) {
@@ -117,40 +116,40 @@
                             return 0;
                         }
                     }
-              },
-              {name:'Estado', field: 'NOMBREESTADO', width: 90},
-              {name:'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 230, enableFiltering: false, enableSorting: false}
+                },
+                { name: 'Estado', field: 'NOMBREESTADO', width: 90 },
+                { name: 'Acci\u00F3n', field: 'CODIGO', cellTemplate: 'actionsActivities.html', width: 230, enableFiltering: false, enableSorting: false }
             ]
         };
 
-        $scope.getGeneralActivities = function () {     
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivity'
+        $scope.getGeneralActivities = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGeneralActivity'
             ).success(function (data, status, headers, config) {
                 // console.log("Actividades generales existentes... ", data);
                 $scope.allGeneralActivities = [];
 
                 for (var i = 0; i < data.response.length; i++)
-                    $scope.allGeneralActivities.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRE});
+                    $scope.allGeneralActivities.push({ value: data.response[i].CODIGO, name: data.response[i].NOMBRE });
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar las actividades generales...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener las actividades generales existentes' }]);
             });
         };
 
-        $scope.getAllResponsables = function () {     
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllResponsables'
+        $scope.getAllResponsables = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllResponsables'
             ).success(function (data, status, headers, config) {
                 // console.log("Docentes... ", data);
                 if (data.success) {
                     $scope.allResponsables = [];
 
                     for (var i = 0; i < data.response.length; i++)
-                        $scope.allResponsables.push({value: data.response[i].CODIGO, name:data.response[i].NOMBRECOMPLETO});
+                        $scope.allResponsables.push({ value: data.response[i].CODIGO, name: data.response[i].NOMBRECOMPLETO });
                 } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar los docentes...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los docentes existentes' }]);
             });
         };
 
@@ -158,20 +157,20 @@
         $scope.getGeneralActivities();
         $scope.getAllResponsables();
 
-        $scope.getElementArray = function(arrayActividad, activityCode) {
-            for (var i=0; i<arrayActividad.length; i++) {
-                if (arrayActividad[i].CODIGO == activityCode) 
+        $scope.getElementArray = function (arrayActividad, activityCode) {
+            for (var i = 0; i < arrayActividad.length; i++) {
+                if (arrayActividad[i].CODIGO == activityCode)
                     return arrayActividad[i];
             }
             return null;
         };
 
-        $scope.toDate = function(dateTime) {
-            var mEpoch = parseInt(dateTime); 
+        $scope.toDate = function (dateTime) {
+            var mEpoch = parseInt(dateTime);
             var dDate = new Date();
 
-            if(mEpoch<10000000000) mEpoch *= 1000;
-        
+            if (mEpoch < 10000000000) mEpoch *= 1000;
+
             dDate.setTime(mEpoch)
             return dDate;
         }
@@ -205,7 +204,7 @@
             });
         };
 
-        $scope.updateElementArray = function(arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId, generalActivityName) {
+        $scope.updateElementArray = function (arrayActivity, generalActivityId, activityId, activityName, activityDate, activityStatus, observation, responsableId, generalActivityName) {
             var nameActivity = '';
 
             if (generalActivityId == 0) {
@@ -216,21 +215,21 @@
                         nameActivity = $scope.allGeneralActivities[i].name;
             }
 
-            for (var i=0; i<arrayActivity.length; i++) {
-                if (arrayActivity[i].CODIGO == activityId) {                    
+            for (var i = 0; i < arrayActivity.length; i++) {
+                if (arrayActivity[i].CODIGO == activityId) {
                     arrayActivity[i].CODIGOACTIVIDAD = generalActivityId;
                     arrayActivity[i].NOMBREACTIVIDAD = nameActivity;
                     arrayActivity[i].NOMBRE = activityName;
                     arrayActivity[i].FECHA = activityDate;
                     arrayActivity[i].ESTADO = activityStatus;
-                    arrayActivity[i].NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
-                    arrayActivity[i].OBSERVACION = observation;  
+                    arrayActivity[i].NOMBREESTADO = $scope.cargarNombreEstado(activityStatus);
+                    arrayActivity[i].OBSERVACION = observation;
                     arrayActivity[i].CODIGOUSUARIO = responsableId;
                 }
             }
         };
 
-        $scope.addNewActivityDialog = function() {
+        $scope.addNewActivityDialog = function () {
             $scope.presentEditGeneralActivity = false;
             $scope.getGeneralActivities();
             $scope.activityCopy = {
@@ -251,7 +250,7 @@
             });
         };
 
-        $scope.addElementArray = function(arrayActivity, newActivity, activityDate, generalActivityId, activityStatus, activityName) {
+        $scope.addElementArray = function (arrayActivity, newActivity, activityDate, generalActivityId, activityStatus, activityName) {
             var nameActivity = '';
 
             if (generalActivityId == 0) {
@@ -264,7 +263,7 @@
             newActivity.FECHA = activityDate;
             newActivity.CODIGOACTIVIDAD = generalActivityId;
             newActivity.NOMBREACTIVIDAD = nameActivity;
-            newActivity.NOMBREESTADO =  $scope.cargarNombreEstado(activityStatus);
+            newActivity.NOMBREESTADO = $scope.cargarNombreEstado(activityStatus);
 
             arrayActivity.push(newActivity);
         };
@@ -280,7 +279,7 @@
             $scope.allLevels = [];
 
             $scope.copyAllCareers = [];
-            
+
             $scope.selectedCareers = [];
             $scope.selectedModalities = [];
             $scope.selectedLevels = [];
@@ -309,17 +308,17 @@
         };
 
         $scope.saveAllGroups = function () {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveAllGroups'
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveAllGroups'
             ).success(function (data, status, headers, config) {
                 console.log("Guardar grupos nuevos... ", data);
             }).error(function (data, status, headers, config) {
                 console.log("Error al guardar grupos nuevos...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al guardar los grupos'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al guardar los grupos' }]);
             });
         };
 
         $scope.getGroupsByActivity = function () {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getGroupActivityByActivity', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getGroupActivityByActivity', {
                 activityId: $scope.activityCopy.CODIGO
             }).success(function (data, status, headers, config) {
                 console.log("Obtener grupos de actividad...", data);
@@ -373,38 +372,38 @@
                     }
                 }
                 else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al obtener los grupos de la actividad...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los grupos de la actividad'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los grupos de la actividad' }]);
             });
         };
 
-        $scope.getAllModalities = function () {     
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllModalities'
+        $scope.getAllModalities = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllModalities'
             ).success(function (data, status, headers, config) {
                 console.log("Modalidades... ", data);
                 if (data.success)
                     $scope.allModalities = data.response;
                 else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar modalidades...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las modalidades'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener las modalidades' }]);
             });
         };
 
-        $scope.getAllCareers = function () {     
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllCareers', {
+        $scope.getAllCareers = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllCareers', {
                 modalities: $scope.selectedModalities
             }).success(function (data, status, headers, config) {
                 if (data.success) {
                     $scope.copyAllCareers = [];
                     $scope.allCareers = data.response;
-                    for (var i=0; i<$scope.allCareers.length; i++) {
+                    for (var i = 0; i < $scope.allCareers.length; i++) {
                         if ($scope.copyAllCareers.length > 0) {
                             var existe = false;
-                            for (var j=0; j<$scope.copyAllCareers.length; j++) {
+                            for (var j = 0; j < $scope.copyAllCareers.length; j++) {
                                 if ($scope.copyAllCareers[j].CRRCODIGOI == $scope.allCareers[i].CRRCODIGOI) {
                                     existe = true;
                                 }
@@ -417,15 +416,15 @@
                     }
                 }
                 else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar carreras...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener las carreras' }]);
             });
         };
 
-        $scope.getAllLevels = function () {     
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllLevels', {
+        $scope.getAllLevels = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllLevels', {
                 modalities: $scope.selectedModalities,
                 carees: $scope.selectedCareers
             }).success(function (data, status, headers, config) {
@@ -433,14 +432,14 @@
                 if (data.success) {
                     $scope.allLevels = data.response;
                 } else
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar niveles...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles' }]);
             });
-        };  
+        };
 
-        $scope.cambiarVista = function(viewValue) {
+        $scope.cambiarVista = function (viewValue) {
             if (viewValue == "levelCareer") {
                 if ($scope.selectedModalities.length > 0) {
                     $scope.getAllCareers();
@@ -498,15 +497,15 @@
 
         $scope.existAllCareerData = function () {
             if ($scope.selectedCareers.length > $scope.copyAllCareers.length)
-                return true; 
+                return true;
             return false;
         };
 
         $scope.existCareerData = function (code) {
             if ($scope.selectedCareers.length > 0) {
                 for (var i = 0; i < $scope.selectedCareers.length; i++) {
-                    if ($scope.selectedCareers[i] == code) { 
-                        return true; 
+                    if ($scope.selectedCareers[i] == code) {
+                        return true;
                     }
                 }
             }
@@ -515,15 +514,15 @@
 
         $scope.existAllModalities = function () {
             if ($scope.selectedModalities.length == $scope.allModalities.length)
-                return true; 
+                return true;
             return false;
         };
 
         $scope.existModalityData = function (code) {
             if ($scope.selectedModalities.length > 0) {
                 for (var i = 0; i < $scope.selectedModalities.length; i++) {
-                    if ($scope.selectedModalities[i] == code) 
-                        return true; 
+                    if ($scope.selectedModalities[i] == code)
+                        return true;
                 }
             }
             return false;
@@ -531,34 +530,34 @@
 
         $scope.existAllLevelData = function () {
             if ($scope.selectedLevels.length == $scope.allLevels.length)
-                return true; 
+                return true;
             return false;
         };
 
         $scope.existLevelData = function (code) {
             if ($scope.selectedLevels.length > 0) {
                 for (var i = 0; i < $scope.selectedLevels.length; i++) {
-                    if ($scope.selectedLevels[i] == code) { 
-                        return true; 
+                    if ($scope.selectedLevels[i] == code) {
+                        return true;
                     }
                 }
             }
             return false;
         };
 
-        $scope.setSelectedAllCareers = function() {
+        $scope.setSelectedAllCareers = function () {
             if ($scope.selectedCareers.length == $scope.copyAllCareers.length) {
-                for (var i=0; i<$scope.copyAllCareers.length; i++) {
+                for (var i = 0; i < $scope.copyAllCareers.length; i++) {
                     $scope.selectedCareers = [];
                 }
             } else {
                 var existe = false;
-                for (var i=0; i<$scope.copyAllCareers.length; i++) {
+                for (var i = 0; i < $scope.copyAllCareers.length; i++) {
                     existe = false;
                     if ($scope.selectedCareers.length == 0) {
                         $scope.selectedCareers.push($scope.copyAllCareers[i].CRRCODIGOI);
                     } else {
-                        for (var j=0; j<$scope.selectedCareers.length; j++) {
+                        for (var j = 0; j < $scope.selectedCareers.length; j++) {
                             if ($scope.copyAllCareers[i].CRRCODIGOI == $scope.selectedCareers[j])
                                 existe = true;
                         }
@@ -571,24 +570,24 @@
             $scope.getAllLevels();
         };
 
-        $scope.setSelectedCareers = function(id) {
+        $scope.setSelectedCareers = function (id) {
             $scope.selectObjects($scope.selectedCareers, id);
             $scope.getAllLevels();
         };
 
-        $scope.setSelectedAllModalities = function() {
+        $scope.setSelectedAllModalities = function () {
             if ($scope.selectedModalities.length == $scope.allModalities.length) {
-                for (var i=0; i<$scope.allModalities.length; i++) {
+                for (var i = 0; i < $scope.allModalities.length; i++) {
                     $scope.selectedModalities = [];
                 }
             } else {
                 var existe = false;
-                for (var i=0; i<$scope.allModalities.length; i++) {
+                for (var i = 0; i < $scope.allModalities.length; i++) {
                     existe = false;
                     if ($scope.selectedModalities.length == 0) {
                         $scope.selectedModalities.push($scope.allModalities[i].MDLCODIGOI);
                     } else {
-                        for (var j=0; j<$scope.selectedModalities.length; j++) {
+                        for (var j = 0; j < $scope.selectedModalities.length; j++) {
                             if ($scope.allModalities[i].MDLCODIGOI == $scope.selectedModalities[j])
                                 existe = true;
                         }
@@ -602,24 +601,24 @@
             $scope.getAllCareers();
         };
 
-        $scope.setSelectedModalities = function(id) { 
+        $scope.setSelectedModalities = function (id) {
             $scope.selectObjects($scope.selectedModalities, id);
             $scope.getAllCareers();
         };
 
-        $scope.setSelectedAllLevels = function() {
+        $scope.setSelectedAllLevels = function () {
             if ($scope.selectedLevels.length == $scope.allLevels.length) {
-                for (var i=0; i<$scope.allLevels.length; i++) {
+                for (var i = 0; i < $scope.allLevels.length; i++) {
                     $scope.selectedLevels = [];
                 }
             } else {
                 var existe = false;
-                for (var i=0; i<$scope.allLevels.length; i++) {
+                for (var i = 0; i < $scope.allLevels.length; i++) {
                     existe = false;
                     if ($scope.selectedLevels.length == 0) {
                         $scope.selectedLevels.push($scope.allLevels[i].NVLCODIGOI);
                     } else {
-                        for (var j=0; j<$scope.selectedLevels.length; j++) {
+                        for (var j = 0; j < $scope.selectedLevels.length; j++) {
                             if ($scope.allLevels[i].NVLCODIGOI == $scope.selectedLevels[j])
                                 existe = true;
                         }
@@ -631,11 +630,11 @@
             }
         };
 
-        $scope.setSelectedLevels = function(id) {  
+        $scope.setSelectedLevels = function (id) {
             $scope.selectObjects($scope.selectedLevels, id);
         };
 
-        $scope.selectObjects = function(listSelected, id) {
+        $scope.selectObjects = function (listSelected, id) {
             var index = null;
             if (listSelected == null || listSelected.length == 0)
                 listSelected.push(id);
@@ -649,7 +648,7 @@
                     listSelected.splice(index, 1);
                 else
                     listSelected.push(id);
-            }     
+            }
         };
 
         this.getAssistance = function (code) {
@@ -658,16 +657,16 @@
             $scope.checkedAll = false;
             $scope.activityId = code;
 
-            $scope.getAllStudents(code, function(){
+            $scope.getAllStudents(code, function () {
                 if ($scope.allLevelAssistance.length > 0) {
                     var countAssistance = 0;
 
                     for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
                         if ($scope.allLevelAssistance[i].ASISTENCIA)
-                            countAssistance ++;
+                            countAssistance++;
                     };
 
-                    if ($scope.allLevelAssistance.length == countAssistance)
+                    if ($scope.allLevelAssistance.length === countAssistance)
                         $scope.checkedAll = true;
 
                     ngDialog.open({
@@ -678,51 +677,62 @@
                         scope: $scope,
                         controller: $controller('ngDialogController', {
                             $scope: $scope,
-                            $http: $http
+                            $http: $http,
+                            code: code,
                         })
                     });
                 }
                 else
-                    $('#messages').puigrowl('show', [{severity: 'info', summary: 'Informaci&oacute;n', detail: 'No se han encontrado niveles registrados en la actividad'}]);
+                    $('#messages').puigrowl('show', [{ severity: 'info', summary: 'Informaci&oacute;n', detail: 'No se han encontrado niveles registrados en la actividad' }]);
             });
         };
 
-        $scope.notifyActivityStudents = function() {
+        $scope.notifyActivityStudents = function () {
             $scope.studentsMails = [];
 
-            for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
-                $scope.studentsMails.push($scope.allLevelAssistance[i].CORREO);
-            };
+            $scope.allLevelAssistance.filter(e => e.notify === true).forEach(function (element) {
+                $scope.studentsMails.push({
+                    codigo: element.CODIGO,
+                    correo: element.CORREO,
+                });
+            }, this);
 
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/sendStudentsNotification', {
+            if ($scope.studentsMails.length === 0) {
+                return;
+            }
+
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/sendStudentsNotification', {
                 studentsMails: $scope.studentsMails,
                 activityId: $scope.activityId
             }).success(function (data, status, headers, config) {
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
+                $scope.getAllStudents($scope.code);
+                console.log($scope.promise);
             }).error(function (data, status, headers, config) {
                 console.log("Error al enviar notificacion estudiantes...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener enviar la notificaci&oacute;n a los estudiantes'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener enviar la notificaci&oacute;n a los estudiantes' }]);
             });
         }
 
         $scope.getAllStudents = function (code, successFunction) {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getStudentsAssistance', {
+            $scope.code = code;
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getStudentsAssistance', {
                 activityId: code
             }).success(function (data, status, headers, config) {
                 // console.log("Estudiantes de la actividad... ", data);
                 if (data.success) {
                     $scope.allLevelAssistance = data.response;
-                } 
+                }
 
                 if (typeof successFunction === "function")
                     successFunction();
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar niveles de actividad...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles de la actividad' }]);
             });
         };
 
-        $scope.setAssistanceStudents = function(code) {
+        $scope.setAssistanceStudents = function (code) {
             $scope.selectObjects($scope.assistance, code);
 
             if ($scope.allLevelAssistance.length == $scope.assistance.length)
@@ -731,7 +741,13 @@
                 $scope.checkedAll = false;
         };
 
-        $scope.setAllStudents = function() {
+        $scope.missingNotify = () => {
+            return $scope.allLevelAssistance.filter(e => e.notify === true).length === 0;
+        }
+
+        $scope.setNotify = function (code) { };
+
+        $scope.setAllStudents = function () {
             if ($scope.checkedAll) {
                 for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
                     $scope.assistance.push($scope.allLevelAssistance[i].CODIGO);
@@ -747,6 +763,21 @@
                     }
                 }
                 $scope.checkedAll = true;
+            }
+        };
+
+        $scope.setAllNotify = function () {
+            if ($scope.checkedAllNotify) {
+                for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                    $scope.allLevelAssistance[i].notify = false;
+                }
+                $scope.checkedAllNotify = false;
+            }
+            else {
+                for (var i = 0; i < $scope.allLevelAssistance.length; i++) {
+                    $scope.allLevelAssistance[i].notify = true;
+                }
+                $scope.checkedAllNotify = true;
             }
         };
 
@@ -770,7 +801,7 @@
         };
 
         $scope.getAllActivitiesAttach = function (code, successFunction) {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAttachByActivity', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAttachByActivity', {
                 activityId: $scope.activityCopy.CODIGO
             }).success(function (data, status, headers, config) {
                 console.log("Adjuntos de la actividad... ", data);
@@ -778,16 +809,16 @@
                     $scope.allAttaches = data.response;
                 else {
                     $scope.allAttaches = [];
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
                 }
             }).error(function (data, status, headers, config) {
                 console.log("Error al cargar ajuntos de actividad...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al obtener los archivos adjuntos de la actividad'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los archivos adjuntos de la actividad' }]);
             });
         };
 
         $scope.removeAttach = function (attachCode) {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/removeAttach', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/removeAttach', {
                 attachCode: attachCode
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar adjunto...", data);
@@ -799,30 +830,30 @@
 
         this.removeActivity = function (code) {
             var parentObject = this;
-            
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/removeActivityById', {
+
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/removeActivityById', {
                 activityId: code
             }).success(function (data, status, headers, config) {
                 console.log("Eliminar actividad... ", data);
                 if (data.success)
                     parentObject.removeElementArray($scope.gridOptions.data, code);
 
-                $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
             }).error(function (data, status, headers, config) {
                 console.log("Error al eliminar la actividad... ", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al eliminar la actividad'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al eliminar la actividad' }]);
             });
         };
 
-        this.removeElementArray = function(arrayActivity, activityCode) {
-            for (var i=0; i<arrayActivity.length; i++) {
+        this.removeElementArray = function (arrayActivity, activityCode) {
+            for (var i = 0; i < arrayActivity.length; i++) {
                 if (arrayActivity[i].CODIGO == activityCode) {
                     arrayActivity.splice(i, 1);
                 }
             }
-        }; 
+        };
 
-        $scope.setSendMail = function() {
+        $scope.setSendMail = function () {
             if ($scope.sendMail)
                 $scope.sendMail = false;
             else
@@ -834,7 +865,7 @@
             //$scope.solicitudbecaReport = angular.copy($scope.gridOptions.data);
 
             $scope.getReportActivities();
-            
+
             ngDialog.open({
                 template: 'activitiesReport.html',
                 className: 'ngdialog-theme-flat ngdialog-report',
@@ -850,7 +881,7 @@
 
     }]);
 
-    app.controller('ngDialogController', ['$scope', '$http', function($scope, $http) {
+    app.controller('ngDialogController', ['$scope', '$http', function ($scope, $http) {
         // Editar una actividad general
         $scope.editGeneralActivities = function () {
             $scope.activityCopy.CODIGOACTIVIDAD = undefined;
@@ -872,7 +903,7 @@
                 if ($scope.activityCopy.NOMBREACTIVIDAD == undefined)
                     $scope.activityCopy.NOMBREACTIVIDAD = "";
 
-                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveActivityData', {
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveActivityData', {
                     activityId: $scope.activityCopy.CODIGO,
                     activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
                     activityDate: $scope.activityCopy.FECHA,
@@ -887,18 +918,18 @@
                     console.log("Editar actividad: ", data);
                     if (data.success) {
                         $scope.updateElementArray($scope.gridOptions.data, $scope.activityCopy.CODIGOACTIVIDAD, $scope.activityCopy.CODIGO,
-                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), $scope.activityCopy.ESTADO, 
+                            $scope.activityCopy.NOMBRE.toUpperCase(), Date.parse($scope.activityCopy.FECHA), $scope.activityCopy.ESTADO,
                             $scope.activityCopy.OBSERVACION.toUpperCase(), $scope.activityCopy.CODIGOUSUARIO, $scope.activityCopy.NOMBREACTIVIDAD.toUpperCase());
                         parentObject.closeThisDialog();
-                    } 
+                    }
 
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al editar la actividad...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad'}]);
+                    $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al actualizar la actividad' }]);
                 });
             } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Editar', detail: 'Ingrese correctamente todos los datos' }]);
             }
         };
 
@@ -910,7 +941,7 @@
                 if ($scope.activityCopy.NOMBREACTIVIDAD == undefined)
                     $scope.activityCopy.NOMBREACTIVIDAD = "";
 
-                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addNewActivity', {                
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addNewActivity', {
                     activityName: $scope.activityCopy.NOMBRE.toUpperCase(),
                     activityDate: $scope.activityCopy.FECHA,
                     activityStatus: $scope.activityCopy.ESTADO,
@@ -927,23 +958,23 @@
                         newParentObject.closeThisDialog();
                     }
 
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al agregar el rol...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al agregar la actividad'}]);
+                    $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al agregar la actividad' }]);
                 });
             } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos' }]);
             }
         };
 
         $scope.saveGroupActivity = function () {
             if ($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0 && $scope.selectedLevels.length == 0) {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un m&oacute;dulo o un nivel'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un m&oacute;dulo o un nivel' }]);
             } else {
                 var parentObject = this;
 
-                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveGroupActivity', {
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveGroupActivity', {
                     careersV: $scope.selectedCareers,
                     modalitiesV: $scope.selectedModalities,
                     levelsV: $scope.selectedLevels,
@@ -956,10 +987,10 @@
                     if (data.success)
                         parentObject.closeThisDialog();
 
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al editar grupo actividad...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar el grupo de la actividad'}]);
+                    $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al actualizar el grupo de la actividad' }]);
                 });
             }
         };
@@ -973,25 +1004,25 @@
 
         //2016-07-31T05:00:00.000Z
         var toUTCDateTimeDigits = function (dateParam) {
-            return  dateParam.getUTCFullYear() +"-"+ pad(dateParam.getUTCMonth() + 1) + "-" + pad(dateParam.getUTCDate()) + 'T' + 
-                    pad(dateParam.getUTCHours()) + ":" + pad(dateParam.getUTCMinutes()) + ":" + pad(dateParam.getUTCSeconds()) + "." + pad(dateParam.getUTCMilliseconds()) + 'Z';
+            return dateParam.getUTCFullYear() + "-" + pad(dateParam.getUTCMonth() + 1) + "-" + pad(dateParam.getUTCDate()) + 'T' +
+                pad(dateParam.getUTCHours()) + ":" + pad(dateParam.getUTCMinutes()) + ":" + pad(dateParam.getUTCSeconds()) + "." + pad(dateParam.getUTCMilliseconds()) + 'Z';
         };
 
         var exportExcelReport = function () {
             var dateFrom = toUTCDateTimeDigits($scope.date.dateFrom);
             var dateTo = toUTCDateTimeDigits($scope.date.dateTo);
             //console.log(JSON.stringify({dateFrom: '2011-04-02 17:15:45'}));
-            var url = (appContext ? appContext : "") + '/WebServices/Activities.asmx/exportExcelReport?dateFrom='+dateFrom+'&dateTo='+dateTo;
+            var url = (appContext ? appContext : "") + '/WebServices/Activities.asmx/exportExcelReport?dateFrom=' + dateFrom + '&dateTo=' + dateTo;
             return url;
         };
 
         $scope.urlExport = exportExcelReport();
 
-        $scope.$watch('date.dateTo', function() {
+        $scope.$watch('date.dateTo', function () {
             $scope.urlExport = exportExcelReport();
         });
 
-        $scope.$watch('date.dateFrom', function() {
+        $scope.$watch('date.dateFrom', function () {
             $scope.urlExport = exportExcelReport();
         });
 
@@ -999,20 +1030,20 @@
             if (!this.assistanceForm.$invalid) {
                 var parentObject = this;
 
-                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveAssistanceData', {                
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveAssistanceData', {
                     assistance: $scope.assistance
                 }).success(function (data, status, headers, config) {
                     console.log("Actualizar asistencia: ", data);
                     if (data.success)
                         parentObject.closeThisDialog();
                     else
-                        $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
+                        $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
                 }).error(function (data, status, headers, config) {
                     console.log("Error al actualizar asistencia...", data);
-                    $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Error al actualizar asistencia'}]);
+                    $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al actualizar asistencia' }]);
                 });
             } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos' }]);
             }
         };
 
@@ -1021,24 +1052,24 @@
                 var formElement = document.getElementById('attachedForm');
                 var formData = new FormData(formElement);
 
-                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addUploadedFileDataBase?codigoActividad='+$scope.activityCopy.CODIGO,
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/addUploadedFileDataBase?codigoActividad=' + $scope.activityCopy.CODIGO,
                     formData, {
-                    withCredentials: true,
-                    headers: {'Content-Type': undefined },
-                    transformRequest: angular.identity
-                }).success(function (data, status, headers, config) {
-                    // console.log("Adjuntos", data);
-                    if (data.success) {
-                        $scope.getAllActivitiesAttach();
-                        document.getElementById("observacion").value = "";
-                        document.getElementById("attachedActivity").value = "";
-                    }
-                    $('#messages').puigrowl('show', [{severity: data.severity, summary: data.summary, detail: data.message}]);
-                }).error(function (data, status, headers, config) {
-                    console.log("error al cargar los tipos...", data);
-                });
+                        withCredentials: true,
+                        headers: { 'Content-Type': undefined },
+                        transformRequest: angular.identity
+                    }).success(function (data, status, headers, config) {
+                        // console.log("Adjuntos", data);
+                        if (data.success) {
+                            $scope.getAllActivitiesAttach();
+                            document.getElementById("observacion").value = "";
+                            document.getElementById("attachedActivity").value = "";
+                        }
+                        $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
+                    }).error(function (data, status, headers, config) {
+                        console.log("error al cargar los tipos...", data);
+                    });
             } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Nuevo', detail: 'Ingrese correctamente todos los datos' }]);
             }
         };
 
@@ -1053,25 +1084,25 @@
 
     }]);
 
-    app.directive('validActivityName', ['$http', function($http) {
+    app.directive('validActivityName', ['$http', function ($http) {
         return {
             require: 'ngModel',
 
-            link: function(scope, element, attr, ctrl) {
+            link: function (scope, element, attr, ctrl) {
                 function customValidator(ngModelValue) {
                     if (ngModelValue != null && ngModelValue != scope.activityCopy.NOMBRE) {
 
                         ctrl.$setValidity('activityNameChecking', false);
 
-                        scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/countActivityWithName', {
+                        scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/countActivityWithName', {
                             activityName: ngModelValue
                         }).success(function (data, status, headers, config) {
                             if (data.cantidad == 0) {
-                                 ctrl.$setValidity('activityNameExist', true);
+                                ctrl.$setValidity('activityNameExist', true);
                                 ctrl.$setValidity('activityNameValidator', true);
                                 ctrl.$setValidity('activityNameChecking', true);
-                               
-                            } else {                            
+
+                            } else {
                                 ctrl.$setValidity('activityNameExist', false);
                                 ctrl.$setValidity('activityNameValidator', true);
                             }
@@ -1083,7 +1114,7 @@
                         ctrl.$setValidity('activityNameExist', true);
                         ctrl.$setValidity('activityNameValidator', true);
                         ctrl.$setValidity('activityNameChecking', true);
-                        
+
                     }
                     return ngModelValue;
                 }
@@ -1093,31 +1124,31 @@
         };
     }]);
 
-    app.directive('validFileInput', ['$http', function($http) {
+    app.directive('validFileInput', ['$http', function ($http) {
         return {
             restrict: 'A',
 
             require: 'ngModel',
 
-            link: function(scope, element, attr, ctrl) {
+            link: function (scope, element, attr, ctrl) {
                 ctrl.$setValidity('validFile', element.val() != '' || !element.get(0).required);
-                element.bind('change',function(){
+                element.bind('change', function () {
                     if (element.get(0).files.length > 0) {
                         ctrl.$setValidity('validFile', true);
                         ctrl.$setValidity('validFileSize', element.get(0).files[0].size < 2000000);
                         ctrl.$setValidity('validFileEmpty', element.get(0).files[0].size != 0);
                         ctrl.$setValidity('validFileType',
-                            element.get(0).files[0].type.toUpperCase().indexOf('APPLICATION/PDF') != -1 || 
+                            element.get(0).files[0].type.toUpperCase().indexOf('APPLICATION/PDF') != -1 ||
                             element.get(0).files[0].type.toUpperCase().indexOf('IMAGE') != -1);
 
                     } else {
                         if (element.get(0).required) ctrl.$setValidity('validFile', false);
-                        else  ctrl.$setValidity('validFile', true);
+                        else ctrl.$setValidity('validFile', true);
                         ctrl.$setValidity('validFileSize', true);
                         ctrl.$setValidity('validFileEmpty', true);
                         ctrl.$setValidity('validFileType', true);
                     }
-                    scope.$apply(function(){
+                    scope.$apply(function () {
                         ctrl.$setViewValue(element.val());
                         ctrl.$render();
                     });
@@ -1126,21 +1157,21 @@
         };
     }]);
 
-    app.filter("rangeDateFilter", function() {
-        return function(items, from, to) {
-            
-            var result = [];        
+    app.filter("rangeDateFilter", function () {
+        return function (items, from, to) {
+
+            var result = [];
             if (items != undefined) {
                 var df = from;
-                df.setHours(0,0,0,0);
+                df.setHours(0, 0, 0, 0);
                 var dt = to;
                 dt.setHours(24);
-                for (var i=0; i<items.length; i++){
+                for (var i = 0; i < items.length; i++) {
                     var t = new Date(parseInt(items[i].FECHA));
-                    if (df <= t && t <= dt)  {
+                    if (df <= t && t <= dt) {
                         result.push(items[i]);
                     }
-                }            
+                }
             }
             return result;
         };
@@ -1174,5 +1205,5 @@
                 ctrl.$parsers.push(customValidator);
             }
         };
-    } ]);
+    }]);
 })();

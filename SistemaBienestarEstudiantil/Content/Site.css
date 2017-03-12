@@ -47,6 +47,13 @@ p, ul
     line-height: 1.6em;
 }
 
+.main .errorTooltip,
+.main .errorTooltip .arrow {
+    color: red;
+    font-weight: bold;
+    font-size: 11px;
+}
+
 /* TÍTULOS   
 ----------------------------------------------------------*/
 h1, h2, h3, h4, h5, h6
@@ -204,6 +211,10 @@ ul#menu li.selected a
     margin: 2px 12px 10px 10px;
 }
 
+.main tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
+
 .main legend 
 {
     font-size: 1.1em;
@@ -211,7 +222,7 @@ ul#menu li.selected a
     padding: 2px 4px 8px 4px;
     width: unset;
     padding: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 21px;
     line-height: inherit;
     color: #333;

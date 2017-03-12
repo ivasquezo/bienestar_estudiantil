@@ -25,9 +25,7 @@
     <div id="messages"></div>
 
     <div ng-controller="ActivitiesController as Main">
-        <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
-            <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
-        </div>
+        <div style="position:fixed;top:0px;left:0; width: 111.11%;" cg-busy="{promise:promise,message:message}"></div>
 
         <button ng-click="addNewActivityDialog()" style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Agregar actividad">
             <span class="ui-button-icon-primary ui-icon ui-icon-circle-plus"></span><span class="ui-button-text">Nuevo</span>
@@ -192,7 +190,7 @@
                                         </button>
                                         <span class="help-block">Nombre de la actividad general</span>
                                         <span ng-messages="newActivityForm.generalActivityBox.$error">
-                                            <span ng-message="required" class="help-block ng-message">Selecione una actividad general</span>
+                                            <span ng-message="required" class="help-block ng-message">Seleccione una actividad general</span>
                                         </span>
                                     </div>
                                 </div>
@@ -369,23 +367,46 @@
         </script>
 
         <script type="text/ng-template" id="assistanceActivity.html">
-            <div style="font-size:12px; color:red; line-height:normal; display:inline;">Enviar notificaci&oacute;n a los alumnos</div>
-            <button class="btn btn-success" style="margin-bottom:5px" ng-click="notifyActivityStudents()">Enviar</button>
+            <div style="font-size: 12px;color: red;line-height: normal;display: inline-block;width: 145px;height: 30px;margin: 5px;vertical-align: bottom;">
+                Enviar notificaci&oacute;n a los alumnos seleccionados
+            </div>
+            <button class="btn btn-success" style="margin-bottom:5px"
+                popover-class="errorTooltip"
+                popover-enable="missingNotify()"
+                popover-trigger="'mouseenter'"
+                uib-popover="Debe seleccionar los estudiantes que ser&aacute;n notificados"
+                ng-click="notifyActivityStudents()">Enviar</button>
             <fieldset>
                 <legend>Asistencia</legend>
                 <form name="assistanceForm" ng-submit="saveAssistanceDB()">
                     <div class="form-group">
-                        <table style="width:100%; font-size:12px">
+                        <table style="width:100%; font-size:10px;line-height: normal;">
                             <tr>
-                                <th style="padding:2px; text-align:center"><input type="checkbox" ng-checked="checkedAll" ng-click="setAllStudents()"></th>
+                                <th style="padding:2px; text-align:center">
+                                    Notificar<br>
+                                    <input type="checkbox" ng-checked="checkedAllNotify" ng-click="setAllNotify()" >
+                                </th>
+                                <th style="padding:2px; text-align:center">
+                                    Asistencia<br>
+                                    <input type="checkbox" ng-checked="checkedAll" ng-click="setAllStudents()">
+                                </th>
                                 <th>Nombre</th>
                                 <th>C&eacute;dula</th>
+                                <th>Nivel</th>
+                                <th>Carrera</th>
+                                <th>Notificado<br>(veces)</th>
                             </tr>
                             <tr ng-repeat="student in allLevelAssistance">
-                                <td style="padding:2px; text-align: center"><input type="checkbox" ng-checked="student.ASISTENCIA" 
+                                <td style="padding:1px; text-align: center">
+                                    <input type="checkbox" ng-model="student.notify" ng-click="setNotify(student.CODIGO)">
+                                </td>
+                                <td style="padding:1px; text-align: center"><input type="checkbox" ng-checked="student.ASISTENCIA" 
                                     ng-click="setAssistanceStudents(student.CODIGO)"></td>                               
-                                <td style="padding:2px; padding-left:5px">{{ student.NOMBRE }}</td>
-                                <td style="padding:2px">{{ student.CEDULA }}</td>
+                                <td style="padding:1px;padding-left:4px">{{ student.NOMBRE }}</td>
+                                <td style="padding:1px">{{ student.CEDULA }}</td>
+                                <td style="padding:1px;padding-left:4px">{{ student.NIVEL }}</td>
+                                <td style="padding:1px;padding-left:4px">{{ student.CARRERA }}</td>
+                                <td style="padding:1px;text-align:center">{{ student.NOTIFICACIONENVIDA }}</td>
                             </tr>
                         </table>
                     </div>

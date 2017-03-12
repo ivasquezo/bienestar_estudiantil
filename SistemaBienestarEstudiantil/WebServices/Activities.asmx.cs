@@ -753,17 +753,21 @@ namespace SistemaBienestarEstudiantil.WebServices
                 var data = db.BE_ASISTENCIA.Join(db.MATRICULAs, a => a.CODIGOALUMNO, m => m.MTRNUMEROI, (a, m) => new { a, m })
                     .Join(db.INSCRIPCIONs, am => am.m.INSCODIGOI, i => i.INSCODIGOI, (am, i) => new { am, i })
                     .Join(db.DATOSPERSONALES, ami => ami.i.DTPCEDULAC, d => d.DTPCEDULAC, (ami, d) => new { ami, d })
+                    .Join(db.NIVELs, amin => amin.ami.am.m.NVLCODIGOI, n => n.NVLCODIGOI, (amin, n) => new { amin, n })
+                    .Join(db.CARRERA_MODAL, amincm => amincm.amin.ami.am.m.CRRMODCODIGOI, cm => cm.CRRMODCODIGOI, (amincm, cm) => new { amincm, cm })
+                    .Join(db.CARRERAs, amincmc => amincmc.cm.CRRCODIGOI, c => c.CRRCODIGOI, (amincmc, c) => new { amincmc, c })
                     .Select(s => new
                     {
-                        CODIGO = s.ami.am.a.CODIGO,
-                        ACTIVIDAD = s.ami.am.a.CODIGOACTIVIDAD,
-                        NOTIFICACIONENVIDA = s.ami.am.a.NOTIFICACIONENVIADA,
-                        CEDULA = s.d.DTPCEDULAC,
-                        NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2,
-                        ASISTENCIA = s.ami.am.a.ASISTENCIA,
-                        CORREO = s.d.DTPEMAILC
-                    })
-                    .Where(w => w.ACTIVIDAD == activityId).ToList();
+                        CODIGO = s.amincmc.amincm.amin.ami.am.a.CODIGO,
+                        ACTIVIDAD = s.amincmc.amincm.amin.ami.am.a.CODIGOACTIVIDAD,
+                        NOTIFICACIONENVIDA = s.amincmc.amincm.amin.ami.am.a.NOTIFICACIONENVIADA,
+                        CEDULA = s.amincmc.amincm.amin.d.DTPCEDULAC,
+                        NOMBRE = s.amincmc.amincm.amin.d.DTPNOMBREC + s.amincmc.amincm.amin.d.DTPAPELLIC + s.amincmc.amincm.amin.d.DTPAPELLIC2,
+                        ASISTENCIA = s.amincmc.amincm.amin.ami.am.a.ASISTENCIA,
+                        CORREO = s.amincmc.amincm.amin.d.DTPEMAILC,
+                        NIVEL = s.amincmc.amincm.n.NVLDESCRIPC,
+                        CARRERA = s.c.CRRDESCRIPC
+                    }).Where(w => w.ACTIVIDAD == activityId).OrderBy(o => o.CARRERA).ToList();
 
                 if (data != null && data.Count > 0)
                     response = new Response(true, "", "", "", data);
@@ -780,7 +784,7 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void sendStudentsNotification(string[] studentsMails, int activityId)
+        public void sendStudentsNotification(Estudiante[] studentsMails, int activityId)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
@@ -793,12 +797,13 @@ namespace SistemaBienestarEstudiantil.WebServices
                 for (int i = 0; i < studentsMails.Length; i++)
                 {
                     Console.WriteLine(studentsMails[i]);
-                    if (Utils.IsValidEmail(studentsMails[i].Trim()))
+                    if (Utils.IsValidEmail(studentsMails[i].correo.Trim()))
                     {
-                        string to = studentsMails[i].Trim();
+                        string to = studentsMails[i].correo.Trim();
                         string subject = "Invitaci\u00F3n a la actividad (Bienestar Estudiantil)";
                         string body = "Estimado/a: \nDebe asistir a la actividad ''" + activity.NOMBRE + "'', que se efectuar\u00E1 en la fecha: " + fecha.ToString("dd/MM/yyyy") + " en el lugar: ''" + activity.OBSERVACION + "''. \nEsperamos su asistencia.";
                         Utils.sendMail(to, subject, body);
+                        saveAssistanceNotification(studentsMails[i].codigo);
                     }
                 }
 
@@ -822,6 +827,19 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
 
             writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+
+        /**
+         * guarda la notificacion en la asistencia del estudiante
+         **/
+        private void saveAssistanceNotification(int codigo)
+        {
+            bienestarEntities db = new bienestarEntities();
+            // guarda la notificacion en la asistencia
+            BE_ASISTENCIA assistance = db.BE_ASISTENCIA.Single(a => a.CODIGO == codigo);
+            assistance.NOTIFICACIONENVIADA = assistance.NOTIFICACIONENVIADA == null ? 1 : assistance.NOTIFICACIONENVIADA + 1;
+            db.SaveChanges();
         }
 
         [WebMethod]
@@ -1156,6 +1174,20 @@ namespace SistemaBienestarEstudiantil.WebServices
 
             return rows;
         }
+    }
+
+    //
+    public class Estudiante
+    {
+        public Int32 codigo { set; get; }
+        public string correo { set; get; }
+
+        public Estudiante(Int32 codigo, string correo)
+        {
+            this.codigo = codigo;
+            this.correo = correo;
+        }
+        public Estudiante() { }
     }
 
     //
