@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var app = angular.module('BienestarApp', ['ui.grid','chart.js','cgBusy']);
+    var app = angular.module('BienestarApp', ['ui.grid', 'chart.js', 'cgBusy']);
 
     app.controller('EncuestasController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
 
@@ -10,15 +10,15 @@
             "Noviembre", "Diciembre"];
 
         // session listener
-        document.onclick = function(){
+        document.onclick = function () {
             $http.get((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/checkSession')
-            .success(function (data, status, headers, config) {
-                if (!data.success) {
-                    document.location.href = "/";
-                }
-            }).error(function (data, status, headers, config) {
-                console.log("Error checkSession", data);
-            });
+                .success(function (data, status, headers, config) {
+                    if (!data.success) {
+                        document.location.href = "/";
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log("Error checkSession", data);
+                });
         };
 
         $scope.promise = null;
@@ -29,11 +29,11 @@
         $scope.mode = 'init';
         $scope.view = 'summary';
 
-        $scope.toDateLabel = function(dateTime) {
-            var mEpoch = parseInt(dateTime); 
+        $scope.toDateLabel = function (dateTime) {
+            var mEpoch = parseInt(dateTime);
             var date = new Date();
 
-            if(mEpoch<10000000000) mEpoch *= 1000;
+            if (mEpoch < 10000000000) mEpoch *= 1000;
 
             date.setTime(mEpoch)
 
@@ -46,25 +46,25 @@
 
         // method for load periodos
         $scope.cargarPeriodos = function () {
-            $scope.promise = $http.get( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getPeriodos')
-            .success(function (data, status, headers, config) {
-                $scope.FECHAINICIO = null;
-                $scope.FECHAFIN = null;
-                $scope.PERIODOS = data;
-                for (var i = 0; i < $scope.PERIODOS.length; i++) {
-                    $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
-                    //$scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
-                    //$scope.PERIODOS[i].PERIODLABEL = $scope.PERIODOS[i].PRDCODIGOI + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECINIF) + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECFINF)
-                };
-                //console.log("periodos:", data);
-            }).error(function (data, status, headers, config) {
-                console.log("error al cargar periodos...", data);
-            });
+            $scope.promise = $http.get((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getPeriodos')
+                .success(function (data, status, headers, config) {
+                    $scope.FECHAINICIO = null;
+                    $scope.FECHAFIN = null;
+                    $scope.PERIODOS = data;
+                    for (var i = 0; i < $scope.PERIODOS.length; i++) {
+                        $scope.PERIODOS[i].PRDFECFINF = $scope.convertDate($scope.PERIODOS[i].PRDFECFINF);
+                        //$scope.PERIODOS[i].PRDFECINIF = $scope.convertDate($scope.PERIODOS[i].PRDFECINIF);
+                        //$scope.PERIODOS[i].PERIODLABEL = $scope.PERIODOS[i].PRDCODIGOI + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECINIF) + " - " + $scope.toDateLabel($scope.PERIODOS[i].PRDFECFINF)
+                    };
+                    //console.log("periodos:", data);
+                }).error(function (data, status, headers, config) {
+                    console.log("error al cargar periodos...", data);
+                });
         };
 
         // method for load encuestas from server
         $scope.cargarEncuestas = function () {
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getAllEncuestas', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getAllEncuestas', {
             }).success(function (data, status, headers, config) {
                 $scope.gridOptions.data = data;
                 $scope.loadDefaultSurvey();
@@ -77,9 +77,9 @@
         // get survey answered
         $scope.cargarEncuestasContestadas = function () {
 
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveyAnsweredCodesServices', {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveyAnsweredCodesServices', {
             }).success(function (data, status, headers, config) {
-                
+
                 for (var i = 0; i < data.length; i++) {
                     var row = $scope.getElementArray($scope.gridOptions.data, data[i]);
                     row.answered = true;
@@ -92,8 +92,8 @@
             });
         };
 
-        $scope.convertDate = function(fecha) {
-            return fecha.substring(6, fecha.length-2);
+        $scope.convertDate = function (fecha) {
+            return fecha.substring(6, fecha.length - 2);
         };
 
         // grid define options
@@ -104,8 +104,8 @@
             selectedItems: $scope.mySelections,
             multiSelect: false,
             columnDefs: [
-                {name:'Título', field: 'TITULO'},
-                {name:'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 130, enableFiltering: false, enableSorting: false}
+                { name: 'Título', field: 'TITULO' },
+                { name: 'Acción', field: 'CODIGO', cellTemplate: 'actionsEncuestas.html', width: 130, enableFiltering: false, enableSorting: false }
             ]
         };
 
@@ -115,21 +115,21 @@
 
         // prepare messages
         $('#messages').puigrowl();
-        $('#messages').puigrowl('option', {life: 5000});
+        $('#messages').puigrowl('option', { life: 5000 });
 
         // function for generate aleatory number for id in encuestas object, for manipulate
-        $scope.generateId = function(){
+        $scope.generateId = function () {
             return Math.floor(Math.random() * 999999) + 100000;
         };
 
         // test method for view object in the console
-        $scope.encuestaConsole = function(){
-            console.log("JSON:",JSON.stringify(this.encuesta));
+        $scope.encuestaConsole = function () {
+            console.log("JSON:", JSON.stringify(this.encuesta));
             console.log("ANGULAR:", angular.toJson(this.encuesta));
         }
 
-        $scope.getElementArray = function(arrayElements, codeElement) {
-            for (var i=0; i<arrayElements.length; i++) {
+        $scope.getElementArray = function (arrayElements, codeElement) {
+            for (var i = 0; i < arrayElements.length; i++) {
                 if (arrayElements[i].CODIGO == codeElement) {
                     return arrayElements[i];
                 }
@@ -137,7 +137,7 @@
             return null;
         };
 
-        $scope.addEncuesta = function(){
+        $scope.addEncuesta = function () {
             $scope.mode = "new";
             $scope.encuesta = {
                 TITULO: null,
@@ -150,7 +150,7 @@
             $scope.encuesta.addQuestion();
         }
 
-        this.editEncuesta = function(code){
+        this.editEncuesta = function (code) {
             var encuesta = $scope.getElementArray($scope.gridOptions.data, code);
             if (encuesta.answered == undefined || !encuesta.answered) {
                 $scope.mode = "edit";
@@ -158,18 +158,18 @@
                 $scope.addHandlerEncuesta($scope.encuesta);
             } else {
                 $scope.mode = "init";
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Información', detail: 'Encuesta ya ha sido contestada, no se puede editar'}]);
+                $('#messages').puigrowl('show', [{ severity: 'info', summary: 'Información', detail: 'Encuesta ya ha sido contestada, no se puede editar' }]);
             }
         };
 
-        this.getSurverDefaultInput = function(code) {
+        this.getSurverDefaultInput = function (code) {
             var row = $scope.getElementArray($scope.gridOptions.data, code);
             return row != null && row.selected != undefined && row.selected == true ? true : false;
         }
 
-        this.setSurverDefaultInput = function(code) {
+        this.setSurverDefaultInput = function (code) {
             var row = $scope.getElementArray($scope.gridOptions.data, code);
-            if (row.selected != undefined && row.selected){
+            if (row.selected != undefined && row.selected) {
                 row.selected = false;
                 $scope.setDefaultSurvey(0);
             } else {
@@ -207,12 +207,12 @@
             return null;
         }*/
 
-        $scope.toDate = function(dateTime) {
-            var mEpoch = parseInt(dateTime); 
+        $scope.toDate = function (dateTime) {
+            var mEpoch = parseInt(dateTime);
             var dDate = new Date();
 
-            if(mEpoch<10000000000) mEpoch *= 1000;
-        
+            if (mEpoch < 10000000000) mEpoch *= 1000;
+
             dDate.setTime(mEpoch)
             return dDate;
         }
@@ -220,10 +220,10 @@
         $scope.restarDias = function (date, days) {
             if (date == null) return null;
             var date = parseInt(date);
-            return date - 24*60*60*1000*days;
+            return date - 24 * 60 * 60 * 1000 * days;
         }
 
-        $scope.viewReport = function(){
+        $scope.viewReport = function () {
 
             if ($scope.FECHAINICIO != undefined && $scope.FECHAINICIO != null && $scope.FECHAFIN != undefined && $scope.FECHAFIN != null) {
 
@@ -231,7 +231,7 @@
                 //var iniDate = $scope.toDate($scope.PERIODO.PRDFECINIF);
                 //var endDate = ($scope.PERIODOSIGUIENTE != null ? $scope.toDate($scope.PERIODOSIGUIENTE.PRDFECINIF) : null);
 
-                $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveysReport', {
+                $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/surveysReport', {
                     surveyCode: $scope.CODIDOENCUESTA,
                     iniDate: $scope.FECHAINICIO,
                     endDate: $scope.FECHAFIN
@@ -246,20 +246,20 @@
                 });
 
             } else {
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Debe seleccionar el periodo'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Debe seleccionar el periodo' }]);
             }
         };
 
-        this.showReport = function(code){
+        this.showReport = function (code) {
             $scope.mode = "report";
             $scope.CODIDOENCUESTA = code;
-            if ($scope.PERIODO != undefined && $scope.PERIODO != null) {
+            if (angular.isDate($scope.FECHAINICIO) && angular.isDate($scope.FECHAFIN)) {
                 $scope.viewReport();
             }
         };
 
-        $scope.setDefaultSurvey = function(code){
-            $scope.promise = $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/setDefaultSurvey', {
+        $scope.setDefaultSurvey = function (code) {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/setDefaultSurvey', {
                 surveyCode: code
             }).success(function (data, status, headers, config) {
                 //console.log("setDefaultSurvey:",data);
@@ -268,7 +268,7 @@
             });
         };
 
-        $scope.verifyQuestion = function(question){
+        $scope.verifyQuestion = function (question) {
             if (question.TIPO == 3) {
                 question.BE_ENCUESTA_RESPUESTA = [];
             } else {
@@ -277,17 +277,17 @@
             }
         }
 
-        $scope.addHandlerEncuesta = function(encuesta){
+        $scope.addHandlerEncuesta = function (encuesta) {
 
-            encuesta.addQuestion = function() {
+            encuesta.addQuestion = function () {
 
                 var question = {
                     id: $scope.generateId(),
                     TITULO: null,
-                    TIPO:2,
+                    TIPO: 2,
                     REQUERIDO: true,
                     BE_ENCUESTA_RESPUESTA: [],
-                    addResponse: function(){
+                    addResponse: function () {
 
                         var response = {
                             id: $scope.generateId(),
@@ -296,7 +296,7 @@
 
                         this.BE_ENCUESTA_RESPUESTA.push(response);
                     },
-                    removeResponse: function(id){
+                    removeResponse: function (id) {
 
                         var index = null;
                         for (var i = 0; i < this.BE_ENCUESTA_RESPUESTA.length; i++) {
@@ -305,17 +305,17 @@
                                 break;
                             }
                         };
-                        if (index != null) this.BE_ENCUESTA_RESPUESTA.splice(index,1);
+                        if (index != null) this.BE_ENCUESTA_RESPUESTA.splice(index, 1);
                     },
-                    addAnswered: function(response){
+                    addAnswered: function (response) {
 
                         if (response.checked) {
                             this.answereds.push(response.id);
-                        }else{
+                        } else {
                             this.removeAnswered(response.id);
                         };
                     },
-                    removeAnswered: function(id){
+                    removeAnswered: function (id) {
                         var index = null;
                         for (var i = 0; i < this.answereds.length; i++) {
                             if (this.answereds[i] == id) {
@@ -323,15 +323,15 @@
                                 break;
                             }
                         };
-                        if (index != null) this.answereds.splice(index,1);
+                        if (index != null) this.answereds.splice(index, 1);
                     }
                 };
 
                 question.addResponse();
                 this.BE_ENCUESTA_PREGUNTA.push(question);
             };
-            encuesta.removeQuestion = function(id){
-                
+            encuesta.removeQuestion = function (id) {
+
                 var index = null;
                 for (var i = 0; i < this.BE_ENCUESTA_PREGUNTA.length; i++) {
                     if (this.BE_ENCUESTA_PREGUNTA[i].id == id) {
@@ -339,11 +339,11 @@
                         break;
                     }
                 };
-                if (index != null) this.BE_ENCUESTA_PREGUNTA.splice(index,1);
+                if (index != null) this.BE_ENCUESTA_PREGUNTA.splice(index, 1);
             };
 
             for (var i = 0; i < encuesta.BE_ENCUESTA_PREGUNTA.length; i++) {
-                encuesta.BE_ENCUESTA_PREGUNTA[i].addResponse = function(){
+                encuesta.BE_ENCUESTA_PREGUNTA[i].addResponse = function () {
 
                     var response = {
                         id: $scope.generateId(),
@@ -352,7 +352,7 @@
 
                     this.BE_ENCUESTA_RESPUESTA.push(response);
                 };
-                encuesta.BE_ENCUESTA_PREGUNTA[i].removeResponse = function(id){
+                encuesta.BE_ENCUESTA_PREGUNTA[i].removeResponse = function (id) {
 
                     var index = null;
                     for (var i = 0; i < this.BE_ENCUESTA_RESPUESTA.length; i++) {
@@ -361,7 +361,7 @@
                             break;
                         }
                     };
-                    if (index != null) this.BE_ENCUESTA_RESPUESTA.splice(index,1);
+                    if (index != null) this.BE_ENCUESTA_RESPUESTA.splice(index, 1);
                 };
 
                 encuesta.BE_ENCUESTA_PREGUNTA[i].id = $scope.generateId();
@@ -371,50 +371,50 @@
             }
         }; // end addHandlerEncuesta
 
-        $scope.addNewEncuesta = function(){
+        $scope.addNewEncuesta = function () {
 
             //console.log($scope.encuesta);
-            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/addNewEncuesta', {
+            $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/addNewEncuesta', {
                 encuesta: $scope.encuesta
             }).success(function (data, status, headers, config) {
                 $scope.gridOptions.data.push(data);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Nueva', detail: 'Encuesta guardada.'}]);
+                $('#messages').puigrowl('show', [{ severity: 'info', summary: 'Nueva', detail: 'Encuesta guardada.' }]);
             }).error(function (data, status, headers, config) {
                 console.log("error al añadir nueva encuesta...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Ocurrió un error al guardar la encuesta.'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al guardar la encuesta.' }]);
             });
         };
 
-        $scope.saveEncuesta = function(){
+        $scope.saveEncuesta = function () {
 
             //console.log($scope.encuesta);
 
-            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/saveEncuesta', {
+            $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/saveEncuesta', {
                 encuestaEdited: $scope.encuesta
             }).success(function (data, status, headers, config) {
                 //console.log("saveEncuesta", data);
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Editar', detail: 'Encuesta guardada.'}]);
+                $('#messages').puigrowl('show', [{ severity: 'info', summary: 'Editar', detail: 'Encuesta guardada.' }]);
             }).error(function (data, status, headers, config) {
                 console.log("error al añadir nueva encuesta...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Ocurrió un error al guardar la encuesta.'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al guardar la encuesta.' }]);
             });
         };
 
-        this.removeEncuesta = function(code){
+        this.removeEncuesta = function (code) {
             var parentObject = this;
-            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/removeEncuestaByCode', {
+            $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/removeEncuestaByCode', {
                 code: code
             }).success(function (data, status, headers, config) {
-                $('#messages').puigrowl('show', [{severity: 'info', summary: 'Eliminar', detail: 'Encuesta borrada.'}]);
+                $('#messages').puigrowl('show', [{ severity: 'info', summary: 'Eliminar', detail: 'Encuesta borrada.' }]);
                 parentObject.removeElementArray($scope.gridOptions.data, code);
             }).error(function (data, status, headers, config) {
                 console.log("error al borrar encuesta...", data);
-                $('#messages').puigrowl('show', [{severity: 'error', summary: 'Error', detail: 'Ocurrió un error al borrar la encuesta.'}]);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al borrar la encuesta.' }]);
             });
         };
 
-        this.removeElementArray = function(arrayElements, codeElement) {
-            for (var i=0; i<arrayElements.length; i++) {
+        this.removeElementArray = function (arrayElements, codeElement) {
+            for (var i = 0; i < arrayElements.length; i++) {
                 if (arrayElements[i].CODIGO == codeElement) {
                     arrayElements.splice(i, 1);
                 }
@@ -422,9 +422,9 @@
         };
 
         // marca de inicio como seleccionada la encuesta habilitada para los estudiantes 
-        $scope.loadDefaultSurvey = function(){
+        $scope.loadDefaultSurvey = function () {
 
-            $http.post( (appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getDefaultSurvey', {
+            $http.post((appContext != undefined ? appContext : "") + '/WebServices/Encuestas.asmx/getDefaultSurvey', {
             }).success(function (data, status, headers, config) {
                 //console.log("loadDefaultSurvey:", data);
                 if (data.success != undefined && data.success) {
@@ -437,7 +437,7 @@
             });
         };
 
-        $scope.cambiarVista = function(viewValue) {
+        $scope.cambiarVista = function (viewValue) {
             $scope.view = viewValue;
         };
 
