@@ -258,13 +258,15 @@ namespace SistemaBienestarEstudiantil.WebServices
             {
                 var data = db.BE_GRUPO_ACTIVIDAD.Join(db.BE_GRUPO, ga => ga.CODIGOGRUPO, g => g.CODIGO,
                     (ga, g) => new { ga, g }).Join(db.CARRERA_MODAL, gcm => gcm.g.CODIGOMODALIDAD, cm => cm.CRRMODCODIGOI,
-                    (gcm, cm) => new { gcm, cm }).Select(s => new
+                    (gcm, cm) => new { gcm, cm }).Join(db.MATRICULAs, cmm => cmm.cm.CRRMODCODIGOI, m => m.CRRMODCODIGOI,
+                    (cmm, m) => new { cmm, m }).Select(s => new
                     {
-                        CODIGOACTIVIDAD = s.gcm.ga.CODIGOACTIVIDAD,
-                        CODIGOGRUPO = s.gcm.ga.CODIGOGRUPO,
-                        CODIGOCARRERA = s.cm.CRRCODIGOI,
-                        CODIGOMODALIDAD = s.cm.MDLCODIGOI,
-                        CODIGONIVEL = s.gcm.g.CODIGONIVEL
+                        CODIGOACTIVIDAD = s.cmm.gcm.ga.CODIGOACTIVIDAD,
+                        CODIGOGRUPO = s.cmm.gcm.ga.CODIGOGRUPO,
+                        CODIGOCARRERA = s.cmm.cm.CRRCODIGOI,
+                        CODIGOMODALIDAD = s.cmm.cm.MDLCODIGOI,
+                        CODIGONIVEL = s.cmm.gcm.g.CODIGONIVEL,
+                        PARALELO = s.m.MTRPARALELO
                     }).Where(w => w.CODIGOACTIVIDAD == activityId).ToList();
 
                 if (data != null && data.Count > 0)
@@ -430,8 +432,9 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
             int period = getPresentPeriod();
-            var data = db.MATRICULAs.Where(m => m.PRDCODIGOI == period && m.CRRMODCODIGOI == carMod)
-                .Select(m => m.NVLCODIGOI).Distinct().ToList();
+            var data = db.MATRICULAs.Join(db.NIVELs, mn => mn.NVLCODIGOI, n => n.NVLCODIGOI, (mn, n) => new { mn, n })
+                .Where(m => m.mn.PRDCODIGOI == period && m.mn.CRRMODCODIGOI == carMod)
+                .Select(m => m.n.NVLCODIGOI).Distinct().ToList();
 
             int[] mod = new int[data.Count];
             int counter = 0;
@@ -531,8 +534,9 @@ namespace SistemaBienestarEstudiantil.WebServices
         {
             bienestarEntities db = new bienestarEntities();
             int period = getPresentPeriod();
-            var data = db.MATRICULAs.Where(m => m.PRDCODIGOI == period && carMod.Contains(m.CRRMODCODIGOI))
-                .Select(m => m.NVLCODIGOI).ToList();
+            var data = db.MATRICULAs.Join(db.NIVELs, mn => mn.NVLCODIGOI, n => n.NVLCODIGOI, (mn, n) => new { mn, n })
+                .Where(m => m.mn.PRDCODIGOI == period && carMod.Contains(m.mn.CRRMODCODIGOI))
+                .Select(m => m.n.NVLCODIGOI).ToList();
 
             int[] mod = new int[data.Count];
             int counter = 0;
@@ -557,7 +561,57 @@ namespace SistemaBienestarEstudiantil.WebServices
         }
 
         [WebMethod]
-        public void saveGroupActivity(int[] careersV, int[] modalitiesV, int[] levelsV, int activityId, int[] originCareersV, int[] originModalitiesV, int[] originLevelsV)
+        public void getAllGroups(int[] modalities, int[] carees, int[] levels)
+        {
+            Response response = new Response(true, "", "", "", null);
+            bienestarEntities db = new bienestarEntities();
+
+            try
+            {
+                int[] careerModalityIds;
+                int period = getPresentPeriod();
+
+                if ((modalities != null && modalities.Length > 0) || (carees != null && carees.Length > 0))
+                {
+                    careerModalityIds = getCareerModalityIds(modalities, carees);
+                    var data = db.MATRICULAs.Join(db.NIVELs, mn => mn.NVLCODIGOI, n => n.NVLCODIGOI, (mn, n) => new { mn, n })
+                        .Select(s => new
+                        {
+                            NIVEL = s.n.NVLCODIGOI,
+                            MODALIDAD = s.mn.CRRMODCODIGOI,
+                            PERIODO = s.mn.PRDCODIGOI,
+                            PARALELO = s.mn.MTRPARALELO
+                        })
+                        .Where(w => w.PERIODO == period && careerModalityIds.Contains(w.MODALIDAD) && levels.Contains(w.NIVEL)).Distinct().ToList();
+
+                    response = new Response(true, "", "", "", data);
+                }
+                else
+                {
+                    var data = db.MATRICULAs.Join(db.NIVELs, mn => mn.NVLCODIGOI, n => n.NVLCODIGOI, (mn, n) => new { mn, n })
+                        .Select(s => new
+                        {
+                            NIVEL = s.n.NVLCODIGOI,
+                            MODALIDAD = s.mn.CRRMODCODIGOI,
+                            PERIODO = s.mn.PRDCODIGOI,
+                            PARALELO = s.mn.MTRPARALELO
+                        })
+                        .Where(w => w.PERIODO == period).Distinct().ToList();
+
+                    response = new Response(true, "", "", "", data);
+                }
+            }
+            catch (Exception)
+            {
+                response = new Response(false, "error", "Error", "Error al obtener los paralelos", null);
+                writeResponse(new JavaScriptSerializer().Serialize(response));
+            }
+
+            writeResponse(new JavaScriptSerializer().Serialize(response));
+        }
+
+        [WebMethod]
+        public void saveGroupActivity(string[] group, int[] careersV, int[] modalitiesV, int[] levelsV, int activityId, int[] originCareersV, int[] originModalitiesV, int[] originLevelsV)
         {
             Response response = new Response(true, "", "", "", null);
             bienestarEntities db = new bienestarEntities();
@@ -586,7 +640,7 @@ namespace SistemaBienestarEstudiantil.WebServices
                 for (int i = 0; i < careerModalityIds.Length; i++)
                 {
                     for (int j = 0; j < levels.Length; j++)
-                        saveGroupActivity(careerModalityIds[i], levels[j], activityId);
+                        saveGroupActivity(careerModalityIds[i], levels[j], group, activityId);
                 }
 
                 response = new Response(true, "info", "Agregar", "Grupos agregado correctamente", null);
@@ -600,7 +654,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             writeResponse(new JavaScriptSerializer().Serialize(response));
         }
 
-        private void saveGroupActivity(int careerModalityId, int levelId, int activityId)
+        private void saveGroupActivity(int careerModalityId, int levelId, string[] groupP, int activityId)
         {
             bienestarEntities db = new bienestarEntities();
 
@@ -621,7 +675,7 @@ namespace SistemaBienestarEstudiantil.WebServices
 
                     db.SaveChanges();
 
-                    saveAssistance(group.CODIGO, activityId, careerModalityId, levelId);
+                    saveAssistance(group.CODIGO, activityId, careerModalityId, levelId, groupP);
                 }
             }
             catch (InvalidOperationException)
@@ -630,7 +684,7 @@ namespace SistemaBienestarEstudiantil.WebServices
             }
         }
 
-        private void saveAssistance(int groupId, int activityId, int careerModalityId, int levelId)
+        private void saveAssistance(int groupId, int activityId, int careerModalityId, int levelId, string[] group)
         {
             bienestarEntities db = new bienestarEntities();
             int period = getPresentPeriod();
@@ -643,9 +697,10 @@ namespace SistemaBienestarEstudiantil.WebServices
                     CODIGOCARRERAMODULO = s.mi.m.CRRMODCODIGOI,
                     NIVEL = s.mi.m.NVLCODIGOI,
                     CEDULA = s.d.DTPCEDULAC,
-                    NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2
+                    NOMBRE = s.d.DTPNOMBREC + s.d.DTPAPELLIC + s.d.DTPAPELLIC2,
+                    PARALELO = s.mi.m.MTRPARALELO
                 })
-                .Where(w => w.PERIODO == period && w.CODIGOCARRERAMODULO == careerModalityId && w.NIVEL == levelId).ToList();
+                .Where(w => w.PERIODO == period && w.CODIGOCARRERAMODULO == careerModalityId && w.NIVEL == levelId && group.Contains(w.PARALELO)).ToList();
 
             for (int i = 0; i < data.Count; i++)
             {
@@ -766,7 +821,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                         ASISTENCIA = s.amincmc.amincm.amin.ami.am.a.ASISTENCIA,
                         CORREO = s.amincmc.amincm.amin.d.DTPEMAILC,
                         NIVEL = s.amincmc.amincm.n.NVLDESCRIPC,
-                        CARRERA = s.c.CRRDESCRIPC
+                        CARRERA = s.c.CRRDESCRIPC,
+                        PARALELO = s.amincmc.amincm.amin.ami.am.m.MTRPARALELO
                     }).Where(w => w.ACTIVIDAD == activityId).OrderBy(o => o.CARRERA).ToList();
 
                 if (data != null && data.Count > 0)

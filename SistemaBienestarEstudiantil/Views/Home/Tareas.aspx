@@ -100,7 +100,7 @@
                                 <div>
                                     <label class="col-md-4 control-label" for="nombre">Actividad</label>  
                                     <div class="col-md-4">
-                                        <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;">
+                                        <input valid-activity-name required ng-model="activityCopy.NOMBRE" id="nombre" name="nombre" type="text" placeholder="Actividad" class="form-control input-md" style="text-transform:uppercase;" title={{activityCopy.NOMBRE}}>
                                         <br/><span class="help-block">Nombre de la actividad</span>
                                         <span ng-messages="activityForm.nombre.$error">
                                             <span ng-message="required" class="help-block ng-message">Ingrese una actividad</span>
@@ -344,6 +344,7 @@
                     <fieldset>
                         <legend>Niveles</legend>
                         <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelCareer')">Anterior</button>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelGroup')">Siguiente</button>
                         <table>
                             <tr>
                                 <th><input type="checkbox" ng-checked="existAllLevelData()" ng-click="setSelectedAllLevels()"></th>
@@ -356,8 +357,25 @@
                         </table>
                     </fieldset>
                 </div>
+
+                <div ng-show="view == 'group'">
+                    <fieldset>
+                        <legend>Niveles</legend>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('careerLevel')">Anterior</button>
+                        <table>
+                            <tr>
+                                <th><input type="checkbox" ng-checked="existAllGroupData()" ng-click="setSelectedAllGroups()"></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="group in copyAllGroups">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existGroupData(group.PARALELO)" ng-click="setSelectedGroups(group.PARALELO)"></td>
+                                <td style="width:100%">{{ group.PARALELO }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
                 
-                <div class="form-group" ng-show="view == 'level'">
+                <div class="form-group" ng-show="view == 'group'">
                     <label class="col-md-4 control-label" for="saveLevel"></label>
                     <div class="col-md-8">
                         <button type="submit" id="saveLevel" name="saveLevel" class="btn btn-success" ng-click="saveGroupActivity()">Guardar</button>
@@ -392,8 +410,9 @@
                                 </th>
                                 <th>Nombre</th>
                                 <th>C&eacute;dula</th>
-                                <th>Nivel</th>
                                 <th>Carrera</th>
+                                <th>Nivel</th>
+                                <th>P.</th>
                                 <th>Notificado<br>(veces)</th>
                             </tr>
                             <tr ng-repeat="student in allLevelAssistance">
@@ -404,8 +423,9 @@
                                     ng-click="setAssistanceStudents(student.CODIGO)"></td>                               
                                 <td style="padding:1px;padding-left:4px">{{ student.NOMBRE }}</td>
                                 <td style="padding:1px">{{ student.CEDULA }}</td>
-                                <td style="padding:1px;padding-left:4px">{{ student.NIVEL }}</td>
                                 <td style="padding:1px;padding-left:4px">{{ student.CARRERA }}</td>
+                                <td style="padding:1px;padding-left:4px">{{ student.NIVEL }}</td>
+                                <td style="padding:1px;padding-left:4px">{{ student.PARALELO }}</td>
                                 <td style="padding:1px;text-align:center">{{ student.NOTIFICACIONENVIDA }}</td>
                             </tr>
                         </table>
@@ -431,7 +451,7 @@
                             <textarea required name="observacion" id="observacion" ng-model="descripcion" class="title" placeholder="Descripci&oacute;n" row="1" ng-maxlength="150" maxlength="240" style="text-transform:uppercase; width:450px"></textarea><br/>
                             <input valid-file-input required ng-model="attachedActivity" type="file" name="attachedActivity" id="attachedActivity" accept="image/*, application/pdf"/>
                             <span ng-show="attachedForm.attachedActivity.$error.validFile" class="help-block ng-message" style="font-size: 18px;">* Debe adjuntar documento</span>
-                            <span ng-show="attachedForm.attachedActivity.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 2MB</span>
+                            <span ng-show="attachedForm.attachedActivity.$error.validFileSize" class="help-block ng-message" style="font-size: 18px;">* Solo se permiten documentos hasta 3MB</span>
                             <span ng-show="attachedForm.attachedActivity.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero est&aacute; vac&iacute;o</span>
                             <span ng-show="attachedForm.attachedActivity.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
                         </div>
@@ -529,6 +549,143 @@
                     </table>
                 </div>
             </fieldset>
+            </div>
+        </script>
+
+        <script type="text/ng-template" id="activitiesReportByLevel.html">
+            <form name="groupActivityForm">
+                <div ng-show="view == 'modality'">
+                    <fieldset>
+                        <legend>Modalidades</legend>
+                        <div style="display:inline">
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelCareer')">Siguiente</button>
+                        </div>
+                        <table>
+                            <tr>
+                                <th><input type="checkbox" ng-checked="existAllModalities()" ng-click="setSelectedAllModalities()"></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="modality in allModalities">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existModalityData(modality.MDLCODIGOI)" ng-click="setSelectedModalities(modality.MDLCODIGOI)"></td>
+                                <td style="width:100%">{{ modality.MDLDESCRIPC }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+                <div ng-show="view == 'career'">
+                    <fieldset>
+                        <legend>Carreras</legend>
+                        <div style="display:inline">
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('careerModality')">Anterior</button>
+                            <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('careerLevel')">Siguiente</button>
+                        </div>
+                        <table>
+                            <tr>
+                                <th><input type="checkbox" ng-checked="existAllCareerData()" ng-click="setSelectedAllCareers()"></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="career in copyAllCareers">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existCareerData(career.CRRCODIGOI)" ng-click="setSelectedCareers(career.CRRCODIGOI)"></td>
+                                <td style="width:100%">{{ career.CRRDESCRIPC }}</td>
+                            </tr>
+                        </table> 
+                    </fieldset>
+                </div>
+                <div ng-show="view == 'level'">
+                    <fieldset>
+                        <legend>Niveles</legend>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelCareer')">Anterior</button>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('levelGroup')">Siguiente</button>
+                        <table>
+                            <tr>
+                                <th><input type="checkbox" ng-checked="existAllLevelData()" ng-click="setSelectedAllLevels()"></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="level in allLevels">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existLevelData(level.NVLCODIGOI)" ng-click="setSelectedLevels(level.NVLCODIGOI)"></td>
+                                <td style="width:100%">{{ level.NVLDESCRIPC }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+
+                <div ng-show="view == 'group'">
+                    <fieldset>
+                        <legend>Niveles</legend>
+                        <button class="btn btn-success" style="margin-bottom:5px" ng-click="cambiarVista('careerLevel')">Anterior</button>
+                        <table>
+                            <tr>
+                                <th><input type="checkbox" ng-checked="existAllGroupData()" ng-click="setSelectedAllGroups()"></th>
+                                <th>Nombre</th> 
+                            </tr>
+                            <tr ng-repeat="group in copyAllGroups">
+                                <td style="width:50px"><input type="checkbox" ng-checked="existGroupData(group.PARALELO)" ng-click="setSelectedGroups(group.PARALELO)"></td>
+                                <td style="width:100%">{{ group.PARALELO }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+                
+                <div class="form-group" ng-show="view == 'group'">
+                    <label class="col-md-4 control-label" for="saveLevel"></label>
+                    <div class="col-md-8">
+                        <button type="submit" id="saveLevel" name="saveLevel" class="btn btn-success" ng-click="saveGroupActivity()">Guardar</button>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="content_print" style="line-height: 14px;">
+                <fieldset>
+                    <div class="form-group" style="font-size:12px;">
+                        <div class="noprint">
+                            Desde: <input name="date1" id="date1" ng-model="date.dateFrom" type="date" />
+                            hasta: <input name="date2" id="date2" ng-model="date.dateTo" type="date" />
+                            <button onclick="printElement('.content_print', 'Imprimir Reporte Actividades')"
+                                ng-disabled="(reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo).length == 0"
+                                style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button">
+                                <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+                                <span class="ui-button-text">Imprimir</span>
+                            </button>
+                            <a href="{{urlExport}}" target="_blank" ><button style="margin-bottom:5px;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary" role="button" title="Imprimir reporte">
+                                <span class="ui-button-icon-primary ui-icon ui-icon-print"></span>
+                                <span class="ui-button-text">Excel</span>
+                            </button></a>
+                        </div>
+                        <table cellspacing=0>
+                            <thead><tr>
+                                    <th>FECHA</th>
+                                    <th>ACTIVIDAD</th>
+                                    <th>A. GENERAL</th>
+                                    <th>ESTADO</th>
+                                    <th>ASIST.</th>
+                                    <th>NIVEL</th>
+                                    <th>CARRERA</th>
+                                    <th>MOD.</th>
+                                    <th>DOC. ADJ.</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr ng-if="(reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo).length == 0">
+                                    <td colspan="9">No existen actividades en este rango de fechas</td>
+                                </tr>
+                                <tr ng-if="reportActivitiesData == null || reportActivitiesData == undefined">
+                                    <td colspan="9">No existen actividades</td>
+                                </tr>
+                                <tr ng-repeat="activitiesReport in reportActivitiesData | rangeDateFilter:date.dateFrom:date.dateTo" style="color:#508ECC;font-size:11px;">
+                                    <td>{{activitiesReport.FECHA | date:"MM/dd/yyyy"}}</td>
+                                    <td>{{activitiesReport.ACTIVIDAD}}</td>
+                                    <td>{{activitiesReport.ACTIVIDADGENERAL}}</td>
+                                    <td>{{ESTADOS[activitiesReport.ESTADO].name}}</td>
+                                    <td style="text-align:center;">{{activitiesReport.DATOS.ASISTENCIA}}</td>
+                                    <td><div class="item-report" ng-repeat="nivel in activitiesReport.DATOS.NIVELES">{{nivel}}</div></td>
+                                    <td><div class="item-report" ng-repeat="carrera in activitiesReport.DATOS.CARRERAS">-{{carrera}}</div></td>
+                                    <td><div class="item-report" ng-repeat="modalidad in activitiesReport.DATOS.MODALIDADES">{{modalidad}}</div></td>
+                                    <td><div class="item-report" ng-repeat="adjunto in activitiesReport.DATOS.ADJUNTOS">{{adjunto}};</div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
             </div>
         </script>
 

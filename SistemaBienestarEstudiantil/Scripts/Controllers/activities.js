@@ -101,7 +101,7 @@
             enableColumnMenus: false,
             columnDefs: [
                 { name: 'C\u00F3digo', field: 'CODIGO', width: 85, type: 'number' },
-                { name: 'Actividad general', field: 'NOMBREACTIVIDAD' },
+                { name: 'Actividad general', field: 'NOMBREACTIVIDAD', width: 150 },
                 { name: 'Actividad', field: 'NOMBRE' },
                 {
                     name: 'Fecha', field: 'FECHA', type: 'date', cellFilter: 'date:\'dd/MM/yyyy\'', width: 100, enableFiltering: false,
@@ -277,22 +277,27 @@
             $scope.allModalities = [];
             $scope.allCareers = [];
             $scope.allLevels = [];
+            $scope.allGroups = [];
 
             $scope.copyAllCareers = [];
+            $scope.copyAllGroups = [];
 
             $scope.selectedCareers = [];
             $scope.selectedModalities = [];
             $scope.selectedLevels = [];
+            $scope.selectedGroups = [];
 
             $scope.originCareers = [];
             $scope.originModalities = [];
             $scope.originLevels = [];
+            $scope.originGroups = [];
 
             $scope.getGroupsByActivity();
 
             $scope.getAllCareers();
             $scope.getAllModalities();
             $scope.getAllLevels();
+            $scope.getAllGroups();
 
             ngDialog.open({
                 template: 'getLevel.html',
@@ -369,6 +374,19 @@
                             $scope.selectedLevels.push(data.response[i].CODIGONIVEL);
                             $scope.originLevels.push(data.response[i].CODIGONIVEL);
                         }
+
+                        if ($scope.selectedGroups.length > 0) {
+                            existe = false;
+                            for (var g = 0; g < $scope.selectedGroups.length; g++) {
+                                if ($scope.selectedGroups[g] == data.response[i].PARALELO)
+                                    existe = true;
+                            }
+                            if (existe == false) {
+                                $scope.selectedGroups.push(data.response[i].PARALELO);
+                            }
+                        } else {
+                            $scope.selectedGroups.push(data.response[i].CODIGONIVEL);
+                        }
                     }
                 }
                 else
@@ -439,6 +457,38 @@
             });
         };
 
+        $scope.getAllGroups = function () {
+            $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/getAllGroups', {
+                modalities: $scope.selectedModalities,
+                carees: $scope.selectedCareers,
+                levels: $scope.selectedLevels
+            }).success(function (data, status, headers, config) {
+                console.log("Paralelos... ", data);
+                if (data.success) {
+                    $scope.copyAllGroups = [];
+                    $scope.allGroups = data.response;
+                    for (var i = 0; i < $scope.allGroups.length; i++) {
+                        if ($scope.copyAllGroups.length > 0) {
+                            var existe = false;
+                            for (var j = 0; j < $scope.copyAllGroups.length; j++) {
+                                if ($scope.copyAllGroups[j].PARALELO == $scope.allGroups[i].PARALELO) {
+                                    existe = true;
+                                }
+                            }
+                            if (existe == false) {
+                                $scope.copyAllGroups.push($scope.allGroups[i]);
+                            }
+                        } else
+                            $scope.copyAllGroups.push($scope.allGroups[i]);
+                    }
+                } else
+                    $('#messages').puigrowl('show', [{ severity: data.severity, summary: data.summary, detail: data.message }]);
+            }).error(function (data, status, headers, config) {
+                console.log("Error al cargar niveles...", data);
+                $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Error', detail: 'Error al obtener los niveles' }]);
+            });
+        };
+
         $scope.cambiarVista = function (viewValue) {
             if (viewValue == "levelCareer") {
                 if ($scope.selectedModalities.length > 0) {
@@ -467,6 +517,13 @@
                     $scope.view = "career";
                 }
             }
+            if (viewValue == "levelGroup") {
+                if ($scope.selectedLevels.length > 0) {
+                    $scope.getAllGroups();
+                    $scope.validateGroupSelected();
+                    $scope.view = "group";
+                }
+            }
         };
 
         $scope.validateCareerSelected = function () {
@@ -493,6 +550,19 @@
             };
             $scope.selectedLevels = [];
             $scope.selectedLevels = levelToErase;
+        };
+
+        $scope.validateGroupSelected = function () {
+            var groupToErase = [];
+            for (var i = 0; i < $scope.selectedGroups.length; i++) {
+                for (var j = 0; j < $scope.copyAllGroups.length; j++) {
+                    if ($scope.selectedGroups[i] == $scope.copyAllGroups[j].PARALELO) {
+                        groupToErase.push($scope.selectedGroups[i]);
+                    }
+                }
+            };
+            $scope.selectedGroups = [];
+            $scope.selectedGroups = groupToErase;
         };
 
         $scope.existAllCareerData = function () {
@@ -538,6 +608,23 @@
             if ($scope.selectedLevels.length > 0) {
                 for (var i = 0; i < $scope.selectedLevels.length; i++) {
                     if ($scope.selectedLevels[i] == code) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        $scope.existAllGroupData = function () {
+            if ($scope.selectedGroups.length == $scope.copyAllGroups.length)
+                return true;
+            return false;
+        };
+
+        $scope.existGroupData = function (code) {
+            if ($scope.selectedGroups.length > 0) {
+                for (var i = 0; i < $scope.selectedGroups.length; i++) {
+                    if ($scope.selectedGroups[i] == code) {
                         return true;
                     }
                 }
@@ -597,7 +684,6 @@
                     }
                 }
             }
-            console.log($scope.selectedModalities);
             $scope.getAllCareers();
         };
 
@@ -628,10 +714,40 @@
                     }
                 }
             }
+            $scope.getAllGroups();
         };
 
         $scope.setSelectedLevels = function (id) {
             $scope.selectObjects($scope.selectedLevels, id);
+            $scope.getAllGroups();
+        };
+
+        $scope.setSelectedAllGroups = function () {
+            if ($scope.selectedGroups.length == $scope.copyAllGroups.length) {
+                for (var i = 0; i < $scope.copyAllGroups.length; i++) {
+                    $scope.selectedGroups = [];
+                }
+            } else {
+                var existe = false;
+                for (var i = 0; i < $scope.copyAllGroups.length; i++) {
+                    existe = false;
+                    if ($scope.selectedGroups.length == 0) {
+                        $scope.selectedGroups.push($scope.copyAllGroups[i].PARALELO);
+                    } else {
+                        for (var j = 0; j < $scope.selectedGroups.length; j++) {
+                            if ($scope.copyAllGroups[i].PARALELO == $scope.selectedGroups[j])
+                                existe = true;
+                        }
+                        if (existe == false) {
+                            $scope.selectedGroups.push($scope.copyAllGroups[i].PARALELO);
+                        }
+                    }
+                }
+            }
+        };
+
+        $scope.setSelectedGroups = function (id) {
+            $scope.selectObjects($scope.selectedGroups, id);
         };
 
         $scope.selectObjects = function (listSelected, id) {
@@ -969,12 +1085,13 @@
         };
 
         $scope.saveGroupActivity = function () {
-            if ($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0 && $scope.selectedLevels.length == 0) {
+            if ($scope.selectedCareers.length == 0 && $scope.selectedModalities.length == 0 && $scope.selectedLevels.length == 0 && $scope.selectedGroups == 0) {
                 $('#messages').puigrowl('show', [{ severity: 'error', summary: 'Editar', detail: 'Debe seleccionar por lo menos una carrera, o un m&oacute;dulo o un nivel' }]);
             } else {
                 var parentObject = this;
 
                 $scope.promise = $http.post((appContext != undefined ? appContext : "") + '/WebServices/Activities.asmx/saveGroupActivity', {
+                    group: $scope.selectedGroups,
                     careersV: $scope.selectedCareers,
                     modalitiesV: $scope.selectedModalities,
                     levelsV: $scope.selectedLevels,
