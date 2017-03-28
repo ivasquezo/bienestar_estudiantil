@@ -173,11 +173,11 @@ namespace SistemaBienestarEstudiantil.WebServices
                 if (email != null)
                     response = new Response(true, "", "", "", email);
                 else
-                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado correos registrados", null);
+                    response = new Response(false, "info", "Informaci\u00F3n", "No se han encontrado correos electr\u00F3nico registrados", null);
             }
             catch (Exception e)
             {
-                response = new Response(false, "error", "Error", "Error al obtener los correos registrados", e);
+                response = new Response(false, "error", "Error", "Error al obtener los correos electr\u00F3nico registrados", e);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
             writeResponse(new JavaScriptSerializer().Serialize(response));
@@ -197,11 +197,11 @@ namespace SistemaBienestarEstudiantil.WebServices
                 newData.NOMBRE = Utils.BECANOTIFICACION;
                 newData.VALOR = mailNotification;
                 db.SaveChanges();
-                response = new Response(true, "info", "Actualizar", "El correo ha sido agregado correctamente", null);
+                response = new Response(true, "info", "Actualizar", "El correo electr\u00F3nico ha sido agregado correctamente", null);
             }
             catch (Exception)
             {
-                response = new Response(false, "error", "Error", "Error al agregar el correo electronico", null);
+                response = new Response(false, "error", "Error", "Error al agregar el correo electr\u00F3nico", null);
                 writeResponse(new JavaScriptSerializer().Serialize(response));
             }
             writeResponse(new JavaScriptSerializer().Serialize(response));

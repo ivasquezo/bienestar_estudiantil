@@ -141,6 +141,8 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         private String pageRedirect()
         {
+            
+
             if (Convert.ToBoolean(Session["editarTarea"])) { return "Tareas"; }
 
             else if (Convert.ToBoolean(Session["editarBeca"])) { return "Becas"; }
@@ -156,6 +158,9 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult Usuarios()
         {
+            Response.Cache.SetCacheability(HttpCacheability.ServerAndNoCache);
+            Response.Cache.SetAllowResponseInBrowserHistory(false);
+            Response.Cache.SetNoStore();
             if (!Utils.ValidateAccessUsuario()) { return RedirectToAction("Index", "Home"); }
 
             return View();
@@ -163,6 +168,9 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult Roles()
         {
+            Response.Cache.SetCacheability(HttpCacheability.ServerAndNoCache);
+            Response.Cache.SetAllowResponseInBrowserHistory(false);
+            Response.Cache.SetNoStore();
             if (!Utils.ValidateAccessRol()) { return RedirectToAction("Index", "Home"); }
 
             return View();
@@ -170,6 +178,9 @@ namespace SistemaBienestarEstudiantil.Controllers
 
         public ActionResult Tareas()
         {
+            Response.Cache.SetCacheability(HttpCacheability.ServerAndNoCache);
+            Response.Cache.SetAllowResponseInBrowserHistory(false);
+            Response.Cache.SetNoStore();
             if (!Utils.ValidateAccessTarea()) { return RedirectToAction("Index", "Home"); }
 
             return View();

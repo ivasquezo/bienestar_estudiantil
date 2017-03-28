@@ -455,7 +455,8 @@ namespace SistemaBienestarEstudiantil.WebServices
                 if (modalities != null && modalities.Length > 0)
                 {
                     var careers = db.CARRERAs.Join(db.CARRERA_MODAL, ccm => ccm.CRRCODIGOI, c => c.CRRCODIGOI,
-                        (ccm, c) => new { ccm, c }).Select(s => new { 
+                        (ccm, c) => new { ccm, c }).Select(s => new
+                        {
                             CODIGOMODALIDAD = s.c.MDLCODIGOI,
                             CRRCODIGOI = s.ccm.CRRCODIGOI,
                             CRRDESCRIPC = s.ccm.CRRDESCRIPC
