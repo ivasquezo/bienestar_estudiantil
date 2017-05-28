@@ -10,7 +10,7 @@
             $http.get((appContext != undefined ? appContext : "") + '/WebServices/Users.asmx/checkSession')
                 .success(function (data, status, headers, config) {
                     if (!data.success) {
-                        document.location.href = "/";
+                        document.location.reload();
                     }
                 }).error(function (data, status, headers, config) {
                     console.log("Error checkSession", data);
@@ -1191,9 +1191,9 @@
         };
 
         $scope.isImage = function (contentType) {
-            console.log(contentType);
+            //console.log(contentType);
             if (typeof contentType === 'string' && contentType.includes('image')) {
-                console.log(contentType);
+                //console.log(contentType);
                 return true;
             }
             return false;

@@ -12,7 +12,7 @@
             $http.get((appContext != undefined ? appContext : "") +'/WebServices/Users.asmx/checkSession')
             .success(function (data, status, headers, config) {
                 if (!data.success) {
-                    document.location.href = "/";
+                    document.location.reload();
                 }
             }).error(function (data, status, headers, config) {
                 console.log("Error checkSession", data);

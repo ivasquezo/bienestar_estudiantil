@@ -21,7 +21,7 @@
 
     <h2>Becas</h2>
     <div ng-controller="BecasController as Main" ng-init='CODIGOUSUARIO=<%=@Session["userCode"]%>' class="main">
-        <div style="font-size:18px;font-weight: bold;">Administrar Solicitudes de <a href="/Home/BecaSolicitud" target="_blank">Becas</a></div>
+        <div style="font-size:18px;font-weight: bold;">Administrar Solicitudes de <a href="<%=Utils.APP_CONTEXT%>/Home/BecaSolicitud" target="_blank">Becas</a></div>
         <div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
             <div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
         </div>
@@ -37,7 +37,7 @@
 
         <script type="text/ng-template" id="actionsBecas.html">
               <div class="ui-grid-cell-contents" style="text-align:center">
-                <button type="button" ng-click="grid.appScope.Main.removeBeca(COL_FIELD)" title="Eliminar solicitud de beca"><span class="ui-icon ui-icon-trash"></span></button>
+                <!-- <button type="button" ng-click="grid.appScope.Main.removeBeca(COL_FIELD)" title="Eliminar solicitud de beca"><span class="ui-icon ui-icon-trash"></span></button>-->
                 <button type="button" ng-click="grid.appScope.Main.editBeca(COL_FIELD)" title="Editar solicitud de beca"><span class="ui-icon ui-icon-pencil"></span></button>
                 <button type="button" ng-click="grid.appScope.Main.viewHistoryChanges(COL_FIELD)" title="Ver historial de cambios"><span class="ui-icon ui-icon-note"></span></button>
               </div>
@@ -103,7 +103,7 @@
                                     <label class="col-md-4 control-label" for="RUBRO">Rubro</label>  
                                     <div class="col-md-4">
                                         <select ng-required="solicitudbeca.OTORGADO != null" ng-model="solicitudbeca.RUBRO" id="RUBRO" name="RUBRO" class="form-control"
-                                            ng-options="o.v as o.n for o in RUBROS" style="height:20px; width:150px;margin-top:5px;"></select>
+                                            ng-options="o.v as o.n for o in RUBROS" style="height:20px; width:150px;margin-top:5px; padding:0"></select>
                                         <span ng-messages="becaForm.RUBRO.$error">
                                             <span ng-message="required" class="help-block ng-message">Ingrese el rubro otorgado</span>
                                         </span>
@@ -117,7 +117,7 @@
                                     <label class="col-md-4 control-label" for="estadobeca">Estado</label>  
                                     <div class="col-md-4">
                                         <select required ng-model="solicitudbeca.APROBADA" id="estadobeca" name="estadobeca" class="form-control"
-                                            ng-options="o.v as o.n for o in ESTADOS" style="height:20px; width:150px;margin-top:5px;"></select>
+                                            ng-options="o.v as o.n for o in ESTADOS" style="height:20px; width:150px;margin-top:5px; padding:0"></select>
                                     </div>
                                 </div>
                             </td>

@@ -33,7 +33,7 @@ namespace SistemaBienestarEstudiantil.Controllers
         [HttpPost]
         public ActionResult Index(LogOnModel model, string returnUrl)
         {
-            if (Utils.isLogged()) return Redirect("/");
+            if (Utils.isLogged()) return Redirect(Utils.APP_CONTEXT);
 
             if (ModelState.IsValid)
             {
@@ -221,7 +221,8 @@ namespace SistemaBienestarEstudiantil.Controllers
             FormsService.SignOut();
             Session.RemoveAll();
             Session.Abandon();
-            return RedirectToAction("Index", "Home");
+            return Redirect(Utils.APP_CONTEXT);
+            //return RedirectToAction("Index", "Home");
         }
     }
 }

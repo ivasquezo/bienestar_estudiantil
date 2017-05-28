@@ -36,7 +36,7 @@
 			<div ng-if="BECA_SOLICITUD == null && (ALUMNO != null && ALUMNO.DTPNOMBREC != undefined)">
 				<div class="document-message">Seleccione el tipo de beca que desea solicitar:</div>
 				<select ng-change="printText()" required ng-model="seleccion.TIPO" id="becaTipo" name="becaTipo" class="form-control"
-		            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold;">
+		            ng-options="o as o.NOMBRE for o in TIPOS" style="height: 30px;font-size: 16px;font-weight: bold; padding:0">
 		        </select>
 				<span ng-messages="becaSolicitudForm.becaTipo.$error">
 					<span ng-message="required" class="help-block ng-message">* Debe ingresar el tipo de Beca</span>
@@ -72,6 +72,7 @@
 					            <span ng-show="formFiles.documentoSolicitud.$error.validFileEmpty" class="help-block ng-message" style="font-size: 18px;">* El fichero está vacío</span>
 					            <span ng-show="formFiles.documentoSolicitud.$error.validFileType" class="help-block ng-message" style="font-size: 18px;">* No se admite el tipo de archivo</span>
 							</div>
+							<br/><input ng-click="uploadFileDataBase()" type="submit" value="Guardar" id="upload" ng-if="ALUMNO != null && ALUMNO.DTPNOMBREC != undefined && (BECA_SOLICITUD == null || BECA_SOLICITUD.APROBADA == 0)"/>
 						</td>
 					</tr>
 					<tr>
@@ -103,11 +104,11 @@
     		</div>
 		</form>
 
-		<div ng-if="BECA_SOLICITUD != null && BECA_SOLICITUD.OBSERVACION != null">
-			<div class="document-message-title">
+		<div ng-if="BECA_SOLICITUD != null">
+			<div ng-if="BECA_SOLICITUD != null && BECA_SOLICITUD.OBSERVACION != null && BECA_SOLICITUD.OBSERVACION != ''" class="document-message-title">
 				Observaciones:
 			</div>
-			<div style="padding:5px;margin-top:10px;border:1px solid red;color:#AD0000;font-weight:bold;text-transform: uppercase;font-size: 14px;background-color: rgba(167, 3, 3, 0.09);">
+			<div ng-if="BECA_SOLICITUD != null && BECA_SOLICITUD.OBSERVACION != null && BECA_SOLICITUD.OBSERVACION != ''" style="padding:5px;margin-top:10px;border:1px solid red;color:#AD0000;font-weight:bold;text-transform: uppercase;font-size: 14px;background-color: rgba(167, 3, 3, 0.09);">
 				{{BECA_SOLICITUD.OBSERVACION}}
 			</div>
 			<div class="document-message-title">
