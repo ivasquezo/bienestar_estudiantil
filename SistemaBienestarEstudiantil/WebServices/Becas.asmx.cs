@@ -423,7 +423,7 @@ namespace SistemaBienestarEstudiantil.WebServices
              */
 
             /* listar codigos periodos donde buscar */
-            List<int> periodos = db.PERIODOes.Where(p => p.TPECODIGOI == 1 && (p.PRDHABILMAT == "1" || p.PRDESTADOC == "1")).Select(p => p.PRDCODIGOI).ToList();
+            List<int> periodos = db.PERIODOes.Where(p => p.TPECODIGOI == 1 && p.PRDHABILMAT == "1").Select(p => p.PRDCODIGOI).ToList();
 
             /* listar codigos matriculas donde buscar */
             List<long> matriculas = db.MATRICULAs.Where(m => periodos.Contains(m.PRDCODIGOI) && m.NVLCODIGOI > 0).Select(m => m.INSCODIGOI).ToList();

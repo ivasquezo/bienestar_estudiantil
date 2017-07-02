@@ -6,24 +6,24 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <%
-        Random rand = new Random((int)DateTime.Now.Ticks);
+	<%
+    	Random rand = new Random((int)DateTime.Now.Ticks);
         int RandomNumber = rand.Next(100000, 999999);
     %>
     <script type="text/javascript" src="<%=Utils.APP_CONTEXT%>/Scripts/Controllers/becasolicitud.js?nocache=<%=RandomNumber%>"></script>
 
 	<div id="messages"></div>
 
-    <h2 style="padding-bottom:0px;margin-bottom:0px;">Solicitud de Beca del estudiante</h2>
+    <h2 style="padding-bottom:0px; margin-bottom:0px;">Solicitud de Beca del estudiante</h2>
+
     <div ng-controller="BecaSolicitudController as Main">
-    	<div style="position:fixed;top:0px;left:50%;margin-left:-85px;">
-    		<div cg-busy="{promise:promise,message:message,backdrop:backdrop,delay:delay,minDuration:minDuration}"></div>
+    	<div style="position:fixed; top:0px; left:50%; margin-left:-85px;">
+    		<div cg-busy="{promise:promise, message:message, backdrop:backdrop, delay:delay, minDuration:minDuration}"></div>
     	</div>
     	<form id="becaSolicitudForm" name="becaSolicitudForm">
 	    	<center><img style="width:150px;" src="<%=Utils.APP_CONTEXT%>/Content/logo-universidad-israel.png"></center>
-	    	<div style="font-size:15px;margin-bottom:5px;">Ingrese número de cédula: </div>
-	    	<input ng-model="ALUMNO.DTPCEDULAC" ng-required="true" valid-identification style="width:200px;height:25px;padding:5px;font-size:18px;"
-				name="validIdentification" placeholder="Número de cédula" type="text"/>
+	    	<div style="font-size:15px; margin-bottom:5px;">Ingrese número de cédula:</div>
+	    	<input ng-model="ALUMNO.DTPCEDULAC" ng-required="true" valid-identification style="width:200px; height:25px; padding:5px; font-size:18px;" name="validIdentification" placeholder="Número de cédula" type="text"/>
 			<span ng-messages="becaSolicitudForm.validIdentification.$error" style="display: inline-block;">
 	            <span ng-message="cedulaValidator" class="help-block ng-message" style="font-size: 18px;">Debe ingresar un número de cédula válido</span>
 	            <span ng-message="cedulaExist" class="help-block ng-message" style="font-size: 18px;">Estudiante no aplica para becas</span>
@@ -137,5 +137,4 @@
 			</div>
 		</div>
     </div>
-
 </asp:Content>
